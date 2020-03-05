@@ -2,7 +2,7 @@
 
 Open source color effects manager for Razer peripherals on macOS. First of its kind available on the latest macOS (10.15 Catalina).
 
-Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans by Razer to support macOS with Synapse 3.
+Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans by Razer to support macOS with the new Synapse 3.
 See [source](https://support.razer.com/articles/1543762911).
 
 ## Usage
@@ -23,11 +23,12 @@ The goal is to support all devices from openrazer on macOS.
 
 ## Device support
 
-Currently works for:
+Currently tested working for:
 
 * Razer Huntsman
+* Razer Deathadder 2013 TODO
 
-Adding new devices is relatively simple.
+Adding new devices is relatively simple. See [wiki](https://github.com/openrazer/openrazer/blob/master/driver/razerchromacommon.h).
 
 
 ## Credits

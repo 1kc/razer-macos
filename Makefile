@@ -1,4 +1,4 @@
-TARGET := osx-razer-led
+TARGET := razer-macos
 SRC := src
 OBJ := obj
 
