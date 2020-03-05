@@ -7,6 +7,12 @@ See [source](https://support.razer.com/articles/1543762911).
 
 ## Usage
 
+Ensure xcode command line tools are installed,
+
+Building the drivers:
+
+    make
+
 TODO
 
 ## Implementation
