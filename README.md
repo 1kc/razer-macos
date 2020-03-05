@@ -28,7 +28,7 @@ Currently tested working for:
 * Razer Huntsman
 * Razer Deathadder 2013 TODO
 
-Adding new devices is relatively simple. See [wiki](https://github.com/openrazer/openrazer/blob/master/driver/razerchromacommon.h).
+Adding new devices is relatively simple. See [wiki](https://github.com/1kc/razer-macos/wiki).
 
 
 ## Credits
