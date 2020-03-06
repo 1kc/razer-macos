@@ -10,6 +10,7 @@
 #import <string.h>
 #import <stdlib.h>
 
+#import "razercommon.h"
 #import "razerkbd_driver.h"
 
 IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
@@ -36,7 +37,7 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
 		
 		IOObjectRelease(usbDevice);  // Not needed after plugin created
 		if ((kReturn != kIOReturnSuccess) || plugInInterface == NULL) {
-			printf("Unable to create plugin (0x%08x)\n", kReturn);
+			// printf("Unable to create plugin (0x%08x)\n", kReturn);
 			continue;
 		}
 		
@@ -46,14 +47,16 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
 		
 		(*plugInInterface)->Release(plugInInterface);  // Not needed after device interface created
 		if (hResult || !dev) {
-			printf("Couldn’t create a device interface (0x%08x)\n", (int) hResult);
+			// printf("Couldn’t create a device interface (0x%08x)\n", (int) hResult);
 			continue;
 		}
 		
-		if (!is_blade_laptop(dev)) {
+		if (!is_razer_device(dev)) {
 			(*dev)->Release(dev);	// Not recognized as a Razer Blade Laptop device
 			continue;
 		}
+
+
 		
 		kReturn = (*dev)->USBDeviceOpen(dev);
 		if (kReturn != kIOReturnSuccess)  {

@@ -23,10 +23,11 @@ The goal is to support all devices from openrazer on macOS.
 
 ## Device support
 
-Currently tested working for:
+Currently only keyboard support has been added.
+
+Tested working for:
 
 * Razer Huntsman
-* Razer Deathadder 2013 TODO
 
 Adding new devices is relatively simple. See [wiki](https://github.com/1kc/razer-macos/wiki).
 
