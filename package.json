@@ -1,9 +1,8 @@
 {
-  "name": "function_arguments",
+  "name": "razer-macos",
   "version": "0.0.0",
-  "description": "Node.js Addons Example #2",
+  "description": "Open source color effects manager for Razer peripherals on macOS",
   "main": "addon.js",
-  "private": true,
   "dependencies": {
     "bindings": "~1.2.1",
     "node-addon-api": "^1.0.0"
