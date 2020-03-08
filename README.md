@@ -9,9 +9,10 @@ See [source](https://support.razer.com/articles/1543762911).
 
 Ensure xcode command line tools are installed,
 
-Building the drivers:
+Install node package dependencies:
 
-    make
+    npm install
+
 
 TODO
 
@@ -19,6 +20,8 @@ TODO
 
 Drivers are ported from the [openrazer](https://github.com/openrazer/openrazer) project for Linux.
 The goal is to support all devices from openrazer on macOS.
+
+node-addon-api is used to deal with 
 
 
 ## Device support

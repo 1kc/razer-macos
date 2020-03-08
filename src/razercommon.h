@@ -9,8 +9,6 @@
 
 #include <IOKit/usb/IOUSBLib.h>
 
-#define USB_VENDOR_ID_RAZER 0x1532
-
 // Linux pre-process defintions
 #define HID_REQ_GET_REPORT 0x01
 #define HID_REQ_SET_REPORT 0x09
@@ -108,8 +106,6 @@ struct razer_report {
     unsigned char crc;/*xor'ed bytes of report*/
     unsigned char reserved; /*0x0*/
 };
-
-bool is_razer_device(IOUSBDeviceInterface **dev);
 
 IOReturn razer_send_control_msg(IOUSBDeviceInterface **dev, void const *data, uint report_index);
 IOReturn razer_get_usb_response(IOUSBDeviceInterface **dev, uint report_index, struct razer_report* request_report, uint response_index, struct razer_report* response_report, int wait_us);

@@ -112,7 +112,7 @@
 
 
 struct razer_kbd_device {
-    struct IOUSBDeviceInterface **usbdev;
+    IOUSBDeviceInterface **usbdev;
     unsigned int fn_on;
     char name[128];
     char phys[64];

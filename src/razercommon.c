@@ -9,20 +9,6 @@
 
 #include "razercommon.h"
 
-
-bool is_razer_device(IOUSBDeviceInterface **dev) {
-    kern_return_t kr;
-    UInt16 vendor;
-    UInt16 product;
-    UInt16 release;
-
-    kr = (*dev)->GetDeviceVendor(dev, &vendor);
-    kr = (*dev)->GetDeviceProduct(dev, &product);
-    kr = (*dev)->GetDeviceReleaseNumber(dev, &release);
-
-    return vendor == USB_VENDOR_ID_RAZER;
-}
-
 /**
  * Send USB control report to the keyboard
  * USUALLY index = 0x02
