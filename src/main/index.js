@@ -25,12 +25,50 @@ app.on('ready', () => {
       click() { addon.setModeNone(); },
     },
     {
+      label: 'Static',
+      submenu: [
+        {
+          label: 'Blue',
+          click() {}
+        },
+        {
+          label: 'Green',
+          click() {}
+        },
+      ]
+    },
+    {
+      label: 'Wave',
+      submenu: [
+        {
+          label: 'Left',
+          click() { addon.setModeWave(); }
+        },
+        {
+          label: 'Right',
+          click() { addon.setModeWave(); }
+        },
+      ]
+    },
+    {
       label: 'Spectrum',
       click() { addon.setModeSpectrum(); },
     },
     {
-      label: 'Wave',
-      click() { addon.setModeWave(); },
+      label: 'Reactive',
+      click() {},
+    },
+    {
+      label: 'Breathe',
+      click() {},
+    },
+    {
+      label: 'Starlight',
+      click() {},
+    },
+    {
+      label: 'Ripple',
+      click() {},
     },
     { type: 'separator' },
     {
