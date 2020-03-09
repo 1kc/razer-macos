@@ -1,7 +1,7 @@
 
 <p align="center">
   <a href="https://github.com/1kc/razer-macos/releases">
-    <img src="https://assets.razerzone.com/eeimages/support/products/1501/1501-blackwidow2019.png" width="443" height="443" alt="keyboard demo pic" />
+    <img src="https://assets.razerzone.com/eeimages/support/products/1501/1501-blackwidow2019.png" width="128" height="128" alt="keyboard demo pic" />
   </a>
   <h1 align="center">Razer macOS</h1>
   <p align="center">Open source color effects manager for Razer peripherals on macOS. First of its kind available on the <b> latest macOS</b> (10.15 Catalina).</p>
