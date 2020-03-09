@@ -74,3 +74,9 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
 	IOObjectRelease(iter);
 	return NULL;
 }
+
+void closeRazerUSBDeviceInterface(IOUSBDeviceInterface **dev) {
+	kern_return_t kr;
+	kr = (*dev)->USBDeviceClose(dev);
+    kr = (*dev)->Release(dev);
+}

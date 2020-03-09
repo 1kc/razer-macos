@@ -4,7 +4,7 @@
       "target_name": "addon",
       "cflags!": [ "-fno-exceptions" ],
       "cflags_cc!": [ "-fno-exceptions" ],
-      "sources": [ "<!@(ls -1 src/*.cc)", "<!@(ls -1 src/*.c)" ],
+      "sources": [ "<!@(ls -1 src/driver/*.cc)", "<!@(ls -1 src/driver/*.c)" ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")"
       ],

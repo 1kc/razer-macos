@@ -14,3 +14,4 @@
 
 bool is_razer_device(IOUSBDeviceInterface **dev);
 IOUSBDeviceInterface** getRazerUSBDeviceInterface();
+void closeRazerUSBDeviceInterface(IOUSBDeviceInterface **dev);
