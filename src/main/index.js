@@ -28,12 +28,8 @@ app.on('ready', () => {
       label: 'Static',
       submenu: [
         {
-          label: 'Blue',
-          click() {}
-        },
-        {
-          label: 'Green',
-          click() {}
+          label: 'White',
+          click() { addon.setModeStatic(); }
         },
       ]
     },

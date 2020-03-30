@@ -71,12 +71,22 @@ Napi::String SetModeWave(const Napi::CallbackInfo& info) {
   return Napi::String::New(env, "done");
 }
 
+Napi::String SetModeStatic(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  // Just set to white for now
+  char buf[3] = {0,0,0};
+  buf[0] = buf[1] = buf[2] = 0xff;
+  razer_attr_write_mode_static(dev, buf, 3);
+  return Napi::String::New(env, "done");
+}
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   // exports.Set(Napi::String::New(env, "add"), Napi::Function::New(env, Add));
   exports.Set(Napi::String::New(env, "getDevice"), Napi::Function::New(env, GetDevice));
   exports.Set(Napi::String::New(env, "closeDevice"), Napi::Function::New(env, CloseDevice));
   exports.Set(Napi::String::New(env, "setModeNone"), Napi::Function::New(env, SetModeNone));
   exports.Set(Napi::String::New(env, "setModeSpectrum"), Napi::Function::New(env, SetModeSpectrum));
+  exports.Set(Napi::String::New(env, "setModeStatic"), Napi::Function::New(env, SetModeStatic));
   exports.Set(Napi::String::New(env, "setModeWave"), Napi::Function::New(env, SetModeWave));
   return exports;
 }
