@@ -4,7 +4,7 @@
     <img src="https://assets.razerzone.com/eeimages/support/products/1501/1501-blackwidow2019.png" width="256" height="256" alt="keyboard demo pic" />
   </a>
   <h1 align="center">Razer macOS</h1>
-  <p align="center">Open source color effects manager for Razer peripherals on macOS. First of its kind available on the <b> latest macOS</b> (10.15 Catalina). Note: Still a work in progess. </p>
+  <p align="center">Open source color effects manager for Razer peripherals on macOS. First of its kind available on the <b> latest macOS</b> (10.15 Catalina).</p>
 </p>
 
 <p align="center">
@@ -49,6 +49,7 @@ Currently only Razer keyboard support has been added.
 Tested working for:
 
 * Razer Huntsman
+* Razer Huntsman Elite
 
 Adding new peripherals types should be relatively simple. See [wiki](https://github.com/1kc/razer-macos/wiki).
 
