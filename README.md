@@ -22,6 +22,10 @@ Install node package dependencies:
 
     yarn
 
+Install node-gyp globally:
+
+    yarn global add node-gyp
+
 Build drivers:
 
     node-gyp configure build
@@ -30,9 +34,6 @@ Run development server:
 
     yarn dev
 
-Build dmg:
-
-    yarn dist
 
 ## Implementation
 
