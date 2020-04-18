@@ -49,6 +49,7 @@ Currently only Razer keyboard support has been added.
 
 Tested working for:
 
+* Razer Ornata Chroma
 * Razer Huntsman
 * Razer Huntsman Elite
 
