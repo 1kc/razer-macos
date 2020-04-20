@@ -8,7 +8,8 @@
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
+    "rebuild": "node-gyp rebuild"
   },
   "dependencies": {
     "node-addon-api": "^1.0.0",
@@ -18,6 +19,7 @@
     "electron": "8.2.3",
     "electron-builder": "^21.0.11",
     "electron-webpack": "^2.7.4",
+    "node-gyp": "^6.1.0",
     "webpack": "~4.35.3"
   },
   "gypfile": true,

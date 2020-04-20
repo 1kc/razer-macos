@@ -92,7 +92,7 @@ function createTray() {
       click() { app.quit(); }
     }
   ])
-  tray.setToolTip('This is my application.')
+  tray.setToolTip('Razer macOS menu')
   tray.setContextMenu(contextMenu)
 
 }

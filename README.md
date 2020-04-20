@@ -22,17 +22,13 @@ Install node package dependencies:
 
     yarn
 
-Install node-gyp globally:
-
-    yarn global add node-gyp
-
-Build drivers:
-
-    node-gyp configure build
-
 Run development server:
 
     yarn dev
+
+During development, every time the driver code has been updated, a rebuild is required:
+
+    yarn rebuild
 
 
 ## Implementation
@@ -64,7 +60,6 @@ A: It is possible that the wrong on-board keyboard profile has been selected. Ch
 
 * Pack src/assets with webpack for the production build
 * Finish adding different colour effects
-* Add node-gyp to package.json scripts
 
 ## Credits
 
