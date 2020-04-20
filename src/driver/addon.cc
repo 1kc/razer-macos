@@ -39,6 +39,9 @@ Napi::String GetDevice(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   dev = getRazerUSBDeviceInterface();
+  if (dev == NULL) {
+    return Napi::String::New(env, "Device not found");
+  }
 
   char buf[256] = {0};
   razer_attr_read_device_type(dev, buf);
@@ -48,6 +51,9 @@ Napi::String GetDevice(const Napi::CallbackInfo& info) {
 
 Napi::String CloseDevice(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
+  if (dev == NULL) {
+    return Napi::String::New(env, "Device not found");
+  }
 
   closeRazerUSBDeviceInterface(dev);
   return Napi::String::New(env, "done");
@@ -55,24 +61,36 @@ Napi::String CloseDevice(const Napi::CallbackInfo& info) {
 
 Napi::String SetModeNone(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
+  if (dev == NULL) {
+    return Napi::String::New(env, "Device not found");
+  }
   razer_attr_write_mode_none(dev, "1", 1);
   return Napi::String::New(env, "done");
 }
 
 Napi::String SetModeSpectrum(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
+  if (dev == NULL) {
+    return Napi::String::New(env, "Device not found");
+  }
   razer_attr_write_mode_spectrum(dev, "1", 1);
   return Napi::String::New(env, "done");
 }
 
 Napi::String SetModeWave(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
+  if (dev == NULL) {
+    return Napi::String::New(env, "Device not found");
+  }
   razer_attr_write_mode_wave(dev, "1", 0);
   return Napi::String::New(env, "done");
 }
 
 Napi::String SetModeStatic(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
+  if (dev == NULL) {
+    return Napi::String::New(env, "Device not found");
+  }
   // Just set to white for now
   char buf[3] = {0,0,0};
   buf[0] = buf[1] = buf[2] = 0xff;
