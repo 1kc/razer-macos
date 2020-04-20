@@ -55,12 +55,16 @@ Tested working for:
 
 Adding new peripherals types should be relatively simple. See [wiki](https://github.com/1kc/razer-macos/wiki).
 
+## FAQ
+
+Q: Selecting a colour setting has no effect on my keyboard
+A: It is possible that the wrong on-board keyboard profile has been selected. Change to a different profile and try again.
+
 ## TODO
 
 * Pack src/assets with webpack for the production build
 * Finish adding different colour effects
 * Add node-gyp to package.json scripts
-* Light and dark mode switching
 
 ## Credits
 
