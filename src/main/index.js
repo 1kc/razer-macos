@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, Menu, Tray } from 'electron'
+import { app, Menu, Tray, nativeTheme } from 'electron'
 import addon from '../driver'
 import * as path from 'path'
 
@@ -9,11 +9,31 @@ import * as path from 'path'
 
 let tray = null
 
-
 app.on('ready', () => {
+  createTray();
+})
+
+app.on('quit', () => {
+  addon.closeDevice();  
+})
+
+nativeTheme.on('updated', () => {
+ createTray();
+})
+
+function createTray() {
   if (app.dock) app.dock.hide()
 
-  tray = new Tray(path.join(__dirname, '../assets/icon.png'))
+  if(tray != null) {
+    tray.destroy();
+  } 
+
+  if(nativeTheme.shouldUseDarkColors) {
+    tray = new Tray(path.join(__dirname, '../assets/icon-darkmode.png'))  
+  } else {
+    tray = new Tray(path.join(__dirname, '../assets/icon-lightmode.png'))   
+  }
+
   const contextMenu = Menu.buildFromTemplate([
     {
       label: addon.getDevice(),
@@ -74,8 +94,5 @@ app.on('ready', () => {
   ])
   tray.setToolTip('This is my application.')
   tray.setContextMenu(contextMenu)
-})
 
-app.on('quit', () => {
-  addon.closeDevice();
-})
+}
