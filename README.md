@@ -1,17 +1,14 @@
 
 <p align="center">
-  <a href="https://github.com/1kc/razer-macos/releases">
-    <img src="https://assets.razerzone.com/eeimages/support/products/1501/1501-blackwidow2019.png" width="256" height="256" alt="keyboard demo pic" />
-  </a>
-  <h1 align="center">Razer macOS</h1>
-  <p align="center">Open source color effects manager for Razer peripherals on macOS. First of its kind available on the <b> latest macOS</b> (10.15 Catalina).</p>
+  <img src="resources/hero.png" alt="keyboard demo pic" />
+  <p align="center">Open source color effects manager for Razer peripherals on macOS. First of its kind on the <b> latest macOS</b> (10.15 Catalina).</p>
 </p>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/1kc/razer-macos/master/screenshots/dark.png">
 </p>
 
-Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans by Razer to support macOS with the new Synapse 3 - see [source](https://support.razer.com/articles/1543762911). All keyboards supported by the [openrazer](http://openrazer.github.io) project should work. 
+Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans from Razer to support macOS with the new Synapse 3 - see [source](https://support.razer.com/articles/1543762911). All keyboards supported by the [openrazer](http://openrazer.github.io) project should work. See confirmed devices below. 
 
 
 ## Usage
@@ -59,7 +56,7 @@ Adding new peripherals types should be relatively simple. See [wiki](https://git
 
 Q: Selecting a colour setting has no effect on my keyboard
 
-A: It is possible that the wrong on-board keyboard profile has been selected. Change to a different profile and try again.
+A: It is possible that a wrong on-board keyboard profile has been selected. Change to a different profile and try again.
 
 ## TODO
 

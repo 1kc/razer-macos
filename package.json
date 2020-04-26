@@ -25,7 +25,17 @@
   "gypfile": true,
   "build": {
     "appId": "com.electron.razer-macos",
-    "productName": "Razer MacOS",
-    "nodeGypRebuild": true
+    "productName": "Razer macOS",
+    "nodeGypRebuild": true,
+    "asar": true,
+    "directories": {
+      "buildResources": "resources"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "icon.icns",
+      "type": "distribution"
+    }
+
   }
 }
