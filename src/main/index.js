@@ -24,14 +24,14 @@ nativeTheme.on('updated', () => {
 function createTray() {
   if (app.dock) app.dock.hide()
 
-  if(tray != null) {
+  if (tray != null) {
     tray.destroy();
   } 
 
-  if(nativeTheme.shouldUseDarkColors) {
-    tray = new Tray(path.join(__dirname, '../assets/icon-darkmode.png'))  
+  if (nativeTheme.shouldUseDarkColors) {
+    tray = new Tray(path.join(__static, '/assets/icon-darkmode.png'));
   } else {
-    tray = new Tray(path.join(__dirname, '../assets/icon-lightmode.png'))   
+    tray = new Tray(path.join(__static, '/assets/icon-lightmode.png'));  
   }
 
   const contextMenu = Menu.buildFromTemplate([

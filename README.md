@@ -30,6 +30,9 @@ During development, every time the driver code has been updated, a rebuild is re
 
     yarn rebuild
 
+For building a distribution ready app and dmg:
+
+    yarn dist
 
 ## Implementation
 
@@ -45,6 +48,7 @@ Currently only Razer keyboard support has been added.
 
 Tested working for:
 
+* Razer BlackWidow Elite
 * Razer Ornata Chroma
 * Razer Huntsman
 * Razer Huntsman Elite
@@ -54,6 +58,7 @@ Adding new peripherals types should be relatively simple. See [wiki](https://git
 ## FAQ
 
 Q: Selecting a colour setting has no effect on my keyboard
+
 A: It is possible that the wrong on-board keyboard profile has been selected. Change to a different profile and try again.
 
 ## TODO
