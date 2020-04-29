@@ -6,26 +6,25 @@ import * as path from 'path'
 
 //const isDevelopment = process.env.NODE_ENV !== 'production'
 
-
 let tray = null
 
 app.on('ready', () => {
-  createTray();
+  createTray()
 })
 
 app.on('quit', () => {
-  addon.closeDevice();  
+  addon.closeDevice()
 })
 
 nativeTheme.on('updated', () => {
- createTray();
+ createTray()
 })
 
 function createTray() {
   if (app.dock) app.dock.hide()
 
   if (tray != null) {
-    tray.destroy();
+    tray.destroy()
   } 
 
   if (nativeTheme.shouldUseDarkColors) {
@@ -36,7 +35,8 @@ function createTray() {
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: addon.getDevice(),
+      // Initialise and get device name
+      label: addon.getDevice() || 'No device found',
       enabled: false,
     },
     { type: 'separator' },
@@ -47,9 +47,29 @@ function createTray() {
     {
       label: 'Static',
       submenu: [
-        {
+        { // TODO: implement a better way to deal with colours
           label: 'White',
-          click() { addon.setModeStatic(); }
+          click() { addon.setModeStatic(new Uint8Array([
+            0xff,0xff,0xff
+          ]))},
+        },
+        {
+          label: 'Red',
+          click() {addon.setModeStatic(new Uint8Array([
+            0xff,0,0
+          ]))},
+        },
+        {
+          label: 'Green',
+          click() {addon.setModeStatic(new Uint8Array([
+            0,0xff,0
+          ]))},
+        },
+        {
+          label: 'Blue',
+          click() {addon.setModeStatic(new Uint8Array([
+            0,0,0xff
+          ]))},
         },
       ]
     },
@@ -72,19 +92,38 @@ function createTray() {
     },
     {
       label: 'Reactive',
-      click() {},
+      submenu: [
+        {
+          label: 'Red',
+          click() {addon.setModeReactive(new Uint8Array([
+            1,0xff,0,0
+          ]))},
+        },
+        {
+          label: 'Green',
+          click() {addon.setModeReactive(new Uint8Array([
+            1,0,0xff,0
+          ]))},
+        },
+        {
+          label: 'Blue',
+          click() {addon.setModeReactive(new Uint8Array([
+            1,0,0,0xff
+          ]))},
+        },
+      ]
     },
     {
       label: 'Breathe',
-      click() {},
+      click() {addon.setModeBreathe(new Uint8Array([
+        0 // random
+      ]))}
     },
     {
       label: 'Starlight',
-      click() {},
-    },
-    {
-      label: 'Ripple',
-      click() {},
+      click() {addon.setModeStarlight(new Uint8Array([
+        1,0,0xff,0,0,0xff,0 // green
+      ]))},
     },
     { type: 'separator' },
     {

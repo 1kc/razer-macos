@@ -13,6 +13,48 @@ bool is_razer_device(IOUSBDeviceInterface **dev) {
     return vendor == USB_VENDOR_ID_RAZER;
 }
 
+bool is_keyboard(IOUSBDeviceInterface **usb_dev) {
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+    
+    switch (product) {        
+		case USB_DEVICE_ID_RAZER_NOSTROMO:
+		case USB_DEVICE_ID_RAZER_ORBWEAVER:
+		case USB_DEVICE_ID_RAZER_ORBWEAVER_CHROMA:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_STEALTH:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_STEALTH_EDITION:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2012:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2013:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2016:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_ULTIMATE:
+		case USB_DEVICE_ID_RAZER_TARTARUS:
+		case USB_DEVICE_ID_RAZER_TARTARUS_CHROMA:
+		case USB_DEVICE_ID_RAZER_TARTARUS_V2:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_OVERWATCH:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA:
+		case USB_DEVICE_ID_RAZER_DEATHSTALKER_EXPERT:
+		case USB_DEVICE_ID_RAZER_DEATHSTALKER_CHROMA:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA_TE:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_CHROMA:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_CHROMA_TE:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_LITE:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
+		case USB_DEVICE_ID_RAZER_ORNATA:
+		case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
+		case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+		case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+		case USB_DEVICE_ID_RAZER_HUNTSMAN:
+		case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+		case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA_V2:
+		case USB_DEVICE_ID_RAZER_ANANSI:
+            return true;
+    }
+    
+    return false;
+}
+
 IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
 	CFMutableDictionaryRef matchingDict;
 	matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
@@ -52,10 +94,15 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
 		}
 		
 		if (!is_razer_device(dev)) {
-			(*dev)->Release(dev);	// Not recognized as a Razer Blade Laptop device
+			(*dev)->Release(dev);
 			continue;
 		}
 
+		// Filter for only keyboards, remove once other peripherals are added
+		if (!is_keyboard(dev)) {
+			(*dev)->Release(dev);
+            continue;
+        }
 
 		
 		kReturn = (*dev)->USBDeviceOpen(dev);
