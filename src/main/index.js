@@ -3,6 +3,7 @@
 import { app, Menu, Tray, BrowserWindow, nativeTheme } from 'electron'
 import addon from '../driver'
 import path from 'path'
+import { format as formatUrl } from 'url'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -40,7 +41,6 @@ function createWindow() {
     // Don't show the window until it's ready, this prevents any white flickering
     show: false
   })
-  //window.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')));
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
   }
