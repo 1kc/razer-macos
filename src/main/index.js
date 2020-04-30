@@ -1,16 +1,21 @@
 'use strict'
 
-import { app, Menu, Tray, nativeTheme } from 'electron'
+import { app, Menu, Tray, BrowserWindow, nativeTheme } from 'electron'
 import addon from '../driver'
-import * as path from 'path'
+import path from 'path'
 
-//const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let tray = null
+let window = null
+let forceQuit = false;
 
 app.on('ready', () => {
   createTray()
+  createWindow()
 })
+
+
 
 app.on('quit', () => {
   addon.closeDevice()
@@ -20,12 +25,80 @@ nativeTheme.on('updated', () => {
  createTray()
 })
 
-function createTray() {
-  if (app.dock) app.dock.hide()
 
-  if (tray != null) {
-    tray.destroy()
-  } 
+
+function createWindow() {
+  window = new BrowserWindow({
+    webPreferences: { nodeIntegration: true },
+    // Set the initial width to 800px
+    width: 800,
+    // Set the initial height to 600px
+    height: 600,
+    // Set the default background color of the window to match the CSS
+    // background color of the page, this prevents any white flickering
+    backgroundColor: "#D6D8DC",
+    // Don't show the window until it's ready, this prevents any white flickering
+    show: false
+  })
+  //window.loadFile(path.resolve(path.join(__dirname, '../renderer/index.html')));
+  if (isDevelopment) {
+    window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
+  }
+  else {
+    window.loadURL(formatUrl({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file',
+      slashes: true
+    }))
+  }
+  window.webContents.on('did-finish-load', () => {
+    // Handle window logic properly on macOS:
+    // 1. App should not terminate if window has been closed
+    // 2. Click on icon in dock should re-open the window
+    // 3. ⌘+Q should close the window and quit the app
+    window.on('close', function (e) {
+      if (!forceQuit) {
+        e.preventDefault();
+        window.hide();
+      }
+    });
+  
+    app.on('activate', () => {
+      window.show();
+    });
+  
+    app.on('before-quit', () => {
+      forceQuit = true;
+    });
+    
+    if (isDevelopment) {
+      // auto-open dev tools
+      window.webContents.openDevTools();
+  
+      // add inspect element on right click menu
+      window.webContents.on('context-menu', (e, props) => {
+        Menu.buildFromTemplate([
+          {
+            label: 'Inspect element',
+            click() {
+              window.inspectElement(props.x, props.y);
+            },
+          },
+        ]).popup(window);
+      });
+    }
+    
+  })
+}
+
+function createTray() {
+  if (!isDevelopment) {
+    if (app.dock) app.dock.hide()
+
+    if (tray != null) {
+      tray.destroy()
+    } 
+  }
 
   if (nativeTheme.shouldUseDarkColors) {
     tray = new Tray(path.join(__static, '/assets/icon-darkmode.png'));
@@ -38,6 +111,11 @@ function createTray() {
       // Initialise and get device name
       label: addon.getDevice() || 'No device found',
       enabled: false,
+    },
+    { type: 'separator' },
+    {
+      label: 'Custom color',
+      click() { window.show() }
     },
     { type: 'separator' },
     {
@@ -78,11 +156,11 @@ function createTray() {
       submenu: [
         {
           label: 'Left',
-          click() { addon.setModeWave(); }
+          click() { addon.setModeWave("left"); }
         },
         {
           label: 'Right',
-          click() { addon.setModeWave(); }
+          click() { addon.setModeWave("right"); }
         },
       ]
     },

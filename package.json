@@ -14,14 +14,23 @@
   },
   "dependencies": {
     "node-addon-api": "^1.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "source-map-support": "^0.5.12"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.9.4",
+    "babel-loader": "^8.1.0",
     "electron": "8.2.3",
     "electron-builder": "^21.0.11",
     "electron-webpack": "^2.7.4",
     "node-gyp": "^6.1.0",
-    "webpack": "~4.35.3"
+    "webpack": "^4.43.0"
+  },
+  "electronWebpack": {
+    "renderer": {
+      "webpackConfig": "webpack.renderer.additions.js"
+    }
   },
   "gypfile": true,
   "build": {
@@ -29,7 +38,13 @@
     "productName": "Razer macOS",
     "nodeGypRebuild": true,
     "asar": true,
+    "files": [
+      "package.json",
+      "build",
+      "node_modules"
+    ],
     "directories": {
+      "output": "dist",
       "buildResources": "resources"
     },
     "mac": {
@@ -37,6 +52,5 @@
       "icon": "icon.icns",
       "type": "distribution"
     }
-
   }
 }

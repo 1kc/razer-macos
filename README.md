@@ -8,10 +8,30 @@
   <img src="https://raw.githubusercontent.com/1kc/razer-macos/master/screenshots/dark.png">
 </p>
 
-Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans from Razer to support macOS with the new Synapse 3 - see [source](https://support.razer.com/articles/1543762911). All keyboards supported by the [openrazer](http://openrazer.github.io) project should work. See confirmed devices below. 
+Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans from Razer to support macOS with the new Synapse 3 - see [source](https://support.razer.com/articles/1543762911).
 
+## Device support
 
-## Usage
+All Razer keybords are supported, with other peripherals being added in the future.
+For a complete list of supported keyboards see here [openrazer](https://openrazer.github.io).
+
+Confirmed working for:
+
+* Razer BlackWidow Elite
+* Razer Ornata Chroma
+* Razer Huntsman
+* Razer Huntsman Elite
+
+## Download
+[Latest release](https://github.com/1kc/razer-macos/releases)
+
+## FAQ
+
+Q: Selecting a colour setting has no effect on my keyboard
+
+A: It is possible that a wrong on-board keyboard profile has been selected. Change to a different profile and try again.
+
+## Developer usage
 
 Ensure xcode command line tools are installed,
 
@@ -31,6 +51,7 @@ For building a distribution ready app and dmg:
 
     yarn dist
 
+
 ## Implementation
 
 Drivers are ported from the [openrazer](https://github.com/openrazer/openrazer) project for Linux.
@@ -39,29 +60,7 @@ The goal is to support all devices from openrazer on macOS.
 An Electron macOS menu bar app is used for the front-end. 
 The C driver is exposed as a native Node.js addon using node-addon-api, which gets called by Electron.
 
-## Device support
-
-Currently only Razer keyboard support has been added.
-
-Tested working for:
-
-* Razer BlackWidow Elite
-* Razer Ornata Chroma
-* Razer Huntsman
-* Razer Huntsman Elite
-
 Adding new peripherals types should be relatively simple. See [wiki](https://github.com/1kc/razer-macos/wiki).
-
-## FAQ
-
-Q: Selecting a colour setting has no effect on my keyboard
-
-A: It is possible that a wrong on-board keyboard profile has been selected. Change to a different profile and try again.
-
-## TODO
-
-* Pack src/assets with webpack for the production build
-* Finish adding different colour effects
 
 ## Credits
 
