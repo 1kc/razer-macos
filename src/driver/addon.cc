@@ -1,37 +1,10 @@
 #include <napi.h>
 
 extern "C" {
-  // Get declaration for f(int i, char c, float x)
   #include "razerdevice.h"
   #include "razerkbd_driver.h"
 }
 
-// #include <stdio.h>
-// #include <string.h>
-// #include <stdlib.h>
-
-
-// Example from https://github.com/nodejs/node-addon-examples/tree/master/3_callbacks/node-addon-api
-
-// Napi::Value Add(const Napi::CallbackInfo& info) {
-//   Napi::Env env = info.Env();
-//   if (info.Length() < 2) {
-//     Napi::TypeError::New(env, "Wrong number of arguments")
-//         .ThrowAsJavaScriptException();
-//     return env.Null();
-//   }
-
-//   if (!info[0].IsNumber() || !info[1].IsNumber()) {
-//     Napi::TypeError::New(env, "Wrong arguments").ThrowAsJavaScriptException();
-//     return env.Null();
-//   }
-
-//   double arg0 = info[0].As<Napi::Number>().DoubleValue();
-//   double arg1 = info[1].As<Napi::Number>().DoubleValue();
-//   Napi::Number num = Napi::Number::New(env, arg0 + arg1);
-
-//   return num;
-// }
 
 IOUSBDeviceInterface **dev;
 
@@ -59,31 +32,29 @@ void CloseDevice(const Napi::CallbackInfo& info) {
   closeRazerUSBDeviceInterface(dev);
 }
 
-Napi::String SetModeNone(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
+void SetModeNone(const Napi::CallbackInfo& info) {
   if (dev == NULL) {
-    return Napi::String::New(env, "Device not found");
+    return;
   }
   razer_attr_write_mode_none(dev, "1", 1);
-  return Napi::String::New(env, "done");
 }
 
-Napi::String SetModeSpectrum(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
+void SetModeSpectrum(const Napi::CallbackInfo& info) {
   if (dev == NULL) {
-    return Napi::String::New(env, "Device not found");
+    return;
   }
   razer_attr_write_mode_spectrum(dev, "1", 1);
-  return Napi::String::New(env, "done");
 }
 
-Napi::String SetModeWave(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
+void SetModeWave(const Napi::CallbackInfo& info) {
   if (dev == NULL) {
-    return Napi::String::New(env, "Device not found");
+    return;
   }
-  razer_attr_write_mode_wave(dev, "1", 0);
-  return Napi::String::New(env, "done");
+  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
+    razer_attr_write_mode_wave(dev, "1", 0);
+  } else {
+    razer_attr_write_mode_wave(dev, "2", 0);
+  }
 }
 
 void SetModeStatic(const Napi::CallbackInfo& info) {
@@ -152,7 +123,7 @@ void SetModeStarlight(const Napi::CallbackInfo& info) {
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 7) {
+  if (argsArr.ElementLength() != 4) {
     Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
         .ThrowAsJavaScriptException();
     return;
@@ -160,11 +131,10 @@ void SetModeStarlight(const Napi::CallbackInfo& info) {
   // Cast unsigned char array into char array
   char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
 
-  razer_attr_write_mode_starlight(dev, buf, 7);
+  razer_attr_write_mode_starlight(dev, buf, 4);
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
-  // exports.Set(Napi::String::New(env, "add"), Napi::Function::New(env, Add));
   exports.Set("getDevice", Napi::Function::New(env, GetDevice));
   exports.Set("closeDevice", Napi::Function::New(env, CloseDevice));
   exports.Set("setModeNone", Napi::Function::New(env, SetModeNone));
