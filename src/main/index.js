@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, Menu, Tray, BrowserWindow, nativeTheme } from 'electron'
+import { app, Menu, Tray, BrowserWindow, nativeTheme, ipcMain } from 'electron'
 import addon from '../driver'
 import path from 'path'
 import { format as formatUrl } from 'url'
@@ -26,20 +26,41 @@ nativeTheme.on('updated', () => {
  createTray()
 })
 
+// custom color rpc listener
+ipcMain.on('request-set-custom-color', (event, arg) => {
+  const { mode, color } = arg
+  const colorArr = new Uint8Array([color.rgb.r, color.rgb.g, color.rgb.b]);
+  // TODO: implement speed
+  const speedColorArr = new Uint8Array([1, color.rgb.r, color.rgb.g, color.rgb.b]);
+
+  switch (mode) {
+    case "static":
+      addon.setModeStatic(colorArr)
+      break
+    case "reactive":
+      addon.setModeReactive(speedColorArr)
+      break
+    case "starlight":
+      addon.setModeStarlight(speedColorArr)
+      break
+    default:
+      addon.setModeStatic(colorArr)
+  }
+});
 
 
 function createWindow() {
   window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
-    // Set the initial width to 800px
-    width: 800,
-    // Set the initial height to 600px
-    height: 600,
+    titleBarStyle: 'hidden',
+    height: 150,
+    resizable: false,
+    width: 316,
     // Set the default background color of the window to match the CSS
     // background color of the page, this prevents any white flickering
-    backgroundColor: "#D6D8DC",
+    backgroundColor: "#242424",
     // Don't show the window until it's ready, this prevents any white flickering
-    show: false
+    show: false,
   })
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
@@ -200,7 +221,7 @@ function createTray() {
     {
       label: 'Starlight',
       click() {addon.setModeStarlight(new Uint8Array([
-        1,0,0xff,0,0,0xff,0 // green
+        1,0,0xff,0,0 // green
       ]))},
     },
     { type: 'separator' },

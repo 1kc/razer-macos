@@ -1,0 +1,9 @@
+html,
+body {
+    -webkit-app-region: drag;
+}
+.settings {
+    margin-top: 50px;
+    -webkit-app-region: no-drag;
+    margin-bottom: 50px;
+}

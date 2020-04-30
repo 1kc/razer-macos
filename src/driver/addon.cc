@@ -123,7 +123,7 @@ void SetModeStarlight(const Napi::CallbackInfo& info) {
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 7) {
+  if (argsArr.ElementLength() != 4) {
     Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
         .ThrowAsJavaScriptException();
     return;
@@ -131,7 +131,7 @@ void SetModeStarlight(const Napi::CallbackInfo& info) {
   // Cast unsigned char array into char array
   char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
 
-  razer_attr_write_mode_starlight(dev, buf, 7);
+  razer_attr_write_mode_starlight(dev, buf, 4);
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {

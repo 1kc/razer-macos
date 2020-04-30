@@ -1,15 +1,19 @@
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+
 module.exports = {
   module: {
     rules: [
       {
-        loader: "babel-loader",
-        options: {
-          presets: ["@babel/react"]
-        }
-      }
+        test: /\.jsx$/,
+        use: [{ loader: 'babel-loader' }]
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"]
+      },
     ]
   },
   resolve: {
-      extensions: ['.jsx']
+      extensions: ['.jsx', '.css']
     }
 }; 
