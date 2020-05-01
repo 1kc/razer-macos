@@ -10,14 +10,16 @@ const ITEMS = [
 
 export default function CustomColor() {
   // UI state
-  const [color, setColor] = useState('#fff');
+  const [color, setColor] = useState('#00ff00');
 
-  const [value, setValue] = React.useState("static");
+  const [value, setValue] = React.useState("");
 
   const handleChange = (newColor) => {
+    if (value === "") return;
     setColor(newColor)
   }
   const handleChangeComplete = (newColor, event) => {
+    if (value === "") return;
     let payload = {
         mode: value,
         color: newColor
@@ -30,6 +32,7 @@ export default function CustomColor() {
             value={value}
             onChange={e => setValue(e.currentTarget.value)}
           >
+          <option value="" disabled>Select effect</option>
           {ITEMS.map(item => (
               <option
               key={item.value}
@@ -39,6 +42,7 @@ export default function CustomColor() {
               </option>
           ))}
           </select>
+
           <HuePicker color={color} onChange={handleChange} onChangeComplete={handleChangeComplete}/>
       </div>
     
