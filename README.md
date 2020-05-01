@@ -9,7 +9,7 @@
 </p>
 
 Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans from Razer to support macOS with Synapse 3 - see [source](https://support.razer.com/articles/1543762911).
-Color settings are hardware based, meaning the colors will stay even after exiting the application.
+Color settings are hardware based, meaning that the colors will stay even after exiting the application.
 
 ## Download
 [Latest release](https://github.com/1kc/razer-macos/releases)
