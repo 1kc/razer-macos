@@ -1,7 +1,7 @@
 
 <p align="center">
   <img src="resources/hero.png" alt="keyboard demo pic" />
-  <p align="center">Open source color effects manager for Razer keyboards on macOS 10.15 Catalina.</p>
+  <p align="center">Color effects manager for Razer keyboards on macOS 10.15 Catalina.</p>
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@ Color settings are hardware based, meaning that the colors will stay even after 
 ## Device support
 
 All Razer keybords are supported, with other peripherals being added in the future.
-For a complete list of supported keyboards see here [openrazer](https://openrazer.github.io).
+For a complete list of supported keyboards see [openrazer](https://openrazer.github.io).
 
 Confirmed working for:
 
@@ -32,6 +32,10 @@ Confirmed working for:
 Q: Selecting a colour setting has no effect on my keyboard
 
 A: It is possible that a wrong on-board keyboard profile has been selected. Change to a different profile and try again.
+
+Q: Menu says "No device found".
+
+A: Razer keyboard needs to be plugged in. Quit the application, plug in the keyboard and restart the application.
 
 ## Developer usage
 
