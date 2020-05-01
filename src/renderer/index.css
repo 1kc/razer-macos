@@ -1,9 +1,36 @@
-html,
+
 body {
+    margin: 3px;
+}
+
+input, select {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.settings {
+    margin: 30px 10px 30px 10px;
+    /* -webkit-app-region: no-drag; */
+}
+
+#titlebar {
+    color: #FFF;
+}
+
+#titlebar #drag-region {
     -webkit-app-region: drag;
 }
-.settings {
-    margin-top: 50px;
-    -webkit-app-region: no-drag;
-    margin-bottom: 50px;
+  
+#window-title {
+    text-align: center;
+    overflow: hidden;
+    font-family: "SF Display Pro", sans-serif;
+    font-size: 12px;
+}
+  
+#window-title span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.5;
 }

@@ -31,7 +31,7 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
   const { mode, color } = arg
   const colorArr = new Uint8Array([color.rgb.r, color.rgb.g, color.rgb.b]);
   // TODO: implement speed
-  const speedColorArr = new Uint8Array([1, color.rgb.r, color.rgb.g, color.rgb.b]);
+  const speedColorArr = new Uint8Array([3, color.rgb.r, color.rgb.g, color.rgb.b]);
 
   switch (mode) {
     case "static":
@@ -55,7 +55,8 @@ function createWindow() {
     titleBarStyle: 'hidden',
     height: 150,
     resizable: false,
-    width: 316,
+    width: 340,
+    y: 100,
     // Set the default background color of the window to match the CSS
     // background color of the page, this prevents any white flickering
     backgroundColor: "#242424",
@@ -64,6 +65,7 @@ function createWindow() {
   })
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
+    window.resizable = true;
   }
   else {
     window.loadURL(formatUrl({
@@ -135,11 +137,6 @@ function createTray() {
     },
     { type: 'separator' },
     {
-      label: 'Custom color',
-      click() { window.show() }
-    },
-    { type: 'separator' },
-    {
       label: 'None',
       click() { addon.setModeNone(); },
     },
@@ -195,19 +192,19 @@ function createTray() {
         {
           label: 'Red',
           click() {addon.setModeReactive(new Uint8Array([
-            1,0xff,0,0
+            3,0xff,0,0
           ]))},
         },
         {
           label: 'Green',
           click() {addon.setModeReactive(new Uint8Array([
-            1,0,0xff,0
+            3,0,0xff,0
           ]))},
         },
         {
           label: 'Blue',
           click() {addon.setModeReactive(new Uint8Array([
-            1,0,0,0xff
+            3,0,0,0xff
           ]))},
         },
       ]
@@ -220,9 +217,31 @@ function createTray() {
     },
     {
       label: 'Starlight',
-      click() {addon.setModeStarlight(new Uint8Array([
-        1,0,0xff,0,0 // green
-      ]))},
+      submenu: [
+        {
+          label: 'Red',
+          click() {addon.setModeStarlight(new Uint8Array([
+            3,0xff,0,0
+          ]))},
+        },
+        {
+          label: 'Green',
+          click() {addon.setModeStarlight(new Uint8Array([
+            3,0,0xff,0
+          ]))},
+        },
+        {
+          label: 'Blue',
+          click() {addon.setModeStarlight(new Uint8Array([
+            3,0,0,0xff
+          ]))},
+        },
+      ]
+    },
+    { type: 'separator' },
+    {
+      label: 'Custom color',
+      click() { window.show() }
     },
     { type: 'separator' },
     {
