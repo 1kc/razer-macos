@@ -8,6 +8,7 @@
   <img src="screenshots/dark.png">
 </p>
 
+
 * __Custom color picker__ for static, reactive and starlight effects
 * __Hardware based color controls__ Colors are saved to onboard memory
 * __Supporting the latest macOS__ Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. There are no also plans from Razer to support macOS with Synapse 3 ([source](https://support.razer.com/articles/1543762911))
@@ -18,7 +19,7 @@
 ## Device support
 
 All Razer keybords are supported, with other peripherals being added in the future.
-For a complete list of supported keyboards, please see here [openrazer](https://openrazer.github.io).
+For a complete list of supported keyboards see [openrazer](https://openrazer.github.io).
 
 Confirmed working for:
 
@@ -33,6 +34,10 @@ Confirmed working for:
 Q: Selecting a colour setting has no effect on my keyboard
 
 A: It is possible that a wrong on-board keyboard profile has been selected. Change to a different profile and try again.
+
+Q: Menu says "No device found".
+
+A: Razer keyboard needs to be plugged in. Quit the application, plug in the keyboard and restart the application.
 
 ## Developer usage
 
