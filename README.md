@@ -1,15 +1,17 @@
 
 <p align="center">
   <img src="resources/hero.png" alt="keyboard demo pic" />
-  <p align="center">Color effects manager for Razer keyboards on macOS 10.15 Catalina.</p>
+  <p align="center">Open source color effects manager for Razer keyboards on macOS</p>
 </p>
 
 <p align="center">
   <img src="screenshots/dark.png">
 </p>
 
-Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. Currently, there are no plans from Razer to support macOS with Synapse 3 - see [source](https://support.razer.com/articles/1543762911).
-Color settings are hardware based, meaning that the colors will stay even after exiting the application.
+
+* __Custom color picker__ for static, reactive and starlight effects
+* __Hardware based color controls__ Colors are saved to onboard memory
+* __Supporting the latest macOS__ Official drivers (Synapse 2) supports only up to macOS 10.14 Mojave. There are no also plans from Razer to support macOS with Synapse 3 ([source](https://support.razer.com/articles/1543762911))
 
 ## Download
 [Latest release](https://github.com/1kc/razer-macos/releases)
