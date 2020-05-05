@@ -98,8 +98,8 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
 			continue;
 		}
 
-		// Filter for only keyboards, remove once other peripherals are added
-		if (!is_keyboard(dev)) {
+		// Filter for only keyboards and blade laptops
+		if (!(is_keyboard(dev) || is_blade_laptop(dev))) {
 			(*dev)->Release(dev);
             continue;
         }
