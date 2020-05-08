@@ -4772,6 +4772,11 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+native-ext-loader@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/native-ext-loader/-/native-ext-loader-2.3.0.tgz#85404be1f2ffa6b301856ade9e91d9d3d6675f53"
+  integrity sha512-awBQEfD25+YLi1voefLbjHiUt0yfm3Z4mBOLqbzFVR8ZOVv0MebeN9fhNiY0fxVEFiyBYtr/hF2VWfuMSCfFlw==
+
 negotiator@0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
