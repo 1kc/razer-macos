@@ -28,6 +28,7 @@ Confirmed working for:
 * Razer Huntsman
 * Razer Huntsman Elite
 * Razer Huntsman TE
+* Razer Blade Advanced 2018
 
 ## FAQ
 
