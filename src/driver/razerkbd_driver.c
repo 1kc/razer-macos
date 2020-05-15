@@ -25,7 +25,7 @@
 #include "razerchromacommon.h"
 #include "razercommon.h"
 
-struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct razer_report *request_report);
+static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct razer_report *request_report);
 
 bool is_blade_laptop(IOUSBDeviceInterface **usb_dev) {
     UInt16 product = -1;
@@ -1384,7 +1384,7 @@ ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, con
 /**
  * Send report to the keyboard
  */
-int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report *request_report, struct razer_report *response_report) {
+static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report *request_report, struct razer_report *response_report) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
     	
@@ -1409,7 +1409,7 @@ int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report *reques
 /**
  * Function to send to device, get response, and actually check the response
  */
-struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct razer_report *request_report) {
+static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct razer_report *request_report) {
     IOReturn retval = -1;
     
     struct razer_report response_report = {0};

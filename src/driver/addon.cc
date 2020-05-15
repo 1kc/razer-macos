@@ -3,6 +3,7 @@
 extern "C" {
   #include "razerdevice.h"
   #include "razerkbd_driver.h"
+  #include "razermouse_driver.h"
 }
 
 
@@ -15,13 +16,14 @@ IOUSBDeviceInterface **dev;
 Napi::Value GetDevice(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
-  dev = getRazerUSBDeviceInterface();
+  dev = getRazerUSBDeviceInterface(TYPE_MOUSE);
   if (dev == NULL) {
     return env.Null();
   }
 
   char buf[256] = {0};
-  razer_attr_read_device_type(dev, buf);
+  // razer_attr_read_device_type(dev, buf);
+  razer_mouse_attr_read_device_type(dev, buf);
   return Napi::String::New(env, buf);
 }
 

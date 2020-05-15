@@ -55,7 +55,64 @@ bool is_keyboard(IOUSBDeviceInterface **usb_dev) {
     return false;
 }
 
-IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
+bool is_mouse(IOUSBDeviceInterface **usb_dev) {
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+    
+    switch (product) {        
+		case USB_DEVICE_ID_RAZER_OROCHI_2011:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_3_5G:
+		case USB_DEVICE_ID_RAZER_ABYSSUS_1800:
+		case USB_DEVICE_ID_RAZER_MAMBA_2012_WIRED:
+		case USB_DEVICE_ID_RAZER_MAMBA_2012_WIRELESS:
+		case USB_DEVICE_ID_RAZER_NAGA_2012:
+		case USB_DEVICE_ID_RAZER_IMPERATOR:
+		case USB_DEVICE_ID_RAZER_OUROBOROS:
+		case USB_DEVICE_ID_RAZER_TAIPAN:
+		case USB_DEVICE_ID_RAZER_NAGA_HEX_RED:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_2013:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_1800:
+		case USB_DEVICE_ID_RAZER_OROCHI_2013:
+		case USB_DEVICE_ID_RAZER_NAGA_2014:
+		case USB_DEVICE_ID_RAZER_NAGA_HEX:
+		case USB_DEVICE_ID_RAZER_ABYSSUS:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_CHROMA:
+		case USB_DEVICE_ID_RAZER_MAMBA_WIRED:
+		case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS:
+		case USB_DEVICE_ID_RAZER_MAMBA_TE_WIRED:
+		case USB_DEVICE_ID_RAZER_OROCHI_CHROMA:
+		case USB_DEVICE_ID_RAZER_DIAMONDBACK_CHROMA:
+		case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+		case USB_DEVICE_ID_RAZER_NAGA_CHROMA:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_3500:
+		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+		case USB_DEVICE_ID_RAZER_ABYSSUS_V2:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+		case USB_DEVICE_ID_RAZER_ABYSSUS_2000:
+		case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+		case USB_DEVICE_ID_RAZER_BASILISK:
+		case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
+		case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
+		case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
+		case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
+		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
+		case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+		case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+		case USB_DEVICE_ID_RAZER_VIPER:
+		case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+		case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
+		case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+            return true;
+    }
+    
+    return false;
+}
+
+IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 	CFMutableDictionaryRef matchingDict;
 	matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
 	if (matchingDict == NULL) {
@@ -93,16 +150,35 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface() {
 			continue;
 		}
 		
+		// Filter out non-Razer devices
 		if (!is_razer_device(dev)) {
 			(*dev)->Release(dev);
 			continue;
 		}
 
-		// Filter for only keyboards and blade laptops
-		if (!(is_keyboard(dev) || is_blade_laptop(dev))) {
-			(*dev)->Release(dev);
-            continue;
-        }
+		switch (type) {
+			case TYPE_KEYBOARD:
+			case TYPE_BLADE:
+				// Filter out non-keyboards and non-blade laptops
+				if (!(is_keyboard(dev) || is_blade_laptop(dev))) {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+			case TYPE_MOUSE:
+				// Filter out non-mice
+				if (!is_mouse(dev)) {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+			default:
+				// Unsupported Razer peripheral type
+				(*dev)->Release(dev);
+				continue;
+		}
+
+
 
 		
 		kReturn = (*dev)->USBDeviceOpen(dev);
