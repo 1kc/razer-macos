@@ -5,11 +5,143 @@ import addon from '../driver'
 import path from 'path'
 import { format as formatUrl } from 'url'
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDevelopment = false;
 
 let tray = null
 let window = null
-let forceQuit = false;
+let forceQuit = false
+const template = [
+  {
+    // Initialise and get device name
+    label: addon.getDevice() || 'No device found',
+    enabled: false,
+  },
+  {
+    label: 'Refresh',
+    click() {refreshDevices()},
+  },
+  { type: 'separator' },
+  {
+    label: 'None',
+    click() { addon.setModeNone(); },
+  },
+  {
+    label: 'Static',
+    submenu: [
+      { // TODO: implement a better way to deal with colours
+        label: 'White',
+        click() { addon.setModeStatic(new Uint8Array([
+          0xff,0xff,0xff
+        ]))},
+      },
+      {
+        label: 'Red',
+        click() {addon.setModeStatic(new Uint8Array([
+          0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.setModeStatic(new Uint8Array([
+          0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.setModeStatic(new Uint8Array([
+          0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
+    label: 'Wave',
+    submenu: [
+      {
+        label: 'Left',
+        click() { addon.setModeWave("left"); }
+      },
+      {
+        label: 'Right',
+        click() { addon.setModeWave("right"); }
+      },
+    ]
+  },
+  {
+    label: 'Spectrum',
+    click() { addon.setModeSpectrum(); },
+  },
+  {
+    label: 'Reactive',
+    submenu: [
+      {
+        label: 'Red',
+        click() {addon.setModeReactive(new Uint8Array([
+          3,0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.setModeReactive(new Uint8Array([
+          3,0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.setModeReactive(new Uint8Array([
+          3,0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
+    label: 'Breathe',
+    click() {addon.setModeBreathe(new Uint8Array([
+      0 // random
+    ]))}
+  },
+  {
+    label: 'Starlight',
+    submenu: [
+      {
+        label: 'Red',
+        click() {addon.setModeStarlight(new Uint8Array([
+          3,0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.setModeStarlight(new Uint8Array([
+          3,0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.setModeStarlight(new Uint8Array([
+          3,0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  { type: 'separator' },
+  {
+    label: 'Custom color',
+    click() { window.show() }
+  },
+  { type: 'separator' },
+  {
+    label: 'Quit',
+    click() { app.quit(); }
+  }
+]
+
+const refreshDevices = () => {
+  addon.closeDevice()
+  template[0].label = addon.getDevice() || 'No device found';
+  // Rebuild menu
+  const newContextMenu = Menu.buildFromTemplate(template)
+  tray.setContextMenu(newContextMenu)
+}
 
 app.on('ready', () => {
   createTray()
@@ -128,127 +260,7 @@ function createTray() {
   } else {
     tray = new Tray(path.join(__static, '/assets/icon-lightmode.png'));  
   }
-
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      // Initialise and get device name
-      label: addon.getDevice() || 'No device found',
-      enabled: false,
-    },
-    { type: 'separator' },
-    {
-      label: 'None',
-      click() { addon.setModeNone(); },
-    },
-    {
-      label: 'Static',
-      submenu: [
-        { // TODO: implement a better way to deal with colours
-          label: 'White',
-          click() { addon.setModeStatic(new Uint8Array([
-            0xff,0xff,0xff
-          ]))},
-        },
-        {
-          label: 'Red',
-          click() {addon.setModeStatic(new Uint8Array([
-            0xff,0,0
-          ]))},
-        },
-        {
-          label: 'Green',
-          click() {addon.setModeStatic(new Uint8Array([
-            0,0xff,0
-          ]))},
-        },
-        {
-          label: 'Blue',
-          click() {addon.setModeStatic(new Uint8Array([
-            0,0,0xff
-          ]))},
-        },
-      ]
-    },
-    {
-      label: 'Wave',
-      submenu: [
-        {
-          label: 'Left',
-          click() { addon.setModeWave("left"); }
-        },
-        {
-          label: 'Right',
-          click() { addon.setModeWave("right"); }
-        },
-      ]
-    },
-    {
-      label: 'Spectrum',
-      click() { addon.setModeSpectrum(); },
-    },
-    {
-      label: 'Reactive',
-      submenu: [
-        {
-          label: 'Red',
-          click() {addon.setModeReactive(new Uint8Array([
-            3,0xff,0,0
-          ]))},
-        },
-        {
-          label: 'Green',
-          click() {addon.setModeReactive(new Uint8Array([
-            3,0,0xff,0
-          ]))},
-        },
-        {
-          label: 'Blue',
-          click() {addon.setModeReactive(new Uint8Array([
-            3,0,0,0xff
-          ]))},
-        },
-      ]
-    },
-    {
-      label: 'Breathe',
-      click() {addon.setModeBreathe(new Uint8Array([
-        0 // random
-      ]))}
-    },
-    {
-      label: 'Starlight',
-      submenu: [
-        {
-          label: 'Red',
-          click() {addon.setModeStarlight(new Uint8Array([
-            3,0xff,0,0
-          ]))},
-        },
-        {
-          label: 'Green',
-          click() {addon.setModeStarlight(new Uint8Array([
-            3,0,0xff,0
-          ]))},
-        },
-        {
-          label: 'Blue',
-          click() {addon.setModeStarlight(new Uint8Array([
-            3,0,0,0xff
-          ]))},
-        },
-      ]
-    },
-    { type: 'separator' },
-    {
-      label: 'Custom color',
-      click() { window.show() }
-    },
-    { type: 'separator' },
-    {
-      label: 'Quit',
-      click() { app.quit(); }
-    }
-  ])
+  const contextMenu = Menu.buildFromTemplate(template);
   tray.setToolTip('Razer macOS menu')
   tray.setContextMenu(contextMenu)
 
