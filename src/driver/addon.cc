@@ -27,31 +27,12 @@ Napi::Value GetKeyboardDevice(const Napi::CallbackInfo& info) {
   return Napi::String::New(env, buf);
 }
 
-
-/**
-* Get the Razer Mouse USB device interface and device name, 
-* return JS Null if non found
-*/
-Napi::Value GetMouseDevice(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
-
-  mouseDev = getRazerUSBDeviceInterface(TYPE_MOUSE);
-  if (mouseDev == NULL) {
-    return env.Null();
+void CloseKeyboardDevice(const Napi::CallbackInfo& info) {
+  if (kbdDev == NULL) {
+    return;
   }
-
-  char buf[256] = {0};
-  razer_mouse_attr_read_device_type(mouseDev, buf);
-  return Napi::String::New(env, buf);
-}
-
-
-void CloseDevice(const Napi::CallbackInfo& info) {
-  // if (kbdDev == NULL) {
-  //   return;
-  // }
   closeRazerUSBDeviceInterface(kbdDev);
-  closeRazerUSBDeviceInterface(mouseDev);
+
 }
 
 void KbdSetModeNone(const Napi::CallbackInfo& info) {
@@ -156,7 +137,31 @@ void KbdSetModeStarlight(const Napi::CallbackInfo& info) {
   razer_attr_write_mode_starlight(kbdDev, buf, 4);
 }
 
+/**
+* Get the Razer Mouse USB device interface and device name, 
+* return JS Null if non found
+*/
+Napi::Value GetMouseDevice(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
 
+  mouseDev = getRazerUSBDeviceInterface(TYPE_MOUSE);
+  if (mouseDev == NULL) {
+    return env.Null();
+  }
+
+  char buf[256] = {0};
+  razer_mouse_attr_read_device_type(mouseDev, buf);
+  return Napi::String::New(env, buf);
+}
+
+
+void CloseMouseDevice(const Napi::CallbackInfo& info) {
+  if (mouseDev == NULL) {
+    return;
+  }
+  closeRazerUSBDeviceInterface(mouseDev);
+
+}
 
 
 void MouseSetLogoLEDEffect(const Napi::CallbackInfo& info) {
@@ -198,7 +203,7 @@ void MouseSetLogoLEDRGB(const Napi::CallbackInfo& info) {
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("getKeyboardDevice", Napi::Function::New(env, GetKeyboardDevice));
-  exports.Set("closeDevice", Napi::Function::New(env, CloseDevice));
+  exports.Set("closeKeyboardDevice", Napi::Function::New(env, CloseKeyboardDevice));
   exports.Set("kbdSetModeNone", Napi::Function::New(env, KbdSetModeNone));
   exports.Set("kbdSetModeSpectrum", Napi::Function::New(env, KbdSetModeSpectrum));
   exports.Set("kbdSetModeStatic", Napi::Function::New(env, KbdSetModeStatic));
@@ -208,6 +213,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("kbdSetModeStarlight", Napi::Function::New(env, KbdSetModeStarlight));
 
   exports.Set("getMouseDevice", Napi::Function::New(env, GetMouseDevice));
+  exports.Set("closeMouseDevice", Napi::Function::New(env, CloseMouseDevice));
   exports.Set("mouseSetLogoLEDEffect", Napi::Function::New(env, MouseSetLogoLEDEffect));
   exports.Set("mouseSetLogoLEDRGB", Napi::Function::New(env, MouseSetLogoLEDRGB));
   return exports;

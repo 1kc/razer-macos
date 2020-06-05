@@ -5,11 +5,200 @@ import addon from '../driver'
 import path from 'path'
 import { format as formatUrl } from 'url'
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDevelopment = process.env.NODE_ENV == 'development'
 
 let tray = null
 let window = null
 let forceQuit = false;
+const template = [
+  {
+    label: 'Refresh',
+    click() {refreshDevices()},
+  },
+  { type: 'separator' },
+  {
+    // Initialise and get keyboard device name
+    label: addon.getKeyboardDevice() || 'No keyboard found',
+    enabled: false,
+  },
+  { type: 'separator' },
+  {
+    label: 'None',
+    click() { addon.kbdSetModeNone(); },
+  },
+  {
+    label: 'Static',
+    submenu: [
+      { // TODO: implement a better way to deal with colours
+        label: 'White',
+        click() { addon.kbdSetModeStatic(new Uint8Array([
+          0xff,0xff,0xff
+        ]))},
+      },
+      {
+        label: 'Red',
+        click() {addon.kbdSetModeStatic(new Uint8Array([
+          0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.kbdSetModeStatic(new Uint8Array([
+          0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.kbdSetModeStatic(new Uint8Array([
+          0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
+    label: 'Wave',
+    submenu: [
+      {
+        label: 'Left',
+        click() { addon.kbdSetModeWave('left'); }
+      },
+      {
+        label: 'Right',
+        click() { addon.kbdSetModeWave('right'); }
+      },
+    ]
+  },
+  {
+    label: 'Spectrum',
+    click() { addon.kbdSetModeSpectrum(); },
+  },
+  {
+    label: 'Reactive',
+    submenu: [
+      {
+        label: 'Red',
+        click() {addon.kbdSetModeReactive(new Uint8Array([
+          3,0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.kbdSetModeReactive(new Uint8Array([
+          3,0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.kbdSetModeReactive(new Uint8Array([
+          3,0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
+    label: 'Breathe',
+    click() {addon.kbdSetModeBreathe(new Uint8Array([
+      0 // random
+    ]))}
+  },
+  {
+    label: 'Starlight',
+    submenu: [
+      {
+        label: 'Red',
+        click() {addon.kbdSetModeStarlight(new Uint8Array([
+          3,0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.kbdSetModeStarlight(new Uint8Array([
+          3,0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.kbdSetModeStarlight(new Uint8Array([
+          3,0,0,0xff
+        ]))},
+      },
+      
+    ]
+  },
+  {
+    label: 'Custom color',
+    click() { window.show() }
+  },
+  { type: 'separator' },
+  {
+    // Initialise and get mouse device name
+    label: addon.getMouseDevice() || 'No mouse found',
+    enabled: false,
+  },
+  { type: 'separator' },
+  {
+    label: 'Static',
+    click() { addon.mouseSetLogoLEDEffect('static'); },
+  },
+  {
+    label: 'Blinking',
+    click() { addon.mouseSetLogoLEDEffect('blinking'); },
+  },
+  {
+    label: 'Pulsate',
+    click() { addon.mouseSetLogoLEDEffect('pulsate'); },
+  },
+  {
+    label: 'Scroll',
+    click() { addon.mouseSetLogoLEDEffect('scroll'); },
+  },
+  {
+    label: 'Logo Color',
+    submenu: [
+      {
+        label: 'White',
+        click() { addon.mouseSetLogoLEDRGB(new Uint8Array([
+          0xff,0xff,0xff
+        ]))},
+      },
+      {
+        label: 'Red',
+        click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
+          0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
+          0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
+          0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  { type: 'separator' },
+  {
+    label: 'Quit',
+    click() { app.quit(); }
+  },
+  
+]
+
+const refreshDevices = () => {
+  addon.closeKeyboardDevice()
+  addon.closeMouseDevice()
+  // TODO: change template indexing
+  template[2].label = addon.getKeyboardDevice() || 'No keyboard found';
+  template[13].label = addon.getMouseDevice() || 'No mouse found';
+  // Rebuild menu
+  const newContextMenu = Menu.buildFromTemplate(template)
+  tray.setContextMenu(newContextMenu)
+}
 
 app.on('ready', () => {
   createTray()
@@ -19,7 +208,8 @@ app.on('ready', () => {
 
 
 app.on('quit', () => {
-  addon.closeDevice()
+  addon.closeKeyboardDevice()
+  addon.closeMouseDevice()
 })
 
 nativeTheme.on('updated', () => {
@@ -129,179 +319,7 @@ function createTray() {
     tray = new Tray(path.join(__static, '/assets/icon-lightmode.png'));  
   }
 
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      // Initialise and get keyboard device name
-      label: addon.getKeyboardDevice() || 'No keyboard found',
-      enabled: false,
-    },
-    { type: 'separator' },
-    {
-      label: 'None',
-      click() { addon.kbdSetModeNone(); },
-    },
-    {
-      label: 'Static',
-      submenu: [
-        { // TODO: implement a better way to deal with colours
-          label: 'White',
-          click() { addon.kbdSetModeStatic(new Uint8Array([
-            0xff,0xff,0xff
-          ]))},
-        },
-        {
-          label: 'Red',
-          click() {addon.kbdSetModeStatic(new Uint8Array([
-            0xff,0,0
-          ]))},
-        },
-        {
-          label: 'Green',
-          click() {addon.kbdSetModeStatic(new Uint8Array([
-            0,0xff,0
-          ]))},
-        },
-        {
-          label: 'Blue',
-          click() {addon.kbdSetModeStatic(new Uint8Array([
-            0,0,0xff
-          ]))},
-        },
-      ]
-    },
-    {
-      label: 'Wave',
-      submenu: [
-        {
-          label: 'Left',
-          click() { addon.kbdSetModeWave('left'); }
-        },
-        {
-          label: 'Right',
-          click() { addon.kbdSetModeWave('right'); }
-        },
-      ]
-    },
-    {
-      label: 'Spectrum',
-      click() { addon.kbdSetModeSpectrum(); },
-    },
-    {
-      label: 'Reactive',
-      submenu: [
-        {
-          label: 'Red',
-          click() {addon.kbdSetModeReactive(new Uint8Array([
-            3,0xff,0,0
-          ]))},
-        },
-        {
-          label: 'Green',
-          click() {addon.kbdSetModeReactive(new Uint8Array([
-            3,0,0xff,0
-          ]))},
-        },
-        {
-          label: 'Blue',
-          click() {addon.kbdSetModeReactive(new Uint8Array([
-            3,0,0,0xff
-          ]))},
-        },
-      ]
-    },
-    {
-      label: 'Breathe',
-      click() {addon.kbdSetModeBreathe(new Uint8Array([
-        0 // random
-      ]))}
-    },
-    {
-      label: 'Starlight',
-      submenu: [
-        {
-          label: 'Red',
-          click() {addon.kbdSetModeStarlight(new Uint8Array([
-            3,0xff,0,0
-          ]))},
-        },
-        {
-          label: 'Green',
-          click() {addon.kbdSetModeStarlight(new Uint8Array([
-            3,0,0xff,0
-          ]))},
-        },
-        {
-          label: 'Blue',
-          click() {addon.kbdSetModeStarlight(new Uint8Array([
-            3,0,0,0xff
-          ]))},
-        },
-        
-      ]
-    },
-    {
-      label: 'Custom color',
-      click() { window.show() }
-    },
-    { type: 'separator' },
-    {
-      // Initialise and get mouse device name
-      label: addon.getMouseDevice() || 'No mouse found',
-      enabled: false,
-    },
-    { type: 'separator' },
-    {
-      label: 'Static',
-      click() { addon.mouseSetLogoLEDEffect('static'); },
-    },
-    {
-      label: 'Blinking',
-      click() { addon.mouseSetLogoLEDEffect('blinking'); },
-    },
-    {
-      label: 'Pulsate',
-      click() { addon.mouseSetLogoLEDEffect('pulsate'); },
-    },
-    {
-      label: 'Scroll',
-      click() { addon.mouseSetLogoLEDEffect('scroll'); },
-    },
-    {
-      label: 'Logo Color',
-      submenu: [
-        {
-          label: 'White',
-          click() { addon.mouseSetLogoLEDRGB(new Uint8Array([
-            0xff,0xff,0xff
-          ]))},
-        },
-        {
-          label: 'Red',
-          click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
-            0xff,0,0
-          ]))},
-        },
-        {
-          label: 'Green',
-          click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
-            0,0xff,0
-          ]))},
-        },
-        {
-          label: 'Blue',
-          click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
-            0,0,0xff
-          ]))},
-        },
-      ]
-    },
-    { type: 'separator' },
-    {
-      label: 'Quit',
-      click() { app.quit(); }
-    },
-    
-  ])
+  const contextMenu = Menu.buildFromTemplate(template);
   tray.setToolTip('Razer macOS menu')
   tray.setContextMenu(contextMenu)
 
