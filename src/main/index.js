@@ -5,7 +5,7 @@ import addon from '../driver'
 import path from 'path'
 import { format as formatUrl } from 'url'
 
-const isDevelopment = false;
+const isDevelopment = process.env.NODE_ENV == 'development'
 
 let tray = null
 let window = null
