@@ -286,3 +286,36 @@ ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *
 
     return sprintf(buf, "%s", device_type);
 }
+
+
+/**
+ * Write device file "logo_led_effect"
+ */
+ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    unsigned char effect = (unsigned char)strtoul(buf, NULL, 10);
+    struct razer_report report = razer_chroma_standard_set_led_effect(VARSTORE, LOGO_LED, effect);
+    report.transaction_id.id = 0x3F;
+
+    razer_send_payload(usb_dev, &report);
+
+    return count;
+}
+
+/**
+ * Write device file "logo_led_rgb"
+ */
+ssize_t razer_attr_write_logo_led_rgb(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    struct razer_report report = {0};
+
+    if(count == 3) {
+        report = razer_chroma_standard_set_led_rgb(VARSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
+        report.transaction_id.id = 0x3F;
+        razer_send_payload(usb_dev, &report);
+    } else {
+        printf("razermouse: Logo LED mode only accepts RGB (3byte)\n");
+    }
+
+    return count;
+}
