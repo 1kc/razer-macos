@@ -43,7 +43,7 @@ export default function CustomColor() {
           ))}
           </select>
 
-          <HuePicker color={color} onChange={handleChange} onChangeComplete={handleChangeComplete}/>
+          {value && <HuePicker color={color} onChange={handleChange} onChangeComplete={handleChangeComplete}/>}
       </div>
     
   );

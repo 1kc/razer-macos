@@ -23,6 +23,10 @@ const template = [
   },
   { type: 'separator' },
   {
+    label: 'Custom color',
+    click() { window.show() }
+  },
+  {
     label: 'None',
     click() { addon.kbdSetModeNone(); },
   },
@@ -125,10 +129,6 @@ const template = [
       
     ]
   },
-  {
-    label: 'Custom color',
-    click() { window.show() }
-  },
   { type: 'separator' },
   {
     // Initialise and get mouse device name
@@ -136,46 +136,50 @@ const template = [
     enabled: false,
   },
   { type: 'separator' },
+  // {
+  //   label: 'Static',
+  //   click() { addon.mouseSetLogoLEDEffect('static'); },
+  // },
+  // {
+  //   label: 'Blinking',
+  //   click() { addon.mouseSetLogoLEDEffect('blinking'); },
+  // },
+  // {
+  //   label: 'Pulsate',
+  //   click() { addon.mouseSetLogoLEDEffect('pulsate'); },
+  // },
+  // {
+  //   label: 'Scroll',
+  //   click() { addon.mouseSetLogoLEDEffect('scroll'); },
+  // },
   {
-    label: 'Static',
-    click() { addon.mouseSetLogoLEDEffect('static'); },
+    label: 'Logo None',
+    click() { addon.mouseSetLogoModeNone(); }
   },
   {
-    label: 'Blinking',
-    click() { addon.mouseSetLogoLEDEffect('blinking'); },
-  },
-  {
-    label: 'Pulsate',
-    click() { addon.mouseSetLogoLEDEffect('pulsate'); },
-  },
-  {
-    label: 'Scroll',
-    click() { addon.mouseSetLogoLEDEffect('scroll'); },
-  },
-  {
-    label: 'Logo Color',
+    label: 'Logo Static',
     submenu: [
       {
         label: 'White',
-        click() { addon.mouseSetLogoLEDRGB(new Uint8Array([
+        click() { addon.mouseSetLogoModeStatic(new Uint8Array([
           0xff,0xff,0xff
         ]))},
       },
       {
         label: 'Red',
-        click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
+        click() {addon.mouseSetLogoModeStatic(new Uint8Array([
           0xff,0,0
         ]))},
       },
       {
         label: 'Green',
-        click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
+        click() {addon.mouseSetLogoModeStatic(new Uint8Array([
           0,0xff,0
         ]))},
       },
       {
         label: 'Blue',
-        click() {addon.mouseSetLogoLEDRGB(new Uint8Array([
+        click() {addon.mouseSetLogoModeStatic(new Uint8Array([
           0,0,0xff
         ]))},
       },
