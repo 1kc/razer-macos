@@ -1,7 +1,7 @@
 
 <p align="center">
   <img src="resources/hero.png" alt="keyboard demo pic" />
-  <p align="center">Open source color effects manager for Razer keyboards on macOS</p>
+  <p align="center">Open source color effects manager for Razer keyboards and mice on macOS</p>
 </p>
 
 <p align="center">
@@ -15,6 +15,10 @@
 
 ## Download
 [Latest release](https://github.com/1kc/razer-macos/releases)
+
+## Installation
+
+If you get a security warning, you need to go to your Mac's "System Preferences" -> "Security and Privacy" -> "General" and click "Open" at the bottom to allow Razer macOS to run.
 
 ## Device support
 

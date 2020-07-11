@@ -3,14 +3,17 @@ body {
     margin: 3px;
 }
 
-input, select {
-    width: 100%;
-    margin-bottom: 20px;
-}
 
 .settings {
     margin: 30px 10px 30px 10px;
     /* -webkit-app-region: no-drag; */
+}
+
+.control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 #titlebar {

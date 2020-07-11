@@ -164,42 +164,54 @@ void CloseMouseDevice(const Napi::CallbackInfo& info) {
 }
 
 
-// void MouseSetLogoLEDEffect(const Napi::CallbackInfo& info) {
-//   if (mouseDev == NULL) {
-//     return;
-//   }
-//   const char* effect =  info[0].ToString().Utf8Value().c_str();
+void MouseSetLogoLEDEffect(const Napi::CallbackInfo& info) {
+  if (mouseDev == NULL) {
+    return;
+  }
+  const char* effect =  info[0].ToString().Utf8Value().c_str();
 
-//   if (std::strncmp(effect, "static", 6) == 0) {
-//     razer_attr_write_logo_led_effect(mouseDev, "0", 1);
-//   } else if (std::strncmp(effect, "blinking", 8) == 0) {
-//     razer_attr_write_logo_led_effect(mouseDev, "1", 1);
-//   } else if (std::strncmp(effect, "pulsate", 7) == 0) {
-//     razer_attr_write_logo_led_effect(mouseDev, "2", 1);
-//   } else if (std::strncmp(effect, "scroll", 6) == 0) {
-//     razer_attr_write_logo_led_effect(mouseDev, "4", 1);
-//   }
+  if (std::strncmp(effect, "static", 6) == 0) {
+    razer_attr_write_logo_led_effect(mouseDev, "0", 1);
+  } else if (std::strncmp(effect, "blinking", 8) == 0) {
+    razer_attr_write_logo_led_effect(mouseDev, "1", 1);
+  } else if (std::strncmp(effect, "pulsate", 7) == 0) {
+    razer_attr_write_logo_led_effect(mouseDev, "2", 1);
+  } else if (std::strncmp(effect, "scroll", 6) == 0) {
+    razer_attr_write_logo_led_effect(mouseDev, "4", 1);
+  }
 
-// }
+}
 
-// void MouseSetLogoLEDRGB(const Napi::CallbackInfo& info) {
-//   Napi::Env env = info.Env();
-//   if (mouseDev == NULL) {
-//     return;
-//   }
+void MouseSetLogoLEDRGB(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == NULL) {
+    return;
+  }
 
-//   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-//   if (argsArr.ElementLength() != 3) {
-//     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
-//         .ThrowAsJavaScriptException();
-//     return;
-//   }
-//   // Cast unsigned char array into char array
-//   char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
 
-//   razer_attr_write_logo_led_rgb(mouseDev, buf, 3);
-// }
+  razer_attr_write_logo_led_rgb(mouseDev, buf, 3);
+}
+
+void MouseSetLogoModeWave(const Napi::CallbackInfo& info) {
+  if (mouseDev == NULL) {
+    return;
+  }
+
+  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
+    razer_attr_write_logo_mode_wave(kbdDev, "1", 0);
+  } else {
+    razer_attr_write_logo_mode_wave(kbdDev, "2", 0);
+  }
+}
 
 void MouseSetLogoModeStatic(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
@@ -242,14 +254,14 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
   exports.Set("getMouseDevice", Napi::Function::New(env, GetMouseDevice));
   exports.Set("closeMouseDevice", Napi::Function::New(env, CloseMouseDevice));
+  exports.Set("mouseSetLogoModeWave", Napi::Function::New(env, MouseSetLogoModeWave));
   exports.Set("mouseSetLogoModeStatic", Napi::Function::New(env, MouseSetLogoModeStatic));
   exports.Set("mouseSetLogoModeNone", Napi::Function::New(env, MouseSetLogoModeNone));
 
 
-
   // Older mouse functions
-  // exports.Set("mouseSetLogoLEDEffect", Napi::Function::New(env, MouseSetLogoLEDEffect));
-  // exports.Set("mouseSetLogoLEDRGB", Napi::Function::New(env, MouseSetLogoLEDRGB));
+  exports.Set("mouseSetLogoLEDEffect", Napi::Function::New(env, MouseSetLogoLEDEffect));
+  exports.Set("mouseSetLogoLEDRGB", Napi::Function::New(env, MouseSetLogoLEDRGB));
   return exports;
 }
 

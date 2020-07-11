@@ -10,6 +10,26 @@ const isDevelopment = process.env.NODE_ENV == 'development'
 let tray = null
 let window = null
 let forceQuit = false;
+
+let customKdbColor = {
+  hex: '#ffff00',
+  rgb: {
+    r: 255,
+    g: 255,
+    b: 0
+  }
+};
+
+let customMouseColor = {
+  hex: '#ffff00',
+  rgb: {
+    r: 255,
+    g: 255,
+    b: 0
+  }
+};
+
+
 const template = [
   {
     label: 'Refresh',
@@ -23,17 +43,19 @@ const template = [
   },
   { type: 'separator' },
   {
-    label: 'Custom color',
-    click() { window.show() }
-  },
-  {
     label: 'None',
     click() { addon.kbdSetModeNone(); },
   },
   {
     label: 'Static',
     submenu: [
-      { // TODO: implement a better way to deal with colours
+      {
+        label: 'Custom color',
+        click() {addon.kbdSetModeStatic(new Uint8Array([
+          customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
+        ]))},
+      },
+      {
         label: 'White',
         click() { addon.kbdSetModeStatic(new Uint8Array([
           0xff,0xff,0xff
@@ -80,6 +102,12 @@ const template = [
     label: 'Reactive',
     submenu: [
       {
+        label: 'Custom color',
+        click() {addon.kbdSetModeReactive(new Uint8Array([
+          3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
+        ]))},
+      },
+      {
         label: 'Red',
         click() {addon.kbdSetModeReactive(new Uint8Array([
           3,0xff,0,0
@@ -109,6 +137,12 @@ const template = [
     label: 'Starlight',
     submenu: [
       {
+        label: 'Custom color',
+        click() {addon.kbdSetModeStarlight(new Uint8Array([
+          3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
+        ]))},
+      },
+      {
         label: 'Red',
         click() {addon.kbdSetModeStarlight(new Uint8Array([
           3,0xff,0,0
@@ -125,9 +159,15 @@ const template = [
         click() {addon.kbdSetModeStarlight(new Uint8Array([
           3,0,0,0xff
         ]))},
-      },
-      
+      }
     ]
+  },
+  {
+    label: 'Set custom color',
+    click() { 
+      window.webContents.send('device-selected', {device: 'Keyboard', currentColor: customKdbColor});
+      window.show()
+     }
   },
   { type: 'separator' },
   {
@@ -136,29 +176,33 @@ const template = [
     enabled: false,
   },
   { type: 'separator' },
-  // {
-  //   label: 'Static',
-  //   click() { addon.mouseSetLogoLEDEffect('static'); },
-  // },
-  // {
-  //   label: 'Blinking',
-  //   click() { addon.mouseSetLogoLEDEffect('blinking'); },
-  // },
-  // {
-  //   label: 'Pulsate',
-  //   click() { addon.mouseSetLogoLEDEffect('pulsate'); },
-  // },
-  // {
-  //   label: 'Scroll',
-  //   click() { addon.mouseSetLogoLEDEffect('scroll'); },
-  // },
   {
-    label: 'Logo None',
+    label: 'None',
     click() { addon.mouseSetLogoModeNone(); }
   },
   {
-    label: 'Logo Static',
+    label: 'Wave',
     submenu: [
+      {
+        label: 'Left',
+        click() { addon.mouseSetLogoModeWave('left'); }
+      },
+      {
+        label: 'Right',
+        click() { addon.mouseSetLogoModeWave('right'); }
+      },
+    ]
+  },
+  {
+    label: 'Static',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          addon.kbdSetModeStatic(new Uint8Array([
+          customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
+        ]))},
+      },
       {
         label: 'White',
         click() { addon.mouseSetLogoModeStatic(new Uint8Array([
@@ -184,6 +228,37 @@ const template = [
         ]))},
       },
     ]
+  },
+  {
+    label: 'Older mouse effects',
+    submenu: [
+      {
+        label: 'Static',
+        click() { addon.mouseSetLogoLEDEffect('static'); },
+      },
+      {
+        label: 'Blinking',
+        click() { addon.mouseSetLogoLEDEffect('blinking'); },
+      },
+      {
+        label: 'Pulsate',
+        click() { addon.mouseSetLogoLEDEffect('pulsate'); },
+      },
+      {
+        label: 'Scroll',
+        click() { addon.mouseSetLogoLEDEffect('scroll'); },
+      },
+      {
+        label: 'Set custom color',
+        click() { console.log(customMouseColor); addon.mouseSetLogoLEDRGB(new Uint8Array([
+          customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
+        ])) },
+      }
+    ]
+  },
+  {
+    label: 'Set custom color',
+    click() { window.webContents.send('device-selected', {device: 'Mouse', currentColor: customMouseColor}); window.show() }
   },
   { type: 'separator' },
   {
@@ -222,23 +297,13 @@ nativeTheme.on('updated', () => {
 
 // custom color rpc listener
 ipcMain.on('request-set-custom-color', (event, arg) => {
-  const { mode, color } = arg
-  const colorArr = new Uint8Array([color.rgb.r, color.rgb.g, color.rgb.b]);
-  // TODO: implement speed
-  const speedColorArr = new Uint8Array([3, color.rgb.r, color.rgb.g, color.rgb.b]);
-
-  switch (mode) {
-    case "static":
-      addon.kbdSetModeStatic(colorArr)
-      break
-    case "reactive":
-      addon.kbdSetModeReactive(speedColorArr)
-      break
-    case "starlight":
-      addon.kbdSetModeStarlight(speedColorArr)
+  const { device, color } = arg
+  switch (device) {
+    case "Mouse":
+      customMouseColor = color
       break
     default:
-      addon.kbdSetModeStatic(colorArr)
+      customKdbColor = color
   }
 });
 
@@ -247,9 +312,9 @@ function createWindow() {
   window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
     titleBarStyle: 'hidden',
-    height: 150,
+    height: 250,
     resizable: false,
-    width: 340,
+    width: 500,
     y: 100,
     // Set the default background color of the window to match the CSS
     // background color of the page, this prevents any white flickering

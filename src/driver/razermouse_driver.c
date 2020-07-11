@@ -288,13 +288,48 @@ ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *
 }
 
 /**
+ * Write device file "logo_mode_wave" (for extended mouse matrix effects)
+ *
+ * Wave effect mode is activated whenever the file is written to
+ */
+ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    unsigned char direction = (unsigned char)strtol(buf, NULL, 10);
+    struct razer_report report = {0};
+    
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction);
+        break;
+
+    case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction);
+        report.transaction_id.id = 0x1f;
+        break;
+
+    default:
+        printf("razermouse: logo_mode_wave not supported for this model\n");
+        return count;
+    }
+
+    razer_send_payload(usb_dev, &report);
+    return count;
+}
+
+/**
  * Write device file "logo_mode_static" (for extended mouse matrix effects)
  *
  * Set the mouse to static mode when 3 RGB bytes are written
  */
 ssize_t razer_attr_write_logo_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
 {
-
     struct razer_report report = {0};
     
     UInt16 product = -1;
@@ -399,34 +434,34 @@ ssize_t razer_attr_write_logo_mode_none(IOUSBDeviceInterface **usb_dev, const ch
 
 // These are for older mice, eg DeathAdder 2013
 
-// /**
-//  * Write device file "logo_led_effect"
-//  */
-// ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
-// {
-//     unsigned char effect = (unsigned char)strtoul(buf, NULL, 10);
-//     struct razer_report report = razer_chroma_standard_set_led_effect(VARSTORE, LOGO_LED, effect);
-//     report.transaction_id.id = 0x3F;
+/**
+ * Write device file "logo_led_effect"
+ */
+ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    unsigned char effect = (unsigned char)strtoul(buf, NULL, 10);
+    struct razer_report report = razer_chroma_standard_set_led_effect(VARSTORE, LOGO_LED, effect);
+    report.transaction_id.id = 0x3F;
 
-//     razer_send_payload(usb_dev, &report);
+    razer_send_payload(usb_dev, &report);
 
-//     return count;
-// }
+    return count;
+}
 
-// /**
-//  * Write device file "logo_led_rgb"
-//  */
-// ssize_t razer_attr_write_logo_led_rgb(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
-// {
-//     struct razer_report report = {0};
+/**
+ * Write device file "logo_led_rgb"
+ */
+ssize_t razer_attr_write_logo_led_rgb(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    struct razer_report report = {0};
 
-//     if(count == 3) {
-//         report = razer_chroma_standard_set_led_rgb(VARSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
-//         report.transaction_id.id = 0x3F;
-//         razer_send_payload(usb_dev, &report);
-//     } else {
-//         printf("razermouse: Logo LED mode only accepts RGB (3byte)\n");
-//     }
+    if(count == 3) {
+        report = razer_chroma_standard_set_led_rgb(VARSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
+        report.transaction_id.id = 0x3F;
+        razer_send_payload(usb_dev, &report);
+    } else {
+        printf("razermouse: Logo LED mode only accepts RGB (3byte)\n");
+    }
 
-//     return count;
-// }
+    return count;
+}
