@@ -112,15 +112,15 @@
 #define RAZER_FIREFLY_WAIT_MAX_US 1000
 
 
-struct razer_kbd_device {
-    IOUSBDeviceInterface **usbdev;
-    unsigned int fn_on;
-    char name[128];
-    char phys[64];
+// struct razer_kbd_device {
+//     IOUSBDeviceInterface **usbdev;
+//     unsigned int fn_on;
+//     char name[128];
+//     char phys[64];
     
-    unsigned char block_keys[3];
-    unsigned char left_alt_on;
-};
+//     unsigned char block_keys[3];
+//     unsigned char left_alt_on;
+// };
 
 bool is_blade_laptop(IOUSBDeviceInterface **usb_dev);
 ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);

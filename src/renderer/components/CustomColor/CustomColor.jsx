@@ -1,49 +1,29 @@
-import React, { useState } from 'react';
-import { HuePicker } from 'react-color';
-import { ipcRenderer } from 'electron'
+import React, { useState, useEffect } from 'react';
+import { HuePicker, MaterialPicker } from 'react-color';
+import { ipcRenderer } from 'electron';
 
-const ITEMS = [
-    {label: "Static", value: "static"},
-    {label: "Reactive", value: "reactive"},
-    {label: "Starlight", value: "starlight"},
-  ]
 
-export default function CustomColor() {
-  // UI state
-  const [color, setColor] = useState('#00ff00');
 
-  const [value, setValue] = React.useState("");
+export default function CustomColor({ deviceSelected, currentColor, setCurrentColor }) {
 
   const handleChange = (newColor) => {
-    if (value === "") return;
-    setColor(newColor)
+    setCurrentColor(newColor)
   }
   const handleChangeComplete = (newColor, event) => {
-    if (value === "") return;
     let payload = {
-        mode: value,
+        device: deviceSelected,
         color: newColor
     };
     ipcRenderer.send('request-set-custom-color', payload);
   }
   return (
       <div className="settings">
-          <select
-            value={value}
-            onChange={e => setValue(e.currentTarget.value)}
-          >
-          <option value="" disabled>Select effect</option>
-          {ITEMS.map(item => (
-              <option
-              key={item.value}
-              value={item.value}
-              >
-              {item.label}
-              </option>
-          ))}
-          </select>
-
-          <HuePicker color={color} onChange={handleChange} onChangeComplete={handleChangeComplete}/>
+        <div className="control">
+          <HuePicker color={currentColor} onChange={handleChange} onChangeComplete={handleChangeComplete}/>
+        </div>
+        <div className="control">
+          <MaterialPicker color={currentColor} onChange={handleChange} onChangeComplete={handleChangeComplete} />
+        </div>
       </div>
     
   );
