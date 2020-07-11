@@ -27,12 +27,19 @@ For a complete list of supported keyboards see [openrazer](https://openrazer.git
 
 Confirmed working for:
 
+Keyboards:
+
 * Razer BlackWidow Elite
 * Razer Ornata Chroma
 * Razer Huntsman
 * Razer Huntsman Elite
 * Razer Huntsman TE
 * Razer Blade Advanced 2018
+
+Mice:
+
+* Deathadder Elite
+* Razer Lancehead Wireless
 
 ## FAQ
 
