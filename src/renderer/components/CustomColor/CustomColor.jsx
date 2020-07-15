@@ -9,20 +9,27 @@ export default function CustomColor({ deviceSelected, currentColor, setCurrentCo
   const handleChange = (newColor) => {
     setCurrentColor(newColor)
   }
-  const handleChangeComplete = (newColor, event) => {
+
+  const handleClick = () => {
     let payload = {
-        device: deviceSelected,
-        color: newColor
+      device: deviceSelected,
+      color: currentColor
     };
     ipcRenderer.send('request-set-custom-color', payload);
   }
+
   return (
       <div className="settings">
         <div className="control">
-          <HuePicker color={currentColor} onChange={handleChange} onChangeComplete={handleChangeComplete}/>
+          <HuePicker color={currentColor} onChange={handleChange} />
         </div>
         <div className="control">
-          <MaterialPicker color={currentColor} onChange={handleChange} onChangeComplete={handleChangeComplete} />
+          <MaterialPicker color={currentColor} onChange={handleChange} />
+        </div>
+        <div className="control">
+        <button onClick={handleClick}>
+          Save custom color
+        </button>
         </div>
       </div>
     

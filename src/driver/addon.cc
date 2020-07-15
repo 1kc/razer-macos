@@ -207,9 +207,9 @@ void MouseSetLogoModeWave(const Napi::CallbackInfo& info) {
   }
 
   if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
-    razer_attr_write_logo_mode_wave(kbdDev, "1", 0);
+    razer_attr_write_logo_mode_wave(mouseDev, "1", 0);
   } else {
-    razer_attr_write_logo_mode_wave(kbdDev, "2", 0);
+    razer_attr_write_logo_mode_wave(mouseDev, "2", 0);
   }
 }
 

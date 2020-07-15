@@ -199,7 +199,7 @@ const template = [
       {
         label: 'Custom color',
         click() {
-          addon.kbdSetModeStatic(new Uint8Array([
+          addon.mouseSetLogoModeStatic(new Uint8Array([
           customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
         ]))},
       },
@@ -230,7 +230,7 @@ const template = [
     ]
   },
   {
-    label: 'Older mouse effects',
+    label: 'Older model effects',
     submenu: [
       {
         label: 'Static',
@@ -247,12 +247,6 @@ const template = [
       {
         label: 'Scroll',
         click() { addon.mouseSetLogoLEDEffect('scroll'); },
-      },
-      {
-        label: 'Set custom color',
-        click() { console.log(customMouseColor); addon.mouseSetLogoLEDRGB(new Uint8Array([
-          customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
-        ])) },
       }
     ]
   },
@@ -312,7 +306,7 @@ function createWindow() {
   window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
     titleBarStyle: 'hidden',
-    height: 250,
+    height: 275,
     resizable: false,
     width: 500,
     y: 100,
