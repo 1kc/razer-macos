@@ -232,6 +232,14 @@ void MouseSetLogoModeStatic(const Napi::CallbackInfo& info) {
   razer_attr_write_logo_mode_static(mouseDev, buf, 3);
 }
 
+void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == NULL) {
+    return;
+  }
+  razer_attr_write_logo_mode_spectrum(mouseDev, "1", 1);
+}
+
 void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
   if (mouseDev == NULL) {
     return;
@@ -256,6 +264,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("closeMouseDevice", Napi::Function::New(env, CloseMouseDevice));
   exports.Set("mouseSetLogoModeWave", Napi::Function::New(env, MouseSetLogoModeWave));
   exports.Set("mouseSetLogoModeStatic", Napi::Function::New(env, MouseSetLogoModeStatic));
+  exports.Set("mouseSetLogoModeSpectrum", Napi::Function::New(env, MouseSetLogoModeSpectrum));
   exports.Set("mouseSetLogoModeNone", Napi::Function::New(env, MouseSetLogoModeNone));
 
 

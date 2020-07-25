@@ -381,6 +381,56 @@ ssize_t razer_attr_write_logo_mode_static(IOUSBDeviceInterface **usb_dev, const 
 }
 
 /**
+ * Write device file "logo_mode_spectrum" (for extended mouse matrix effects)
+ *
+ * Spectrum effect mode is activated whenever the file is written to
+ */
+ssize_t razer_attr_write_logo_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    struct razer_report report = {0};
+    
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+    case USB_DEVICE_ID_RAZER_NAGA_CHROMA:
+    case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+        report = razer_chroma_mouse_extended_matrix_effect_spectrum(VARSTORE, LOGO_LED);
+        break;
+
+    case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+    case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+    case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+    case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+    case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
+    case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
+    case USB_DEVICE_ID_RAZER_VIPER:
+    case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+    case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
+    case USB_DEVICE_ID_RAZER_BASILISK:
+    case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, LOGO_LED);
+        break;
+
+    case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, LOGO_LED);
+        report.transaction_id.id = 0x1f;
+        break;
+
+    default:
+        printf("razermouse: logo_mode_spectrum not supported for this model\n");
+        return count;
+    }
+
+    razer_send_payload(usb_dev, &report);
+    return count;
+}
+
+/**
  * Write device file "logo_mode_none" (for extended mouse matrix effects)
  *
  * No effect is activated whenever this file is written to

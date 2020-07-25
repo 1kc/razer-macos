@@ -230,6 +230,10 @@ const template = [
     ]
   },
   {
+    label: 'Spectrum',
+    click() { addon.mouseSetLogoModeSpectrum(); },
+  },
+  {
     label: 'Older model effects',
     submenu: [
       {
