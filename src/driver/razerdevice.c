@@ -112,6 +112,21 @@ bool is_mouse(IOUSBDeviceInterface **usb_dev) {
     return false;
 }
 
+bool is_mouse_mat(IOUSBDeviceInterface **usb_dev) {
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+    
+    switch (product) {        
+	case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
+	case USB_DEVICE_ID_RAZER_FIREFLY:
+	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
+	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
+		return true;
+    }
+    
+    return false;
+}
+
 IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 	CFMutableDictionaryRef matchingDict;
 	matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
@@ -168,6 +183,13 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 			case TYPE_MOUSE:
 				// Filter out non-mice
 				if (!is_mouse(dev)) {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+			case TYPE_MOUSE_MAT:
+				// Filter out non-mice-mats
+				if (!is_mouse_mat(dev)) {
 					(*dev)->Release(dev);
 					continue;
 				}

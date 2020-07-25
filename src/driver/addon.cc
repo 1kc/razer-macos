@@ -4,11 +4,13 @@ extern "C" {
   #include "razerdevice.h"
   #include "razerkbd_driver.h"
   #include "razermouse_driver.h"
+  #include "razermousemat_driver.h"
 }
 
 
 IOUSBDeviceInterface **kbdDev;
 IOUSBDeviceInterface **mouseDev;
+IOUSBDeviceInterface **mouseMatDev;
 
 /**
 * Get the Razer Keyboard USB device interface and device name, 
@@ -240,6 +242,14 @@ void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
   razer_attr_write_logo_mode_spectrum(mouseDev, "1", 1);
 }
 
+void MouseSetLogoModeBreathe(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == NULL) {
+    return;
+  }
+  razer_attr_write_logo_mode_breath(mouseDev, "1", 1);
+}
+
 void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
   if (mouseDev == NULL) {
     return;
@@ -248,6 +258,105 @@ void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
 }
 
 
+void MouseMatSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == NULL) {
+    return;
+  }
+  razer_attr_write_logo_mode_spectrum(mouseDev, "1", 1);
+}
+
+
+/**
+* Get the Razer Mouse Mat USB device interface and device name, 
+* return JS Null if non found
+*/
+Napi::Value GetMouseMatDevice(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+
+  mouseMatDev = getRazerUSBDeviceInterface(TYPE_MOUSE_MAT);
+  if (mouseMatDev == NULL) {
+    return env.Null();
+  }
+
+  char buf[256] = {0};
+  razer_mouse_mat_attr_read_device_type(mouseMatDev, buf);
+  return Napi::String::New(env, buf);
+}
+
+
+void CloseMouseMatDevice(const Napi::CallbackInfo& info) {
+  if (mouseMatDev == NULL) {
+    return;
+  }
+  closeRazerUSBDeviceInterface(mouseMatDev);
+
+}
+
+void MouseMatSetModeNone(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseMatDev == NULL) {
+    return;
+  }
+  razer_mouse_mat_attr_write_mode_none(mouseMatDev, "1", 1);
+}
+
+void MouseMatSetModeWave(const Napi::CallbackInfo& info) {
+  if (mouseMatDev == NULL) {
+    return;
+  }
+  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
+    razer_mouse_mat_attr_write_mode_wave(mouseMatDev, "1", 0);
+  } else {
+    razer_mouse_mat_attr_write_mode_wave(mouseMatDev, "2", 0);
+  }
+}
+
+void MouseMatSetModeBreathe(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseMatDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 1) {
+    Napi::TypeError::New(env, "Breathing only accepts '1' (1byte). RGB (3byte). RGB, RGB (6byte)")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_mouse_mat_attr_write_mode_breath(mouseMatDev, buf, 1);
+}
+
+void MouseMatSetModeStatic(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseMatDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_mouse_mat_attr_write_mode_static(mouseMatDev, buf, 3);
+}
+
+void MouseMatSetModeSpectrum(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseMatDev == NULL) {
+    return;
+  }
+  razer_mouse_mat_attr_write_mode_spectrum(mouseMatDev, "1", 1);
+}
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("getKeyboardDevice", Napi::Function::New(env, GetKeyboardDevice));
@@ -265,8 +374,16 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("mouseSetLogoModeWave", Napi::Function::New(env, MouseSetLogoModeWave));
   exports.Set("mouseSetLogoModeStatic", Napi::Function::New(env, MouseSetLogoModeStatic));
   exports.Set("mouseSetLogoModeSpectrum", Napi::Function::New(env, MouseSetLogoModeSpectrum));
+  exports.Set("mouseSetLogoModeBreathe", Napi::Function::New(env, MouseSetLogoModeBreathe));
   exports.Set("mouseSetLogoModeNone", Napi::Function::New(env, MouseSetLogoModeNone));
 
+  exports.Set("getMouseMatDevice", Napi::Function::New(env, GetMouseMatDevice));
+  exports.Set("closeMouseMatDevice", Napi::Function::New(env, CloseMouseMatDevice));
+  exports.Set("mouseMatSetModeNone", Napi::Function::New(env, MouseMatSetModeNone));
+  exports.Set("mouseMatSetModeWave", Napi::Function::New(env, MouseMatSetModeWave));
+  exports.Set("mouseMatSetModeBreathe", Napi::Function::New(env, MouseMatSetModeBreathe));
+  exports.Set("mouseMatSetModeStatic", Napi::Function::New(env, MouseMatSetModeStatic));
+  exports.Set("mouseMatSetModeSpectrum", Napi::Function::New(env, MouseMatSetModeSpectrum));
 
   // Older mouse functions
   exports.Set("mouseSetLogoLEDEffect", Napi::Function::New(env, MouseSetLogoLEDEffect));

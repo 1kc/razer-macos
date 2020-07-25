@@ -29,16 +29,30 @@ let customMouseColor = {
   }
 };
 
+let customMouseMatColor = {
+  hex: '#ffff00',
+  rgb: {
+    r: 255,
+    g: 255,
+    b: 0
+  }
+};
 
-const template = [
+let mainMenu = [
   {
-    label: 'Refresh',
-    click() {refreshDevices()},
+    label: 'Refresh Device List',
+    click() { refreshDevices(); refreshTray(); },
   },
+  {
+    label: 'Spectrum All Devices',
+    click() { addon.kbdSetModeSpectrum(); addon.mouseSetLogoModeSpectrum(); addon.mouseMatSetModeSpectrum(); },
+  },
+]
+
+let keyboardMenu = [
   { type: 'separator' },
   {
-    // Initialise and get keyboard device name
-    label: addon.getKeyboardDevice() || 'No keyboard found',
+    label: 'No keyboard found',
     enabled: false,
   },
   { type: 'separator' },
@@ -169,29 +183,18 @@ const template = [
       window.show()
      }
   },
+]
+
+let mouseMenu = [
   { type: 'separator' },
   {
-    // Initialise and get mouse device name
-    label: addon.getMouseDevice() || 'No mouse found',
+    label: 'No mouse found',
     enabled: false,
   },
   { type: 'separator' },
   {
     label: 'None',
     click() { addon.mouseSetLogoModeNone(); }
-  },
-  {
-    label: 'Wave',
-    submenu: [
-      {
-        label: 'Left',
-        click() { addon.mouseSetLogoModeWave('left'); }
-      },
-      {
-        label: 'Right',
-        click() { addon.mouseSetLogoModeWave('right'); }
-      },
-    ]
   },
   {
     label: 'Static',
@@ -230,8 +233,27 @@ const template = [
     ]
   },
   {
+    label: 'Wave',
+    submenu: [
+      {
+        label: 'Left',
+        click() { addon.mouseSetLogoModeWave('left'); }
+      },
+      {
+        label: 'Right',
+        click() { addon.mouseSetLogoModeWave('right'); }
+      },
+    ]
+  },
+  {
     label: 'Spectrum',
     click() { addon.mouseSetLogoModeSpectrum(); },
+  },
+  {
+    label: 'Breathe',
+    click() {addon.mouseSetLogoModeBreathe(new Uint8Array([
+      0 // random
+    ]))}
   },
   {
     label: 'Older model effects',
@@ -258,26 +280,110 @@ const template = [
     label: 'Set custom color',
     click() { window.webContents.send('device-selected', {device: 'Mouse', currentColor: customMouseColor}); window.show() }
   },
+]
+
+let mouseMatMenu = [
+  { type: 'separator' },
+  {
+    label: 'No mouse mat found',
+    enabled: false,
+  },
+  { type: 'separator' },
+  {
+    label: 'None',
+    click() { addon.mouseMatSetModeNone(); }
+  },
+  {
+    label: 'Static',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          addon.mouseMatSetModeStatic(new Uint8Array([
+          customMouseMatColor.rgb.r, customMouseMatColor.rgb.g, customMouseMatColor.rgb.b
+        ]))},
+      },
+      {
+        label: 'White',
+        click() { addon.mouseMatSetModeStatic(new Uint8Array([
+          0xff,0xff,0xff
+        ]))},
+      },
+      {
+        label: 'Red',
+        click() {addon.mouseMatSetModeStatic(new Uint8Array([
+          0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() {addon.mouseMatSetModeStatic(new Uint8Array([
+          0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() {addon.mouseMatSetModeStatic(new Uint8Array([
+          0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
+    label: 'Wave',
+    submenu: [
+      {
+        label: 'Left',
+        click() { addon.mouseMatSetModeWave('left'); }
+      },
+      {
+        label: 'Right',
+        click() { addon.mouseMatSetModeWave('right'); }
+      },
+    ]
+  },
+  {
+    label: 'Spectrum',
+    click() { addon.mouseMatSetModeSpectrum(); },
+  },
+  {
+    label: 'Breathe',
+    click() {addon.mouseMatSetModeBreathe(new Uint8Array([
+      0 // random
+    ]))}
+  },
+  {
+    label: 'Set custom color',
+    click() { window.webContents.send('device-selected', {device: 'Mouse Mat', currentColor: customMouseMatColor}); window.show() }
+  },
+]
+
+let mainMenuBottom = [
   { type: 'separator' },
   {
     label: 'Quit',
     click() { app.quit(); }
   },
-  
 ]
 
+let keyboardDeviceName = '';
+let mouseDeviceName = '';
+let mouseMatDeviceName = '';
+
 const refreshDevices = () => {
+  // close devices
   addon.closeKeyboardDevice()
   addon.closeMouseDevice()
-  // TODO: change template indexing
-  template[2].label = addon.getKeyboardDevice() || 'No keyboard found';
-  template[13].label = addon.getMouseDevice() || 'No mouse found';
-  // Rebuild menu
-  const newContextMenu = Menu.buildFromTemplate(template)
-  tray.setContextMenu(newContextMenu)
+  addon.closeMouseMatDevice()
+
+  // get devices
+  keyboardDeviceName = addon.getKeyboardDevice();
+  mouseDeviceName = addon.getMouseDevice();
+  mouseMatDeviceName = addon.getMouseMatDevice();
 }
 
 app.on('ready', () => {
+  refreshDevices()
   createTray()
   createWindow()
 })
@@ -287,6 +393,7 @@ app.on('ready', () => {
 app.on('quit', () => {
   addon.closeKeyboardDevice()
   addon.closeMouseDevice()
+  addon.closeMouseMatDevice()
 })
 
 nativeTheme.on('updated', () => {
@@ -299,6 +406,9 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
   switch (device) {
     case "Mouse":
       customMouseColor = color
+      break
+    case "Mouse Mat":
+      customMouseMatColor = color
       break
     default:
       customKdbColor = color
@@ -386,8 +496,27 @@ function createTray() {
     tray = new Tray(path.join(__static, '/assets/icon-lightmode.png'));  
   }
 
-  const contextMenu = Menu.buildFromTemplate(template);
+  refreshTray()
+}
+
+function refreshTray() {
+  // generate menu based on found devices
+  let menu = mainMenu;
+  if (keyboardDeviceName) {
+    keyboardMenu[1].label = keyboardDeviceName;
+    menu = menu.concat(keyboardMenu);
+  }
+  if (mouseDeviceName) {
+    mouseMenu[1].label = mouseDeviceName;
+    menu = menu.concat(mouseMenu);
+  }
+  if (mouseMatDeviceName) {
+    mouseMatMenu[1].label = mouseMatDeviceName;
+    menu = menu.concat(mouseMatMenu);
+  }
+  menu = menu.concat(mainMenuBottom);
+
+  const contextMenu = Menu.buildFromTemplate(menu);
   tray.setToolTip('Razer macOS menu')
   tray.setContextMenu(contextMenu)
-
 }
