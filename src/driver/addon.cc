@@ -258,13 +258,6 @@ void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
 }
 
 
-void MouseMatSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
-  if (mouseDev == NULL) {
-    return;
-  }
-  razer_attr_write_logo_mode_spectrum(mouseDev, "1", 1);
-}
 
 
 /**
