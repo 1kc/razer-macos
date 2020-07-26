@@ -5,38 +5,93 @@ import addon from '../driver'
 import path from 'path'
 import { format as formatUrl } from 'url'
 
+const storage = require('electron-json-storage');
+
 const isDevelopment = process.env.NODE_ENV == 'development'
 
 let tray = null;
 let window = null;
 let forceQuit = false;
 
-let customKdbColor = {
-  hex: '#ffff00',
-  rgb: {
-    r: 255,
-    g: 255,
-    b: 0
-  }
-};
+let customKdbColor = null;
+let customMouseColor = null;
+let customMouseMatColor = null;
+let cycleColors = null;
 
-let customMouseColor = {
-  hex: '#ffff00',
-  rgb: {
-    r: 255,
-    g: 255,
-    b: 0
+function isEmpty(obj) {
+  for(var prop in obj) {
+      if(obj.hasOwnProperty(prop))
+          return false;
   }
-};
 
-let customMouseMatColor = {
-  hex: '#ffff00',
-  rgb: {
-    r: 255,
-    g: 255,
-    b: 0
-  }
-};
+  return true;
+}
+
+function loadItemsFromStorage() {
+  storage.get('customKdbColor', function(error, data) {
+    if (error) throw error;
+  
+    customKdbColor = data;
+    if (isEmpty(customKdbColor)) {
+      customKdbColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0
+        }
+      };
+    }
+  });
+  
+  storage.get('customMouseColor', function(error, data) {
+    if (error) throw error;
+  
+    customMouseColor = data;
+    if (isEmpty(customMouseColor)) {
+      customMouseColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0
+        }
+      };
+    }
+  });
+
+  storage.get('customMouseMatColor', function(error, data) {
+    if (error) throw error;
+  
+    customMouseMatColor = data;
+    if (isEmpty(customMouseMatColor)) {
+      customMouseMatColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0
+        }
+      };
+    }
+  });
+
+  storage.get('cycleColors', function(error, data) {
+    if (error) throw error;
+  
+    cycleColors = data;
+    if (isEmpty(cycleColors)) {
+      cycleColors = [
+        {r: 0xff, g: 0x00, b: 0x00},
+        {r: 0x00, g: 0xff, b: 0x00},
+        {r: 0x00, g: 0x00, b: 0xff},
+      ];
+    }
+
+    // this is the last item to load, finish app startup
+    itemsLoadedFromStorage();
+  });
+}
 
 function componentToHex(c) {
   var hex = c.toString(16);
@@ -59,11 +114,6 @@ let spectrumColors = [
   {r: 0x77, g: 0x00, b: 0xff},
   {r: 0xff, g: 0x00, b: 0xff},
   {r: 0xff, g: 0x00, b: 0x77},
-];
-let cycleColors = [
-  {r: 0xff, g: 0x00, b: 0x00},
-  {r: 0x00, g: 0xff, b: 0x00},
-  {r: 0x00, g: 0x00, b: 0xff},
 ];
 let cycleColorsIndex = 0;
 let cycleColorsInterval = null;
@@ -122,6 +172,7 @@ function buildCustomColorsCycleMenu() {
       label: 'Add Color',
       click() {
         cycleColors = cycleColors.concat({r: 0x00, g: 0xff, b: 0x00});
+        storage.set('cycleColors', cycleColors);
         refreshTray();
       }
     },
@@ -133,6 +184,7 @@ function buildCustomColorsCycleMenu() {
           {r: 0x00, g: 0xff, b: 0x00},
           {r: 0x00, g: 0x00, b: 0xff},
         ];
+        storage.set('cycleColors', cycleColors);
         refreshTray();
       }
     },
@@ -495,41 +547,50 @@ const refreshDevices = () => {
 }
 
 app.on('ready', () => {
-  refreshDevices()
-  createTray()
-  createWindow()
+  loadItemsFromStorage();
 })
+function itemsLoadedFromStorage() {
+  refreshDevices();
+  createTray();
+  createWindow();
+}
 
 
 
 app.on('quit', () => {
-  addon.closeKeyboardDevice()
-  addon.closeMouseDevice()
-  addon.closeMouseMatDevice()
+  addon.closeKeyboardDevice();
+  addon.closeMouseDevice();
+  addon.closeMouseMatDevice();
 })
 
 nativeTheme.on('updated', () => {
- createTray()
+ createTray();
 })
 
 // custom color rpc listener
 ipcMain.on('request-set-custom-color', (event, arg) => {
-  const { device, color } = arg
+  const { device, color } = arg;
 
   if (device.startsWith('Cycle Color ')) {
     let index = Number.parseInt(device.substring(12)) - 1;
     cycleColors[index] = color.rgb;
+    storage.set('cycleColors', cycleColors);
   }
   else {
     switch (device) {
+      case "Keyboard":
+        customKdbColor = color;
+        storage.set('customKdbColor', customKdbColor);
+        break;
       case "Mouse":
-        customMouseColor = color
-        break
+        customMouseColor = color;
+        storage.set('customMouseColor', customMouseColor);
+        break;
       case "Mouse Mat":
-        customMouseMatColor = color
-        break
-      default:
-        customKdbColor = color
+        customMouseMatColor = color;
+        storage.set('customMouseMatColor', customMouseMatColor);
+        break;
+      default:        
     }
   }
 });
@@ -596,16 +657,15 @@ function createWindow() {
         ]).popup(window);
       });
     }
-    
   })
 }
 
 function createTray() {
   if (!isDevelopment) {
-    if (app.dock) app.dock.hide()
+    if (app.dock) app.dock.hide();
 
     if (tray != null) {
-      tray.destroy()
+      tray.destroy();
     } 
   }
 

@@ -13,6 +13,7 @@
     "clean": "node-gyp clean"
   },
   "dependencies": {
+    "electron-json-storage": "^4.2.0",
     "node-addon-api": "^1.0.0",
     "react": "^16.13.1",
     "react-color": "^2.18.0",
