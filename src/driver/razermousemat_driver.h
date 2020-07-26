@@ -35,6 +35,7 @@ ssize_t razer_mouse_mat_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, con
 ssize_t razer_mouse_mat_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_mouse_mat_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_mouse_mat_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_mouse_mat_attr_write_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_mouse_mat_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 
 #endif

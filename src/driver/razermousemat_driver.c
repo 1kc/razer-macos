@@ -250,6 +250,41 @@ ssize_t razer_mouse_mat_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, c
 }
 
 /**
+ * Write device file "mode_static"
+ *
+ * ** NOSTORE version for efficiency in custom lighting configurations
+ * 
+ * Set the mousemat to static mode when 3 RGB bytes are written
+ */
+ssize_t razer_mouse_mat_attr_write_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    struct razer_report report = {0};
+    
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    if(count == 3) {
+        switch(product) {
+        case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
+        case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
+        case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
+            report = razer_chroma_extended_matrix_effect_static(NOSTORE, ZERO_LED, (struct razer_rgb *)&buf[0]);
+            break;
+
+        default:
+            report = razer_chroma_standard_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
+            break;
+        }
+
+        razer_send_payload(usb_dev, &report);
+    } else {
+        printf("razermousemat: Static mode only accepts RGB (3byte)\n");
+    }
+
+    return count;
+}
+
+/**
  * Write device file "mode_spectrum"
  *
  * Specrum effect mode is activated whenever the file is written to

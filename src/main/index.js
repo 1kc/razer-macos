@@ -38,6 +38,38 @@ let customMouseMatColor = {
   }
 };
 
+let spectrumInterval = null;
+let spectrumColors = [
+  {r: 0xff, g: 0x00, b: 0x00},
+  {r: 0xff, g: 0x77, b: 0x00},
+  {r: 0xff, g: 0xff, b: 0x00},
+  {r: 0x77, g: 0xff, b: 0x00},
+  {r: 0x00, g: 0xff, b: 0x00},
+  {r: 0x00, g: 0xff, b: 0x77},
+  {r: 0x00, g: 0xff, b: 0xff},
+  {r: 0x00, g: 0x77, b: 0xff},
+  {r: 0x00, g: 0x00, b: 0xff},
+  {r: 0x77, g: 0x00, b: 0xff},
+  {r: 0xff, g: 0x00, b: 0xff},
+  {r: 0xff, g: 0x00, b: 0x77},
+];
+let spectrumColorIndex = 0;
+function setDevicesSpectrumColors() {
+  addon.kbdSetModeStaticNoStore(new Uint8Array([
+    spectrumColors[spectrumColorIndex].r, spectrumColors[spectrumColorIndex].g, spectrumColors[spectrumColorIndex].b
+  ]))
+  addon.mouseSetLogoModeStaticNoStore(new Uint8Array([
+    spectrumColors[spectrumColorIndex].r, spectrumColors[spectrumColorIndex].g, spectrumColors[spectrumColorIndex].b
+  ]))
+  addon.mouseMatSetModeStaticNoStore(new Uint8Array([
+    spectrumColors[spectrumColorIndex].r, spectrumColors[spectrumColorIndex].g, spectrumColors[spectrumColorIndex].b
+  ]))
+
+  spectrumColorIndex++;
+  if (spectrumColorIndex >= spectrumColors.length)
+  spectrumColorIndex = 0;
+}
+
 let mainMenu = [
   {
     label: 'Refresh Device List',
@@ -45,7 +77,16 @@ let mainMenu = [
   },
   {
     label: 'Spectrum All Devices',
-    click() { addon.kbdSetModeSpectrum(); addon.mouseSetLogoModeSpectrum(); addon.mouseMatSetModeSpectrum(); },
+    click() {
+      // manually use an interval so that all devices are gauranteed in sync.
+      // with normal spectrum each device's spectrum can vary slightly causing a mismatched look.
+      // must set interval to 4 seconds or the change can look too abrupt.
+
+      clearInterval(spectrumInterval);
+      spectrumColorIndex = 0;
+      setDevicesSpectrumColors();
+      spectrumInterval = setInterval(setDevicesSpectrumColors, 4000);
+    },
   },
 ]
 
@@ -58,38 +99,38 @@ let keyboardMenu = [
   { type: 'separator' },
   {
     label: 'None',
-    click() { addon.kbdSetModeNone(); },
+    click() { clearInterval(spectrumInterval); addon.kbdSetModeNone(); },
   },
   {
     label: 'Static',
     submenu: [
       {
         label: 'Custom color',
-        click() {addon.kbdSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStatic(new Uint8Array([
           customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
         ]))},
       },
       {
         label: 'White',
-        click() { addon.kbdSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStatic(new Uint8Array([
           0xff,0xff,0xff
         ]))},
       },
       {
         label: 'Red',
-        click() {addon.kbdSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStatic(new Uint8Array([
           0xff,0,0
         ]))},
       },
       {
         label: 'Green',
-        click() {addon.kbdSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStatic(new Uint8Array([
           0,0xff,0
         ]))},
       },
       {
         label: 'Blue',
-        click() {addon.kbdSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStatic(new Uint8Array([
           0,0,0xff
         ]))},
       },
@@ -100,42 +141,42 @@ let keyboardMenu = [
     submenu: [
       {
         label: 'Left',
-        click() { addon.kbdSetModeWave('left'); }
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeWave('left'); }
       },
       {
         label: 'Right',
-        click() { addon.kbdSetModeWave('right'); }
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeWave('right'); }
       },
     ]
   },
   {
     label: 'Spectrum',
-    click() { addon.kbdSetModeSpectrum(); },
+    click() { clearInterval(spectrumInterval); addon.kbdSetModeSpectrum(); },
   },
   {
     label: 'Reactive',
     submenu: [
       {
         label: 'Custom color',
-        click() {addon.kbdSetModeReactive(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeReactive(new Uint8Array([
           3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
         ]))},
       },
       {
         label: 'Red',
-        click() {addon.kbdSetModeReactive(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeReactive(new Uint8Array([
           3,0xff,0,0
         ]))},
       },
       {
         label: 'Green',
-        click() {addon.kbdSetModeReactive(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeReactive(new Uint8Array([
           3,0,0xff,0
         ]))},
       },
       {
         label: 'Blue',
-        click() {addon.kbdSetModeReactive(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeReactive(new Uint8Array([
           3,0,0,0xff
         ]))},
       },
@@ -143,7 +184,7 @@ let keyboardMenu = [
   },
   {
     label: 'Breathe',
-    click() {addon.kbdSetModeBreathe(new Uint8Array([
+    click() { clearInterval(spectrumInterval); addon.kbdSetModeBreathe(new Uint8Array([
       0 // random
     ]))}
   },
@@ -152,25 +193,25 @@ let keyboardMenu = [
     submenu: [
       {
         label: 'Custom color',
-        click() {addon.kbdSetModeStarlight(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStarlight(new Uint8Array([
           3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
         ]))},
       },
       {
         label: 'Red',
-        click() {addon.kbdSetModeStarlight(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStarlight(new Uint8Array([
           3,0xff,0,0
         ]))},
       },
       {
         label: 'Green',
-        click() {addon.kbdSetModeStarlight(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStarlight(new Uint8Array([
           3,0,0xff,0
         ]))},
       },
       {
         label: 'Blue',
-        click() {addon.kbdSetModeStarlight(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.kbdSetModeStarlight(new Uint8Array([
           3,0,0,0xff
         ]))},
       }
@@ -194,7 +235,7 @@ let mouseMenu = [
   { type: 'separator' },
   {
     label: 'None',
-    click() { addon.mouseSetLogoModeNone(); }
+    click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeNone(); }
   },
   {
     label: 'Static',
@@ -202,31 +243,32 @@ let mouseMenu = [
       {
         label: 'Custom color',
         click() {
+          clearInterval(spectrumInterval); 
           addon.mouseSetLogoModeStatic(new Uint8Array([
           customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
         ]))},
       },
       {
         label: 'White',
-        click() { addon.mouseSetLogoModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
           0xff,0xff,0xff
         ]))},
       },
       {
         label: 'Red',
-        click() {addon.mouseSetLogoModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
           0xff,0,0
         ]))},
       },
       {
         label: 'Green',
-        click() {addon.mouseSetLogoModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
           0,0xff,0
         ]))},
       },
       {
         label: 'Blue',
-        click() {addon.mouseSetLogoModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
           0,0,0xff
         ]))},
       },
@@ -237,21 +279,21 @@ let mouseMenu = [
     submenu: [
       {
         label: 'Left',
-        click() { addon.mouseSetLogoModeWave('left'); }
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeWave('left'); }
       },
       {
         label: 'Right',
-        click() { addon.mouseSetLogoModeWave('right'); }
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeWave('right'); }
       },
     ]
   },
   {
     label: 'Spectrum',
-    click() { addon.mouseSetLogoModeSpectrum(); },
+    click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeSpectrum(); },
   },
   {
     label: 'Breathe',
-    click() {addon.mouseSetLogoModeBreathe(new Uint8Array([
+    click() { clearInterval(spectrumInterval); addon.mouseSetLogoModeBreathe(new Uint8Array([
       0 // random
     ]))}
   },
@@ -260,19 +302,19 @@ let mouseMenu = [
     submenu: [
       {
         label: 'Static',
-        click() { addon.mouseSetLogoLEDEffect('static'); },
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoLEDEffect('static'); },
       },
       {
         label: 'Blinking',
-        click() { addon.mouseSetLogoLEDEffect('blinking'); },
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoLEDEffect('blinking'); },
       },
       {
         label: 'Pulsate',
-        click() { addon.mouseSetLogoLEDEffect('pulsate'); },
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoLEDEffect('pulsate'); },
       },
       {
         label: 'Scroll',
-        click() { addon.mouseSetLogoLEDEffect('scroll'); },
+        click() { clearInterval(spectrumInterval); addon.mouseSetLogoLEDEffect('scroll'); },
       }
     ]
   },
@@ -291,7 +333,7 @@ let mouseMatMenu = [
   { type: 'separator' },
   {
     label: 'None',
-    click() { addon.mouseMatSetModeNone(); }
+    click() { clearInterval(spectrumInterval); addon.mouseMatSetModeNone(); }
   },
   {
     label: 'Static',
@@ -299,31 +341,32 @@ let mouseMatMenu = [
       {
         label: 'Custom color',
         click() {
+          clearInterval(spectrumInterval);
           addon.mouseMatSetModeStatic(new Uint8Array([
           customMouseMatColor.rgb.r, customMouseMatColor.rgb.g, customMouseMatColor.rgb.b
         ]))},
       },
       {
         label: 'White',
-        click() { addon.mouseMatSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseMatSetModeStatic(new Uint8Array([
           0xff,0xff,0xff
         ]))},
       },
       {
         label: 'Red',
-        click() {addon.mouseMatSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseMatSetModeStatic(new Uint8Array([
           0xff,0,0
         ]))},
       },
       {
         label: 'Green',
-        click() {addon.mouseMatSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseMatSetModeStatic(new Uint8Array([
           0,0xff,0
         ]))},
       },
       {
         label: 'Blue',
-        click() {addon.mouseMatSetModeStatic(new Uint8Array([
+        click() { clearInterval(spectrumInterval); addon.mouseMatSetModeStatic(new Uint8Array([
           0,0,0xff
         ]))},
       },
@@ -334,21 +377,21 @@ let mouseMatMenu = [
     submenu: [
       {
         label: 'Left',
-        click() { addon.mouseMatSetModeWave('left'); }
+        click() { clearInterval(spectrumInterval); addon.mouseMatSetModeWave('left'); }
       },
       {
         label: 'Right',
-        click() { addon.mouseMatSetModeWave('right'); }
+        click() { clearInterval(spectrumInterval); addon.mouseMatSetModeWave('right'); }
       },
     ]
   },
   {
     label: 'Spectrum',
-    click() { addon.mouseMatSetModeSpectrum(); },
+    click() { clearInterval(spectrumInterval); addon.mouseMatSetModeSpectrum(); },
   },
   {
     label: 'Breathe',
-    click() {addon.mouseMatSetModeBreathe(new Uint8Array([
+    click() { clearInterval(spectrumInterval); addon.mouseMatSetModeBreathe(new Uint8Array([
       0 // random
     ]))}
   },
@@ -517,6 +560,6 @@ function refreshTray() {
   menu = menu.concat(mainMenuBottom);
 
   const contextMenu = Menu.buildFromTemplate(menu);
-  tray.setToolTip('Razer macOS menu')
-  tray.setContextMenu(contextMenu)
+  tray.setToolTip('Razer macOS menu');
+  tray.setContextMenu(contextMenu);
 }
