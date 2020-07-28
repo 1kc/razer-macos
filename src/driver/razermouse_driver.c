@@ -38,7 +38,6 @@ static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report 
 		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
 		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
 		case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
-		case USB_DEVICE_ID_RAZER_CHROMA_MOUSE_CHARGING_DOCK:
 		case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
 			return razer_get_usb_response(usb_dev, 0x00, request_report, 0x00, response_report, RAZER_NEW_MOUSE_RECEIVER_WAIT_MIN_US);
 			break;
@@ -314,7 +313,6 @@ ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const ch
 		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
 		case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
 		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
-		case USB_DEVICE_ID_RAZER_CHROMA_MOUSE_CHARGING_DOCK:
 		case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
 		case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
 			report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction);
