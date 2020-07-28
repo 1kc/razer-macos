@@ -778,6 +778,137 @@ ssize_t razer_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, const char 
 }
 
 /**
+ * Write device file "mode_static"
+ * 
+ * ** NOSTORE version for efficiency in custom lighting configurations
+ * 
+ * Set the keyboard to mode when 3 RGB bytes are written
+ */
+ssize_t razer_attr_write_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, int count) {
+    struct razer_report report = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+
+        case USB_DEVICE_ID_RAZER_TARTARUS_V2:
+            report = razer_chroma_extended_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
+            razer_send_payload(usb_dev, &report);
+            report.transaction_id.id = 0x1F;
+            break;
+
+        case USB_DEVICE_ID_RAZER_ORBWEAVER:
+        case USB_DEVICE_ID_RAZER_DEATHSTALKER_EXPERT:
+            report = razer_chroma_standard_set_led_effect(NOSTORE, BACKLIGHT_LED, 0x00);
+            razer_send_payload(usb_dev, &report);
+            break;
+
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_STEALTH:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_STEALTH_EDITION:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2012:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2013: // Doesn't need any parameters as can only do one type of static
+            report = razer_chroma_standard_set_led_effect(NOSTORE, LOGO_LED, 0x00);
+            razer_send_payload(usb_dev, &report);
+            break;
+
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_OVERWATCH:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA:
+        case USB_DEVICE_ID_RAZER_DEATHSTALKER_CHROMA:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA_TE:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_CHROMA:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_CHROMA_TE:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2016:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_ULTIMATE:
+        case USB_DEVICE_ID_RAZER_BLADE_STEALTH:
+        case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2016:
+        case USB_DEVICE_ID_RAZER_BLADE_STEALTH_MID_2017:
+        case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2017:
+        case USB_DEVICE_ID_RAZER_BLADE_STEALTH_2019:
+        case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2019:
+        case USB_DEVICE_ID_RAZER_BLADE_QHD:
+        case USB_DEVICE_ID_RAZER_BLADE_PRO_LATE_2016:
+        case USB_DEVICE_ID_RAZER_BLADE_2018:
+        case USB_DEVICE_ID_RAZER_BLADE_2018_MERCURY:
+        case USB_DEVICE_ID_RAZER_BLADE_2018_BASE:
+        case USB_DEVICE_ID_RAZER_BLADE_2019_ADV:
+        case USB_DEVICE_ID_RAZER_BLADE_2019_BASE:
+        case USB_DEVICE_ID_RAZER_BLADE_MID_2019_MERCURY:
+        case USB_DEVICE_ID_RAZER_BLADE_STUDIO_EDITION_2019:
+        case USB_DEVICE_ID_RAZER_BLADE_LATE_2016:
+        case USB_DEVICE_ID_RAZER_BLADE_PRO_2017:
+        case USB_DEVICE_ID_RAZER_BLADE_PRO_2017_FULLHD:
+        case USB_DEVICE_ID_RAZER_TARTARUS:
+        case USB_DEVICE_ID_RAZER_TARTARUS_CHROMA:
+        case USB_DEVICE_ID_RAZER_ORBWEAVER_CHROMA:
+            if(count == 3) {
+                report = razer_chroma_standard_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
+                razer_send_payload(usb_dev, &report);
+            } else {
+                printf("razerkbd: Static mode only accepts RGB (3byte)");
+            }
+            break;
+
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA_V2:
+            if(count == 3) {
+                report = razer_chroma_standard_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
+                report.transaction_id.id = 0x3F;  // TODO move to a usb_device variable
+                razer_send_payload(usb_dev, &report);
+            } else {
+                printf("razerkbd: Static mode only accepts RGB (3byte)");
+            }
+            break;
+
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_LITE:
+        case USB_DEVICE_ID_RAZER_ORNATA:
+        case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN:
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
+        case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+            if(count == 3) {
+                report = razer_chroma_extended_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
+                razer_send_payload(usb_dev, &report);
+            } else {
+                printf("razerkbd: Static mode only accepts RGB (3byte)");
+            }
+            break;
+
+        case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+            if(count == 3) {
+                report = razer_chroma_extended_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
+                report.transaction_id.id = 0x1F;
+                razer_send_payload(usb_dev, &report);
+            } else {
+                printf("razerkbd: Static mode only accepts RGB (3byte)");
+            }
+            break;
+
+        case USB_DEVICE_ID_RAZER_ANANSI:
+            if(count == 3) {
+                report = razer_chroma_standard_set_led_state(NOSTORE, BACKLIGHT_LED, ON);
+                razer_send_payload(usb_dev, &report);
+                report = razer_chroma_standard_set_led_effect(NOSTORE, BACKLIGHT_LED, LED_STATIC);
+                razer_send_payload(usb_dev, &report);
+                report = razer_chroma_standard_set_led_rgb(NOSTORE, BACKLIGHT_LED, (struct razer_rgb *) &buf[0]);
+                razer_send_payload(usb_dev, &report);
+            } else
+                printf("razerkbd: Static mode only accepts RGB (3byte)\n");
+            break;
+
+        default:
+            printf("razerkbd: Cannot set static mode for this device\n");
+            break;
+
+    }
+
+    
+    return count;
+}
+
+/**
 * Write device file "mode_starlight"
 *
 * Starlight keyboard effect is activated whenever this file is written to (for bw2016)

@@ -81,6 +81,24 @@ void KbdSetModeStatic(const Napi::CallbackInfo& info) {
   razer_attr_write_mode_static(kbdDev, buf, 3);
 }
 
+void KbdSetModeStaticNoStore(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (kbdDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Static only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_attr_write_mode_static_no_store(kbdDev, buf, 3);
+}
 
 void KbdSetModeReactive(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
@@ -234,6 +252,25 @@ void MouseSetLogoModeStatic(const Napi::CallbackInfo& info) {
   razer_attr_write_logo_mode_static(mouseDev, buf, 3);
 }
 
+void MouseSetLogoModeStaticNoStore(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_attr_write_logo_mode_static_no_store(mouseDev, buf, 3);
+}
+
 void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   if (mouseDev == NULL) {
@@ -343,6 +380,25 @@ void MouseMatSetModeStatic(const Napi::CallbackInfo& info) {
   razer_mouse_mat_attr_write_mode_static(mouseMatDev, buf, 3);
 }
 
+void MouseMatSetModeStaticNoStore(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseMatDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_mouse_mat_attr_write_mode_static_no_store(mouseMatDev, buf, 3);
+}
+
 void MouseMatSetModeSpectrum(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   if (mouseMatDev == NULL) {
@@ -357,6 +413,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("kbdSetModeNone", Napi::Function::New(env, KbdSetModeNone));
   exports.Set("kbdSetModeSpectrum", Napi::Function::New(env, KbdSetModeSpectrum));
   exports.Set("kbdSetModeStatic", Napi::Function::New(env, KbdSetModeStatic));
+  exports.Set("kbdSetModeStaticNoStore", Napi::Function::New(env, KbdSetModeStaticNoStore));
   exports.Set("kbdSetModeWave", Napi::Function::New(env, KbdSetModeWave));
   exports.Set("kbdSetModeReactive", Napi::Function::New(env, KbdSetModeReactive));
   exports.Set("kbdSetModeBreathe", Napi::Function::New(env, KbdSetModeBreathe));
@@ -366,6 +423,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("closeMouseDevice", Napi::Function::New(env, CloseMouseDevice));
   exports.Set("mouseSetLogoModeWave", Napi::Function::New(env, MouseSetLogoModeWave));
   exports.Set("mouseSetLogoModeStatic", Napi::Function::New(env, MouseSetLogoModeStatic));
+  exports.Set("mouseSetLogoModeStaticNoStore", Napi::Function::New(env, MouseSetLogoModeStaticNoStore));
   exports.Set("mouseSetLogoModeSpectrum", Napi::Function::New(env, MouseSetLogoModeSpectrum));
   exports.Set("mouseSetLogoModeBreathe", Napi::Function::New(env, MouseSetLogoModeBreathe));
   exports.Set("mouseSetLogoModeNone", Napi::Function::New(env, MouseSetLogoModeNone));
@@ -376,6 +434,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("mouseMatSetModeWave", Napi::Function::New(env, MouseMatSetModeWave));
   exports.Set("mouseMatSetModeBreathe", Napi::Function::New(env, MouseMatSetModeBreathe));
   exports.Set("mouseMatSetModeStatic", Napi::Function::New(env, MouseMatSetModeStatic));
+  exports.Set("mouseMatSetModeStaticNoStore", Napi::Function::New(env, MouseMatSetModeStaticNoStore));
   exports.Set("mouseMatSetModeSpectrum", Napi::Function::New(env, MouseMatSetModeSpectrum));
 
   // Older mouse functions
