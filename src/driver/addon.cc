@@ -272,7 +272,6 @@ void MouseSetLogoModeStaticNoStore(const Napi::CallbackInfo& info) {
 }
 
 void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
   if (mouseDev == NULL) {
     return;
   }
@@ -280,7 +279,6 @@ void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
 }
 
 void MouseSetLogoModeBreathe(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
   if (mouseDev == NULL) {
     return;
   }
@@ -324,7 +322,6 @@ void CloseMouseMatDevice(const Napi::CallbackInfo& info) {
 }
 
 void MouseMatSetModeNone(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
   if (mouseMatDev == NULL) {
     return;
   }
@@ -400,7 +397,6 @@ void MouseMatSetModeStaticNoStore(const Napi::CallbackInfo& info) {
 }
 
 void MouseMatSetModeSpectrum(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
   if (mouseMatDev == NULL) {
     return;
   }

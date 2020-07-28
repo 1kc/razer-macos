@@ -138,6 +138,7 @@ let mainMenu = [
     label: 'Refresh Device List',
     click() { refreshDevices(); refreshTray(); },
   },
+  { type: 'separator' },
   {
     label: 'Spectrum All Devices',
     click() {
@@ -203,7 +204,7 @@ function buildCustomColorsCycleMenu() {
     index++;
   });
 
-  mainMenu[2].submenu = cccMenu;
+  mainMenu[3].submenu = cccMenu;
 }
 
 function setCustomCycleColor(index) {
