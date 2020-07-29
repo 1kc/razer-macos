@@ -332,6 +332,95 @@ ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const ch
 }
 
 /**
+ * Write device file "scroll_mode_wave" (for extended mouse matrix effects)
+ *
+ * Wave effect mode is activated whenever the file is written to
+ */
+ssize_t razer_attr_write_scroll_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    unsigned char direction = (unsigned char)strtol(buf, NULL, 10);
+    struct razer_report report = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
+            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, SCROLL_WHEEL_LED, direction);
+            break;
+
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, SCROLL_WHEEL_LED, direction);
+            report.transaction_id.id = 0x1f;
+            break;
+
+        default:
+            printf("razermouse: logo_mode_wave not supported for this model\n");
+            return count;
+    }
+
+    razer_send_payload(usb_dev, &report);
+    return count;
+}
+
+ssize_t razer_attr_write_side_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count, int side)
+{
+    unsigned char direction = (unsigned char)strtol(buf, NULL, 10);
+    struct razer_report report = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, side, direction);
+        break;
+
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, side, direction);
+        report.transaction_id.id = 0x1f;
+        break;
+
+        default:
+        printf("razermouse: logo_mode_wave not supported for this model\n");
+        return count;
+    }
+
+    razer_send_payload(usb_dev, &report);
+    return count;
+}
+
+/**
+ * Write device file "left_mode_wave" (for extended mouse matrix effects)
+ *
+ * Wave effect mode is activated whenever the file is written to
+ */
+ssize_t razer_attr_write_left_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    return razer_attr_write_side_mode_wave(usb_dev, buf, count, LEFT_SIDE_LED);
+}
+
+/**
+ * Write device file "right_mode_wave" (for extended mouse matrix effects)
+ *
+ * Wave effect mode is activated whenever the file is written to
+ */
+ssize_t razer_attr_write_right_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    return razer_attr_write_side_mode_wave(usb_dev, buf, count, RIGHT_SIDE_LED);
+}
+
+/**
  * Write device file "logo_mode_static" (for extended mouse matrix effects)
  *
  * Set the mouse to static mode when 3 RGB bytes are written

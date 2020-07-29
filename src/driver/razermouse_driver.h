@@ -115,6 +115,11 @@
 
 ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_left_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_side_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count, int side);
+
 ssize_t razer_attr_write_logo_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_logo_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_logo_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
