@@ -40,8 +40,9 @@ Mice:
 * Razer Deathadder Elite
 * Razer Razer Lancehead Wireless
 * Razer Viper Ultimate Wireless
+* Razer Basilisk Ultimate
 
-Mouse mat:
+Mouse mats:
 
 * Razer Goliathus Extended
 
