@@ -228,8 +228,14 @@ void MouseSetLogoModeWave(const Napi::CallbackInfo& info) {
 
   if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
     razer_attr_write_logo_mode_wave(mouseDev, "1", 0);
+    razer_attr_write_scroll_mode_wave(mouseDev, "1", 0);
+    razer_attr_write_left_mode_wave(mouseDev, "1", 0);
+    razer_attr_write_right_mode_wave(mouseDev, "1", 0);
   } else {
     razer_attr_write_logo_mode_wave(mouseDev, "2", 0);
+    razer_attr_write_scroll_mode_wave(mouseDev, "2", 0);
+    razer_attr_write_left_mode_wave(mouseDev, "2", 0);
+    razer_attr_write_right_mode_wave(mouseDev, "2", 0);
   }
 }
 
@@ -250,6 +256,9 @@ void MouseSetLogoModeStatic(const Napi::CallbackInfo& info) {
   char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
 
   razer_attr_write_logo_mode_static(mouseDev, buf, 3);
+  razer_attr_write_scroll_mode_static(mouseDev, buf, 3);
+  razer_attr_write_left_mode_static(mouseDev, buf, 3);
+  razer_attr_write_right_mode_static(mouseDev, buf, 3);
 }
 
 void MouseSetLogoModeStaticNoStore(const Napi::CallbackInfo& info) {
@@ -269,6 +278,9 @@ void MouseSetLogoModeStaticNoStore(const Napi::CallbackInfo& info) {
   char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
 
   razer_attr_write_logo_mode_static_no_store(mouseDev, buf, 3);
+  razer_attr_write_scroll_mode_static_no_store(mouseDev, buf, 3);
+  razer_attr_write_left_mode_static_no_store(mouseDev, buf, 3);
+  razer_attr_write_right_mode_static_no_store(mouseDev, buf, 3);
 }
 
 void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
@@ -276,6 +288,9 @@ void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
     return;
   }
   razer_attr_write_logo_mode_spectrum(mouseDev, "1", 1);
+  razer_attr_write_scroll_mode_spectrum(mouseDev, "1", 1);
+  razer_attr_write_left_mode_spectrum(mouseDev, "1", 1);
+  razer_attr_write_right_mode_spectrum(mouseDev, "1", 1);
 }
 
 void MouseSetLogoModeBreathe(const Napi::CallbackInfo& info) {
@@ -283,6 +298,9 @@ void MouseSetLogoModeBreathe(const Napi::CallbackInfo& info) {
     return;
   }
   razer_attr_write_logo_mode_breath(mouseDev, "1", 1);
+  razer_attr_write_scroll_mode_breath(mouseDev, "1", 1);
+  razer_attr_write_left_mode_breath(mouseDev, "1", 1);
+  razer_attr_write_right_mode_breath(mouseDev, "1", 1);
 }
 
 void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
@@ -290,10 +308,10 @@ void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
     return;
   }
   razer_attr_write_logo_mode_none(mouseDev, "1", 1);
+  razer_attr_write_scroll_mode_none(mouseDev, "1", 1);
+  razer_attr_write_left_mode_none(mouseDev, "1", 1);
+  razer_attr_write_right_mode_none(mouseDev, "1", 1);
 }
-
-
-
 
 /**
 * Get the Razer Mouse Mat USB device interface and device name, 

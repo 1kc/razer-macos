@@ -47,6 +47,7 @@
 #define USB_DEVICE_ID_RAZER_ABYSSUS_2000 0x005E
 #define USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED 0x0060
 #define USB_DEVICE_ID_RAZER_BASILISK 0x0064
+#define USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE 0x0086
 #define USB_DEVICE_ID_RAZER_NAGA_TRINITY 0x0067
 #define USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION 0x006A
 #define USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL 0x006B
@@ -55,6 +56,7 @@
 #define USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER 0x006F
 #define USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED 0x0070
 #define USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION 0x0071
+#define USB_DEVICE_ID_RAZER_CHROMA_MOUSE_CHARGING_DOCK 0x007e
 #define USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER 0x0072
 #define USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED 0x0073
 #define USB_DEVICE_ID_RAZER_VIPER 0x0078
@@ -113,11 +115,34 @@
 
 ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_left_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+
 ssize_t razer_attr_write_logo_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_left_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+
 ssize_t razer_attr_write_logo_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_left_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+
 ssize_t razer_attr_write_logo_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_left_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+
 ssize_t razer_attr_write_logo_mode_breath(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_breath(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_left_mode_breath(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_breath(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+
 ssize_t razer_attr_write_logo_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_left_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 
 // Older mouse
 ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
