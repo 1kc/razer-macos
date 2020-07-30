@@ -534,6 +534,8 @@ let mainMenuBottom = [
 let keyboardDeviceName = '';
 let mouseDeviceName = '';
 let mouseMatDeviceName = '';
+let mouseBatteryLevel = -1;
+let mouseCharging = false;
 
 const refreshDevices = () => {
   // close devices
@@ -545,6 +547,8 @@ const refreshDevices = () => {
   keyboardDeviceName = addon.getKeyboardDevice();
   mouseDeviceName = addon.getMouseDevice();
   mouseMatDeviceName = addon.getMouseMatDevice();
+  mouseBatteryLevel = addon.getBatteryLevel();
+  mouseCharging = addon.getChargingStatus();
 }
 
 app.on('ready', () => {
@@ -689,13 +693,20 @@ function refreshTray() {
     menu = menu.concat(keyboardMenu);
   }
   if (mouseDeviceName) {
-    mouseMenu[1].label = mouseDeviceName;
+    if (mouseBatteryLevel == -1) {
+      mouseMenu[1].label = mouseDeviceName;
+    } else if (mouseCharging) {
+      mouseMenu[1].label = mouseDeviceName.concat(" - ⚡".concat(mouseBatteryLevel.toString()));
+    }
+    else {
+      mouseMenu[1].label = mouseDeviceName.concat(" - 🔋".concat(mouseBatteryLevel.toString().concat("%")));
+    }
     menu = menu.concat(mouseMenu);
   }
-  if (mouseMatDeviceName) {
-    mouseMatMenu[1].label = mouseMatDeviceName;
-    menu = menu.concat(mouseMatMenu);
-  }
+  // if (mouseMatDeviceName) {
+  //   mouseMatMenu[1].label = mouseMatDeviceName;
+  //   menu = menu.concat(mouseMatMenu);
+  // }
   menu = menu.concat(mainMenuBottom);
 
   const contextMenu = Menu.buildFromTemplate(menu);
