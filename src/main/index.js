@@ -703,10 +703,10 @@ function refreshTray() {
     }
     menu = menu.concat(mouseMenu);
   }
-  // if (mouseMatDeviceName) {
-  //   mouseMatMenu[1].label = mouseMatDeviceName;
-  //   menu = menu.concat(mouseMatMenu);
-  // }
+  if (mouseMatDeviceName) {
+    mouseMatMenu[1].label = mouseMatDeviceName;
+    menu = menu.concat(mouseMatMenu);
+  }
   menu = menu.concat(mainMenuBottom);
 
   const contextMenu = Menu.buildFromTemplate(menu);
