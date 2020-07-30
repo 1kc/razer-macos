@@ -696,7 +696,7 @@ function refreshTray() {
     if (mouseBatteryLevel == -1) {
       mouseMenu[1].label = mouseDeviceName;
     } else if (mouseCharging) {
-      mouseMenu[1].label = mouseDeviceName.concat(" - ⚡".concat(mouseBatteryLevel.toString()));
+      mouseMenu[1].label = mouseDeviceName.concat(" - ⚡".concat(mouseBatteryLevel.toString().concat("%")));
     }
     else {
       mouseMenu[1].label = mouseDeviceName.concat(" - 🔋".concat(mouseBatteryLevel.toString().concat("%")));
