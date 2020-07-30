@@ -186,8 +186,8 @@ Napi::Number GetMousebatteryLevel(const Napi::CallbackInfo& info) {
 
   razer_attr_read_get_battery(mouseDev, buf);
   double bufferValue = atof(buf);
-  
-  if (bufferValue < 0)
+
+  if (bufferValue <= 0)
   {
     return Napi::Number::New(env, -1);
   }
