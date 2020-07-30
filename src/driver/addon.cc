@@ -6,12 +6,14 @@ extern "C" {
   #include "razerdevice.h"
   #include "razerkbd_driver.h"
   #include "razermouse_driver.h"
+  #include "razermousedock_driver.h"
   #include "razermousemat_driver.h"
 }
 
 
 IOUSBDeviceInterface **kbdDev;
 IOUSBDeviceInterface **mouseDev;
+IOUSBDeviceInterface **mouseDockDev;
 IOUSBDeviceInterface **mouseMatDev;
 
 /**
@@ -348,6 +350,91 @@ void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
 }
 
 /**
+* Get the Razer Mouse Dock USB device interface and device name, 
+* return JS Null if non found
+*/
+Napi::Value GetMouseDockDevice(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+
+  mouseDockDev = getRazerUSBDeviceInterface(TYPE_MOUSE_DOCK);
+  if (mouseDockDev == NULL) {
+    return env.Null();
+  }
+
+  char buf[256] = {0};
+  razer_mouse_dock_attr_read_device_type(mouseDockDev, buf);
+  return Napi::String::New(env, buf);
+}
+
+void CloseMouseDockDevice(const Napi::CallbackInfo& info) {
+  if (mouseDockDev == NULL) {
+    return;
+  }
+  closeRazerUSBDeviceInterface(mouseDockDev);
+
+}
+
+void MouseDockSetModeStatic(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDockDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_mouse_dock_attr_write_mode_static(mouseDockDev, buf, 3);
+}
+
+void MouseDockSetModeStaticNoStore(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDockDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_mouse_dock_attr_write_mode_static_no_store(mouseDockDev, buf, 3);
+}
+
+void MouseDockSetModeSpectrum(const Napi::CallbackInfo& info) {
+  if (mouseDockDev == NULL) {
+    return;
+  }
+  razer_mouse_dock_attr_write_mode_spectrum(mouseDockDev, "1", 1);
+}
+
+void MouseDockSetModeBreathe(const Napi::CallbackInfo& info) {
+  if (mouseDockDev == NULL) {
+    return;
+  }
+  razer_mouse_dock_attr_write_mode_breath(mouseDockDev, "1", 1);
+}
+
+void MouseDockSetModeNone(const Napi::CallbackInfo& info) {
+  if (mouseDockDev == NULL) {
+    return;
+  }
+  razer_mouse_dock_attr_write_mode_none(mouseDockDev, "1", 1);
+}
+
+
+/**
 * Get the Razer Mouse Mat USB device interface and device name, 
 * return JS Null if non found
 */
@@ -477,6 +564,14 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("mouseSetLogoModeSpectrum", Napi::Function::New(env, MouseSetLogoModeSpectrum));
   exports.Set("mouseSetLogoModeBreathe", Napi::Function::New(env, MouseSetLogoModeBreathe));
   exports.Set("mouseSetLogoModeNone", Napi::Function::New(env, MouseSetLogoModeNone));
+
+  exports.Set("getMouseDockDevice", Napi::Function::New(env, GetMouseDockDevice));
+  exports.Set("closeMouseDockDevice", Napi::Function::New(env, CloseMouseDockDevice));
+  exports.Set("mouseDockSetModeNone", Napi::Function::New(env, MouseDockSetModeNone));
+  exports.Set("mouseDockSetModeBreathe", Napi::Function::New(env, MouseDockSetModeBreathe));
+  exports.Set("mouseDockSetModeStatic", Napi::Function::New(env, MouseDockSetModeStatic));
+  exports.Set("mouseDockSetModeStaticNoStore", Napi::Function::New(env, MouseDockSetModeStaticNoStore));
+  exports.Set("mouseDockSetModeSpectrum", Napi::Function::New(env, MouseDockSetModeSpectrum));
 
   exports.Set("getMouseMatDevice", Napi::Function::New(env, GetMouseMatDevice));
   exports.Set("closeMouseMatDevice", Napi::Function::New(env, CloseMouseMatDevice));

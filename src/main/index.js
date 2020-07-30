@@ -15,6 +15,7 @@ let forceQuit = false;
 
 let customKdbColor = null;
 let customMouseColor = null;
+let customMouseDockColor = null;
 let customMouseMatColor = null;
 let cycleColors = null;
 
@@ -50,6 +51,22 @@ function loadItemsFromStorage() {
     customMouseColor = data;
     if (isEmpty(customMouseColor)) {
       customMouseColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0
+        }
+      };
+    }
+  });
+
+  storage.get('customMouseDockColor', function(error, data) {
+    if (error) throw error;
+  
+    customMouseDockColor = data;
+    if (isEmpty(customMouseDockColor)) {
+      customMouseDockColor = {
         hex: '#ffff00',
         rgb: {
           r: 255,
@@ -120,13 +137,16 @@ let cycleColorsInterval = null;
 function setDevicesCycleColors(colors) {
   addon.kbdSetModeStaticNoStore(new Uint8Array([
     colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
-  ]))
+  ]));
   addon.mouseSetLogoModeStaticNoStore(new Uint8Array([
     colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
-  ]))
+  ]));
+  addon.mouseDockSetModeStaticNoStore(new Uint8Array([
+    colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
+  ]));
   addon.mouseMatSetModeStaticNoStore(new Uint8Array([
     colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
-  ]))
+  ]));
 
   cycleColorsIndex++;
   if (cycleColorsIndex >= colors.length)
@@ -446,6 +466,70 @@ let mouseMenu = [
   },
 ]
 
+let mouseDockMenu = [
+  { type: 'separator' },
+  {
+    label: 'No mouse dock found',
+    enabled: false,
+  },
+  { type: 'separator' },
+  {
+    label: 'None',
+    click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeNone(); }
+  },
+  {
+    label: 'Static',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.mouseDockSetModeStatic(new Uint8Array([
+          customMouseMatColor.rgb.r, customMouseMatColor.rgb.g, customMouseMatColor.rgb.b
+        ]))},
+      },
+      {
+        label: 'White',
+        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+          0xff,0xff,0xff
+        ]))},
+      },
+      {
+        label: 'Red',
+        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+          0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+          0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+          0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
+    label: 'Spectrum',
+    click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeSpectrum(); },
+  },
+  {
+    label: 'Breathe',
+    click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeBreathe(new Uint8Array([
+      0 // random
+    ]))}
+  },
+  {
+    label: 'Set custom color',
+    click() { window.webContents.send('device-selected', {device: 'Mouse Dock', currentColor: customMouseDockColor}); window.show() }
+  },
+]
+
 let mouseMatMenu = [
   { type: 'separator' },
   {
@@ -533,6 +617,7 @@ let mainMenuBottom = [
 
 let keyboardDeviceName = '';
 let mouseDeviceName = '';
+let mouseDockDeviceName = '';
 let mouseMatDeviceName = '';
 let mouseBatteryLevel = -1;
 let mouseCharging = false;
@@ -541,11 +626,13 @@ const refreshDevices = () => {
   // close devices
   addon.closeKeyboardDevice()
   addon.closeMouseDevice()
+  addon.closeMouseDockDevice()
   addon.closeMouseMatDevice()
 
   // get devices
   keyboardDeviceName = addon.getKeyboardDevice();
   mouseDeviceName = addon.getMouseDevice();
+  mouseDockDeviceName = addon.getMouseDockDevice();
   mouseMatDeviceName = addon.getMouseMatDevice();
   mouseBatteryLevel = addon.getBatteryLevel();
   mouseCharging = addon.getChargingStatus();
@@ -565,6 +652,7 @@ function itemsLoadedFromStorage() {
 app.on('quit', () => {
   addon.closeKeyboardDevice();
   addon.closeMouseDevice();
+  addon.closeMouseDockDevice();
   addon.closeMouseMatDevice();
 })
 
@@ -590,6 +678,10 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
       case "Mouse":
         customMouseColor = color;
         storage.set('customMouseColor', customMouseColor);
+        break;
+      case "Mouse Dock":
+        customMouseDockColor = color;
+        storage.set('customMouseDockColor', customMouseDockColor);
         break;
       case "Mouse Mat":
         customMouseMatColor = color;
@@ -703,10 +795,14 @@ function refreshTray() {
     }
     menu = menu.concat(mouseMenu);
   }
-  // if (mouseMatDeviceName) {
-  //   mouseMatMenu[1].label = mouseMatDeviceName;
-  //   menu = menu.concat(mouseMatMenu);
-  // }
+  if (mouseDockDeviceName) {
+    mouseDockMenu[1].label = mouseDockDeviceName;
+    menu = menu.concat(mouseDockMenu);
+  }
+  if (mouseMatDeviceName) {
+    mouseMatMenu[1].label = mouseMatDeviceName;
+    menu = menu.concat(mouseMatMenu);
+  }
   menu = menu.concat(mainMenuBottom);
 
   const contextMenu = Menu.buildFromTemplate(menu);
