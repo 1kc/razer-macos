@@ -1,4 +1,6 @@
 #include <napi.h>
+#include <iostream>
+#include <iomanip> 
 
 extern "C" {
   #include "razerdevice.h"
@@ -172,6 +174,38 @@ Napi::Value GetMouseDevice(const Napi::CallbackInfo& info) {
   char buf[256] = {0};
   razer_mouse_attr_read_device_type(mouseDev, buf);
   return Napi::String::New(env, buf);
+}
+
+Napi::Number GetMousebatteryLevel(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == nullptr) {
+    return Napi::Number::New(env, -1);
+  }
+
+  char buf[4] = {0};
+
+  razer_attr_read_get_battery(mouseDev, buf);
+  double bufferValue = atof(buf);
+
+  if (bufferValue <= 0)
+  {
+    return Napi::Number::New(env, -1);
+  }
+  double batteryLevel = (bufferValue * 100.0) / 255.0;
+  return Napi::Number::New(env, static_cast<int>(batteryLevel));
+}
+
+Napi::Boolean GetIsMouseCharging(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == nullptr) {
+    return Napi::Boolean::New(env, false);
+  }
+
+  char buf[2] = {0};
+  razer_attr_read_is_charging(mouseDev, buf);
+  int charging = atoi(buf);
+
+  return Napi::Boolean::New(env, static_cast<bool>(charging));
 }
 
 
@@ -434,6 +468,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("kbdSetModeStarlight", Napi::Function::New(env, KbdSetModeStarlight));
 
   exports.Set("getMouseDevice", Napi::Function::New(env, GetMouseDevice));
+  exports.Set("getBatteryLevel", Napi::Function::New(env, GetMousebatteryLevel));
+  exports.Set("getChargingStatus", Napi::Function::New(env, GetIsMouseCharging));
   exports.Set("closeMouseDevice", Napi::Function::New(env, CloseMouseDevice));
   exports.Set("mouseSetLogoModeWave", Napi::Function::New(env, MouseSetLogoModeWave));
   exports.Set("mouseSetLogoModeStatic", Napi::Function::New(env, MouseSetLogoModeStatic));
