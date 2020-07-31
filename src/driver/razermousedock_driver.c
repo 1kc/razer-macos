@@ -35,7 +35,7 @@ static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report 
 
     switch (product) {
     // These devices require longer waits to read their firmware, serial, and other setting values
-    case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
+    case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
         return razer_get_usb_response(usb_dev, 0x00, request_report, 0x00, response_report, RAZER_MOUSE_DOCK_WAIT_MIN_US);
         break;
 
@@ -92,8 +92,8 @@ ssize_t razer_mouse_dock_attr_read_device_type(IOUSBDeviceInterface **usb_dev, c
     char *device_type = "";
 
     switch (product) {
-    case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
-        device_type = "Razer Viper Ultimate Wireless Dock\n";
+    case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
+        device_type = "Razer Mouse Charging Dock\n";
         break;
 
     default:
@@ -118,7 +118,7 @@ ssize_t razer_mouse_dock_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, 
 
     if(count == 3) {
         switch (product) {
-        case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
+        case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
             report = razer_chroma_extended_matrix_effect_static(VARSTORE, ZERO_LED, (struct razer_rgb*) & buf[0]);
             break;
 
@@ -155,7 +155,7 @@ ssize_t razer_mouse_dock_attr_write_mode_static_no_store(IOUSBDeviceInterface **
 
     if(count == 3) {
         switch (product) {
-        case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
+        case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
             report = razer_chroma_extended_matrix_effect_static(NOSTORE, ZERO_LED, (struct razer_rgb*) & buf[0]);
             break;
 
@@ -189,7 +189,7 @@ ssize_t razer_mouse_dock_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
     switch(product) {
-    case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
+    case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
         report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, ZERO_LED);
         break;
 
@@ -216,7 +216,7 @@ ssize_t razer_mouse_dock_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, 
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
     switch(product) {
-    case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
+    case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
         switch(count) {
         case 3: // Single colour mode
             report = razer_chroma_extended_matrix_effect_breathing_single(VARSTORE, ZERO_LED, (struct razer_rgb*)&buf[0]);
@@ -253,7 +253,7 @@ ssize_t razer_mouse_dock_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, co
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
     switch(product) {
-    case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
+    case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
         report = razer_chroma_extended_matrix_effect_none(VARSTORE, ZERO_LED);
         break;
 
