@@ -119,7 +119,7 @@ bool is_mouse_dock(IOUSBDeviceInterface **usb_dev) {
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
     
     switch (product) {        
-	case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS_DOCK:
+	case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
 		return true;
     }
     
