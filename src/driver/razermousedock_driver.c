@@ -40,7 +40,7 @@ static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report 
         break;
 
     default:
-        ;
+        return -1;
     }
 }
 
