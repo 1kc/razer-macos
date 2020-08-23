@@ -485,7 +485,7 @@ let mouseDockMenu = [
         click() {
           clearInterval(cycleColorsInterval);
           addon.mouseDockSetModeStatic(new Uint8Array([
-          customMouseMatColor.rgb.r, customMouseMatColor.rgb.g, customMouseMatColor.rgb.b
+          customMouseDockColor.rgb.r, customMouseDockColor.rgb.g, customMouseDockColor.rgb.b
         ]))},
       },
       {
