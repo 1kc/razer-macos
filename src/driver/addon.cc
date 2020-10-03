@@ -329,6 +329,28 @@ void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_spectrum(mouseDev, "1", 1);
 }
 
+void MouseSetLogoModeReactive(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  if (mouseDev == NULL) {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3) {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_attr_write_logo_mode_reactive(mouseDev, buf, 4);
+  razer_attr_write_scroll_mode_reactive(mouseDev, buf, 4);
+  razer_attr_write_left_mode_reactive(mouseDev, buf, 4);
+  razer_attr_write_right_mode_reactive(mouseDev, buf, 4);
+}
+
 void MouseSetLogoModeBreathe(const Napi::CallbackInfo& info) {
   if (mouseDev == NULL) {
     return;
@@ -562,6 +584,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("mouseSetLogoModeStatic", Napi::Function::New(env, MouseSetLogoModeStatic));
   exports.Set("mouseSetLogoModeStaticNoStore", Napi::Function::New(env, MouseSetLogoModeStaticNoStore));
   exports.Set("mouseSetLogoModeSpectrum", Napi::Function::New(env, MouseSetLogoModeSpectrum));
+  exports.Set("mouseSetLogoModeReactive", Napi::Function::New(env, MouseSetLogoModeReactive));
   exports.Set("mouseSetLogoModeBreathe", Napi::Function::New(env, MouseSetLogoModeBreathe));
   exports.Set("mouseSetLogoModeNone", Napi::Function::New(env, MouseSetLogoModeNone));
 

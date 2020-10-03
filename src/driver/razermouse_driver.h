@@ -63,6 +63,7 @@
 #define USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED 0x007A
 #define USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS 0x007B
 #define USB_DEVICE_ID_RAZER_DEATHADDER_V2 0x0084
+#define USB_DEVICE_ID_RAZER_VIPER_MINI 0x008A
 
 /* Each keyboard report has 90 bytes*/
 #define RAZER_REPORT_LEN 0x5A
@@ -143,6 +144,12 @@ ssize_t razer_attr_write_logo_mode_none(IOUSBDeviceInterface **usb_dev, const ch
 ssize_t razer_attr_write_scroll_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_left_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_right_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+
+ssize_t razer_attr_write_logo_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_side_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count, int side);
+ssize_t razer_attr_write_left_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_right_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 
 // Older mouse
 ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);

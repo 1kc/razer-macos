@@ -434,6 +434,43 @@ let mouseMenu = [
     click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeSpectrum(); },
   },
   {
+    label: 'Reactive',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          clearInterval(cycleColorsInterval); 
+          addon.mouseSetLogoModeReactive(new Uint8Array([
+          customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
+        ]))},
+      },
+      {
+        label: 'White',
+        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+          0xff,0xff,0xff
+        ]))},
+      },
+      {
+        label: 'Red',
+        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+          0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+          0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+          0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
     label: 'Breathe',
     click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeBreathe(new Uint8Array([
       0 // random
@@ -697,7 +734,7 @@ function createWindow() {
   window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
     titleBarStyle: 'hidden',
-    height: 275,
+    height: 300,
     resizable: false,
     width: 500,
     y: 100,
