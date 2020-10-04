@@ -434,38 +434,38 @@ let mouseMenu = [
     click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeSpectrum(); },
   },
   {
-    label: 'Reactive',
+    label: 'Reactive', // Speed currently defaults to 3 until we add speed controls
     submenu: [
       {
         label: 'Custom color',
         click() {
           clearInterval(cycleColorsInterval); 
           addon.mouseSetLogoModeReactive(new Uint8Array([
-          customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
+          3, customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
         ]))},
       },
       {
         label: 'White',
         click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          0xff,0xff,0xff
+          3, 0xff,0xff,0xff
         ]))},
       },
       {
         label: 'Red',
         click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          0xff,0,0
+          3, 0xff,0,0
         ]))},
       },
       {
         label: 'Green',
         click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          0,0xff,0
+          3, 0,0xff,0
         ]))},
       },
       {
         label: 'Blue',
         click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          0,0,0xff
+          3, 0,0,0xff
         ]))},
       },
     ]

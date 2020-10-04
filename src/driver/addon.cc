@@ -337,8 +337,8 @@ void MouseSetLogoModeReactive(const Napi::CallbackInfo& info) {
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
-    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+  if (argsArr.ElementLength() != 4) {
+    Napi::TypeError::New(env, "Reactive only accepts Speed, RGB (4byte)")
         .ThrowAsJavaScriptException();
     return;
   }
