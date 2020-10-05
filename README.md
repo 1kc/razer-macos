@@ -30,6 +30,7 @@ Confirmed working for:
 
 Keyboards:
 
+* Razer BlackWidow 2019
 * Razer BlackWidow Elite
 * Razer Ornata Chroma
 * Razer Huntsman
