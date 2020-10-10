@@ -21,6 +21,8 @@
 Install by drag and drop to Applications.
 If you get a security warning when opening the app, you need to go to your Mac's "System Preferences", "Security and Privacy", "General" and click "Open" at the bottom to allow Razer macOS to run.
 
+Please see FAQ section below if color changes are not working, otherwise open a new issue.
+
 ## Device support
 
 Keyboards, mice, mouse mats and Blade laptops are supported.
