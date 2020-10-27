@@ -38,6 +38,7 @@ Keyboards:
 * Razer Huntsman
 * Razer Huntsman Elite
 * Razer Huntsman TE
+* Razer Cynosa V2
 
 Mice:
 
