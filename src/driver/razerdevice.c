@@ -16,8 +16,8 @@ bool is_razer_device(IOUSBDeviceInterface **dev) {
 bool is_keyboard(IOUSBDeviceInterface **usb_dev) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
-    switch (product) {        
+
+    switch (product) {
 		case USB_DEVICE_ID_RAZER_NOSTROMO:
 		case USB_DEVICE_ID_RAZER_ORBWEAVER:
 		case USB_DEVICE_ID_RAZER_ORBWEAVER_CHROMA:
@@ -43,6 +43,7 @@ bool is_keyboard(IOUSBDeviceInterface **usb_dev) {
 		case USB_DEVICE_ID_RAZER_ORNATA:
 		case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
 		case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+		case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
 		case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
 		case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
 		case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -51,15 +52,15 @@ bool is_keyboard(IOUSBDeviceInterface **usb_dev) {
 		case USB_DEVICE_ID_RAZER_ANANSI:
             return true;
     }
-    
+
     return false;
 }
 
 bool is_mouse(IOUSBDeviceInterface **usb_dev) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
-    switch (product) {        
+
+    switch (product) {
 		case USB_DEVICE_ID_RAZER_OROCHI_2011:
 		case USB_DEVICE_ID_RAZER_DEATHADDER_3_5G:
 		case USB_DEVICE_ID_RAZER_ABYSSUS_1800:
@@ -111,34 +112,34 @@ bool is_mouse(IOUSBDeviceInterface **usb_dev) {
 		case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
             return true;
     }
-    
+
     return false;
 }
 
 bool is_mouse_dock(IOUSBDeviceInterface **usb_dev) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
-    switch (product) {        
+
+    switch (product) {
 	case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
 		return true;
     }
-    
+
     return false;
 }
 
 bool is_mouse_mat(IOUSBDeviceInterface **usb_dev) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
-    switch (product) {        
+
+    switch (product) {
 	case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
 	case USB_DEVICE_ID_RAZER_FIREFLY:
 	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
 	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
 		return true;
     }
-    
+
     return false;
 }
 
@@ -148,7 +149,7 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 	if (matchingDict == NULL) {
 		return NULL;
 	}
-	
+
 	io_iterator_t iter;
 	kern_return_t kReturn =
 		IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &iter);
@@ -160,26 +161,26 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 	while ((usbDevice = IOIteratorNext(iter))) {
 		IOCFPlugInInterface **plugInInterface = NULL;
 		SInt32 score;
-		
+
 		kReturn = IOCreatePlugInInterfaceForService(
 			usbDevice, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &plugInInterface, &score);
-		
+
 		IOObjectRelease(usbDevice);  // Not needed after plugin created
 		if ((kReturn != kIOReturnSuccess) || plugInInterface == NULL) {
 			// printf("Unable to create plugin (0x%08x)\n", kReturn);
 			continue;
 		}
-		
+
 		IOUSBDeviceInterface **dev = NULL;
 		HRESULT hResult = (*plugInInterface)->QueryInterface(
 			plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID), (LPVOID *)&dev);
-		
+
 		(*plugInInterface)->Release(plugInInterface);  // Not needed after device interface created
 		if (hResult || !dev) {
 			// printf("Couldn’t create a device interface (0x%08x)\n", (int) hResult);
 			continue;
 		}
-		
+
 		// Filter out non-Razer devices
 		if (!is_razer_device(dev)) {
 			(*dev)->Release(dev);
@@ -224,20 +225,20 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 
 
 
-		
+
 		kReturn = (*dev)->USBDeviceOpen(dev);
 		if (kReturn != kIOReturnSuccess)  {
 			printf("Unable to open USB device: %08x\n", kReturn);
 			(*dev)->Release(dev);
 			continue;
 		}
-		
+
 		// Success. We found the Razer USB device.
 		// Caller is responsible for closing USB and release device.
 		IOObjectRelease(iter);
 		return dev;
 	}
-	
+
 	IOObjectRelease(iter);
 	return NULL;
 }

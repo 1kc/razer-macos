@@ -30,8 +30,8 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct
 bool is_blade_laptop(IOUSBDeviceInterface **usb_dev) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
-    switch (product) {        
+
+    switch (product) {
         case USB_DEVICE_ID_RAZER_BLADE_STEALTH:
         case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2016:
         case USB_DEVICE_ID_RAZER_BLADE_PRO_LATE_2016:
@@ -51,9 +51,10 @@ bool is_blade_laptop(IOUSBDeviceInterface **usb_dev) {
         case USB_DEVICE_ID_RAZER_BLADE_2019_BASE:
         case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2019:
         case USB_DEVICE_ID_RAZER_CYNOSA_V2:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         return true;
     }
-    
+
     return false;
 }
 
@@ -65,9 +66,9 @@ bool is_blade_laptop(IOUSBDeviceInterface **usb_dev) {
 ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
+
     char *device_type = "";
-    
+
     switch (product)
     {
     case USB_DEVICE_ID_RAZER_NOSTROMO:
@@ -269,6 +270,10 @@ ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf) {
         device_type = "Razer Cynosa V2\n";
         break;
 
+    case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
+        device_type = "Razer Huntsman Mini\n";
+    break;
+
     default:
         device_type = "Unknown Device\n";
     }
@@ -285,7 +290,7 @@ ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf) {
 ssize_t razer_attr_read_mode_game(IOUSBDeviceInterface **usb_dev, char *buf) {
     struct razer_report report = razer_chroma_standard_get_led_state(VARSTORE, GAME_LED);
     struct razer_report response;
-    
+
     response = razer_send_payload(usb_dev, &report);
     return sprintf(buf, "%d\n", response.arguments[2]);
 }
@@ -299,9 +304,9 @@ ssize_t razer_attr_read_mode_game(IOUSBDeviceInterface **usb_dev, char *buf) {
 ssize_t razer_attr_write_mode_macro(IOUSBDeviceInterface **usb_dev, const char *buf, int count) {
     unsigned char enabled = (unsigned char)strtol(buf, NULL, 10);
     struct razer_report report = razer_chroma_standard_set_led_state(VARSTORE, MACRO_LED, enabled);
-    
+
     razer_send_payload(usb_dev, &report);
-    
+
     return count;
 }
 
@@ -323,6 +328,7 @@ ssize_t razer_attr_write_mode_macro_effect(IOUSBDeviceInterface **usb_dev, const
     case USB_DEVICE_ID_RAZER_ORNATA:
     case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
     case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+    case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
     case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
     case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -363,7 +369,7 @@ ssize_t razer_attr_write_mode_macro_effect(IOUSBDeviceInterface **usb_dev, const
 ssize_t razer_attr_read_mode_macro_effect(IOUSBDeviceInterface **usb_dev, char *buf) {
     struct razer_report report = razer_chroma_standard_get_led_effect(VARSTORE, MACRO_LED);
     struct razer_report response = razer_send_payload(usb_dev, &report);
-    
+
     return sprintf(buf, "%d\n", response.arguments[2]);
 }
 
@@ -387,7 +393,7 @@ ssize_t razer_attr_write_mode_pulsate(IOUSBDeviceInterface **usb_dev, const char
             report = razer_chroma_standard_set_led_effect(VARSTORE, LOGO_LED, 0x02);
             break;
     }
-    
+
     return count;
 }
 
@@ -399,7 +405,7 @@ ssize_t razer_attr_write_mode_pulsate(IOUSBDeviceInterface **usb_dev, const char
 ssize_t razer_attr_read_mode_pulsate(IOUSBDeviceInterface **usb_dev, char *buf) {
     struct razer_report report = razer_chroma_standard_get_led_effect(VARSTORE, LOGO_LED);
     struct razer_report response = razer_send_payload(usb_dev, &report);
-    
+
     return sprintf(buf, "%d\n", response.arguments[2]);
 }
 
@@ -415,7 +421,7 @@ ssize_t razer_attr_read_mode_pulsate(IOUSBDeviceInterface **usb_dev, char *buf) 
 ssize_t razer_attr_read_tartarus_profile_led_red(IOUSBDeviceInterface **usb_dev, char *buf) {
     struct razer_report report = razer_chroma_standard_get_led_state(VARSTORE, RED_PROFILE_LED);
     struct razer_report response = razer_send_payload(usb_dev, &report);
-    
+
     return sprintf(buf, "%d\n", response.arguments[2]);
 }
 
@@ -427,7 +433,7 @@ ssize_t razer_attr_read_tartarus_profile_led_red(IOUSBDeviceInterface **usb_dev,
 ssize_t razer_attr_read_tartarus_profile_led_green(IOUSBDeviceInterface **usb_dev, char *buf) {
     struct razer_report report = razer_chroma_standard_get_led_state(VARSTORE, GREEN_PROFILE_LED);
     struct razer_report response = razer_send_payload(usb_dev, &report);
-    
+
     return sprintf(buf, "%d\n", response.arguments[2]);
 }
 
@@ -439,7 +445,7 @@ ssize_t razer_attr_read_tartarus_profile_led_green(IOUSBDeviceInterface **usb_de
 ssize_t razer_attr_read_tartarus_profile_led_blue(IOUSBDeviceInterface **usb_dev, char *buf) {
     struct razer_report report = razer_chroma_standard_get_led_state(VARSTORE, BLUE_PROFILE_LED);
     struct razer_report response = razer_send_payload(usb_dev, &report);
-    
+
     return sprintf(buf, "%d\n", response.arguments[2]);
 }
 
@@ -476,6 +482,7 @@ ssize_t razer_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *b
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, BACKLIGHT_LED);
@@ -503,7 +510,7 @@ ssize_t razer_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *b
     }
 
     razer_send_payload(usb_dev, &report);
-    
+
     return count;
 }
 
@@ -518,7 +525,7 @@ ssize_t razer_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *b
 ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, int count) {
     unsigned char direction = (unsigned char)strtol(buf, NULL, 10);
     struct razer_report report;
-    
+
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
@@ -526,6 +533,7 @@ ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *b
         case USB_DEVICE_ID_RAZER_ORNATA:
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -551,7 +559,7 @@ ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *b
             break;
     }
     razer_send_payload(usb_dev, &report);
-    
+
     return count;
 }
 
@@ -570,6 +578,7 @@ ssize_t razer_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const cha
         case USB_DEVICE_ID_RAZER_ORNATA:
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -605,7 +614,7 @@ ssize_t razer_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const cha
     }
 
     razer_send_payload(usb_dev, &report);
-    
+
     return count;
 }
 
@@ -616,7 +625,7 @@ ssize_t razer_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const cha
  */
 ssize_t razer_attr_write_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, int count) {
     struct razer_report report;
-    
+
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
@@ -627,6 +636,7 @@ ssize_t razer_attr_write_mode_reactive(IOUSBDeviceInterface **usb_dev, const cha
             case USB_DEVICE_ID_RAZER_ORNATA:
             case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
             case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+            case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
             case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
             case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
             case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -742,6 +752,7 @@ ssize_t razer_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, const char 
         case USB_DEVICE_ID_RAZER_ORNATA:
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -784,15 +795,15 @@ ssize_t razer_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, const char 
 
     }
 
-    
+
     return count;
 }
 
 /**
  * Write device file "mode_static"
- * 
+ *
  * ** NOSTORE version for efficiency in custom lighting configurations
- * 
+ *
  * Set the keyboard to mode when 3 RGB bytes are written
  */
 ssize_t razer_attr_write_mode_static_no_store(IOUSBDeviceInterface **usb_dev, const char *buf, int count) {
@@ -874,6 +885,7 @@ ssize_t razer_attr_write_mode_static_no_store(IOUSBDeviceInterface **usb_dev, co
         case USB_DEVICE_ID_RAZER_ORNATA:
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -916,7 +928,7 @@ ssize_t razer_attr_write_mode_static_no_store(IOUSBDeviceInterface **usb_dev, co
 
     }
 
-    
+
     return count;
 }
 
@@ -950,6 +962,7 @@ ssize_t razer_attr_write_mode_starlight(IOUSBDeviceInterface **usb_dev, const ch
 
     case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
     case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+    case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
     case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
     case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -1027,7 +1040,7 @@ ssize_t razer_attr_write_mode_starlight(IOUSBDeviceInterface **usb_dev, const ch
         break;
     }
 
-    
+
     return count;
 }
 
@@ -1083,6 +1096,7 @@ ssize_t razer_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, const char 
 
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -1171,7 +1185,7 @@ ssize_t razer_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, const char 
             break;
     }
 
-    
+
     return count;
 }
 
@@ -1225,7 +1239,7 @@ ssize_t razer_attr_read_set_logo(IOUSBDeviceInterface **usb_dev, char *buf, int 
 ssize_t razer_attr_write_set_logo(IOUSBDeviceInterface **usb_dev, const char *buf, int count) {
     unsigned char state = (unsigned char)strtol(buf, NULL, 10);
     struct razer_report report = {0};
-    
+
 	if (has_inverted_led_state(usb_dev) && (state == 0 || state == 1)) {
     	state = !state;
 	}
@@ -1237,9 +1251,9 @@ ssize_t razer_attr_write_set_logo(IOUSBDeviceInterface **usb_dev, const char *bu
     } else {
 		report = razer_chroma_standard_set_led_effect(VARSTORE, LOGO_LED, state);
 	}
-    
+
     razer_send_payload(usb_dev, &report);
-    
+
     return count;
 }
 
@@ -1259,6 +1273,7 @@ ssize_t razer_attr_write_mode_custom(IOUSBDeviceInterface **usb_dev, const char 
         case USB_DEVICE_ID_RAZER_ORNATA:
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -1295,7 +1310,7 @@ ssize_t razer_attr_write_set_fn_toggle(IOUSBDeviceInterface **usb_dev, const cha
     unsigned char state = (unsigned char)strtol(buf, NULL, 10);
     struct razer_report report = razer_chroma_misc_fn_key_toggle(state);
     razer_send_payload(usb_dev, &report);
-    
+
     return count;
 }
 
@@ -1322,6 +1337,7 @@ ssize_t razer_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev, const ch
         case USB_DEVICE_ID_RAZER_ORNATA:
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -1382,6 +1398,7 @@ ssize_t razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev, char *buf
         case USB_DEVICE_ID_RAZER_ORNATA:
         case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+        case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -1441,9 +1458,9 @@ ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, con
 
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
+
     //printk(KERN_ALERT "razerkbd: Total count: %d\n", (unsigned char)count);
-    
+
     while(offset < count) {
         if(offset + 3 > count) {
             printf("razerkbd: Wrong Amount of data provided: Should be ROW_ID, START_COL, STOP_COL, N_RGB\n");
@@ -1472,6 +1489,7 @@ ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, con
             case USB_DEVICE_ID_RAZER_ORNATA:
             case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
             case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
+            case USB_DEVICE_ID_RAZER_HUNTSMAN_MINI:
             case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
             case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
             case USB_DEVICE_ID_RAZER_HUNTSMAN:
@@ -1524,8 +1542,8 @@ ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, con
         // *3 as its 3 bytes per col (RGB)
         offset += row_length;
     }
-    
-    
+
+
     return count;
 }
 
@@ -1535,10 +1553,10 @@ ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, con
 static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report *request_report, struct razer_report *response_report) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    	
+
 	uint report_index;
 	uint response_index;
-	
+
 	switch (product) {
 		case USB_DEVICE_ID_RAZER_ANANSI:
         case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
@@ -1548,9 +1566,9 @@ static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report 
 		default:
 			report_index = 0x01;
 			response_index = 0x01;
-			break;		
+			break;
 	}
-	
+
     return razer_get_usb_response(usb_dev, report_index, request_report, response_index, response_report, RAZER_BLACKWIDOW_CHROMA_WAIT_MIN_US);
 }
 
@@ -1559,12 +1577,12 @@ static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report 
  */
 static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct razer_report *request_report) {
     IOReturn retval = -1;
-    
+
     struct razer_report response_report = {0};
     request_report->crc = razer_calculate_crc(request_report);
-    
+
     retval = razer_get_report(dev, request_report, &response_report);
-    
+
     if (retval == kIOReturnSuccess) {
         // Check the packet number, class and command are the same
         if(response_report.remaining_packets != request_report->remaining_packets ||
@@ -1583,6 +1601,6 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct
     } else {
     	printf("Invalid Report Length");
     }
-    
+
     return response_report;
 }

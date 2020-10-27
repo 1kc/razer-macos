@@ -67,6 +67,7 @@
 #define USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2019 0x024a
 #define USB_DEVICE_ID_RAZER_BLADE_STUDIO_EDITION_2019 0x024d
 #define USB_DEVICE_ID_RAZER_CYNOSA_V2 0x025E
+#define USB_DEVICE_ID_RAZER_HUNTSMAN_MINI 0x0257
 
 /* Each keyboard report has 90 bytes*/
 #define RAZER_BLACKWIDOW_REPORT_LEN 0x5A
@@ -118,7 +119,7 @@
 //     unsigned int fn_on;
 //     char name[128];
 //     char phys[64];
-    
+
 //     unsigned char block_keys[3];
 //     unsigned char left_alt_on;
 // };
