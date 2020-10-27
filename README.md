@@ -18,7 +18,10 @@
 
 ## Installation
 
-If you get a security warning, you need to go to your Mac's "System Preferences", "Security and Privacy", "General" and click "Open" at the bottom to allow Razer macOS to run.
+Install by drag and drop to Applications.
+If you get a security warning when opening the app, you need to go to your Mac's "System Preferences", "Security and Privacy", "General" and click "Open" at the bottom to allow Razer macOS to run.
+
+Please see FAQ section below if color changes are not working, otherwise open a new issue.
 
 ## Device support
 
@@ -29,19 +32,22 @@ Confirmed working for:
 
 Keyboards:
 
+* Razer BlackWidow 2019
 * Razer BlackWidow Elite
 * Razer Ornata Chroma
 * Razer Huntsman
 * Razer Huntsman Elite
 * Razer Huntsman TE
+* Razer Cynosa V2
 
 Mice:
 
 * Razer Deathadder Elite
 * Razer Razer Lancehead Wireless
 * Razer Viper Ultimate Wireless
+* Razer Basilisk Ultimate
 
-Mouse mat:
+Mouse mats:
 
 * Razer Goliathus Extended
 
@@ -49,7 +55,12 @@ Laptops:
 
 * Razer Blade Advanced 2018
 
-Please feel free to open a pull request to add new devices.
+Please feel free to open pull requests for new devices you have tested.
+
+## Roadmap
+
+* Add speed control for light effects
+* Add brightness control for mouse and keyboard
 
 ## FAQ
 

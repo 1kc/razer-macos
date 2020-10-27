@@ -105,10 +105,23 @@ bool is_mouse(IOUSBDeviceInterface **usb_dev) {
 		case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
 		case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
 		case USB_DEVICE_ID_RAZER_VIPER:
+		case USB_DEVICE_ID_RAZER_VIPER_MINI:
 		case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
 		case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
 		case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
             return true;
+    }
+    
+    return false;
+}
+
+bool is_mouse_dock(IOUSBDeviceInterface **usb_dev) {
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+    
+    switch (product) {        
+	case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
+		return true;
     }
     
     return false;
@@ -185,6 +198,13 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 			case TYPE_MOUSE:
 				// Filter out non-mice
 				if (!is_mouse(dev)) {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+			case TYPE_MOUSE_DOCK:
+				// Filter out non-mice-mats
+				if (!is_mouse_dock(dev)) {
 					(*dev)->Release(dev);
 					continue;
 				}

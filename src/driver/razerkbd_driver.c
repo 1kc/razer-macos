@@ -50,6 +50,7 @@ bool is_blade_laptop(IOUSBDeviceInterface **usb_dev) {
         case USB_DEVICE_ID_RAZER_BLADE_PRO_2017_FULLHD:
         case USB_DEVICE_ID_RAZER_BLADE_2019_BASE:
         case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2019:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
         return true;
     }
     
@@ -263,6 +264,11 @@ ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf) {
     case USB_DEVICE_ID_RAZER_ANANSI:
         device_type = "Razer Anansi\n";
         break;
+
+    case USB_DEVICE_ID_RAZER_CYNOSA_V2:
+        device_type = "Razer Cynosa V2\n";
+        break;
+
     default:
         device_type = "Unknown Device\n";
     }
@@ -477,6 +483,7 @@ ssize_t razer_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *b
 
         case USB_DEVICE_ID_RAZER_TARTARUS_V2:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, BACKLIGHT_LED);
             report.transaction_id.id = 0x1F;
             break;
@@ -534,6 +541,7 @@ ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *b
 
         case USB_DEVICE_ID_RAZER_TARTARUS_V2:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             report = razer_chroma_extended_matrix_effect_wave(VARSTORE, BACKLIGHT_LED, direction);
             report.transaction_id.id = 0x1F;
             break;
@@ -570,6 +578,7 @@ ssize_t razer_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const cha
             break;
 
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, BACKLIGHT_LED);
             report.transaction_id.id = 0x1F;
             break;
@@ -627,6 +636,7 @@ ssize_t razer_attr_write_mode_reactive(IOUSBDeviceInterface **usb_dev, const cha
 
             case USB_DEVICE_ID_RAZER_TARTARUS_V2:
             case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+            case USB_DEVICE_ID_RAZER_CYNOSA_V2:
                 report = razer_chroma_extended_matrix_effect_reactive(VARSTORE, BACKLIGHT_LED, speed, (struct razer_rgb*)&buf[1]);
                 report.transaction_id.id = 0x1F;
                 break;
@@ -746,6 +756,7 @@ ssize_t razer_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, const char 
             break;
 
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             if(count == 3) {
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
                 report.transaction_id.id = 0x1F;
@@ -877,6 +888,7 @@ ssize_t razer_attr_write_mode_static_no_store(IOUSBDeviceInterface **usb_dev, co
             break;
 
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             if(count == 3) {
                 report = razer_chroma_extended_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
                 report.transaction_id.id = 0x1F;
@@ -957,6 +969,7 @@ ssize_t razer_attr_write_mode_starlight(IOUSBDeviceInterface **usb_dev, const ch
         break;
 
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+    case USB_DEVICE_ID_RAZER_CYNOSA_V2:
         if (count == 7) {
             report = razer_chroma_extended_matrix_effect_starlight_dual(VARSTORE, BACKLIGHT_LED, buf[0], (struct razer_rgb*)&buf[1], (struct razer_rgb*)&buf[4]);
         } else if(count == 4) {
@@ -1098,6 +1111,7 @@ ssize_t razer_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, const char 
             break;
 
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             if (count == 3) { // Single colour mode
                 report = razer_chroma_extended_matrix_effect_breathing_single(VARSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
             } else if (count == 6) { // Dual colour mode
@@ -1254,6 +1268,7 @@ ssize_t razer_attr_write_mode_custom(IOUSBDeviceInterface **usb_dev, const char 
 
         case USB_DEVICE_ID_RAZER_TARTARUS_V2:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             report = razer_chroma_extended_matrix_effect_custom_frame();
             report.transaction_id.id = 0x1F;
             break;
@@ -1316,6 +1331,7 @@ ssize_t razer_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev, const ch
             break;
 
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+        case USB_DEVICE_ID_RAZER_CYNOSA_V2:
             report = razer_chroma_extended_matrix_brightness(VARSTORE, BACKLIGHT_LED, brightness);
             report.transaction_id.id = 0x1F;
             break;
@@ -1465,6 +1481,7 @@ ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, con
 
             case USB_DEVICE_ID_RAZER_TARTARUS_V2:
             case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+            case USB_DEVICE_ID_RAZER_CYNOSA_V2:
                 report = razer_chroma_extended_matrix_set_custom_frame(row_id, start_col, stop_col, (unsigned char*)&buf[offset]);
                 report.transaction_id.id = 0x1F;
                 break;
