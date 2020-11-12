@@ -621,7 +621,7 @@ ssize_t razer_attr_write_side_mode_none(IOUSBDeviceInterface **usb_dev, const ch
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, side);
             break;
 
-        case case USB_DEVICE_ID_RAZER_MAMBA_TE_WIRED::
+        case USB_DEVICE_ID_RAZER_MAMBA_TE_WIRED:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, side);
             break;
 
@@ -849,7 +849,7 @@ ssize_t razer_attr_write_scroll_mode_static(IOUSBDeviceInterface **usb_dev, cons
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, SCROLL_WHEEL_LED, (struct razer_rgb*)&buf[0]);
                 break;
 
-            case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            case USB_DEVICE_ID_RAZER_MAMBA_TE_WIRED:
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, SCROLL_WHEEL_LED, (struct razer_rgb*)&buf[0]);
                 break;
 
