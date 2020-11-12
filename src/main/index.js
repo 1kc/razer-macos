@@ -155,11 +155,6 @@ function setDevicesCycleColors(colors) {
 
 let mainMenu = [
   {
-    label: 'Refresh Device List',
-    click() { refreshDevices(); refreshTray(); },
-  },
-  { type: 'separator' },
-  {
     label: 'Spectrum All Devices',
     click() {
       // manually use an interval so that all devices are gauranteed in sync.
@@ -694,6 +689,7 @@ app.on('quit', () => {
 })
 
 nativeTheme.on('updated', () => {
+ refreshDevices();
  createTray();
 })
 
