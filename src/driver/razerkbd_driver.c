@@ -51,6 +51,7 @@ bool is_blade_laptop(IOUSBDeviceInterface **usb_dev) {
         case USB_DEVICE_ID_RAZER_BLADE_2019_BASE:
         case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2019:
         case USB_DEVICE_ID_RAZER_CYNOSA_V2:
+        case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
         return true;
     }
     
@@ -268,7 +269,11 @@ ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf) {
     case USB_DEVICE_ID_RAZER_CYNOSA_V2:
         device_type = "Razer Cynosa V2\n";
         break;
-
+            
+    case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
+        device_type = "Razer Cynosa Lite\n";
+        break;
+            
     default:
         device_type = "Unknown Device\n";
     }
@@ -328,6 +333,7 @@ ssize_t razer_attr_write_mode_macro_effect(IOUSBDeviceInterface **usb_dev, const
     case USB_DEVICE_ID_RAZER_HUNTSMAN:
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
     case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+    case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
         report = razer_chroma_standard_set_led_effect(NOSTORE, MACRO_LED, enabled);
         report.transaction_id.id = 0x3F;
         break;
@@ -478,6 +484,7 @@ ssize_t razer_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *b
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+        case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, BACKLIGHT_LED);
             break;
 
@@ -574,6 +581,7 @@ ssize_t razer_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const cha
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
         case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+        case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
             report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, BACKLIGHT_LED);
             break;
 
@@ -747,6 +755,7 @@ ssize_t razer_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, const char 
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+        case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
             if(count == 3) {
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
                 razer_send_payload(usb_dev, &report);
@@ -1088,6 +1097,7 @@ ssize_t razer_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, const char 
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+        case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
             switch(count) {
             case 3: // Single colour mode
                 report = razer_chroma_extended_matrix_effect_breathing_single(VARSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
@@ -1327,6 +1337,7 @@ ssize_t razer_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev, const ch
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+        case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
             report = razer_chroma_extended_matrix_brightness(VARSTORE, BACKLIGHT_LED, brightness);
             break;
 
@@ -1387,6 +1398,7 @@ ssize_t razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev, char *buf
         case USB_DEVICE_ID_RAZER_HUNTSMAN:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
+        case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
             report = razer_chroma_extended_matrix_get_brightness(VARSTORE, BACKLIGHT_LED);
             break;
 
