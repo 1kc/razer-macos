@@ -498,9 +498,10 @@ let mouseMenu = [
     ]
   },
   {
-    label: 'Set custom color',
-    click() { window.webContents.send('device-selected', {device: 'Mouse', currentColor: customMouseColor}); window.show() }
-  },
+    label: 'Set custom color and DPI',
+    click() { 
+      window.webContents.send('device-selected', {device: 'Mouse', currentColor: customMouseColor, currentSensitivity: addon.mouseGetDpi()}); window.show() }
+  }
 ]
 
 let mouseDockMenu = [
@@ -695,6 +696,12 @@ app.on('quit', () => {
 
 nativeTheme.on('updated', () => {
  createTray();
+})
+
+// mouse dpi rpc listener
+ipcMain.on('request-set-dpi', (event, arg) => {
+  const { dpi } = arg;
+  addon.mouseSetDpi(dpi);
 })
 
 // custom color rpc listener
