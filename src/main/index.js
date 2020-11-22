@@ -361,9 +361,10 @@ let keyboardMenu = [
   },
   {
     label: 'Set custom color',
-    click() { 
+    click() {
       window.webContents.send('device-selected', {device: 'Keyboard', currentColor: customKdbColor});
-      window.show()
+      window.setSize(500, 300);
+      window.show();
      }
   },
 ]
@@ -499,8 +500,11 @@ let mouseMenu = [
   },
   {
     label: 'Set custom color and DPI',
-    click() { 
-      window.webContents.send('device-selected', {device: 'Mouse', currentColor: customMouseColor, currentSensitivity: addon.mouseGetDpi()}); window.show() }
+    click() {
+      window.webContents.send('device-selected', {device: 'Mouse', currentColor: customMouseColor, currentSensitivity: addon.mouseGetDpi()});
+      window.setSize(500, 420);
+      window.show();
+    }
   }
 ]
 
@@ -564,7 +568,11 @@ let mouseDockMenu = [
   },
   {
     label: 'Set custom color',
-    click() { window.webContents.send('device-selected', {device: 'Mouse Dock', currentColor: customMouseDockColor}); window.show() }
+    click() {
+      window.webContents.send('device-selected', {device: 'Mouse Dock', currentColor: customMouseDockColor});
+      window.setSize(500, 300);
+      window.show();
+    }
   },
 ]
 
@@ -641,7 +649,11 @@ let mouseMatMenu = [
   },
   {
     label: 'Set custom color',
-    click() { window.webContents.send('device-selected', {device: 'Mouse Mat', currentColor: customMouseMatColor}); window.show() }
+    click() {
+      window.webContents.send('device-selected', {device: 'Mouse Mat', currentColor: customMouseMatColor});
+      window.setSize(500, 300);
+      window.show();
+    }
   },
 ]
 
