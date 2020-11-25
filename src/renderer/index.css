@@ -37,3 +37,23 @@ body {
     white-space: nowrap;
     line-height: 1.5;
 }
+
+.horizontal-slider {
+    width: 100%;
+    max-width: 500px;
+    height: 50px;
+}
+
+.horizontal-slider .dpi-track {
+    top: 20px;
+    height: 10px;
+    background-color: aqua;
+}
+
+.horizontal-slider .dpi-thumb {
+    top: 1px;
+    width: 50px;
+    height: 48px;
+    line-height: 38px;
+    background-color: white;
+}

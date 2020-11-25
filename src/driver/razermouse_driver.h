@@ -151,6 +151,9 @@ ssize_t razer_attr_write_side_mode_reactive(IOUSBDeviceInterface **usb_dev, cons
 ssize_t razer_attr_write_left_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_right_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 
+ushort razer_attr_read_dpi(IOUSBDeviceInterface **usb_dev);
+void razer_attr_write_dpi(IOUSBDeviceInterface **usb_dev, ushort dpi_x, ushort dpi_y);
+
 // Older mouse
 ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_logo_led_rgb(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
