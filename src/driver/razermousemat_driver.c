@@ -88,6 +88,10 @@ ssize_t razer_mouse_mat_attr_read_device_type(IOUSBDeviceInterface **usb_dev, ch
         device_type = "Razer Firefly\n";
         break;
 
+    case USB_DEVICE_ID_RAZER_FIREFLY_V2:
+        device_type = "Razer Firefly v2\n";
+        break;
+
     case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
         device_type = "Razer Firefly Hyperflux\n";
         break;
@@ -122,6 +126,7 @@ ssize_t razer_mouse_mat_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, con
 
     switch(product) {
     case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
+    case USB_DEVICE_ID_RAZER_FIREFLY_V2:
     case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
     case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
         report = razer_chroma_extended_matrix_effect_none(VARSTORE, ZERO_LED);
@@ -152,6 +157,7 @@ ssize_t razer_mouse_mat_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, con
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
     switch(product) {
+    case USB_DEVICE_ID_RAZER_FIREFLY_V2:
     case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
         report = razer_chroma_extended_matrix_effect_wave(VARSTORE, ZERO_LED, direction);
         break;
@@ -176,6 +182,7 @@ ssize_t razer_mouse_mat_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, c
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
     switch(product) {
+    case USB_DEVICE_ID_RAZER_FIREFLY_V2:
     case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
     case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
     case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
@@ -230,6 +237,7 @@ ssize_t razer_mouse_mat_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, c
 
     if(count == 3) {
         switch(product) {
+        case USB_DEVICE_ID_RAZER_FIREFLY_V2:
         case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
         case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
         case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
@@ -265,6 +273,7 @@ ssize_t razer_mouse_mat_attr_write_mode_static_no_store(IOUSBDeviceInterface **u
 
     if(count == 3) {
         switch(product) {
+        case USB_DEVICE_ID_RAZER_FIREFLY_V2:
         case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
         case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
         case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
@@ -297,6 +306,7 @@ ssize_t razer_mouse_mat_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev,
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
 
     switch(product) {
+    case USB_DEVICE_ID_RAZER_FIREFLY_V2:
     case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
     case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
     case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:

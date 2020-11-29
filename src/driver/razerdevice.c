@@ -131,9 +131,10 @@ bool is_mouse_mat(IOUSBDeviceInterface **usb_dev) {
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
     
-    switch (product) {        
+    switch (product) {
 	case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
 	case USB_DEVICE_ID_RAZER_FIREFLY:
+	case USB_DEVICE_ID_RAZER_FIREFLY_V2:
 	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
 	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
 		return true;
