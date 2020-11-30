@@ -1636,6 +1636,21 @@ ssize_t razer_attr_write_right_mode_reactive(IOUSBDeviceInterface **usb_dev, con
     return razer_attr_write_side_mode_reactive(usb_dev, buf, count, RIGHT_SIDE_LED);
 }
 
+ushort razer_attr_read_dpi(IOUSBDeviceInterface **usb_dev)
+{
+    struct razer_report report, response_report;
+    report = razer_chroma_misc_get_dpi_xy(0x01);
+    response_report = razer_send_payload(usb_dev, &report);
+    ushort dpi_x = (response_report.arguments[1] << 8) | (response_report.arguments[2] & 0xFF);
+    return dpi_x;
+}
+
+void razer_attr_write_dpi(IOUSBDeviceInterface **usb_dev, ushort dpi_x, ushort dpi_y)
+{
+    struct razer_report report = razer_chroma_misc_set_dpi_xy(0x01, dpi_x, dpi_y);
+    razer_send_payload(usb_dev, &report);
+}
+
 ssize_t razer_attr_read_get_battery(IOUSBDeviceInterface **usb_dev, char *buf)
 {
     struct razer_report report = razer_chroma_misc_get_battery_level();

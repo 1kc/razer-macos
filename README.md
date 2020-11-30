@@ -43,6 +43,7 @@ Keyboards:
 Mice:
 
 * Razer Deathadder Elite
+* Razer DeathAdder V2
 * Razer Razer Lancehead Wireless
 * Razer Viper Ultimate Wireless
 * Razer Basilisk Ultimate

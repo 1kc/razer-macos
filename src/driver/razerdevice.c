@@ -135,6 +135,7 @@ bool is_mouse_mat(IOUSBDeviceInterface **usb_dev) {
     switch (product) {
 	case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
 	case USB_DEVICE_ID_RAZER_FIREFLY:
+	case USB_DEVICE_ID_RAZER_FIREFLY_V2:
 	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
 	case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
 		return true;
@@ -174,7 +175,7 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 		IOUSBDeviceInterface **dev = NULL;
 		HRESULT hResult = (*plugInInterface)->QueryInterface(
 			plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID), (LPVOID *)&dev);
-
+		
 		(*plugInInterface)->Release(plugInInterface);  // Not needed after device interface created
 		if (hResult || !dev) {
 			// printf("Couldn’t create a device interface (0x%08x)\n", (int) hResult);

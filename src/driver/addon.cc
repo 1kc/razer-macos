@@ -371,6 +371,29 @@ void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_none(mouseDev, "1", 1);
 }
 
+Napi::Number MouseGetDpi(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    // Return 0 if no device
+    if (mouseDev == NULL) {
+      return Napi::Number::New(env, 0);;
+    }
+
+    ushort dpi = razer_attr_read_dpi(mouseDev);
+
+    return Napi::Number::New(env, dpi);
+}
+
+void MouseSetDpi(const Napi::CallbackInfo& info) {
+  if (mouseDev == NULL) {
+    return;
+  }
+  Napi::Number dpi_number = info[0].ToNumber();;
+  ushort dpi = dpi_number.Int32Value();
+
+  razer_attr_write_dpi(mouseDev, dpi, dpi);
+}
+
 /**
 * Get the Razer Mouse Dock USB device interface and device name, 
 * return JS Null if non found
@@ -587,6 +610,9 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("mouseSetLogoModeReactive", Napi::Function::New(env, MouseSetLogoModeReactive));
   exports.Set("mouseSetLogoModeBreathe", Napi::Function::New(env, MouseSetLogoModeBreathe));
   exports.Set("mouseSetLogoModeNone", Napi::Function::New(env, MouseSetLogoModeNone));
+
+  exports.Set("mouseGetDpi", Napi::Function::New(env, MouseGetDpi));
+  exports.Set("mouseSetDpi", Napi::Function::New(env, MouseSetDpi));
 
   exports.Set("getMouseDockDevice", Napi::Function::New(env, GetMouseDockDevice));
   exports.Set("closeMouseDockDevice", Napi::Function::New(env, CloseMouseDockDevice));
