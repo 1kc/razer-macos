@@ -269,6 +269,11 @@ ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *
         device_type = "Razer Viper Mini\n";
         break;
 
+    case USB_DEVICE_ID_RAZER_BASILISK_V2:
+        device_type = "Razer Basilisk V2\n";
+        break;
+
+
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
         device_type = "Razer Viper Ultimate (Wired)\n";
         break;
@@ -320,6 +325,7 @@ ssize_t razer_attr_write_side_mode_wave(IOUSBDeviceInterface **usb_dev, const ch
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_wave(VARSTORE, side, direction);
             report.transaction_id.id = 0x1f;
             break;
@@ -371,6 +377,7 @@ ssize_t razer_attr_write_side_mode_static(IOUSBDeviceInterface **usb_dev, const 
                 break;
 
             case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            case USB_DEVICE_ID_RAZER_BASILISK_V2:
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, side, (struct razer_rgb*)&buf[0]);
                 report.transaction_id.id = 0x1f;
                 break;
@@ -425,6 +432,7 @@ ssize_t razer_attr_write_side_mode_static_no_store(IOUSBDeviceInterface **usb_de
                 break;
 
             case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            case USB_DEVICE_ID_RAZER_BASILISK_V2:
                 report = razer_chroma_extended_matrix_effect_static(NOSTORE, side, (struct razer_rgb*)&buf[0]);
                 report.transaction_id.id = 0x1f;
                 break;
@@ -476,6 +484,7 @@ ssize_t razer_attr_write_side_mode_spectrum(IOUSBDeviceInterface **usb_dev, cons
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, side);
             report.transaction_id.id = 0x1f;
             break;
@@ -521,6 +530,7 @@ ssize_t razer_attr_write_side_mode_breath(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
         case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
         case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
@@ -553,6 +563,7 @@ ssize_t razer_attr_write_side_mode_breath(IOUSBDeviceInterface **usb_dev, const 
 
     switch(product) {
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report.transaction_id.id = 0x1f;
             break;
 
@@ -602,6 +613,7 @@ ssize_t razer_attr_write_side_mode_none(IOUSBDeviceInterface **usb_dev, const ch
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, side);
             report.transaction_id.id = 0x1f;
             break;
@@ -640,6 +652,7 @@ ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const ch
         break;
 
     case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+    case USB_DEVICE_ID_RAZER_BASILISK_V2:
         report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction);
         report.transaction_id.id = 0x1f;
         break;
@@ -678,6 +691,7 @@ ssize_t razer_attr_write_scroll_mode_wave(IOUSBDeviceInterface **usb_dev, const 
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_wave(VARSTORE, SCROLL_WHEEL_LED, direction);
             report.transaction_id.id = 0x1f;
             break;
@@ -754,6 +768,7 @@ ssize_t razer_attr_write_logo_mode_static(IOUSBDeviceInterface **usb_dev, const 
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_static(VARSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
             report.transaction_id.id = 0x1f;
             break;
@@ -814,6 +829,7 @@ ssize_t razer_attr_write_scroll_mode_static(IOUSBDeviceInterface **usb_dev, cons
                 break;
 
             case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            case USB_DEVICE_ID_RAZER_BASILISK_V2:
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, SCROLL_WHEEL_LED, (struct razer_rgb*)&buf[0]);
                 report.transaction_id.id = 0x1f;
                 break;
@@ -897,6 +913,7 @@ ssize_t razer_attr_write_logo_mode_static_no_store(IOUSBDeviceInterface **usb_de
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_static(NOSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
             report.transaction_id.id = 0x1f;
             break;
@@ -959,6 +976,7 @@ ssize_t razer_attr_write_scroll_mode_static_no_store(IOUSBDeviceInterface **usb_
                 break;
 
             case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            case USB_DEVICE_ID_RAZER_BASILISK_V2:
                 report = razer_chroma_extended_matrix_effect_static(NOSTORE, SCROLL_WHEEL_LED, (struct razer_rgb*)&buf[0]);
                 report.transaction_id.id = 0x1f;
                 break;
@@ -1036,6 +1054,7 @@ ssize_t razer_attr_write_logo_mode_spectrum(IOUSBDeviceInterface **usb_dev, cons
         break;
 
     case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+    case USB_DEVICE_ID_RAZER_BASILISK_V2:
         report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, LOGO_LED);
         report.transaction_id.id = 0x1f;
         break;
@@ -1089,6 +1108,7 @@ ssize_t razer_attr_write_scroll_mode_spectrum(IOUSBDeviceInterface **usb_dev, co
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, SCROLL_WHEEL_LED);
             report.transaction_id.id = 0x1f;
             break;
@@ -1160,6 +1180,7 @@ ssize_t razer_attr_write_logo_mode_breath(IOUSBDeviceInterface **usb_dev, const 
     case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
     case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
     case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+    case USB_DEVICE_ID_RAZER_BASILISK_V2:
     case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
     case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
     case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
@@ -1192,6 +1213,7 @@ ssize_t razer_attr_write_logo_mode_breath(IOUSBDeviceInterface **usb_dev, const 
 
     switch(product) {
     case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+    case USB_DEVICE_ID_RAZER_BASILISK_V2:
         report.transaction_id.id = 0x1f;
         break;
 
@@ -1241,6 +1263,7 @@ ssize_t razer_attr_write_scroll_mode_breath(IOUSBDeviceInterface **usb_dev, cons
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
         case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
         case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
@@ -1273,6 +1296,7 @@ ssize_t razer_attr_write_scroll_mode_breath(IOUSBDeviceInterface **usb_dev, cons
 
     switch(product) {
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report.transaction_id.id = 0x1f;
             break;
 
@@ -1347,6 +1371,7 @@ ssize_t razer_attr_write_logo_mode_none(IOUSBDeviceInterface **usb_dev, const ch
         break;
 
     case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+    case USB_DEVICE_ID_RAZER_BASILISK_V2:
         report = razer_chroma_extended_matrix_effect_none(VARSTORE, LOGO_LED);
         report.transaction_id.id = 0x1f;
         break;
@@ -1402,6 +1427,7 @@ ssize_t razer_attr_write_scroll_mode_none(IOUSBDeviceInterface **usb_dev, const 
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, SCROLL_WHEEL_LED);
             report.transaction_id.id = 0x1f;
             break;
@@ -1510,6 +1536,7 @@ ssize_t razer_attr_write_logo_mode_reactive(IOUSBDeviceInterface **usb_dev, cons
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_reactive(VARSTORE, LOGO_LED, speed, (struct razer_rgb*)&buf[1]);
             report.transaction_id.id = 0x1f;
             break;
@@ -1562,6 +1589,7 @@ ssize_t razer_attr_write_scroll_mode_reactive(IOUSBDeviceInterface **usb_dev, co
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_reactive(VARSTORE, SCROLL_WHEEL_LED, speed, (struct razer_rgb*)&buf[1]);
             report.transaction_id.id = 0x1f;
             break;
@@ -1599,6 +1627,7 @@ ssize_t razer_attr_write_side_mode_reactive(IOUSBDeviceInterface **usb_dev, cons
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
             report = razer_chroma_extended_matrix_effect_reactive(VARSTORE, side, speed, (struct razer_rgb*)&buf[1]);
             report.transaction_id.id = 0x1f;
             break;
