@@ -17,6 +17,7 @@ let customKdbColor = null;
 let customMouseColor = null;
 let customMouseDockColor = null;
 let customMouseMatColor = null;
+let customHeadphoneColor = null;
 let cycleColors = null;
 
 function isEmpty(obj) {
@@ -93,6 +94,22 @@ function loadItemsFromStorage() {
     }
   });
 
+  storage.get('customHeadphoneColor', function(error, data) {
+    if (error) throw error;
+
+    customHeadphoneColor = data;
+    if (isEmpty(customHeadphoneColor)) {
+      customHeadphoneColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0
+        }
+      };
+    }
+  });
+
   storage.get('cycleColors', function(error, data) {
     if (error) throw error;
   
@@ -145,6 +162,9 @@ function setDevicesCycleColors(colors) {
     colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
   ]));
   addon.mouseMatSetModeStaticNoStore(new Uint8Array([
+    colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
+  ]));
+  addon.headphoneSetModeStaticNoStore(new Uint8Array([
     colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
   ]));
 
@@ -657,6 +677,70 @@ let mouseMatMenu = [
   },
 ]
 
+let headphoneMenu = [
+  { type: 'separator' },
+  {
+    label: 'No headphone found',
+    enabled: false,
+  },
+  { type: 'separator' },
+  {
+    label: 'None',
+    click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeNone(); }
+  },
+  {
+    label: 'Static',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.headphoneSetModeStatic(new Uint8Array([
+            customHeadphoneColor.rgb.r, customHeadphoneColor.rgb.g, customHeadphoneColor.rgb.b
+          ]))},
+      },
+      {
+        label: 'White',
+        click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeStatic(new Uint8Array([
+          0xff,0xff,0xff
+        ]))},
+      },
+      {
+        label: 'Red',
+        click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeStatic(new Uint8Array([
+          0xff,0,0
+        ]))},
+      },
+      {
+        label: 'Green',
+        click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeStatic(new Uint8Array([
+          0,0xff,0
+        ]))},
+      },
+      {
+        label: 'Blue',
+        click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeStatic(new Uint8Array([
+          0,0,0xff
+        ]))},
+      },
+    ]
+  },
+  {
+    label: 'Breathe',
+    click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeBreathe(new Uint8Array([
+      0 // random
+    ]))}
+  },
+  {
+    label: 'Set custom color',
+    click() {
+      window.webContents.send('device-selected', {device: 'Headphone', currentColor: customHeadphoneColor});
+      window.setSize(500, 300);
+      window.show();
+    }
+  }
+]
+
 let mainMenuBottom = [
   { type: 'separator' },
   {
@@ -669,6 +753,7 @@ let keyboardDeviceName = '';
 let mouseDeviceName = '';
 let mouseDockDeviceName = '';
 let mouseMatDeviceName = '';
+let headphoneDeviceName = '';
 let mouseBatteryLevel = -1;
 let mouseCharging = false;
 
@@ -678,6 +763,7 @@ const refreshDevices = () => {
   addon.closeMouseDevice()
   addon.closeMouseDockDevice()
   addon.closeMouseMatDevice()
+  addon.closeHeadphoneDevice()
 
   // get devices
   keyboardDeviceName = addon.getKeyboardDevice();
@@ -686,6 +772,7 @@ const refreshDevices = () => {
   mouseMatDeviceName = addon.getMouseMatDevice();
   mouseBatteryLevel = addon.getBatteryLevel();
   mouseCharging = addon.getChargingStatus();
+  headphoneDeviceName = addon.getHeadphoneDevice();
 }
 
 app.on('ready', () => {
@@ -704,6 +791,7 @@ app.on('quit', () => {
   addon.closeMouseDevice();
   addon.closeMouseDockDevice();
   addon.closeMouseMatDevice();
+  addon.closeHeadphoneDevice();
 })
 
 nativeTheme.on('updated', () => {
@@ -742,6 +830,10 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
       case "Mouse Mat":
         customMouseMatColor = color;
         storage.set('customMouseMatColor', customMouseMatColor);
+        break;
+      case "Headphone":
+        customHeadphoneColor = color;
+        storage.set('customHeadphoneColor', customHeadphoneColor);
         break;
       default:        
     }
@@ -858,6 +950,10 @@ function refreshTray() {
   if (mouseMatDeviceName) {
     mouseMatMenu[1].label = mouseMatDeviceName;
     menu = menu.concat(mouseMatMenu);
+  }
+  if (headphoneDeviceName) {
+    headphoneMenu[1].label = headphoneDeviceName;
+    menu = menu.concat(headphoneMenu);
   }
   menu = menu.concat(mainMenuBottom);
 
