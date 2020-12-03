@@ -17,21 +17,22 @@ let customKdbColor = null;
 let customMouseColor = null;
 let customMouseDockColor = null;
 let customMouseMatColor = null;
+let customEgpuColor = null;
 let cycleColors = null;
 
 function isEmpty(obj) {
-  for(var prop in obj) {
-      if(obj.hasOwnProperty(prop))
-          return false;
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop))
+      return false;
   }
 
   return true;
 }
 
 function loadItemsFromStorage() {
-  storage.get('customKdbColor', function(error, data) {
+  storage.get('customKdbColor', function (error, data) {
     if (error) throw error;
-  
+
     customKdbColor = data;
     if (isEmpty(customKdbColor)) {
       customKdbColor = {
@@ -44,13 +45,13 @@ function loadItemsFromStorage() {
       };
     }
   });
-  
-  storage.get('customMouseColor', function(error, data) {
+
+  storage.get('customEgpuColor', function (error, data) {
     if (error) throw error;
-  
-    customMouseColor = data;
-    if (isEmpty(customMouseColor)) {
-      customMouseColor = {
+
+    customEgpuColor = data;
+    if (isEmpty(customEgpuColor)) {
+      customEgpuColor = {
         hex: '#ffff00',
         rgb: {
           r: 255,
@@ -61,9 +62,9 @@ function loadItemsFromStorage() {
     }
   });
 
-  storage.get('customMouseDockColor', function(error, data) {
+  storage.get('customMouseDockColor', function (error, data) {
     if (error) throw error;
-  
+
     customMouseDockColor = data;
     if (isEmpty(customMouseDockColor)) {
       customMouseDockColor = {
@@ -77,9 +78,9 @@ function loadItemsFromStorage() {
     }
   });
 
-  storage.get('customMouseMatColor', function(error, data) {
+  storage.get('customMouseMatColor', function (error, data) {
     if (error) throw error;
-  
+
     customMouseMatColor = data;
     if (isEmpty(customMouseMatColor)) {
       customMouseMatColor = {
@@ -93,15 +94,15 @@ function loadItemsFromStorage() {
     }
   });
 
-  storage.get('cycleColors', function(error, data) {
+  storage.get('cycleColors', function (error, data) {
     if (error) throw error;
-  
+
     cycleColors = data;
     if (isEmpty(cycleColors)) {
       cycleColors = [
-        {r: 0xff, g: 0x00, b: 0x00},
-        {r: 0x00, g: 0xff, b: 0x00},
-        {r: 0x00, g: 0x00, b: 0xff},
+        { r: 0xff, g: 0x00, b: 0x00 },
+        { r: 0x00, g: 0xff, b: 0x00 },
+        { r: 0x00, g: 0x00, b: 0xff },
       ];
     }
 
@@ -114,23 +115,23 @@ function componentToHex(c) {
   var hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
-function rgbToHex({r, g, b}) {
+function rgbToHex({ r, g, b }) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
 let spectrumColors = [
-  {r: 0xff, g: 0x00, b: 0x00},
-  {r: 0xff, g: 0x77, b: 0x00},
-  {r: 0xff, g: 0xff, b: 0x00},
-  {r: 0x77, g: 0xff, b: 0x00},
-  {r: 0x00, g: 0xff, b: 0x00},
-  {r: 0x00, g: 0xff, b: 0x77},
-  {r: 0x00, g: 0xff, b: 0xff},
-  {r: 0x00, g: 0x77, b: 0xff},
-  {r: 0x00, g: 0x00, b: 0xff},
-  {r: 0x77, g: 0x00, b: 0xff},
-  {r: 0xff, g: 0x00, b: 0xff},
-  {r: 0xff, g: 0x00, b: 0x77},
+  { r: 0xff, g: 0x00, b: 0x00 },
+  { r: 0xff, g: 0x77, b: 0x00 },
+  { r: 0xff, g: 0xff, b: 0x00 },
+  { r: 0x77, g: 0xff, b: 0x00 },
+  { r: 0x00, g: 0xff, b: 0x00 },
+  { r: 0x00, g: 0xff, b: 0x77 },
+  { r: 0x00, g: 0xff, b: 0xff },
+  { r: 0x00, g: 0x77, b: 0xff },
+  { r: 0x00, g: 0x00, b: 0xff },
+  { r: 0x77, g: 0x00, b: 0xff },
+  { r: 0xff, g: 0x00, b: 0xff },
+  { r: 0xff, g: 0x00, b: 0x77 },
 ];
 let cycleColorsIndex = 0;
 let cycleColorsInterval = null;
@@ -147,6 +148,10 @@ function setDevicesCycleColors(colors) {
   addon.mouseMatSetModeStaticNoStore(new Uint8Array([
     colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
   ]));
+  addon.egpuSetModeStaticNoStore(new Uint8Array([
+    colors[cycleColorsIndex].r, colors[cycleColorsIndex].g, colors[cycleColorsIndex].b
+  ]));
+
 
   cycleColorsIndex++;
   if (cycleColorsIndex >= colors.length)
@@ -192,7 +197,7 @@ function buildCustomColorsCycleMenu() {
     {
       label: 'Add Color',
       click() {
-        cycleColors = cycleColors.concat({r: 0x00, g: 0xff, b: 0x00});
+        cycleColors = cycleColors.concat({ r: 0x00, g: 0xff, b: 0x00 });
         storage.set('cycleColors', cycleColors);
         refreshTray();
       }
@@ -201,9 +206,9 @@ function buildCustomColorsCycleMenu() {
       label: 'Reset Colors',
       click() {
         cycleColors = [
-          {r: 0xff, g: 0x00, b: 0x00},
-          {r: 0x00, g: 0xff, b: 0x00},
-          {r: 0x00, g: 0x00, b: 0xff},
+          { r: 0xff, g: 0x00, b: 0x00 },
+          { r: 0x00, g: 0xff, b: 0x00 },
+          { r: 0x00, g: 0x00, b: 0xff },
         ];
         storage.set('cycleColors', cycleColors);
         refreshTray();
@@ -215,12 +220,12 @@ function buildCustomColorsCycleMenu() {
   let index = 0;
   cycleColors.forEach(element => {
     let colorMenuItem = {
-      label: 'Color ' + (index+1),
+      label: 'Color ' + (index + 1),
       indexValue: index,
       click: event => setCustomCycleColor(event.indexValue),
     };
     cccMenu = cccMenu.concat(colorMenuItem);
-    
+
     index++;
   });
 
@@ -228,7 +233,7 @@ function buildCustomColorsCycleMenu() {
 }
 
 function setCustomCycleColor(index) {
-  window.webContents.send('device-selected', {device: 'Cycle Color ' + (index+1), currentColor: {hex: rgbToHex(cycleColors[index]), rgb: cycleColors[index]}});
+  window.webContents.send('device-selected', { device: 'Cycle Color ' + (index + 1), currentColor: { hex: rgbToHex(cycleColors[index]), rgb: cycleColors[index] } });
   window.show()
 }
 
@@ -248,33 +253,43 @@ let keyboardMenu = [
     submenu: [
       {
         label: 'Custom color',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
-          customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
+            customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
+          ]))
+        },
       },
       {
         label: 'White',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
-          0xff,0xff,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
+            0xff, 0xff, 0xff
+          ]))
+        },
       },
       {
         label: 'Red',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
-          0xff,0,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
+            0xff, 0, 0
+          ]))
+        },
       },
       {
         label: 'Green',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
-          0,0xff,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
+            0, 0xff, 0
+          ]))
+        },
       },
       {
         label: 'Blue',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
-          0,0,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStatic(new Uint8Array([
+            0, 0, 0xff
+          ]))
+        },
       },
     ]
   },
@@ -300,72 +315,90 @@ let keyboardMenu = [
     submenu: [
       {
         label: 'Custom color',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
-          3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
+            3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
+          ]))
+        },
       },
       {
         label: 'Red',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
-          3,0xff,0,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
+            3, 0xff, 0, 0
+          ]))
+        },
       },
       {
         label: 'Green',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
-          3,0,0xff,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
+            3, 0, 0xff, 0
+          ]))
+        },
       },
       {
         label: 'Blue',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
-          3,0,0,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeReactive(new Uint8Array([
+            3, 0, 0, 0xff
+          ]))
+        },
       },
     ]
   },
   {
     label: 'Breathe',
-    click() { clearInterval(cycleColorsInterval); addon.kbdSetModeBreathe(new Uint8Array([
-      0 // random
-    ]))}
+    click() {
+      clearInterval(cycleColorsInterval); addon.kbdSetModeBreathe(new Uint8Array([
+        0 // random
+      ]))
+    }
   },
   {
     label: 'Starlight',
     submenu: [
       {
         label: 'Custom color',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
-          3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
+            3, customKdbColor.rgb.r, customKdbColor.rgb.g, customKdbColor.rgb.b
+          ]))
+        },
       },
       {
         label: 'Red',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
-          3,0xff,0,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
+            3, 0xff, 0, 0
+          ]))
+        },
       },
       {
         label: 'Green',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
-          3,0,0xff,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
+            3, 0, 0xff, 0
+          ]))
+        },
       },
       {
         label: 'Blue',
-        click() { clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
-          3,0,0,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.kbdSetModeStarlight(new Uint8Array([
+            3, 0, 0, 0xff
+          ]))
+        },
       }
     ]
   },
   {
     label: 'Set custom color',
     click() {
-      window.webContents.send('device-selected', {device: 'Keyboard', currentColor: customKdbColor});
+      window.webContents.send('device-selected', { device: 'Keyboard', currentColor: customKdbColor });
       window.setSize(500, 300);
       window.show();
-     }
+    }
   },
 ]
 
@@ -386,34 +419,43 @@ let mouseMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval); 
+          clearInterval(cycleColorsInterval);
           addon.mouseSetLogoModeStatic(new Uint8Array([
-          customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
-        ]))},
+            customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
+          ]))
+        },
       },
       {
         label: 'White',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
-          0xff,0xff,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
+            0xff, 0xff, 0xff
+          ]))
+        },
       },
       {
         label: 'Red',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
-          0xff,0,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
+            0xff, 0, 0
+          ]))
+        },
       },
       {
         label: 'Green',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
-          0,0xff,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
+            0, 0xff, 0
+          ]))
+        },
       },
       {
         label: 'Blue',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
-          0,0,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeStatic(new Uint8Array([
+            0, 0, 0xff
+          ]))
+        },
       },
     ]
   },
@@ -440,42 +482,53 @@ let mouseMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval); 
+          clearInterval(cycleColorsInterval);
           addon.mouseSetLogoModeReactive(new Uint8Array([
-          3, customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
-        ]))},
+            3, customMouseColor.rgb.r, customMouseColor.rgb.g, customMouseColor.rgb.b
+          ]))
+        },
       },
       {
         label: 'White',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          3, 0xff,0xff,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+            3, 0xff, 0xff, 0xff
+          ]))
+        },
       },
       {
         label: 'Red',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          3, 0xff,0,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+            3, 0xff, 0, 0
+          ]))
+        },
       },
       {
         label: 'Green',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          3, 0,0xff,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+            3, 0, 0xff, 0
+          ]))
+        },
       },
       {
         label: 'Blue',
-        click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
-          3, 0,0,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseSetLogoModeReactive(new Uint8Array([
+            3, 0, 0, 0xff
+          ]))
+        },
       },
     ]
   },
   {
     label: 'Breathe',
-    click() { clearInterval(cycleColorsInterval); addon.mouseSetLogoModeBreathe(new Uint8Array([
-      0 // random
-    ]))}
+    click() {
+      clearInterval(cycleColorsInterval); addon.mouseSetLogoModeBreathe(new Uint8Array([
+        0 // random
+      ]))
+    }
   },
   {
     label: 'Older model effects',
@@ -501,7 +554,7 @@ let mouseMenu = [
   {
     label: 'Set custom color and DPI',
     click() {
-      window.webContents.send('device-selected', {device: 'Mouse', currentColor: customMouseColor, currentSensitivity: addon.mouseGetDpi()});
+      window.webContents.send('device-selected', { device: 'Mouse', currentColor: customMouseColor, currentSensitivity: addon.mouseGetDpi() });
       window.setSize(500, 420);
       window.show();
     }
@@ -527,32 +580,41 @@ let mouseDockMenu = [
         click() {
           clearInterval(cycleColorsInterval);
           addon.mouseDockSetModeStatic(new Uint8Array([
-          customMouseDockColor.rgb.r, customMouseDockColor.rgb.g, customMouseDockColor.rgb.b
-        ]))},
+            customMouseDockColor.rgb.r, customMouseDockColor.rgb.g, customMouseDockColor.rgb.b
+          ]))
+        },
       },
       {
         label: 'White',
-        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
-          0xff,0xff,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+            0xff, 0xff, 0xff
+          ]))
+        },
       },
       {
         label: 'Red',
-        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
-          0xff,0,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+            0xff, 0, 0
+          ]))
+        },
       },
       {
         label: 'Green',
-        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
-          0,0xff,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+            0, 0xff, 0
+          ]))
+        },
       },
       {
         label: 'Blue',
-        click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
-          0,0,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseDockSetModeStatic(new Uint8Array([
+            0, 0, 0xff
+          ]))
+        },
       },
     ]
   },
@@ -562,14 +624,16 @@ let mouseDockMenu = [
   },
   {
     label: 'Breathe',
-    click() { clearInterval(cycleColorsInterval); addon.mouseDockSetModeBreathe(new Uint8Array([
-      0 // random
-    ]))}
+    click() {
+      clearInterval(cycleColorsInterval); addon.mouseDockSetModeBreathe(new Uint8Array([
+        0 // random
+      ]))
+    }
   },
   {
     label: 'Set custom color',
     click() {
-      window.webContents.send('device-selected', {device: 'Mouse Dock', currentColor: customMouseDockColor});
+      window.webContents.send('device-selected', { device: 'Mouse Dock', currentColor: customMouseDockColor });
       window.setSize(500, 300);
       window.show();
     }
@@ -595,32 +659,41 @@ let mouseMatMenu = [
         click() {
           clearInterval(cycleColorsInterval);
           addon.mouseMatSetModeStatic(new Uint8Array([
-          customMouseMatColor.rgb.r, customMouseMatColor.rgb.g, customMouseMatColor.rgb.b
-        ]))},
+            customMouseMatColor.rgb.r, customMouseMatColor.rgb.g, customMouseMatColor.rgb.b
+          ]))
+        },
       },
       {
         label: 'White',
-        click() { clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
-          0xff,0xff,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
+            0xff, 0xff, 0xff
+          ]))
+        },
       },
       {
         label: 'Red',
-        click() { clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
-          0xff,0,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
+            0xff, 0, 0
+          ]))
+        },
       },
       {
         label: 'Green',
-        click() { clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
-          0,0xff,0
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
+            0, 0xff, 0
+          ]))
+        },
       },
       {
         label: 'Blue',
-        click() { clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
-          0,0,0xff
-        ]))},
+        click() {
+          clearInterval(cycleColorsInterval); addon.mouseMatSetModeStatic(new Uint8Array([
+            0, 0, 0xff
+          ]))
+        },
       },
     ]
   },
@@ -643,14 +716,108 @@ let mouseMatMenu = [
   },
   {
     label: 'Breathe',
-    click() { clearInterval(cycleColorsInterval); addon.mouseMatSetModeBreathe(new Uint8Array([
-      0 // random
-    ]))}
+    click() {
+      clearInterval(cycleColorsInterval); addon.mouseMatSetModeBreathe(new Uint8Array([
+        0 // random
+      ]))
+    }
   },
   {
     label: 'Set custom color',
     click() {
-      window.webContents.send('device-selected', {device: 'Mouse Mat', currentColor: customMouseMatColor});
+      window.webContents.send('device-selected', { device: 'Mouse Mat', currentColor: customMouseMatColor });
+      window.setSize(500, 300);
+      window.show();
+    }
+  },
+]
+
+let egpuMenu = [
+  { type: 'separator' },
+  {
+    label: 'No egpu found',
+    enabled: false,
+  },
+  { type: 'separator' },
+  {
+    label: 'None',
+    click() { clearInterval(cycleColorsInterval); addon.egpuSetModeNone(); }
+  },
+  {
+    label: 'Static',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.egpuSetModeStatic(new Uint8Array([
+            customegpuColor.rgb.r, customegpuColor.rgb.g, customegpuColor.rgb.b
+          ]))
+        },
+      },
+      {
+        label: 'White',
+        click() {
+          clearInterval(cycleColorsInterval); addon.egpuSetModeStatic(new Uint8Array([
+            0xff, 0xff, 0xff
+          ]))
+        },
+      },
+      {
+        label: 'Red',
+        click() {
+          clearInterval(cycleColorsInterval); addon.egpuSetModeStatic(new Uint8Array([
+            0xff, 0, 0
+          ]))
+        },
+      },
+      {
+        label: 'Green',
+        click() {
+          clearInterval(cycleColorsInterval); addon.egpuSetModeStatic(new Uint8Array([
+            0, 0xff, 0
+          ]))
+        },
+      },
+      {
+        label: 'Blue',
+        click() {
+          clearInterval(cycleColorsInterval); addon.egpuSetModeStatic(new Uint8Array([
+            0, 0, 0xff
+          ]))
+        },
+      },
+    ]
+  },
+  {
+    label: 'Wave',
+    submenu: [
+      {
+        label: 'Left',
+        click() { clearInterval(cycleColorsInterval); addon.egpuSetModeWave('left'); }
+      },
+      {
+        label: 'Right',
+        click() { clearInterval(cycleColorsInterval); addon.egpuSetModeWave('right'); }
+      },
+    ]
+  },
+  {
+    label: 'Spectrum',
+    click() { clearInterval(cycleColorsInterval); addon.egpuSetModeSpectrum(); },
+  },
+  {
+    label: 'Breathe',
+    click() {
+      clearInterval(cycleColorsInterval); addon.egpuSetModeBreathe(new Uint8Array([
+        0 // random
+      ]))
+    }
+  },
+  {
+    label: 'Set custom color',
+    click() {
+      window.webContents.send('device-selected', { device: 'Mouse Mat', currentColor: customegpuColor });
       window.setSize(500, 300);
       window.show();
     }
@@ -669,6 +836,7 @@ let keyboardDeviceName = '';
 let mouseDeviceName = '';
 let mouseDockDeviceName = '';
 let mouseMatDeviceName = '';
+let egpuDeviceName = '';
 let mouseBatteryLevel = -1;
 let mouseCharging = false;
 
@@ -678,12 +846,14 @@ const refreshDevices = () => {
   addon.closeMouseDevice()
   addon.closeMouseDockDevice()
   addon.closeMouseMatDevice()
+  addon.closeEgpuDevice()
 
   // get devices
   keyboardDeviceName = addon.getKeyboardDevice();
   mouseDeviceName = addon.getMouseDevice();
   mouseDockDeviceName = addon.getMouseDockDevice();
   mouseMatDeviceName = addon.getMouseMatDevice();
+  egpuDeviceName = addon.getEgpuDevice();
   mouseBatteryLevel = addon.getBatteryLevel();
   mouseCharging = addon.getChargingStatus();
 }
@@ -704,10 +874,11 @@ app.on('quit', () => {
   addon.closeMouseDevice();
   addon.closeMouseDockDevice();
   addon.closeMouseMatDevice();
+  addon.closeEgpuDevice();
 })
 
 nativeTheme.on('updated', () => {
- createTray();
+  createTray();
 })
 
 // mouse dpi rpc listener
@@ -743,7 +914,11 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
         customMouseMatColor = color;
         storage.set('customMouseMatColor', customMouseMatColor);
         break;
-      default:        
+      case "eGPU":
+        customMouseMatColor = color;
+        storage.set('customMouseMatColor', customMouseMatColor);
+        break;
+      default:
     }
   }
 });
@@ -785,19 +960,19 @@ function createWindow() {
         window.hide();
       }
     });
-  
+
     app.on('activate', () => {
       window.show();
     });
-  
+
     app.on('before-quit', () => {
       forceQuit = true;
     });
-    
+
     if (isDevelopment) {
       // auto-open dev tools
       window.webContents.openDevTools();
-  
+
       // add inspect element on right click menu
       window.webContents.on('context-menu', (e, props) => {
         Menu.buildFromTemplate([
@@ -819,13 +994,13 @@ function createTray() {
 
     if (tray != null) {
       tray.destroy();
-    } 
+    }
   }
 
   if (nativeTheme.shouldUseDarkColors) {
     tray = new Tray(path.join(__static, '/assets/icon-darkmode.png'));
   } else {
-    tray = new Tray(path.join(__static, '/assets/icon-lightmode.png'));  
+    tray = new Tray(path.join(__static, '/assets/icon-lightmode.png'));
   }
 
   refreshTray()
@@ -858,6 +1033,10 @@ function refreshTray() {
   if (mouseMatDeviceName) {
     mouseMatMenu[1].label = mouseMatDeviceName;
     menu = menu.concat(mouseMatMenu);
+  }
+  if (egpuDeviceName) {
+    egpuMenu[1].label = egpuDeviceName;
+    menu = menu.concat(egpuMenu);
   }
   menu = menu.concat(mainMenuBottom);
 
