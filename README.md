@@ -47,10 +47,12 @@ Mice:
 * Razer Razer Lancehead Wireless
 * Razer Viper Ultimate Wireless
 * Razer Basilisk Ultimate
+* Razer Basilisk V2
 
 Mouse mats:
 
 * Razer Goliathus Extended
+* Razer Firefly V2
 
 Laptops:
 

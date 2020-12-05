@@ -45,15 +45,20 @@ body {
 }
 
 .horizontal-slider .dpi-track {
-    top: 20px;
-    height: 10px;
-    background-color: aqua;
+    top: 16px;
+    height: 16px;
+    background-color: rgb(51,42,245);
+    border-radius: 24px;
 }
 
 .horizontal-slider .dpi-thumb {
-    top: 1px;
-    width: 50px;
-    height: 48px;
-    line-height: 38px;
+    top: 6px;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
     background-color: white;
+    text-align: center;
+    border-radius: 24px;
+    font-family: "SF Display Pro", sans-serif;
+    font-size: 12px;
 }

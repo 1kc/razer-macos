@@ -9,6 +9,7 @@ extern "C"
 #include "razermouse_driver.h"
 #include "razermousedock_driver.h"
 #include "razermousemat_driver.h"
+#include "razerheadphone_driver.h"
 }
 
 IOUSBDeviceInterface **kbdDev;
@@ -16,6 +17,7 @@ IOUSBDeviceInterface **mouseDev;
 IOUSBDeviceInterface **mouseDockDev;
 IOUSBDeviceInterface **mouseMatDev;
 IOUSBDeviceInterface **egpuDev;
+IOUSBDeviceInterface **headphoneDev;
 
 /**
 * Get the Razer Keyboard USB device interface and device name, 
@@ -806,8 +808,85 @@ void MouseMatSetModeSpectrum(const Napi::CallbackInfo &info)
   razer_mouse_mat_attr_write_mode_spectrum(mouseMatDev, "1", 1);
 }
 
-Napi::Object Init(Napi::Env env, Napi::Object exports)
+Napi::Value GetHeadphoneDevice(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    headphoneDev = getRazerUSBDeviceInterface(TYPE_HEADPHONE);
+    if (headphoneDev == NULL) {
+        return env.Null();
+    }
+
+    char buf[256] = {0};
+    razer_headphone_attr_read_device_type(headphoneDev, buf);
+    return Napi::String::New(env, buf);
+}
+
+void CloseHeadphoneDevice(const Napi::CallbackInfo &info) {
+    if (headphoneDev == NULL) {
+        return;
+    }
+    closeRazerUSBDeviceInterface(headphoneDev);
+}
+
+void HeadphoneSetModeStatic(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    if (headphoneDev == NULL) {
+        return;
+    }
+    Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+    if (argsArr.ElementLength() != 3)
+    {
+        Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+            .ThrowAsJavaScriptException();
+        return;
+    }
+    // Cast unsigned char array into char array
+    char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+    razer_headphone_attr_write_mode_static(headphoneDev, buf, 3);
+}
+
+void HeadphoneSetModeStaticNoStore(const Napi::CallbackInfo &info)
 {
+    Napi::Env env = info.Env();
+    if (headphoneDev == NULL)
+    {
+        return;
+    }
+
+    Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+    if (argsArr.ElementLength() != 3)
+    {
+        Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+            .ThrowAsJavaScriptException();
+        return;
+    }
+    // Cast unsigned char array into char array
+    char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+    razer_headphone_attr_write_mode_static_no_store(headphoneDev, buf, 3);
+}
+
+void HeadphoneSetModeBreathe(const Napi::CallbackInfo &info)
+{
+    if (headphoneDev == NULL)
+    {
+        return;
+    }
+    razer_headphone_attr_write_mode_breath(headphoneDev, "1", 1);
+}
+
+void HeadphoneSetModeNone(const Napi::CallbackInfo &info)
+{
+    if (headphoneDev == NULL)
+    {
+        return;
+    }
+    razer_headphone_attr_write_mode_none(headphoneDev, "1", 1);
+}
+
+Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("getKeyboardDevice", Napi::Function::New(env, GetKeyboardDevice));
   exports.Set("closeKeyboardDevice", Napi::Function::New(env, CloseKeyboardDevice));
   exports.Set("kbdSetModeNone", Napi::Function::New(env, KbdSetModeNone));
@@ -855,6 +934,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
   exports.Set("mouseSetLogoLEDEffect", Napi::Function::New(env, MouseSetLogoLEDEffect));
   exports.Set("mouseSetLogoLEDRGB", Napi::Function::New(env, MouseSetLogoLEDRGB));
 
+  // Egpu
   exports.Set("getEgpuDevice", Napi::Function::New(env, GetEgpuDevice));
   exports.Set("closeEgpuDevice", Napi::Function::New(env, CloseEgpuDevice));
   exports.Set("egpuSetModeNone", Napi::Function::New(env, EgpuSetModeNone));
@@ -863,6 +943,14 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
   exports.Set("egpuSetModeStaticNoStore", Napi::Function::New(env, EgpuSetModeStaticNoStore));
   exports.Set("egpuSetModeWave", Napi::Function::New(env, EgpuSetModeWave));
   exports.Set("egpuSetModeSpectrum", Napi::Function::New(env, EgpuSetModeSpectrum));
+  
+  // Headphones
+  exports.Set("getHeadphoneDevice", Napi::Function::New(env, GetHeadphoneDevice));
+  exports.Set("closeHeadphoneDevice", Napi::Function::New(env, CloseHeadphoneDevice));
+  exports.Set("headphoneSetModeNone", Napi::Function::New(env, HeadphoneSetModeNone));
+  exports.Set("headphoneSetModeBreathe", Napi::Function::New(env, HeadphoneSetModeBreathe));
+  exports.Set("headphoneSetModeStatic", Napi::Function::New(env, HeadphoneSetModeStatic));
+  exports.Set("headphoneSetModeStaticNoStore", Napi::Function::New(env, HeadphoneSetModeStaticNoStore));
 
   return exports;
 }

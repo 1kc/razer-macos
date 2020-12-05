@@ -24,7 +24,7 @@ export default function MouseSensitivity({ currentSensitivity}) {
       <div className="control">
         <ReactSlider step={100}
           className="horizontal-slider" thumbClassName="dpi-thumb" trackClassName="dpi-track"
-          min={100} max={16000} value={currentDpi} onChange={changeSliderValue}
+          min={100} max={20000} value={currentDpi} onChange={changeSliderValue}
           renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}></ReactSlider>
       </div>
       <div className="control">

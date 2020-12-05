@@ -119,7 +119,7 @@
 //     unsigned int fn_on;
 //     char name[128];
 //     char phys[64];
-    
+
 //     unsigned char block_keys[3];
 //     unsigned char left_alt_on;
 // };
