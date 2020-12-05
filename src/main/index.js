@@ -1005,7 +1005,6 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
         customMouseMatColor = color;
         storage.set('customMouseMatColor', customMouseMatColor);
         break;
-      default:
       case "Headphone":
         customHeadphoneColor = color;
         storage.set('customHeadphoneColor', customHeadphoneColor);
@@ -1129,6 +1128,7 @@ function refreshTray() {
   if (egpuDeviceName) {
     egpuMenu[1].label = egpuDeviceName;
     menu = menu.concat(egpuMenu);
+  }
   if (headphoneDeviceName) {
     headphoneMenu[1].label = headphoneDeviceName;
     menu = menu.concat(headphoneMenu);
