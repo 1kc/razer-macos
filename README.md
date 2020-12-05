@@ -25,7 +25,13 @@ Please see FAQ section below if color changes are not working, otherwise open a 
 
 ## Device support
 
-Keyboards, mice, mouse mats and Blade laptops are supported.
+*  ⌨️  Keyboard
+* 🖱️  Mouse
+* 📜  Mouse mat
+* 🌈  e-GPU
+* 🎧  Headphones
+* 💻  Blade laptop
+
 For a complete list of supported keyboards, please see [openrazer](https://openrazer.github.io).
 
 Confirmed working for:
