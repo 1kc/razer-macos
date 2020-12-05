@@ -1,30 +1,35 @@
 #include <napi.h>
 #include <iostream>
-#include <iomanip> 
+#include <iomanip>
 
-extern "C" {
-  #include "razerdevice.h"
-  #include "razerkbd_driver.h"
-  #include "razermouse_driver.h"
-  #include "razermousedock_driver.h"
-  #include "razermousemat_driver.h"
+extern "C"
+{
+#include "razerdevice.h"
+#include "razerkbd_driver.h"
+#include "razermouse_driver.h"
+#include "razermousedock_driver.h"
+#include "razermousemat_driver.h"
+#include "razerheadphone_driver.h"
 }
-
 
 IOUSBDeviceInterface **kbdDev;
 IOUSBDeviceInterface **mouseDev;
 IOUSBDeviceInterface **mouseDockDev;
 IOUSBDeviceInterface **mouseMatDev;
+IOUSBDeviceInterface **egpuDev;
+IOUSBDeviceInterface **headphoneDev;
 
 /**
 * Get the Razer Keyboard USB device interface and device name, 
 * return JS Null if non found
 */
-Napi::Value GetKeyboardDevice(const Napi::CallbackInfo& info) {
+Napi::Value GetKeyboardDevice(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
 
   kbdDev = getRazerUSBDeviceInterface(TYPE_KEYBOARD);
-  if (kbdDev == NULL) {
+  if (kbdDev == NULL)
+  {
     return env.Null();
   }
 
@@ -33,48 +38,61 @@ Napi::Value GetKeyboardDevice(const Napi::CallbackInfo& info) {
   return Napi::String::New(env, buf);
 }
 
-void CloseKeyboardDevice(const Napi::CallbackInfo& info) {
-  if (kbdDev == NULL) {
+void CloseKeyboardDevice(const Napi::CallbackInfo &info)
+{
+  if (kbdDev == NULL)
+  {
     return;
   }
   closeRazerUSBDeviceInterface(kbdDev);
-
 }
 
-void KbdSetModeNone(const Napi::CallbackInfo& info) {
-  if (kbdDev == NULL) {
+void KbdSetModeNone(const Napi::CallbackInfo &info)
+{
+  if (kbdDev == NULL)
+  {
     return;
   }
   razer_attr_write_mode_none(kbdDev, "1", 1);
 }
 
-void KbdSetModeSpectrum(const Napi::CallbackInfo& info) {
-  if (kbdDev == NULL) {
+void KbdSetModeSpectrum(const Napi::CallbackInfo &info)
+{
+  if (kbdDev == NULL)
+  {
     return;
   }
   razer_attr_write_mode_spectrum(kbdDev, "1", 1);
 }
 
-void KbdSetModeWave(const Napi::CallbackInfo& info) {
-  if (kbdDev == NULL) {
+void KbdSetModeWave(const Napi::CallbackInfo &info)
+{
+  if (kbdDev == NULL)
+  {
     return;
   }
-  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
+  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0)
+  {
     razer_attr_write_mode_wave(kbdDev, "1", 0);
-  } else {
+  }
+  else
+  {
     razer_attr_write_mode_wave(kbdDev, "2", 0);
   }
 }
 
-void KbdSetModeStatic(const Napi::CallbackInfo& info) {
+void KbdSetModeStatic(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (kbdDev == NULL) {
+  if (kbdDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Static only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -85,15 +103,18 @@ void KbdSetModeStatic(const Napi::CallbackInfo& info) {
   razer_attr_write_mode_static(kbdDev, buf, 3);
 }
 
-void KbdSetModeStaticNoStore(const Napi::CallbackInfo& info) {
+void KbdSetModeStaticNoStore(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (kbdDev == NULL) {
+  if (kbdDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Static only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -104,15 +125,18 @@ void KbdSetModeStaticNoStore(const Napi::CallbackInfo& info) {
   razer_attr_write_mode_static_no_store(kbdDev, buf, 3);
 }
 
-void KbdSetModeReactive(const Napi::CallbackInfo& info) {
+void KbdSetModeReactive(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (kbdDev == NULL) {
+  if (kbdDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
   // TODO: allow different arg length types
-  if (argsArr.ElementLength() != 4) {
+  if (argsArr.ElementLength() != 4)
+  {
     Napi::TypeError::New(env, "Reactive only accepts Speed, RGB (4byte)")
         .ThrowAsJavaScriptException();
     return;
@@ -123,15 +147,18 @@ void KbdSetModeReactive(const Napi::CallbackInfo& info) {
   razer_attr_write_mode_reactive(kbdDev, buf, 4);
 }
 
-void KbdSetModeBreathe(const Napi::CallbackInfo& info) {
+void KbdSetModeBreathe(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (kbdDev == NULL) {
+  if (kbdDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 1) {
+  if (argsArr.ElementLength() != 1)
+  {
     Napi::TypeError::New(env, "Breathing only accepts '1' (1byte). RGB (3byte). RGB, RGB (6byte)")
         .ThrowAsJavaScriptException();
     return;
@@ -142,15 +169,18 @@ void KbdSetModeBreathe(const Napi::CallbackInfo& info) {
   razer_attr_write_mode_breath(kbdDev, buf, 1);
 }
 
-void KbdSetModeStarlight(const Napi::CallbackInfo& info) {
+void KbdSetModeStarlight(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (kbdDev == NULL) {
+  if (kbdDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 4) {
+  if (argsArr.ElementLength() != 4)
+  {
     Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
         .ThrowAsJavaScriptException();
     return;
@@ -165,11 +195,13 @@ void KbdSetModeStarlight(const Napi::CallbackInfo& info) {
 * Get the Razer Mouse USB device interface and device name, 
 * return JS Null if non found
 */
-Napi::Value GetMouseDevice(const Napi::CallbackInfo& info) {
+Napi::Value GetMouseDevice(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
 
   mouseDev = getRazerUSBDeviceInterface(TYPE_MOUSE);
-  if (mouseDev == NULL) {
+  if (mouseDev == NULL)
+  {
     return env.Null();
   }
 
@@ -178,9 +210,11 @@ Napi::Value GetMouseDevice(const Napi::CallbackInfo& info) {
   return Napi::String::New(env, buf);
 }
 
-Napi::Number GetMousebatteryLevel(const Napi::CallbackInfo& info) {
+Napi::Number GetMousebatteryLevel(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDev == nullptr) {
+  if (mouseDev == nullptr)
+  {
     return Napi::Number::New(env, -1);
   }
 
@@ -197,9 +231,11 @@ Napi::Number GetMousebatteryLevel(const Napi::CallbackInfo& info) {
   return Napi::Number::New(env, static_cast<int>(batteryLevel));
 }
 
-Napi::Boolean GetIsMouseCharging(const Napi::CallbackInfo& info) {
+Napi::Boolean GetIsMouseCharging(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDev == nullptr) {
+  if (mouseDev == nullptr)
+  {
     return Napi::Boolean::New(env, false);
   }
 
@@ -210,43 +246,53 @@ Napi::Boolean GetIsMouseCharging(const Napi::CallbackInfo& info) {
   return Napi::Boolean::New(env, static_cast<bool>(charging));
 }
 
-
-void CloseMouseDevice(const Napi::CallbackInfo& info) {
-  if (mouseDev == NULL) {
+void CloseMouseDevice(const Napi::CallbackInfo &info)
+{
+  if (mouseDev == NULL)
+  {
     return;
   }
   closeRazerUSBDeviceInterface(mouseDev);
-
 }
 
-
-void MouseSetLogoLEDEffect(const Napi::CallbackInfo& info) {
-  if (mouseDev == NULL) {
+void MouseSetLogoLEDEffect(const Napi::CallbackInfo &info)
+{
+  if (mouseDev == NULL)
+  {
     return;
   }
-  const char* effect =  info[0].ToString().Utf8Value().c_str();
+  const char *effect = info[0].ToString().Utf8Value().c_str();
 
-  if (std::strncmp(effect, "static", 6) == 0) {
+  if (std::strncmp(effect, "static", 6) == 0)
+  {
     razer_attr_write_logo_led_effect(mouseDev, "0", 1);
-  } else if (std::strncmp(effect, "blinking", 8) == 0) {
+  }
+  else if (std::strncmp(effect, "blinking", 8) == 0)
+  {
     razer_attr_write_logo_led_effect(mouseDev, "1", 1);
-  } else if (std::strncmp(effect, "pulsate", 7) == 0) {
+  }
+  else if (std::strncmp(effect, "pulsate", 7) == 0)
+  {
     razer_attr_write_logo_led_effect(mouseDev, "2", 1);
-  } else if (std::strncmp(effect, "scroll", 6) == 0) {
+  }
+  else if (std::strncmp(effect, "scroll", 6) == 0)
+  {
     razer_attr_write_logo_led_effect(mouseDev, "4", 1);
   }
-
 }
 
-void MouseSetLogoLEDRGB(const Napi::CallbackInfo& info) {
+void MouseSetLogoLEDRGB(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDev == NULL) {
+  if (mouseDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -257,17 +303,22 @@ void MouseSetLogoLEDRGB(const Napi::CallbackInfo& info) {
   razer_attr_write_logo_led_rgb(mouseDev, buf, 3);
 }
 
-void MouseSetLogoModeWave(const Napi::CallbackInfo& info) {
-  if (mouseDev == NULL) {
+void MouseSetLogoModeWave(const Napi::CallbackInfo &info)
+{
+  if (mouseDev == NULL)
+  {
     return;
   }
 
-  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
+  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0)
+  {
     razer_attr_write_logo_mode_wave(mouseDev, "1", 0);
     razer_attr_write_scroll_mode_wave(mouseDev, "1", 0);
     razer_attr_write_left_mode_wave(mouseDev, "1", 0);
     razer_attr_write_right_mode_wave(mouseDev, "1", 0);
-  } else {
+  }
+  else
+  {
     razer_attr_write_logo_mode_wave(mouseDev, "2", 0);
     razer_attr_write_scroll_mode_wave(mouseDev, "2", 0);
     razer_attr_write_left_mode_wave(mouseDev, "2", 0);
@@ -275,15 +326,18 @@ void MouseSetLogoModeWave(const Napi::CallbackInfo& info) {
   }
 }
 
-void MouseSetLogoModeStatic(const Napi::CallbackInfo& info) {
+void MouseSetLogoModeStatic(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDev == NULL) {
+  if (mouseDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -297,15 +351,18 @@ void MouseSetLogoModeStatic(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_static(mouseDev, buf, 3);
 }
 
-void MouseSetLogoModeStaticNoStore(const Napi::CallbackInfo& info) {
+void MouseSetLogoModeStaticNoStore(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDev == NULL) {
+  if (mouseDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -319,8 +376,10 @@ void MouseSetLogoModeStaticNoStore(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_static_no_store(mouseDev, buf, 3);
 }
 
-void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
-  if (mouseDev == NULL) {
+void MouseSetLogoModeSpectrum(const Napi::CallbackInfo &info)
+{
+  if (mouseDev == NULL)
+  {
     return;
   }
   razer_attr_write_logo_mode_spectrum(mouseDev, "1", 1);
@@ -329,15 +388,18 @@ void MouseSetLogoModeSpectrum(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_spectrum(mouseDev, "1", 1);
 }
 
-void MouseSetLogoModeReactive(const Napi::CallbackInfo& info) {
+void MouseSetLogoModeReactive(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDev == NULL) {
+  if (mouseDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 4) {
+  if (argsArr.ElementLength() != 4)
+  {
     Napi::TypeError::New(env, "Reactive only accepts Speed, RGB (4byte)")
         .ThrowAsJavaScriptException();
     return;
@@ -351,8 +413,10 @@ void MouseSetLogoModeReactive(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_reactive(mouseDev, buf, 4);
 }
 
-void MouseSetLogoModeBreathe(const Napi::CallbackInfo& info) {
-  if (mouseDev == NULL) {
+void MouseSetLogoModeBreathe(const Napi::CallbackInfo &info)
+{
+  if (mouseDev == NULL)
+  {
     return;
   }
   razer_attr_write_logo_mode_breath(mouseDev, "1", 1);
@@ -361,8 +425,10 @@ void MouseSetLogoModeBreathe(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_breath(mouseDev, "1", 1);
 }
 
-void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
-  if (mouseDev == NULL) {
+void MouseSetLogoModeNone(const Napi::CallbackInfo &info)
+{
+  if (mouseDev == NULL)
+  {
     return;
   }
   razer_attr_write_logo_mode_none(mouseDev, "1", 1);
@@ -371,24 +437,30 @@ void MouseSetLogoModeNone(const Napi::CallbackInfo& info) {
   razer_attr_write_right_mode_none(mouseDev, "1", 1);
 }
 
-Napi::Number MouseGetDpi(const Napi::CallbackInfo& info) {
-    Napi::Env env = info.Env();
+Napi::Number MouseGetDpi(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
 
-    // Return 0 if no device
-    if (mouseDev == NULL) {
-      return Napi::Number::New(env, 0);;
-    }
+  // Return 0 if no device
+  if (mouseDev == NULL)
+  {
+    return Napi::Number::New(env, 0);
+    ;
+  }
 
-    ushort dpi = razer_attr_read_dpi(mouseDev);
+  ushort dpi = razer_attr_read_dpi(mouseDev);
 
-    return Napi::Number::New(env, dpi);
+  return Napi::Number::New(env, dpi);
 }
 
-void MouseSetDpi(const Napi::CallbackInfo& info) {
-  if (mouseDev == NULL) {
+void MouseSetDpi(const Napi::CallbackInfo &info)
+{
+  if (mouseDev == NULL)
+  {
     return;
   }
-  Napi::Number dpi_number = info[0].ToNumber();;
+  Napi::Number dpi_number = info[0].ToNumber();
+  ;
   ushort dpi = dpi_number.Int32Value();
 
   razer_attr_write_dpi(mouseDev, dpi, dpi);
@@ -398,11 +470,13 @@ void MouseSetDpi(const Napi::CallbackInfo& info) {
 * Get the Razer Mouse Dock USB device interface and device name, 
 * return JS Null if non found
 */
-Napi::Value GetMouseDockDevice(const Napi::CallbackInfo& info) {
+Napi::Value GetMouseDockDevice(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
 
   mouseDockDev = getRazerUSBDeviceInterface(TYPE_MOUSE_DOCK);
-  if (mouseDockDev == NULL) {
+  if (mouseDockDev == NULL)
+  {
     return env.Null();
   }
 
@@ -411,23 +485,27 @@ Napi::Value GetMouseDockDevice(const Napi::CallbackInfo& info) {
   return Napi::String::New(env, buf);
 }
 
-void CloseMouseDockDevice(const Napi::CallbackInfo& info) {
-  if (mouseDockDev == NULL) {
+void CloseMouseDockDevice(const Napi::CallbackInfo &info)
+{
+  if (mouseDockDev == NULL)
+  {
     return;
   }
   closeRazerUSBDeviceInterface(mouseDockDev);
-
 }
 
-void MouseDockSetModeStatic(const Napi::CallbackInfo& info) {
+void MouseDockSetModeStatic(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDockDev == NULL) {
+  if (mouseDockDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -438,15 +516,18 @@ void MouseDockSetModeStatic(const Napi::CallbackInfo& info) {
   razer_mouse_dock_attr_write_mode_static(mouseDockDev, buf, 3);
 }
 
-void MouseDockSetModeStaticNoStore(const Napi::CallbackInfo& info) {
+void MouseDockSetModeStaticNoStore(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseDockDev == NULL) {
+  if (mouseDockDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -457,37 +538,159 @@ void MouseDockSetModeStaticNoStore(const Napi::CallbackInfo& info) {
   razer_mouse_dock_attr_write_mode_static_no_store(mouseDockDev, buf, 3);
 }
 
-void MouseDockSetModeSpectrum(const Napi::CallbackInfo& info) {
-  if (mouseDockDev == NULL) {
+void MouseDockSetModeSpectrum(const Napi::CallbackInfo &info)
+{
+  if (mouseDockDev == NULL)
+  {
     return;
   }
   razer_mouse_dock_attr_write_mode_spectrum(mouseDockDev, "1", 1);
 }
 
-void MouseDockSetModeBreathe(const Napi::CallbackInfo& info) {
-  if (mouseDockDev == NULL) {
+void MouseDockSetModeBreathe(const Napi::CallbackInfo &info)
+{
+  if (mouseDockDev == NULL)
+  {
     return;
   }
   razer_mouse_dock_attr_write_mode_breath(mouseDockDev, "1", 1);
 }
 
-void MouseDockSetModeNone(const Napi::CallbackInfo& info) {
-  if (mouseDockDev == NULL) {
+void MouseDockSetModeNone(const Napi::CallbackInfo &info)
+{
+  if (mouseDockDev == NULL)
+  {
     return;
   }
   razer_mouse_dock_attr_write_mode_none(mouseDockDev, "1", 1);
 }
 
+/**
+* Get the Razer eGPU USB device interface and device name, 
+* return JS Null if non found
+*/
+Napi::Value GetEgpuDevice(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+
+  egpuDev = getRazerUSBDeviceInterface(TYPE_EGPU);
+  if (egpuDev == NULL)
+  {
+    return env.Null();
+  }
+
+  char buf[256] = {0};
+  razer_egpu_attr_read_device_type(egpuDev, buf);
+  return Napi::String::New(env, buf);
+}
+
+void CloseEgpuDevice(const Napi::CallbackInfo &info)
+{
+  if (egpuDev == NULL)
+  {
+    return;
+  }
+  closeRazerUSBDeviceInterface(egpuDev);
+}
+
+void EgpuSetModeStatic(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  if (egpuDev == NULL)
+  {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3)
+  {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_egpu_attr_write_mode_static(egpuDev, buf, 3);
+}
+
+void EgpuSetModeStaticNoStore(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+  if (egpuDev == NULL)
+  {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+  if (argsArr.ElementLength() != 3)
+  {
+    Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+        .ThrowAsJavaScriptException();
+    return;
+  }
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_egpu_attr_write_mode_static_no_store(egpuDev, buf, 3);
+}
+
+void EgpuSetModeSpectrum(const Napi::CallbackInfo &info)
+{
+  if (egpuDev == NULL)
+  {
+    return;
+  }
+  razer_egpu_attr_write_mode_spectrum(egpuDev, "1", 1);
+}
+
+void EgpuSetModeBreathe(const Napi::CallbackInfo &info)
+{
+  if (egpuDev == NULL)
+  {
+    return;
+  }
+  razer_egpu_attr_write_mode_breath(egpuDev, "1", 1);
+}
+
+void EgpuSetModeNone(const Napi::CallbackInfo &info)
+{
+  if (egpuDev == NULL)
+  {
+    return;
+  }
+  razer_egpu_attr_write_mode_none(egpuDev, "1", 1);
+}
+
+void EgpuSetModeWave(const Napi::CallbackInfo &info)
+{
+  if (egpuDev == NULL)
+  {
+    return;
+  }
+  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0)
+  {
+    razer_egpu_attr_write_mode_wave(egpuDev, "1", 0);
+  }
+  else
+  {
+    razer_egpu_attr_write_mode_wave(egpuDev, "2", 0);
+  }
+}
 
 /**
 * Get the Razer Mouse Mat USB device interface and device name, 
 * return JS Null if non found
 */
-Napi::Value GetMouseMatDevice(const Napi::CallbackInfo& info) {
+Napi::Value GetMouseMatDevice(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
 
   mouseMatDev = getRazerUSBDeviceInterface(TYPE_MOUSE_MAT);
-  if (mouseMatDev == NULL) {
+  if (mouseMatDev == NULL)
+  {
     return env.Null();
   }
 
@@ -496,42 +699,52 @@ Napi::Value GetMouseMatDevice(const Napi::CallbackInfo& info) {
   return Napi::String::New(env, buf);
 }
 
-
-void CloseMouseMatDevice(const Napi::CallbackInfo& info) {
-  if (mouseMatDev == NULL) {
+void CloseMouseMatDevice(const Napi::CallbackInfo &info)
+{
+  if (mouseMatDev == NULL)
+  {
     return;
   }
   closeRazerUSBDeviceInterface(mouseMatDev);
-
 }
 
-void MouseMatSetModeNone(const Napi::CallbackInfo& info) {
-  if (mouseMatDev == NULL) {
+void MouseMatSetModeNone(const Napi::CallbackInfo &info)
+{
+  if (mouseMatDev == NULL)
+  {
     return;
   }
   razer_mouse_mat_attr_write_mode_none(mouseMatDev, "1", 1);
 }
 
-void MouseMatSetModeWave(const Napi::CallbackInfo& info) {
-  if (mouseMatDev == NULL) {
+void MouseMatSetModeWave(const Napi::CallbackInfo &info)
+{
+  if (mouseMatDev == NULL)
+  {
     return;
   }
-  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0) {
+  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0)
+  {
     razer_mouse_mat_attr_write_mode_wave(mouseMatDev, "1", 0);
-  } else {
+  }
+  else
+  {
     razer_mouse_mat_attr_write_mode_wave(mouseMatDev, "2", 0);
   }
 }
 
-void MouseMatSetModeBreathe(const Napi::CallbackInfo& info) {
+void MouseMatSetModeBreathe(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseMatDev == NULL) {
+  if (mouseMatDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 1) {
+  if (argsArr.ElementLength() != 1)
+  {
     Napi::TypeError::New(env, "Breathing only accepts '1' (1byte). RGB (3byte). RGB, RGB (6byte)")
         .ThrowAsJavaScriptException();
     return;
@@ -542,15 +755,18 @@ void MouseMatSetModeBreathe(const Napi::CallbackInfo& info) {
   razer_mouse_mat_attr_write_mode_breath(mouseMatDev, buf, 1);
 }
 
-void MouseMatSetModeStatic(const Napi::CallbackInfo& info) {
+void MouseMatSetModeStatic(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseMatDev == NULL) {
+  if (mouseMatDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -561,15 +777,18 @@ void MouseMatSetModeStatic(const Napi::CallbackInfo& info) {
   razer_mouse_mat_attr_write_mode_static(mouseMatDev, buf, 3);
 }
 
-void MouseMatSetModeStaticNoStore(const Napi::CallbackInfo& info) {
+void MouseMatSetModeStaticNoStore(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
-  if (mouseMatDev == NULL) {
+  if (mouseMatDev == NULL)
+  {
     return;
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
 
-  if (argsArr.ElementLength() != 3) {
+  if (argsArr.ElementLength() != 3)
+  {
     Napi::TypeError::New(env, "Only accepts RGB (3byte).")
         .ThrowAsJavaScriptException();
     return;
@@ -580,11 +799,91 @@ void MouseMatSetModeStaticNoStore(const Napi::CallbackInfo& info) {
   razer_mouse_mat_attr_write_mode_static_no_store(mouseMatDev, buf, 3);
 }
 
-void MouseMatSetModeSpectrum(const Napi::CallbackInfo& info) {
-  if (mouseMatDev == NULL) {
+void MouseMatSetModeSpectrum(const Napi::CallbackInfo &info)
+{
+  if (mouseMatDev == NULL)
+  {
     return;
   }
   razer_mouse_mat_attr_write_mode_spectrum(mouseMatDev, "1", 1);
+}
+
+Napi::Value GetHeadphoneDevice(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    headphoneDev = getRazerUSBDeviceInterface(TYPE_HEADPHONE);
+    if (headphoneDev == NULL) {
+        return env.Null();
+    }
+
+    char buf[256] = {0};
+    razer_headphone_attr_read_device_type(headphoneDev, buf);
+    return Napi::String::New(env, buf);
+}
+
+void CloseHeadphoneDevice(const Napi::CallbackInfo &info) {
+    if (headphoneDev == NULL) {
+        return;
+    }
+    closeRazerUSBDeviceInterface(headphoneDev);
+}
+
+void HeadphoneSetModeStatic(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    if (headphoneDev == NULL) {
+        return;
+    }
+    Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+    if (argsArr.ElementLength() != 3)
+    {
+        Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+            .ThrowAsJavaScriptException();
+        return;
+    }
+    // Cast unsigned char array into char array
+    char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+    razer_headphone_attr_write_mode_static(headphoneDev, buf, 3);
+}
+
+void HeadphoneSetModeStaticNoStore(const Napi::CallbackInfo &info)
+{
+    Napi::Env env = info.Env();
+    if (headphoneDev == NULL)
+    {
+        return;
+    }
+
+    Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+
+    if (argsArr.ElementLength() != 3)
+    {
+        Napi::TypeError::New(env, "Only accepts RGB (3byte).")
+            .ThrowAsJavaScriptException();
+        return;
+    }
+    // Cast unsigned char array into char array
+    char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+    razer_headphone_attr_write_mode_static_no_store(headphoneDev, buf, 3);
+}
+
+void HeadphoneSetModeBreathe(const Napi::CallbackInfo &info)
+{
+    if (headphoneDev == NULL)
+    {
+        return;
+    }
+    razer_headphone_attr_write_mode_breath(headphoneDev, "1", 1);
+}
+
+void HeadphoneSetModeNone(const Napi::CallbackInfo &info)
+{
+    if (headphoneDev == NULL)
+    {
+        return;
+    }
+    razer_headphone_attr_write_mode_none(headphoneDev, "1", 1);
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
@@ -634,6 +933,25 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   // Older mouse functions
   exports.Set("mouseSetLogoLEDEffect", Napi::Function::New(env, MouseSetLogoLEDEffect));
   exports.Set("mouseSetLogoLEDRGB", Napi::Function::New(env, MouseSetLogoLEDRGB));
+
+  // Egpu
+  exports.Set("getEgpuDevice", Napi::Function::New(env, GetEgpuDevice));
+  exports.Set("closeEgpuDevice", Napi::Function::New(env, CloseEgpuDevice));
+  exports.Set("egpuSetModeNone", Napi::Function::New(env, EgpuSetModeNone));
+  exports.Set("egpuSetModeBreathe", Napi::Function::New(env, EgpuSetModeBreathe));
+  exports.Set("egpuSetModeStatic", Napi::Function::New(env, EgpuSetModeStatic));
+  exports.Set("egpuSetModeStaticNoStore", Napi::Function::New(env, EgpuSetModeStaticNoStore));
+  exports.Set("egpuSetModeWave", Napi::Function::New(env, EgpuSetModeWave));
+  exports.Set("egpuSetModeSpectrum", Napi::Function::New(env, EgpuSetModeSpectrum));
+  
+  // Headphones
+  exports.Set("getHeadphoneDevice", Napi::Function::New(env, GetHeadphoneDevice));
+  exports.Set("closeHeadphoneDevice", Napi::Function::New(env, CloseHeadphoneDevice));
+  exports.Set("headphoneSetModeNone", Napi::Function::New(env, HeadphoneSetModeNone));
+  exports.Set("headphoneSetModeBreathe", Napi::Function::New(env, HeadphoneSetModeBreathe));
+  exports.Set("headphoneSetModeStatic", Napi::Function::New(env, HeadphoneSetModeStatic));
+  exports.Set("headphoneSetModeStaticNoStore", Napi::Function::New(env, HeadphoneSetModeStaticNoStore));
+
   return exports;
 }
 
