@@ -143,6 +143,18 @@ bool is_mouse_mat(IOUSBDeviceInterface **usb_dev) {
     return false;
 }
 
+bool is_headphone(IOUSBDeviceInterface **usb_dev) {
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch (product) {
+        case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
+            return true;
+    }
+
+    return false;
+}
+
 IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 	CFMutableDictionaryRef matchingDict;
 	matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
@@ -217,6 +229,14 @@ IOUSBDeviceInterface** getRazerUSBDeviceInterface(int type) {
 					continue;
 				}
 				break;
+
+            case TYPE_HEADPHONE:
+                if (!is_headphone(dev)) {
+                    (*dev)->Release(dev);
+                    continue;
+                }
+                break;
+
 			default:
 				// Unsupported Razer peripheral type
 				(*dev)->Release(dev);

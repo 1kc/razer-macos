@@ -12,6 +12,7 @@
 #include "razermouse_driver.h"
 #include "razermousedock_driver.h"
 #include "razermousemat_driver.h"
+#include "razerheadphone_driver.h"
 
 #define TYPE_KEYBOARD 0
 #define TYPE_BLADE 1
