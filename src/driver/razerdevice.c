@@ -166,6 +166,21 @@ bool is_egpu(IOUSBDeviceInterface **usb_dev)
 	return false;
 }
 
+
+bool is_headphone(IOUSBDeviceInterface **usb_dev) 
+{
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch (product) 
+    {
+        case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
+            return true;
+    }
+
+    return false;
+}
+
 IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 {
 	CFMutableDictionaryRef matchingDict;
@@ -216,49 +231,71 @@ IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 			continue;
 		}
 
-		switch (type)
-		{
-		case TYPE_KEYBOARD:
-		case TYPE_BLADE:
-			// Filter out non-keyboards and non-blade laptops
-			if (!(is_keyboard(dev) || is_blade_laptop(dev)))
-			{
-				(*dev)->Release(dev);
-				continue;
-			}
-			break;
-		case TYPE_MOUSE:
-			// Filter out non-mice
-			if (!is_mouse(dev))
-			{
-				(*dev)->Release(dev);
-				continue;
-			}
-			break;
-		case TYPE_MOUSE_DOCK:
+		switch (type) 
+    {
+			case TYPE_KEYBOARD:
+			case TYPE_BLADE:
+				// Filter out non-keyboards and non-blade laptops
+				if (!(is_keyboard(dev) || is_blade_laptop(dev))) 
+        {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+        
+			case TYPE_MOUSE:
+				// Filter out non-mice
+				if (!is_mouse(dev)) 
+        {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+        
+			case TYPE_MOUSE_DOCK:
+				// Filter out non-mice-mats
+				if (!is_mouse_dock(dev)) 
+        {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+        
+			case TYPE_MOUSE_MAT:
+				// Filter out non-mice-mats
+				if (!is_mouse_mat(dev)) 
+        {
+					(*dev)->Release(dev);
+					continue;
+				}
+				break;
+      
+      case TYPE_HEADPHONE:
+        if (!is_headphone(dev)) 
+        {
+          (*dev)->Release(dev);
+          continue;
+        }
+        break;
+      
+      case TYPE_MOUSE_MAT:
 			// Filter out non-mice-mats
-			if (!is_mouse_dock(dev))
-			{
-				(*dev)->Release(dev);
-				continue;
-			}
-			break;
-		case TYPE_MOUSE_MAT:
+        if (!is_mouse_mat(dev))
+			  {
+				  (*dev)->Release(dev);
+				  continue;
+			  }
+			  break;
+      
+      case TYPE_EGPU:
 			// Filter out non-mice-mats
-			if (!is_mouse_mat(dev))
-			{
-				(*dev)->Release(dev);
-				continue;
-			}
-			break;
-		case TYPE_EGPU:
-			// Filter out non-mice-mats
-			if (!is_egpu(dev))
-			{
-				(*dev)->Release(dev);
-				continue;
-			}
-			break;
+			  if (!is_egpu(dev))
+			  {
+				  (*dev)->Release(dev);
+				  continue;
+			  }
+			  break;
+        
 		default:
 			// Unsupported Razer peripheral type
 			(*dev)->Release(dev);
