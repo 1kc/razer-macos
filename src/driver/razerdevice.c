@@ -232,12 +232,12 @@ IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 		}
 
 		switch (type) 
-    {
+        {
 			case TYPE_KEYBOARD:
 			case TYPE_BLADE:
 				// Filter out non-keyboards and non-blade laptops
 				if (!(is_keyboard(dev) || is_blade_laptop(dev))) 
-        {
+                {
 					(*dev)->Release(dev);
 					continue;
 				}
@@ -246,7 +246,7 @@ IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 			case TYPE_MOUSE:
 				// Filter out non-mice
 				if (!is_mouse(dev)) 
-        {
+                {
 					(*dev)->Release(dev);
 					continue;
 				}
@@ -255,7 +255,7 @@ IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 			case TYPE_MOUSE_DOCK:
 				// Filter out non-mice-mats
 				if (!is_mouse_dock(dev)) 
-        {
+                {
 					(*dev)->Release(dev);
 					continue;
 				}
@@ -264,42 +264,33 @@ IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 			case TYPE_MOUSE_MAT:
 				// Filter out non-mice-mats
 				if (!is_mouse_mat(dev)) 
-        {
+                {
 					(*dev)->Release(dev);
 					continue;
 				}
 				break;
-      
-      case TYPE_HEADPHONE:
-        if (!is_headphone(dev)) 
-        {
-          (*dev)->Release(dev);
-          continue;
-        }
-        break;
-      
-      case TYPE_MOUSE_MAT:
-			// Filter out non-mice-mats
-        if (!is_mouse_mat(dev))
-			  {
+
+ 	        case TYPE_HEADPHONE:
+                if (!is_headphone(dev))
+                {
+                  (*dev)->Release(dev);
+                  continue;
+                }
+                break;
+
+            case TYPE_EGPU:
+			    // Filter out non-mice-mats
+			    if (!is_egpu(dev))
+			    {
 				  (*dev)->Release(dev);
 				  continue;
-			  }
-			  break;
-      
-      case TYPE_EGPU:
-			// Filter out non-mice-mats
-			  if (!is_egpu(dev))
-			  {
-				  (*dev)->Release(dev);
-				  continue;
-			  }
+			    }
 			  break;
         
-		default:
-			// Unsupported Razer peripheral type
-			(*dev)->Release(dev);
-			continue;
+		    default:
+			    // Unsupported Razer peripheral type
+			    (*dev)->Release(dev);
+			    continue;
 		}
 
 		kReturn = (*dev)->USBDeviceOpen(dev);
