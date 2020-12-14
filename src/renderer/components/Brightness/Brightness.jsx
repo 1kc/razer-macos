@@ -2,37 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import ReactSlider from 'react-slider';
 
-export default function MouseSensitivity({ currentSensitivity }) {
-  const [currentDpi, setCurrentDpi] = useState(currentSensitivity);
+export default function Brightness({ currentBrightness }) {
+  const [brightness, setBrightness] = useState(currentBrightness);
 
-  const handleClick = () => {
+  useEffect(() => {
     let payload = {
-      dpi: currentDpi,
+      brightness,
     };
-    ipcRenderer.send('request-set-dpi', payload);
-  };
+    ipcRenderer.send('update-keyboard-brightness', payload);
+  }, [brightness]);
 
   const changeSliderValue = (value) => {
-    setCurrentDpi(value);
+    setBrightness(value);
   };
 
   return (
     <div className="settings">
+      <h4>Adjust keyboard brightness</h4>
       <div className="control">
         <ReactSlider
-          step={100}
+          step={1}
           className="horizontal-slider"
           thumbClassName="slider-thumb"
           trackClassName="slider-track"
-          min={100}
-          max={20000}
-          value={currentDpi}
+          min={0}
+          max={100}
+          value={brightness}
           onChange={changeSliderValue}
           renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
         ></ReactSlider>
-      </div>
-      <div className="control">
-        <button onClick={handleClick}>Set DPI</button>
       </div>
     </div>
   );

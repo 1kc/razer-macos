@@ -1,45 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import CustomColor from './components/CustomColor'
+import CustomColor from './components/CustomColor';
 import { ipcRenderer } from 'electron';
 import MouseSensitivity from './components/MouseSensitivity';
+import Brightness from './components/Brightness/Brightness';
 
 /**
  * Root React component
  */
 export default function App() {
-    const INITIAL_COLOR = {}
+  const INITIAL_COLOR = {};
 
-    const [deviceSelected, setDeviceSelected] = useState('Keyboard');
-    const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
-    const [currentSensitivity, setCurrentSensitivity] = useState(3200);
+  const [deviceSelected, setDeviceSelected] = useState('Keyboard');
+  const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
+  const [currentSensitivity, setCurrentSensitivity] = useState(3200);
 
-    useEffect( () => {
-        ipcRenderer.on('device-selected', (event, message) => { 
-          if (message.currentSensitivity != null) {
-            setCurrentSensitivity(message.currentSensitivity)
-          }
-          setDeviceSelected(message.device);
-          setCurrentColor(message.currentColor);
+  useEffect(() => {
+    ipcRenderer.on('device-selected', (event, message) => {
+      if (message.currentSensitivity != null) {
+        setCurrentSensitivity(message.currentSensitivity);
+      }
+      setDeviceSelected(message.device);
+      setCurrentColor(message.currentColor);
+    });
+  }, []);
 
-        });
-                
-    }, []);
-
-    return (
+  return (
     <div>
-        <header id="titlebar">
-          <div id="drag-region">
-            <div id="window-title">
-              <span>{deviceSelected} custom color picker</span>
-            </div>
+      <header id="titlebar">
+        <div id="drag-region">
+          <div id="window-title">
+            <span>{deviceSelected} custom color picker</span>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <CustomColor deviceSelected={deviceSelected} currentColor={currentColor} setCurrentColor={setCurrentColor}/>
-        {deviceSelected == 'Mouse' && 
-          <MouseSensitivity currentSensitivity={currentSensitivity} ></MouseSensitivity>
-        }
-        
-    </div>);
-
+      <CustomColor
+        deviceSelected={deviceSelected}
+        currentColor={currentColor}
+        setCurrentColor={setCurrentColor}
+      />
+      {deviceSelected == 'Mouse' && (
+        <MouseSensitivity
+          currentSensitivity={currentSensitivity}
+        ></MouseSensitivity>
+      )}
+      {/* TODO: Update currentBrightness to read from device */}
+      {deviceSelected === 'Keyboard' && <Brightness currentBrightness={0} />}
+    </div>
+  );
 }

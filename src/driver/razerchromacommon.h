@@ -28,7 +28,7 @@ struct razer_report razer_chroma_standard_get_led_rgb(unsigned char variable_sto
 struct razer_report razer_chroma_standard_set_led_effect(unsigned char variable_storage, unsigned char led_id, unsigned char led_effect);
 struct razer_report razer_chroma_standard_get_led_effect(unsigned char variable_storage, unsigned char led_id);
 
-struct razer_report razer_chroma_standard_set_led_brightness(unsigned char variable_storage, unsigned char led_id, unsigned char brightness);
+struct razer_report razer_chroma_standard_set_led_brightness(unsigned char variable_storage, unsigned char led_id, ushort brightness);
 struct razer_report razer_chroma_standard_get_led_brightness(unsigned char variable_storage, unsigned char led_id);
 
 /*
