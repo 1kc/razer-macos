@@ -13,16 +13,32 @@ export default function App() {
   const [deviceSelected, setDeviceSelected] = useState('Keyboard');
   const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
   const [currentSensitivity, setCurrentSensitivity] = useState(3200);
+  // 0-100. In debug mode, this will be set to 50 when the UI is loaded
+  const [currentBrightness, setCurrentBrightness] = useState(50);
 
   useEffect(() => {
     ipcRenderer.on('device-selected', (event, message) => {
       if (message.currentSensitivity != null) {
         setCurrentSensitivity(message.currentSensitivity);
       }
+      if (message.currentBrightness != null) {
+        setCurrentBrightness(message.currentBrightness);
+      }
       setDeviceSelected(message.device);
       setCurrentColor(message.currentColor);
     });
   }, []);
+
+  useEffect(() => {
+    let payload = {
+      brightness: currentBrightness,
+    };
+    ipcRenderer.send('update-keyboard-brightness', payload);
+  }, [currentBrightness]);
+
+  const handleBrightnessChange = (value) => {
+    setCurrentBrightness(value);
+  };
 
   return (
     <div>
@@ -44,8 +60,12 @@ export default function App() {
           currentSensitivity={currentSensitivity}
         ></MouseSensitivity>
       )}
-      {/* TODO: Update currentBrightness to read from device */}
-      {deviceSelected === 'Keyboard' && <Brightness currentBrightness={0} />}
+      {deviceSelected === 'Keyboard' && (
+        <Brightness
+          brightness={currentBrightness}
+          onBrightnessChange={handleBrightnessChange}
+        />
+      )}
     </div>
   );
 }

@@ -149,6 +149,6 @@ ssize_t razer_attr_write_set_logo(IOUSBDeviceInterface **usb_dev, const char *bu
 ssize_t razer_attr_write_mode_custom(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
 ssize_t razer_attr_write_set_fn_toggle(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
 ssize_t razer_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev, ushort brightness, int count);
-ssize_t razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev, char *buf);
+ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev);
 ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
 #endif

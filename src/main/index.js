@@ -476,14 +476,19 @@ let keyboardMenu = [
     label: 'Brightness',
     submenu: [
       {
-        label: '0',
+        label: 'Brightness info not found',
+        enabled: false,
+      },
+      { type: 'separator' },
+      {
+        label: 'Set to 0%',
         click() {
           clearInterval(cycleColorsInterval);
           addon.KbdSetBrightness(0);
         },
       },
       {
-        label: '100',
+        label: 'Set to 100%',
         click() {
           clearInterval(cycleColorsInterval);
           addon.KbdSetBrightness(100);
@@ -492,11 +497,14 @@ let keyboardMenu = [
     ],
   },
   {
-    label: 'Set custom color',
+    label: 'Set custom color and brightness',
     click() {
+      const currentBrightness = addon.KbdGetBrightness();
       window.webContents.send('device-selected', {
         device: 'Keyboard',
         currentColor: customKdbColor,
+        // getBrightness could give -1 when not keyboard not detected
+        currentBrightness: currentBrightness < 0 ? 0 : currentBrightness,
       });
       window.setSize(500, 420);
       window.show();
@@ -1101,6 +1109,7 @@ let mainMenuBottom = [
 ];
 
 let keyboardDeviceName = '';
+let keyboardBrightnessLevel = -1;
 let mouseDeviceName = '';
 let mouseDockDeviceName = '';
 let mouseMatDeviceName = '';
@@ -1120,6 +1129,7 @@ const refreshDevices = () => {
 
   // get devices
   keyboardDeviceName = addon.getKeyboardDevice();
+  keyboardBrightnessLevel = addon.KbdGetBrightness();
   mouseDeviceName = addon.getMouseDevice();
   mouseDockDeviceName = addon.getMouseDockDevice();
   mouseMatDeviceName = addon.getMouseMatDevice();
@@ -1292,6 +1302,7 @@ function refreshTray() {
   let menu = mainMenu;
   if (keyboardDeviceName) {
     keyboardMenu[1].label = keyboardDeviceName;
+    keyboardMenu[10].submenu[0].label = `Brightness: ${keyboardBrightnessLevel}%`;
     menu = menu.concat(keyboardMenu);
   }
   if (mouseDeviceName) {

@@ -2,20 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import ReactSlider from 'react-slider';
 
-export default function Brightness({ currentBrightness }) {
-  const [brightness, setBrightness] = useState(currentBrightness);
-
-  useEffect(() => {
-    let payload = {
-      brightness,
-    };
-    ipcRenderer.send('update-keyboard-brightness', payload);
-  }, [brightness]);
-
-  const changeSliderValue = (value) => {
-    setBrightness(value);
-  };
-
+export default function Brightness({ brightness, onBrightnessChange }) {
   return (
     <div className="settings">
       <h4>Adjust keyboard brightness</h4>
@@ -28,8 +15,10 @@ export default function Brightness({ currentBrightness }) {
           min={0}
           max={100}
           value={brightness}
-          onChange={changeSliderValue}
-          renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+          onChange={onBrightnessChange}
+          renderThumb={(props, state) => (
+            <div {...props}>{state.valueNow + '%'}</div>
+          )}
         ></ReactSlider>
       </div>
     </div>

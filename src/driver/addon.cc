@@ -169,6 +169,21 @@ void KbdSetModeBreathe(const Napi::CallbackInfo &info)
   razer_attr_write_mode_breath(kbdDev, buf, 1);
 }
 
+Napi::Number KbdGetBrightness(const Napi::CallbackInfo &info)
+{
+  Napi::Env env = info.Env();
+
+  // Return -1 if no device
+  if (kbdDev == NULL)
+  {
+    return Napi::Number::New(env, -1);
+  }
+
+  ushort brightness = razer_attr_read_set_brightness(kbdDev);
+
+  return Napi::Number::New(env, brightness);
+}
+
 void KbdSetBrightness(const Napi::CallbackInfo &info)
 {
   if (kbdDev == NULL)
@@ -910,6 +925,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("kbdSetModeWave", Napi::Function::New(env, KbdSetModeWave));
   exports.Set("kbdSetModeReactive", Napi::Function::New(env, KbdSetModeReactive));
   exports.Set("kbdSetModeBreathe", Napi::Function::New(env, KbdSetModeBreathe));
+  exports.Set("KbdGetBrightness", Napi::Function::New(env, KbdGetBrightness));
   exports.Set("KbdSetBrightness", Napi::Function::New(env, KbdSetBrightness));
   exports.Set("kbdSetModeStarlight", Napi::Function::New(env, KbdSetModeStarlight));
 

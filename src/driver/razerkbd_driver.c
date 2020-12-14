@@ -1477,7 +1477,7 @@ ssize_t razer_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev, ushort b
  *
  * Returns a string
  */
-ssize_t razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev, char *buf)
+ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
 {
     unsigned char brightness = 0;
     struct razer_report report = {0};
@@ -1544,7 +1544,9 @@ ssize_t razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev, char *buf
         brightness = response.arguments[2];
     }
 
-    return sprintf(buf, "%d\n", brightness);
+    printf("Current keyboard brightness %d\n", brightness);
+
+    return brightness;
 }
 
 /**
