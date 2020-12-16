@@ -79,6 +79,9 @@
 #define RAZER_NEW_MOUSE_RECEIVER_WAIT_MIN_US 31000
 #define RAZER_NEW_MOUSE_RECEIVER_WAIT_MAX_US 31100
 
+#define RAZER_VIPER_MOUSE_RECEIVER_WAIT_MIN_US 59900
+#define RAZER_VIPER_MOUSE_RECEIVER_WAIT_MAX_US 60000
+
 // struct razer_mouse_device {
 //     IOUSBDeviceInterface **usbdev;
 //     // Need to use macOS kernel lock
