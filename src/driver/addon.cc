@@ -886,6 +886,15 @@ void HeadphoneSetModeNone(const Napi::CallbackInfo &info)
     razer_headphone_attr_write_mode_none(headphoneDev, "1", 1);
 }
 
+void HeadphoneSetModeSpectrum(const Napi::CallbackInfo &info)
+{
+    if (headphoneDev == NULL)
+    {
+        return;
+    }
+    razer_headphone_attr_write_mode_spectrum(headphoneDev, "1", 1);
+}
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("getKeyboardDevice", Napi::Function::New(env, GetKeyboardDevice));
   exports.Set("closeKeyboardDevice", Napi::Function::New(env, CloseKeyboardDevice));
@@ -951,6 +960,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("headphoneSetModeBreathe", Napi::Function::New(env, HeadphoneSetModeBreathe));
   exports.Set("headphoneSetModeStatic", Napi::Function::New(env, HeadphoneSetModeStatic));
   exports.Set("headphoneSetModeStaticNoStore", Napi::Function::New(env, HeadphoneSetModeStaticNoStore));
+  exports.Set("headphoneSetModeSpectrum", Napi::Function::New(env, HeadphoneSetModeSpectrum));
 
   return exports;
 }

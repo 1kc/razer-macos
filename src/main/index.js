@@ -892,6 +892,10 @@ let headphoneMenu = [
     ]
   },
   {
+    label: 'Spectrum',
+    click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeSpectrum(); },
+  },
+  {
     label: 'Breathe',
     click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeBreathe(new Uint8Array([
       0 // random

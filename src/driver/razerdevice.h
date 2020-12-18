@@ -14,6 +14,7 @@
 #include "razermousemat_driver.h"
 #include "razerheadphone_driver.h"
 #include "razeregpu_driver.h"
+#include "razerkraken_driver.h"
 
 #define TYPE_KEYBOARD 0
 #define TYPE_BLADE 1

@@ -175,6 +175,7 @@ bool is_headphone(IOUSBDeviceInterface **usb_dev)
     switch (product) 
     {
         case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
+        case USB_DEVICE_ID_RAZER_KRAKEN_V2:
             return true;
     }
 
