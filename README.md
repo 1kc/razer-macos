@@ -74,7 +74,7 @@ Please feel free to open pull requests for new devices you have tested.
 ## Roadmap
 
 * Add speed control for light effects
-* Add brightness control for mouse and keyboard
+* Add brightness control for mouse
 
 ## FAQ
 
