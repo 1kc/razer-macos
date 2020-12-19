@@ -5,6 +5,7 @@
 #include "razerheadphone_driver.h"
 #include "razercommon.h"
 #include "razerchromacommon.h"
+#include "razerkraken_driver.h"
 
 /**
  * Send report to the headphone
@@ -66,7 +67,9 @@ ssize_t razer_headphone_attr_read_device_type(IOUSBDeviceInterface **usb_dev, ch
         case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
             device_type = "Razer Kraken Kitty Edition\n";
             break;
-
+        case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+            device_type = "Razer Kraken V2\n";
+            break;
         default:
             device_type = "Unknown Device\n";
             break;
@@ -92,7 +95,8 @@ ssize_t razer_headphone_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, con
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, ZERO_LED);
             report.transaction_id.id = 0x1F;
             break;
-
+        case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+            return razer_kraken_attr_write_mode_none(usb_dev, buf, count);
         default:
             report = razer_chroma_standard_matrix_effect_none(VARSTORE, BACKLIGHT_LED);
             break;
@@ -132,7 +136,14 @@ ssize_t razer_headphone_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, c
                     break;
             }
             break;
-
+        case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+            // "Random" colour mode
+            if(count == 1) {
+                count = 3;
+                char color[3] = {(unsigned char)rand(), (unsigned char)rand(), (unsigned char)rand()};
+                return razer_kraken_attr_write_mode_breath(usb_dev, color, count);
+            }
+            return razer_kraken_attr_write_mode_breath(usb_dev, buf, count);
         default:
             switch(count) {
                 case 3: // Single colour mode
@@ -173,7 +184,8 @@ ssize_t razer_headphone_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, c
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, ZERO_LED, (struct razer_rgb *)&buf[0]);
                 report.transaction_id.id = 0x1F;
                 break;
-
+            case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+                return razer_kraken_attr_write_mode_static(usb_dev, buf, count);
             default:
                 report = razer_chroma_standard_matrix_effect_static(VARSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
                 break;
@@ -207,7 +219,8 @@ ssize_t razer_headphone_attr_write_mode_static_no_store(IOUSBDeviceInterface **u
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, ZERO_LED, (struct razer_rgb *)&buf[0]);
                 report.transaction_id.id = 0x1F;
                 break;
-
+            case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+                return razer_kraken_attr_write_mode_static(usb_dev, buf, count);
             default:
                 report = razer_chroma_standard_matrix_effect_static(NOSTORE, BACKLIGHT_LED, (struct razer_rgb*)&buf[0]);
                 break;
@@ -218,5 +231,16 @@ ssize_t razer_headphone_attr_write_mode_static_no_store(IOUSBDeviceInterface **u
         printf("razerheadphone: Static mode only accepts RGB (3byte)\n");
     }
 
+    return count;
+}
+
+ssize_t razer_headphone_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count)
+{
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+            return razer_kraken_attr_write_mode_spectrum(usb_dev, buf, count);
+    }
     return count;
 }

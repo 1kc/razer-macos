@@ -1093,6 +1093,10 @@ let headphoneMenu = [
     ],
   },
   {
+    label: 'Spectrum',
+    click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeSpectrum(); },
+  },
+  {
     label: 'Breathe',
     click() {
       clearInterval(cycleColorsInterval);
