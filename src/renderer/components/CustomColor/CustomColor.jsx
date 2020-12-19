@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { HuePicker, MaterialPicker } from 'react-color';
 import { ipcRenderer } from 'electron';
 
@@ -20,6 +20,7 @@ export default function CustomColor({ deviceSelected, currentColor, setCurrentCo
 
   return (
       <div className="settings">
+        <p className="ui-center-text">Custom color selection</p>
         <div className="control">
           <HuePicker color={currentColor} onChange={handleChange} />
         </div>

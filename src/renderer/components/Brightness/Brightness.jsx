@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { ipcRenderer } from 'electron';
+import React from 'react';
 import ReactSlider from 'react-slider';
 
 export default function Brightness({ brightness, onBrightnessChange }) {
   return (
     <div className="settings">
-      <h4>Adjust keyboard brightness</h4>
+      <p className="ui-center-text">Adjust keyboard brightness</p>
       <div className="control">
         <ReactSlider
           step={1}

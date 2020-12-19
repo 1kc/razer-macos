@@ -501,6 +501,7 @@ let keyboardMenu = [
         click() {
           clearInterval(cycleColorsInterval);
           addon.KbdSetBrightness(0);
+          refreshTray();
         },
       },
       {
@@ -508,12 +509,13 @@ let keyboardMenu = [
         click() {
           clearInterval(cycleColorsInterval);
           addon.KbdSetBrightness(100);
+          refreshTray();
         },
       },
     ],
   },
   {
-    label: 'Set custom color and brightness',
+    label: 'Custom settings',
     click() {
       const currentBrightness = addon.KbdGetBrightness();
       window.webContents.send('device-selected', {
@@ -706,14 +708,14 @@ let mouseMenu = [
     ],
   },
   {
-    label: 'Set custom color and DPI',
+    label: 'Custom settings',
     click() {
       window.webContents.send('device-selected', {
         device: 'Mouse',
         currentColor: customMouseColor,
         currentSensitivity: addon.mouseGetDpi(),
       });
-      window.setSize(500, 420);
+      window.setSize(500, 460);
       window.show();
     },
   },
@@ -1187,6 +1189,7 @@ ipcMain.on('request-set-dpi', (event, arg) => {
 ipcMain.on('update-keyboard-brightness', (_, arg) => {
   const { brightness } = arg;
   addon.KbdSetBrightness(brightness);
+  refreshTray();
 });
 
 // custom color rpc listener
@@ -1232,7 +1235,7 @@ function createWindow() {
   window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
     titleBarStyle: 'hidden',
-    height: 420,
+    height: 420, // This is adjusted later with window.setSize
     resizable: false,
     width: 500,
     y: 100,
@@ -1318,6 +1321,7 @@ function refreshTray() {
   let menu = mainMenu;
   if (keyboardDeviceName) {
     keyboardMenu[1].label = keyboardDeviceName;
+    keyboardBrightnessLevel = addon.KbdGetBrightness();
     keyboardMenu[10].submenu[0].label = `Brightness: ${keyboardBrightnessLevel}%`;
     menu = menu.concat(keyboardMenu);
   }

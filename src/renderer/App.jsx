@@ -45,7 +45,7 @@ export default function App() {
       <header id="titlebar">
         <div id="drag-region">
           <div id="window-title">
-            <span>{deviceSelected} custom color picker</span>
+            <span>{deviceSelected} settings</span>
           </div>
         </div>
       </header>
