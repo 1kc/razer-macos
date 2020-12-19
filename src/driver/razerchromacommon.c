@@ -178,7 +178,7 @@ struct razer_report razer_chroma_standard_get_led_effect(unsigned char variable_
  * Status Trans Packet Proto DataSize Class CMD Args
  * ? TODO fill this
  */
-struct razer_report razer_chroma_standard_set_led_brightness(unsigned char variable_storage, unsigned char led_id, unsigned char brightness)
+struct razer_report razer_chroma_standard_set_led_brightness(unsigned char variable_storage, unsigned char led_id, ushort brightness)
 {
     struct razer_report report = get_razer_report(0x03, 0x03, 0x03);
     report.arguments[0] = variable_storage;
