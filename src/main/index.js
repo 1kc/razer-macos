@@ -46,6 +46,22 @@ function loadItemsFromStorage() {
       };
     }
   });
+  
+  storage.get('customMouseColor', function(error, data) {
+    if (error) throw error;
+  
+    customMouseColor = data;
+    if (isEmpty(customMouseColor)) {
+      customMouseColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0
+        }
+      };
+    }
+  });
 
   storage.get('customEgpuColor', function (error, data) {
     if (error) throw error;
