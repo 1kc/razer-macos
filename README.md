@@ -64,6 +64,10 @@ Laptops:
 
 * Razer Blade Advanced 2018
 
+Headphones:
+
+* Razer Kraken V2
+
 Please feel free to open pull requests for new devices you have tested.
 
 ## Roadmap

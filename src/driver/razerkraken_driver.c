@@ -16,9 +16,8 @@
  * Should you need to contact me, the author, you can do so by
  * e-mail - mail your message to Terry Cain <terry@terrys-home.co.uk>
  */
+#include <stdio.h>
 
-#include <usb.h>
-#include <libc.h>
 #include "razerkraken_driver.h"
 #include "razercommon.h"
 
