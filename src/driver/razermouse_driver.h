@@ -160,6 +160,7 @@ void razer_attr_write_dpi(IOUSBDeviceInterface **usb_dev, ushort dpi_x, ushort d
 
 // Older mouse
 ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
+ssize_t razer_attr_write_scroll_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_logo_led_rgb(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 
 ssize_t razer_attr_read_get_battery(IOUSBDeviceInterface **usb_dev, char *buf);
