@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "razerkbd_driver.h"
 #include "razerchromacommon.h"
@@ -52,8 +53,6 @@ bool is_blade_laptop(IOUSBDeviceInterface **usb_dev)
     case USB_DEVICE_ID_RAZER_BLADE_PRO_2017_FULLHD:
     case USB_DEVICE_ID_RAZER_BLADE_2019_BASE:
     case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2019:
-    case USB_DEVICE_ID_RAZER_CYNOSA_V2:
-    case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
         return true;
     }
 
@@ -1493,6 +1492,7 @@ ssize_t razer_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev, ushort b
  */
 ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
 {
+    bool is_matrix_brightness = false;
     unsigned char brightness = 0;
     struct razer_report report = {0};
     struct razer_report response = {0};
@@ -1506,6 +1506,7 @@ ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
     case USB_DEVICE_ID_RAZER_TARTARUS_V2:
         report = razer_chroma_extended_matrix_get_brightness(VARSTORE, ZERO_LED);
         report.transaction_id.id = 0x1F;
+        is_matrix_brightness = true;
         break;
 
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_LITE:
@@ -1520,11 +1521,14 @@ ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
     case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
     case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
         report = razer_chroma_extended_matrix_get_brightness(VARSTORE, BACKLIGHT_LED);
+        is_matrix_brightness = true;
         break;
 
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
+    case USB_DEVICE_ID_RAZER_CYNOSA_V2:
         report = razer_chroma_extended_matrix_get_brightness(VARSTORE, BACKLIGHT_LED);
         report.transaction_id.id = 0x1F;
+        is_matrix_brightness = true;
         break;
 
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_STEALTH:
@@ -1557,6 +1561,10 @@ ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
     else
     {
         brightness = response.arguments[2];
+    }
+
+    if(is_matrix_brightness) {
+        brightness = round(brightness / 2.55);
     }
 
     printf("Current keyboard brightness %d\n", brightness);
