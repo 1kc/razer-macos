@@ -1,1 +1,1 @@
-export * from "./Brightness";
+export * from './Brightness';
