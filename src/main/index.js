@@ -45,10 +45,10 @@ function loadItemsFromStorage() {
       };
     }
   });
-  
-  storage.get('customMouseColor', function(error, data) {
+
+  storage.get('customMouseColor', function (error, data) {
     if (error) throw error;
-  
+
     customMouseColor = data;
     if (isEmpty(customMouseColor)) {
       customMouseColor = {
@@ -56,8 +56,8 @@ function loadItemsFromStorage() {
         rgb: {
           r: 255,
           g: 255,
-          b: 0
-        }
+          b: 0,
+        },
       };
     }
   });
@@ -1190,7 +1190,10 @@ let headphoneMenu = [
   },
   {
     label: 'Spectrum',
-    click() { clearInterval(cycleColorsInterval); addon.headphoneSetModeSpectrum(); },
+    click() {
+      clearInterval(cycleColorsInterval);
+      addon.headphoneSetModeSpectrum();
+    },
   },
   {
     label: 'Breathe',
