@@ -76,7 +76,7 @@ void KbdSetModeWave(const Napi::CallbackInfo &info)
 
   if (std::strncmp(waveSetting,"left_slowest", 12) == 0)
   {
-    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x90);
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0xE9);
   }
   else if (std::strncmp(waveSetting,"left_slower", 12) == 0)
   {
