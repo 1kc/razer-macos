@@ -373,20 +373,116 @@ let keyboardMenu = [
   },
   {
     label: 'Wave',
-    submenu: [
+    submenu:[
       {
         label: 'Left',
-        click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeWave('left');
-        },
+        submenu:[
+          {
+            label: 'Slowest Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_slowest');
+            },
+          },
+          {
+            label: 'Slower Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_slower');
+            },
+          },
+          {
+            label: 'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_slow');
+            },
+          },
+
+          {
+            label: 'Normal Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_default');
+            },
+          },
+          {
+            label: 'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_fast');
+            },
+          },
+          {
+            label: 'Faster Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_faster');
+            },
+          },
+          {
+            label: 'Lighting Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_fastest');
+            },
+          },
+        ]
       },
       {
         label: 'Right',
-        click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeWave('right');
-        },
+        submenu:[
+          {
+            label: 'Slowest Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_slowest');
+            },
+          },
+          {
+            label: 'Slower Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_slower');
+            },
+          },
+          {
+            label: 'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_slow');
+            },
+          },
+
+          {
+            label: 'Normal Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_default');
+            },
+          },
+          {
+            label: 'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_fast');
+            },
+          },
+          {
+            label: 'Faster Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_faster');
+            },
+          },
+          {
+            label: 'Lighting Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_fastest');
+            },
+          }, 
+        ]
       },
     ],
   },

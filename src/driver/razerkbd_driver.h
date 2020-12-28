@@ -138,7 +138,7 @@ ssize_t razer_attr_read_tartarus_profile_led_green(IOUSBDeviceInterface **usb_de
 ssize_t razer_attr_read_tartarus_profile_led_blue(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_attr_read_get_firmware_version(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
-ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
+ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, int count, int speed);
 ssize_t razer_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
 ssize_t razer_attr_write_mode_reactive(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
 ssize_t razer_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
