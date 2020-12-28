@@ -296,18 +296,22 @@ void MouseSetLogoLEDEffect(const Napi::CallbackInfo &info)
   if (std::strncmp(effect, "static", 6) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "0", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "0", 1);
   }
   else if (std::strncmp(effect, "blinking", 8) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "1", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "1", 1);
   }
   else if (std::strncmp(effect, "pulsate", 7) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "2", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "2", 1);
   }
   else if (std::strncmp(effect, "scroll", 6) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "4", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "4", 1);
   }
 }
 
