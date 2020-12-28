@@ -152,7 +152,7 @@ ssize_t razer_egpu_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const ch
     switch (product)
     {
     case USB_DEVICE_ID_RAZER_CORE_X_CHROMA:
-        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, ZERO_LED, direction);
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, ZERO_LED, direction, 0x28);
         break;
 
     default:

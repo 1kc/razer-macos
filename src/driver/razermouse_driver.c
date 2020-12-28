@@ -326,12 +326,12 @@ ssize_t razer_attr_write_side_mode_wave(IOUSBDeviceInterface **usb_dev, const ch
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
-            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, side, direction);
+            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, side, direction, 0x28);
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
         case USB_DEVICE_ID_RAZER_BASILISK_V2:
-            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, side, direction);
+            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, side, direction, 0x28);
             report.transaction_id.id = 0x1f;
             break;
 
@@ -653,12 +653,12 @@ ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const ch
     case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
-        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction);
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction, 0x28);
         break;
 
     case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
     case USB_DEVICE_ID_RAZER_BASILISK_V2:
-        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction);
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, LOGO_LED, direction, 0x28);
         report.transaction_id.id = 0x1f;
         break;
 
@@ -692,12 +692,12 @@ ssize_t razer_attr_write_scroll_mode_wave(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
-            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, SCROLL_WHEEL_LED, direction);
+            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, SCROLL_WHEEL_LED, direction, 0x28);
             break;
 
         case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
         case USB_DEVICE_ID_RAZER_BASILISK_V2:
-            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, SCROLL_WHEEL_LED, direction);
+            report = razer_chroma_extended_matrix_effect_wave(VARSTORE, SCROLL_WHEEL_LED, direction, 0x28);
             report.transaction_id.id = 0x1f;
             break;
 

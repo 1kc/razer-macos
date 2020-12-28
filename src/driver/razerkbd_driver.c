@@ -540,7 +540,7 @@ ssize_t razer_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *b
  *
  * For the extended its 0x00 and 0x01
  */
-ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, int count)
+ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, int count, int speed)
 {
     unsigned char direction = (unsigned char)strtol(buf, NULL, 10);
     struct razer_report report;
@@ -559,7 +559,7 @@ ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *b
     case USB_DEVICE_ID_RAZER_HUNTSMAN:
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
     case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
-        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, BACKLIGHT_LED, direction);
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, BACKLIGHT_LED, direction, speed);
         break;
 
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA_V2:
@@ -570,7 +570,7 @@ ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *b
     case USB_DEVICE_ID_RAZER_TARTARUS_V2:
     case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
     case USB_DEVICE_ID_RAZER_CYNOSA_V2:
-        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, BACKLIGHT_LED, direction);
+        report = razer_chroma_extended_matrix_effect_wave(VARSTORE, BACKLIGHT_LED, direction, speed);
         report.transaction_id.id = 0x1F;
         break;
 

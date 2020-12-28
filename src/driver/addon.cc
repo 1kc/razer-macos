@@ -71,13 +71,63 @@ void KbdSetModeWave(const Napi::CallbackInfo &info)
   {
     return;
   }
-  if (std::strncmp(info[0].ToString().Utf8Value().c_str(), "left", 4) == 0)
+  const char *wave_setting = info[0].ToString().Utf8Value().c_str();
+  if (std::strncmp(wave_setting,"left_slowest", 12) == 0)
   {
-    razer_attr_write_mode_wave(kbdDev, "1", 0);
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x90);
   }
-  else
+  else if (std::strncmp(wave_setting,"left_slower", 12) == 0)
   {
-    razer_attr_write_mode_wave(kbdDev, "2", 0);
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x80);
+  }
+  else if (std::strncmp(wave_setting,"left_slow", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x70);
+  }
+  else if (std::strncmp(wave_setting,"left_default", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x55);
+  }
+  else if (std::strncmp(wave_setting,"left_fast", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x40);
+  }
+  else if (std::strncmp(wave_setting,"left_faster", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x25);
+  }
+  else if (std::strncmp(wave_setting,"left_fastest", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x10);
+  }
+// right
+  else if (std::strncmp(wave_setting,"right_slowest", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x90);
+  }
+  else if (std::strncmp(wave_setting,"right_slower", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x80);
+  }
+  else if (std::strncmp(wave_setting,"right_slow", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x70);
+  }
+  else if (std::strncmp(wave_setting,"right_default", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x55);
+  }
+  else if (std::strncmp(wave_setting,"right_fast", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x40);
+  }
+  else if (std::strncmp(wave_setting,"right_faster", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x25);
+  }
+  else if (std::strncmp(wave_setting,"right_fastest", 12) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x10);
   }
 }
 
