@@ -101,31 +101,31 @@ void KbdSetModeWave(const Napi::CallbackInfo &info)
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x10);
   }
 // right
-  else if (std::strncmp(wave_setting,"right_slowest", 12) == 0)
+  else if (std::strncmp(wave_setting,"right_slowest", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x90);
   }
-  else if (std::strncmp(wave_setting,"right_slower", 12) == 0)
+  else if (std::strncmp(wave_setting,"right_slower", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x80);
   }
-  else if (std::strncmp(wave_setting,"right_slow", 12) == 0)
+  else if (std::strncmp(wave_setting,"right_slow", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x70);
   }
-  else if (std::strncmp(wave_setting,"right_default", 12) == 0)
+  else if (std::strncmp(wave_setting,"right_default", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x55);
   }
-  else if (std::strncmp(wave_setting,"right_fast", 12) == 0)
+  else if (std::strncmp(wave_setting,"right_fast", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x40);
   }
-  else if (std::strncmp(wave_setting,"right_faster", 12) == 0)
+  else if (std::strncmp(wave_setting,"right_faster", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x25);
   }
-  else if (std::strncmp(wave_setting,"right_fastest", 12) == 0)
+  else if (std::strncmp(wave_setting,"right_fastest", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x10);
   }
