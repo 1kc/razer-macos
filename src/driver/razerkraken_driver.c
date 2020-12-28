@@ -17,6 +17,7 @@
  * e-mail - mail your message to Terry Cain <terry@terrys-home.co.uk>
  */
 #include <stdio.h>
+#include <string.h>
 
 #include "razerkraken_driver.h"
 #include "razercommon.h"
