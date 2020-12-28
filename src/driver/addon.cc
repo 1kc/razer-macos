@@ -71,61 +71,63 @@ void KbdSetModeWave(const Napi::CallbackInfo &info)
   {
     return;
   }
-  const char *wave_setting = info[0].ToString().Utf8Value().c_str();
-  if (std::strncmp(wave_setting,"left_slowest", 12) == 0)
+  std::string waveSettingString = info[0].ToString().Utf8Value();
+  const char* waveSetting = waveSettingString.c_str();
+
+  if (std::strncmp(waveSetting,"left_slowest", 12) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x90);
   }
-  else if (std::strncmp(wave_setting,"left_slower", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_slower", 12) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x80);
   }
-  else if (std::strncmp(wave_setting,"left_slow", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_slow", 12) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x70);
   }
-  else if (std::strncmp(wave_setting,"left_default", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_default", 12) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x55);
   }
-  else if (std::strncmp(wave_setting,"left_fast", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_fast", 12) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x40);
   }
-  else if (std::strncmp(wave_setting,"left_faster", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_faster", 12) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x25);
   }
-  else if (std::strncmp(wave_setting,"left_fastest", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_fastest", 12) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x10);
   }
 // right
-  else if (std::strncmp(wave_setting,"right_slowest", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_slowest", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x90);
   }
-  else if (std::strncmp(wave_setting,"right_slower", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_slower", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x80);
   }
-  else if (std::strncmp(wave_setting,"right_slow", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_slow", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x70);
   }
-  else if (std::strncmp(wave_setting,"right_default", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_default", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x55);
   }
-  else if (std::strncmp(wave_setting,"right_fast", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_fast", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x40);
   }
-  else if (std::strncmp(wave_setting,"right_faster", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_faster", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x25);
   }
-  else if (std::strncmp(wave_setting,"right_fastest", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_fastest", 13) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x10);
   }
@@ -340,23 +342,28 @@ void MouseSetLogoLEDEffect(const Napi::CallbackInfo &info)
   {
     return;
   }
-  const char *effect = info[0].ToString().Utf8Value().c_str();
-
+  std::string effectString = info[0].ToString().Utf8Value();
+  const char* effect = effectString.c_str();
+    
   if (std::strncmp(effect, "static", 6) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "0", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "0", 1);
   }
   else if (std::strncmp(effect, "blinking", 8) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "1", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "1", 1);
   }
   else if (std::strncmp(effect, "pulsate", 7) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "2", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "2", 1);
   }
   else if (std::strncmp(effect, "scroll", 6) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "4", 1);
+    razer_attr_write_scroll_led_effect(mouseDev, "4", 1);
   }
 }
 
