@@ -290,8 +290,9 @@ void MouseSetLogoLEDEffect(const Napi::CallbackInfo &info)
   {
     return;
   }
-  const char *effect = info[0].ToString().Utf8Value().c_str();
-
+  std::string effectString = info[0].ToString().Utf8Value();
+  const char* effect = effectString.c_str();
+    
   if (std::strncmp(effect, "static", 6) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "0", 1);
