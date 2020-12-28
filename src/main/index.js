@@ -5,6 +5,8 @@ import addon from '../driver';
 import path from 'path';
 import { format as formatUrl } from 'url';
 
+const APP_VERSION = require('../../package.json').version;
+
 const storage = require('electron-json-storage');
 
 const isDevelopment = process.env.NODE_ENV == 'development';
@@ -373,10 +375,10 @@ let keyboardMenu = [
   },
   {
     label: 'Wave',
-    submenu:[
+    submenu: [
       {
         label: 'Left',
-        submenu:[
+        submenu: [
           {
             label: 'Slowest Speed',
             click() {
@@ -427,11 +429,11 @@ let keyboardMenu = [
               addon.kbdSetModeWave('left_fastest');
             },
           },
-        ]
+        ],
       },
       {
         label: 'Right',
-        submenu:[
+        submenu: [
           {
             label: 'Slowest Speed',
             click() {
@@ -481,8 +483,8 @@ let keyboardMenu = [
               clearInterval(cycleColorsInterval);
               addon.kbdSetModeWave('right_fastest');
             },
-          }, 
-        ]
+          },
+        ],
       },
     ],
   },
@@ -1221,6 +1223,15 @@ let headphoneMenu = [
 
 let mainMenuBottom = [
   { type: 'separator' },
+  {
+    label: 'About',
+    submenu: [
+      {
+        label: `Version: ${APP_VERSION}`,
+        enabled: false,
+      }
+    ]
+  },
   {
     label: 'Quit',
     click() {
