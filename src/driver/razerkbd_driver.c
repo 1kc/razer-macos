@@ -651,11 +651,11 @@ ssize_t razer_attr_write_mode_reactive(IOUSBDeviceInterface **usb_dev, const cha
 
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-
+    printf("FUCK THIS MUST BE CALLED RAZER ATTR WRITE MODE REACTIVE ");
     if (count == 4)
     {
         unsigned char speed = (unsigned char)buf[0];
-
+        printf("speed: %c", speed);
         switch (product)
         {
         case USB_DEVICE_ID_RAZER_ORNATA:

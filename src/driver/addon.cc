@@ -73,61 +73,76 @@ void KbdSetModeWave(const Napi::CallbackInfo &info)
   }
   std::string waveSettingString = info[0].ToString().Utf8Value();
   const char* waveSetting = waveSettingString.c_str();
-
-  if (std::strncmp(waveSetting,"left_slowest", 12) == 0)
+  if (std::strncmp(waveSetting,"left_turtle", 20) == 0)
   {
-    razer_attr_write_mode_wave(kbdDev, "1", 0, 0xE9);
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0xFF);
   }
-  else if (std::strncmp(waveSetting,"left_slower", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_slowest", 20) == 0)
   {
-    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x80);
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0xD9);
   }
-  else if (std::strncmp(waveSetting,"left_slow", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_slower", 20) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0xB9);
+  }
+  else if (std::strncmp(waveSetting,"left_slow", 20) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "1", 0, 0x90);
+  }
+  else if (std::strncmp(waveSetting,"left_default", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x70);
   }
-  else if (std::strncmp(waveSetting,"left_default", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_fast", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x55);
   }
-  else if (std::strncmp(waveSetting,"left_fast", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_faster", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x40);
   }
-  else if (std::strncmp(waveSetting,"left_faster", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_fastest", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x25);
   }
-  else if (std::strncmp(waveSetting,"left_fastest", 12) == 0)
+  else if (std::strncmp(waveSetting,"left_lightning", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "1", 0, 0x10);
   }
 // right
-  else if (std::strncmp(waveSetting,"right_slowest", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_turtle", 20) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0xFF);
+  }
+  else if (std::strncmp(waveSetting,"right_slowest", 20) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0xD9);
+  }
+  else if (std::strncmp(waveSetting,"right_slower", 20) == 0)
+  {
+    razer_attr_write_mode_wave(kbdDev, "2", 0, 0xB9);
+  }
+  else if (std::strncmp(waveSetting,"right_slow", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x90);
   }
-  else if (std::strncmp(waveSetting,"right_slower", 13) == 0)
-  {
-    razer_attr_write_mode_wave(kbdDev, "2", 0, 0x80);
-  }
-  else if (std::strncmp(waveSetting,"right_slow", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_default", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x70);
   }
-  else if (std::strncmp(waveSetting,"right_default", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_fast", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x55);
   }
-  else if (std::strncmp(waveSetting,"right_fast", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_faster", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x40);
   }
-  else if (std::strncmp(waveSetting,"right_faster", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_fastest", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x25);
   }
-  else if (std::strncmp(waveSetting,"right_fastest", 13) == 0)
+  else if (std::strncmp(waveSetting,"right_lightning", 20) == 0)
   {
     razer_attr_write_mode_wave(kbdDev, "2", 0, 0x10);
   }
@@ -259,17 +274,38 @@ void KbdSetModeStarlight(const Napi::CallbackInfo &info)
   }
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
-
-  if (argsArr.ElementLength() != 4)
+  int argsArr_len = argsArr.ElementLength();
+  /*
+  if (argsArr_len != 7 || argsArr_len!= 4 || argsArr_len != 1)
   {
     Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
         .ThrowAsJavaScriptException();
     return;
   }
+ */ 
   // Cast unsigned char array into char array
   char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
-
-  razer_attr_write_mode_starlight(kbdDev, buf, 4);
+  if (argsArr_len == 7) //two colors
+  {
+    razer_attr_write_mode_starlight(kbdDev, buf, 7);
+  }
+  else if (argsArr_len == 4) //single color
+  {
+    razer_attr_write_mode_starlight(kbdDev, buf, 4);
+  }
+  else if (argsArr_len == 1) //random
+  {
+    razer_attr_write_mode_starlight(kbdDev, buf, 1);
+  }
+  else //exception 
+  {
+   Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
+        .ThrowAsJavaScriptException();
+    return;
+ 
+  }
+  
+  
 }
 
 /**

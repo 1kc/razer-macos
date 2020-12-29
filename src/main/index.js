@@ -380,6 +380,13 @@ let keyboardMenu = [
         label: 'Left',
         submenu: [
           {
+            label: 'Turtle Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_turtle');
+            },
+          },
+          {
             label: 'Slowest Speed',
             click() {
               clearInterval(cycleColorsInterval);
@@ -400,7 +407,6 @@ let keyboardMenu = [
               addon.kbdSetModeWave('left_slow');
             },
           },
-
           {
             label: 'Normal Speed',
             click() {
@@ -423,10 +429,17 @@ let keyboardMenu = [
             },
           },
           {
-            label: 'Lighting Speed',
+            label: 'Fastest Speed',
             click() {
               clearInterval(cycleColorsInterval);
               addon.kbdSetModeWave('left_fastest');
+            },
+          },
+          {
+            label: 'Lightning Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_lightning');
             },
           },
         ],
@@ -434,6 +447,13 @@ let keyboardMenu = [
       {
         label: 'Right',
         submenu: [
+          {
+            label: 'Turtle Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_turtle');
+            },
+          },
           {
             label: 'Slowest Speed',
             click() {
@@ -478,12 +498,20 @@ let keyboardMenu = [
             },
           },
           {
-            label: 'Lighting Speed',
+            label: 'Fastest Speed',
             click() {
               clearInterval(cycleColorsInterval);
               addon.kbdSetModeWave('right_fastest');
             },
           },
+          {
+            label: 'Lightning Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_lightning');
+            },
+          },
+
         ],
       },
     ],
@@ -516,7 +544,7 @@ let keyboardMenu = [
         label: 'Red',
         click() {
           clearInterval(cycleColorsInterval);
-          addon.kbdSetModeReactive(new Uint8Array([3, 0xff, 0, 0]));
+          addon.kbdSetModeReactive(new Uint8Array([3, 0xff, 0, 0])); 
         },
       },
       {
@@ -563,13 +591,35 @@ let keyboardMenu = [
           );
         },
       },
+      //add submenu speed for each category below
       {
         label: 'Red',
-        click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0]));
-        },
+        submenu:[
+          {
+          label:'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0]));
+              },
+          },
+          {
+          label:'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0, 0]));
+               },
+          },
+          {
+          label:'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0, 0]));
+              },
+          },
+
+      ], 
       },
+      
       {
         label: 'Green',
         click() {
@@ -582,6 +632,34 @@ let keyboardMenu = [
         click() {
           clearInterval(cycleColorsInterval);
           addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0, 0xff]));
+        },
+      },
+      {
+        label: 'Random',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.kbdSetModeStarlight(new Uint8Array([1]));
+        },
+      },
+      {
+        label: 'Red and Green',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0, 0, 0xff, 0])); //red + green
+        },
+      },
+      {
+        label: 'Red and Blue',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0, 0, 0, 0xff])); //red + blue
+        },
+      },
+      {
+        label: 'blue and green',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.kbdSetModeMtarlight(new Uint8Array([3, 0, 0, 0xff, 0, 0xff, 0])); //blue + green
         },
       },
     ],
