@@ -1,8 +1,50 @@
+:root {
+  --default-text-color: #ffffff;
+}
+
 body {
-  margin: 3px;
+  height: 100vh;
+  margin: 0;
+}
+
+#app {
+  height: 100vh;
+}
+
+.App {
+  height: 100%;
+  display: grid;
+  grid-template: auto 1fr auto / auto 1fr auto;
+}
+
+.App header {
+  grid-column: 1 / 4;
+  color: var(--default-text-color);
+}
+
+.App .left-side {
+  grid-column: 1 / 2;
+}
+
+.App main {
+  grid-column: 2 / 3;
+  display: grid;
+  place-items: center;
+}
+
+.App .right-side {
+  grid-column: 3 / 4;
+}
+
+.App footer {
+  grid-column: 1 / 4;
+  text-align: center;
+  color: var(--default-text-color);
 }
 
 .settings {
+  width: 60vw;
+  max-width: 800px;
   margin: 30px 10px 30px 10px;
   /* -webkit-app-region: no-drag; */
 }
@@ -12,10 +54,7 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-}
-
-#titlebar {
-  color: #fff;
+  width: 100%;
 }
 
 #titlebar #drag-region {
@@ -64,6 +103,16 @@ body {
 .ui-center-text {
   font-family: 'SF Display Pro', sans-serif;
   font-size: 12px;
-  color: white;
+  color: var(--default-text-color);
   text-align: center;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }

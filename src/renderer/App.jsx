@@ -3,6 +3,7 @@ import CustomColor from './components/CustomColor';
 import { ipcRenderer } from 'electron';
 import MouseSensitivity from './components/MouseSensitivity';
 import Brightness from './components/Brightness/Brightness';
+import FooterInfo from './components/Info/FooterInfo';
 
 /**
  * Root React component
@@ -10,7 +11,7 @@ import Brightness from './components/Brightness/Brightness';
 export default function App() {
   const INITIAL_COLOR = {};
 
-  const [deviceSelected, setDeviceSelected] = useState('Keyboard');
+  const [deviceSelected, setDeviceSelected] = useState('Mouse');
   const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
   const [currentSensitivity, setCurrentSensitivity] = useState(3200);
   // 0-100. In debug mode, this will be set to 50 when the UI is loaded
@@ -41,7 +42,7 @@ export default function App() {
   };
 
   return (
-    <div>
+    <span className="App no-select">
       <header id="titlebar">
         <div id="drag-region">
           <div id="window-title">
@@ -49,23 +50,25 @@ export default function App() {
           </div>
         </div>
       </header>
-
-      <CustomColor
-        deviceSelected={deviceSelected}
-        currentColor={currentColor}
-        setCurrentColor={setCurrentColor}
-      />
-      {deviceSelected == 'Mouse' && (
-        <MouseSensitivity
-          currentSensitivity={currentSensitivity}
-        ></MouseSensitivity>
-      )}
-      {deviceSelected === 'Keyboard' && (
-        <Brightness
-          brightness={currentBrightness}
-          onBrightnessChange={handleBrightnessChange}
+      <main>
+        <CustomColor
+          deviceSelected={deviceSelected}
+          currentColor={currentColor}
+          setCurrentColor={setCurrentColor}
         />
-      )}
-    </div>
+        {deviceSelected === 'Mouse' && (
+          <MouseSensitivity currentSensitivity={currentSensitivity} />
+        )}
+        {deviceSelected === 'Keyboard' && (
+          <Brightness
+            brightness={currentBrightness}
+            onBrightnessChange={handleBrightnessChange}
+          />
+        )}
+      </main>
+      <footer>
+        <FooterInfo />
+      </footer>
+    </span>
   );
 }
