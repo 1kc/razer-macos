@@ -11,7 +11,7 @@ import FooterInfo from './components/Info/FooterInfo';
 export default function App() {
   const INITIAL_COLOR = {};
 
-  const [deviceSelected, setDeviceSelected] = useState('Mouse');
+  const [deviceSelected, setDeviceSelected] = useState('Keyboard');
   const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
   const [currentSensitivity, setCurrentSensitivity] = useState(3200);
   // 0-100. In debug mode, this will be set to 50 when the UI is loaded
