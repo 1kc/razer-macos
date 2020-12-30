@@ -275,14 +275,6 @@ void KbdSetModeStarlight(const Napi::CallbackInfo &info)
 
   Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
   int argsArr_len = argsArr.ElementLength();
-  /*
-  if (argsArr_len != 7 || argsArr_len!= 4 || argsArr_len != 1)
-  {
-    Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
-        .ThrowAsJavaScriptException();
-    return;
-  }
- */ 
   // Cast unsigned char array into char array
   char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
   if (argsArr_len == 7) //two colors
@@ -299,13 +291,12 @@ void KbdSetModeStarlight(const Napi::CallbackInfo &info)
   }
   else //exception 
   {
-   Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
+    Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
         .ThrowAsJavaScriptException();
     return;
- 
-  }
   
   
+ }
 }
 
 /**
