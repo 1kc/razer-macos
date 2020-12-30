@@ -295,7 +295,6 @@ void KbdSetModeStarlight(const Napi::CallbackInfo &info)
         .ThrowAsJavaScriptException();
     return;
   
-  
  }
 }
 

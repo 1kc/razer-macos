@@ -16,7 +16,6 @@ export default function CustomColor2({
       device: deviceSelected,
       color: currentColor2,
     };
-    console.log('sending payload');
     ipcRenderer.send('request-set-custom-color2', payload);
   };
 

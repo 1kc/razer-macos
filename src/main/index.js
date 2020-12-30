@@ -1729,8 +1729,6 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
 });
 ipcMain.on('request-set-custom-color2', (event, arg) => {
   const { color } = arg;
-        console.log("ipcMain.on request-set-custom-color2");
-        console.log(color);
         customKdbColor2 = color;
         storage.set('customKdbColor2', customKdbColor2);
 });
