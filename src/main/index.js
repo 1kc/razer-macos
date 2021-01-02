@@ -1043,9 +1043,9 @@ let egpuMenu = [
           clearInterval(cycleColorsInterval);
           addon.egpuSetModeStatic(
             new Uint8Array([
-              customegpuColor.rgb.r,
-              customegpuColor.rgb.g,
-              customegpuColor.rgb.b,
+              customEgpuColor.rgb.r,
+              customEgpuColor.rgb.g,
+              customEgpuColor.rgb.b,
             ])
           );
         },
@@ -1121,8 +1121,8 @@ let egpuMenu = [
     label: 'Set custom color',
     click() {
       window.webContents.send('device-selected', {
-        device: 'Mouse Mat',
-        currentColor: customegpuColor,
+        device: 'eGPU',
+        currentColor: customEgpuColor,
       });
       window.setSize(500, 300);
       window.show();
@@ -1229,8 +1229,8 @@ let mainMenuBottom = [
       {
         label: `Version: ${APP_VERSION}`,
         enabled: false,
-      }
-    ]
+      },
+    ],
   },
   {
     label: 'Quit',
@@ -1333,8 +1333,8 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
         storage.set('customMouseMatColor', customMouseMatColor);
         break;
       case 'eGPU':
-        customMouseMatColor = color;
-        storage.set('customMouseMatColor', customMouseMatColor);
+        customEgpuColor = color;
+        storage.set('customEgpuColor', customEgpuColor);
         break;
       case 'Headphone':
         customHeadphoneColor = color;
