@@ -3,7 +3,6 @@ import CustomColor from './components/CustomColor';
 import { ipcRenderer } from 'electron';
 import MouseSensitivity from './components/MouseSensitivity';
 import Brightness from './components/Brightness/Brightness';
-import FooterInfo from './components/Info/FooterInfo';
 
 /**
  * Root React component
@@ -42,7 +41,7 @@ export default function App() {
   };
 
   return (
-    <span className="App no-select">
+    <span className="no-select">
       <header id="titlebar">
         <div id="drag-region">
           <div id="window-title">
@@ -50,7 +49,6 @@ export default function App() {
           </div>
         </div>
       </header>
-      <main>
         <CustomColor
           deviceSelected={deviceSelected}
           currentColor={currentColor}
@@ -65,10 +63,6 @@ export default function App() {
             onBrightnessChange={handleBrightnessChange}
           />
         )}
-      </main>
-      <footer>
-        <FooterInfo />
-      </footer>
     </span>
   );
 }

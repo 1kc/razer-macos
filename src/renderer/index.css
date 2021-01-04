@@ -1,50 +1,8 @@
-:root {
-  --default-text-color: #ffffff;
-}
-
 body {
-  height: 100vh;
-  margin: 0;
-}
-
-#app {
-  height: 100vh;
-}
-
-.App {
-  height: 100%;
-  display: grid;
-  grid-template: auto 1fr auto / auto 1fr auto;
-}
-
-.App header {
-  grid-column: 1 / 4;
-  color: var(--default-text-color);
-}
-
-.App .left-side {
-  grid-column: 1 / 2;
-}
-
-.App main {
-  grid-column: 2 / 3;
-  display: grid;
-  place-items: center;
-}
-
-.App .right-side {
-  grid-column: 3 / 4;
-}
-
-.App footer {
-  grid-column: 1 / 4;
-  text-align: center;
-  color: var(--default-text-color);
+  margin: 3px;
 }
 
 .settings {
-  width: 60vw;
-  max-width: 800px;
   margin: 30px 10px 30px 10px;
   /* -webkit-app-region: no-drag; */
 }
@@ -54,7 +12,10 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  width: 100%;
+}
+
+#titlebar {
+  color: #fff;
 }
 
 #titlebar #drag-region {
@@ -103,7 +64,7 @@ body {
 .ui-center-text {
   font-family: 'SF Display Pro', sans-serif;
   font-size: 12px;
-  color: var(--default-text-color);
+  color: white;
   text-align: center;
 }
 
