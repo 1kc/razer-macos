@@ -299,7 +299,7 @@ struct razer_report razer_chroma_standard_matrix_effect_starlight_single(unsigne
 {
     struct razer_report report = get_razer_report(0x03, 0x0A, 0x01);
 
-    speed = clamp_u8(speed, 0x01, 0x03); // For now only seen
+    speed = clamp_u8(0x01, 0x01, 0x03); // For now only seen
 
     report.arguments[0] = 0x19; // Effect ID
     report.arguments[1] = 0x01; // Type one color
@@ -635,12 +635,12 @@ struct razer_report razer_chroma_extended_matrix_effect_reactive(unsigned char v
     struct razer_report report = razer_chroma_extended_matrix_effect_base(0x09, variable_storage, led_id, 0x05);
 
     speed = clamp_u8(speed, 0x01, 0x04);
-
+    
     report.arguments[4] = speed;
     report.arguments[5] = 0x01;
     report.arguments[6] = rgb->r;
     report.arguments[7] = rgb->g;
-    report.arguments[8] = rgb->b;
+    report.arguments[8] = rgb->b; 
 
     return report;
 }

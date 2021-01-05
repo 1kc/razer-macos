@@ -581,7 +581,6 @@ ssize_t razer_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *b
 
     return count;
 }
-
 /**
  * Write device file "mode_spectrum"
  *
@@ -651,11 +650,9 @@ ssize_t razer_attr_write_mode_reactive(IOUSBDeviceInterface **usb_dev, const cha
 
     UInt16 product = -1;
     (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-
     if (count == 4)
     {
         unsigned char speed = (unsigned char)buf[0];
-
         switch (product)
         {
         case USB_DEVICE_ID_RAZER_ORNATA:

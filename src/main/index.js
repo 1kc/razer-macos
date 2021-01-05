@@ -16,6 +16,7 @@ let window = null;
 let forceQuit = false;
 
 let customKdbColor = null;
+let customKdbColor2 = null;
 let customMouseColor = null;
 let customMouseDockColor = null;
 let customMouseMatColor = null;
@@ -34,7 +35,6 @@ function isEmpty(obj) {
 function loadItemsFromStorage() {
   storage.get('customKdbColor', function (error, data) {
     if (error) throw error;
-
     customKdbColor = data;
     if (isEmpty(customKdbColor)) {
       customKdbColor = {
@@ -47,7 +47,20 @@ function loadItemsFromStorage() {
       };
     }
   });
-
+  storage.get('customKdbColor2', function (error, data) {
+    if (error) throw error;
+    customKdbColor2 = data;
+    if (isEmpty(customKdbColor2)) {
+      customKdbColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0,
+        },
+      };
+    }
+  });
   storage.get('customMouseColor', function (error, data) {
     if (error) throw error;
 
@@ -380,6 +393,13 @@ let keyboardMenu = [
         label: 'Left',
         submenu: [
           {
+            label: 'Turtle Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_turtle');
+            },
+          },
+          {
             label: 'Slowest Speed',
             click() {
               clearInterval(cycleColorsInterval);
@@ -400,7 +420,6 @@ let keyboardMenu = [
               addon.kbdSetModeWave('left_slow');
             },
           },
-
           {
             label: 'Normal Speed',
             click() {
@@ -423,10 +442,17 @@ let keyboardMenu = [
             },
           },
           {
-            label: 'Lighting Speed',
+            label: 'Fastest Speed',
             click() {
               clearInterval(cycleColorsInterval);
               addon.kbdSetModeWave('left_fastest');
+            },
+          },
+          {
+            label: 'Lightning Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('left_lightning');
             },
           },
         ],
@@ -434,6 +460,13 @@ let keyboardMenu = [
       {
         label: 'Right',
         submenu: [
+          {
+            label: 'Turtle Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_turtle');
+            },
+          },
           {
             label: 'Slowest Speed',
             click() {
@@ -478,12 +511,20 @@ let keyboardMenu = [
             },
           },
           {
-            label: 'Lighting Speed',
+            label: 'Fastest Speed',
             click() {
               clearInterval(cycleColorsInterval);
               addon.kbdSetModeWave('right_fastest');
             },
           },
+          {
+            label: 'Lightning Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeWave('right_lightning');
+            },
+          },
+
         ],
       },
     ],
@@ -516,7 +557,7 @@ let keyboardMenu = [
         label: 'Red',
         click() {
           clearInterval(cycleColorsInterval);
-          addon.kbdSetModeReactive(new Uint8Array([3, 0xff, 0, 0]));
+          addon.kbdSetModeReactive(new Uint8Array([3, 0xff, 0, 0])); 
         },
       },
       {
@@ -551,38 +592,379 @@ let keyboardMenu = [
     submenu: [
       {
         label: 'Custom color',
-        click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeStarlight(
-            new Uint8Array([
-              3,
-              customKdbColor.rgb.r,
-              customKdbColor.rgb.g,
-              customKdbColor.rgb.b,
-            ])
-          );
-        },
+        submenu: 
+        [
+          {
+          label: 'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  3,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                ])
+              );
+            },
+          },
+          {
+          label: 'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  2,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                ])
+              );
+            },
+          },
+          {
+          label: 'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  1,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                ])
+              );
+            },
+          },
+        ]
+      },
+      {
+        label: 'Custom dual color',
+        submenu: 
+        [
+          {
+          label: 'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  3,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                  customKdbColor2.rgb.r,
+                  customKdbColor2.rgb.g,
+                  customKdbColor2.rgb.b,
+
+                ])
+              );
+            },
+          },
+          {
+          label: 'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  2,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                  customKdbColor2.rgb.r,
+                  customKdbColor2.rgb.g,
+                  customKdbColor2.rgb.b,
+                ])
+              );
+            },
+          },
+          {
+          label: 'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  1,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                  customKdbColor2.rgb.r,
+                  customKdbColor2.rgb.g,
+                  customKdbColor2.rgb.b,
+                ])
+              );
+            },
+          },
+        ]
+      }, 
+      {
+        label: 'Random',
+        submenu:
+        [
+          {
+            label: 'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3]));
+            },
+          },
+          {
+            label: 'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2]));
+            },
+          },
+          {
+            label: 'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1]));
+            },
+          }
+        ],
       },
       {
         label: 'Red',
-        click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0]));
-        },
+        submenu:[
+          {
+          label:'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0]));
+              },
+          },
+          {
+          label:'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0, 0]));
+               },
+          },
+          {
+          label:'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0, 0]));
+              },
+          },
+
+      ], 
       },
       {
         label: 'Green',
-        click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0xff, 0]));
-        },
+        submenu:
+        [
+          {
+          label:'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0xff, 0]));
+              },
+          },
+          {
+          label:'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0xff, 0]));
+               },
+          },
+          {
+          label:'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0xff, 0]));
+              },
+          },
+        ], 
       },
       {
         label: 'Blue',
-        click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0, 0xff]));
-        },
+        submenu:
+        [
+          {
+          label:'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0, 0xff]));
+              },
+          },
+          {
+          label:'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0, 0xff]));
+               },
+          },
+          {
+          label:'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0, 0xff]));
+              },
+          },
+        ], 
+      },
+      {
+        label: 'Purple',
+        submenu:
+        [
+          {
+          label:'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3, 0x80, 0, 0x80]));
+              },
+          },
+          {
+          label:'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0x80, 0, 0x80]));
+               },
+          },
+          {
+          label:'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1, 0x80, 0, 0x80]));
+              },
+          },
+        ], 
+      },
+      {
+        label: 'Aqua',
+        submenu:
+        [
+          {
+          label:'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0xff, 0xff]));
+              },
+          },
+          {
+          label:'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0xff, 0xff]));
+               },
+          },
+          {
+          label:'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0xff, 0xff]));
+              },
+          },
+        ], 
+      },
+      {
+        label: 'Orange',
+        submenu:
+        [
+          {
+          label:'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0x45, 0]));
+              },
+          },
+          {
+          label:'Medium Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0x45, 0])); },
+                        },
+          {
+          label:'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0x45, 0]));
+              },
+          },
+        ], 
+      },
+
+      {
+        label: 'Red and Green',
+        submenu: 
+        [
+          {
+          label: 'Slow Speed',
+          click(){
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0, 0, 0xff, 0])); //red + green
+            },
+          },
+          {
+          label: 'Medium Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0, 0, 0, 0xff, 0])); //red + green
+            },
+          },
+          {
+          label: 'Fast Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0, 0, 0, 0xff, 0])); //red + green
+            },
+          },
+        ],
+      },
+      {
+        label: 'Red and Blue',
+        submenu:
+        [
+          {
+          label: 'Slow Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0, 0, 0, 0xff])); //red + blue
+            },
+          },
+          {
+          label: 'Medium Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0, 0, 0, 0, 0xff])); //red + blue
+            },
+          },
+          {
+          label: 'Fast Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0, 0, 0, 0, 0xff])); //red + blue
+            },
+          },
+        ],
+      },
+      {
+        label: 'Blue and Green',
+        submenu:
+        [
+          {
+          label: 'Slow Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0, 0xff, 0, 0xff, 0])); //blue + green
+            },
+          },
+          {
+          label: 'Medium Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0, 0xff, 0, 0xff, 0])); //blue + green
+            },
+          },
+          {
+          label: 'Fast Speed',
+          click() {
+            clearInterval(cycleColorsInterval);
+            addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0, 0xff, 0, 0xff, 0])); //blue + green
+            },
+          },
+        ],
       },
     ],
   },
@@ -619,10 +1001,11 @@ let keyboardMenu = [
       window.webContents.send('device-selected', {
         device: 'Keyboard',
         currentColor: customKdbColor,
+        currentColor2: customKdbColor2,
         // getBrightness could give -1 when not keyboard not detected
         currentBrightness: currentBrightness < 0 ? 0 : currentBrightness,
       });
-      window.setSize(500, 420);
+      window.setSize(700, 780);
       window.show();
     },
   },
@@ -1344,6 +1727,14 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
     }
   }
 });
+ipcMain.on('request-set-custom-color2', (event, arg) => {
+  const { color } = arg;
+        customKdbColor2 = color;
+        storage.set('customKdbColor2', customKdbColor2);
+});
+
+
+
 
 function createWindow() {
   window = new BrowserWindow({

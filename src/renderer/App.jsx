@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CustomColor from './components/CustomColor';
+import CustomColor2 from './components/CustomColor2';
 import { ipcRenderer } from 'electron';
 import MouseSensitivity from './components/MouseSensitivity';
 import Brightness from './components/Brightness/Brightness';
@@ -9,9 +10,10 @@ import Brightness from './components/Brightness/Brightness';
  */
 export default function App() {
   const INITIAL_COLOR = {};
-
+  const INITIAL_COLOR2 = {};
   const [deviceSelected, setDeviceSelected] = useState('Keyboard');
   const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
+  const [currentColor2, setCurrentColor2] = useState(INITIAL_COLOR2);
   const [currentSensitivity, setCurrentSensitivity] = useState(3200);
   // 0-100. In debug mode, this will be set to 50 when the UI is loaded
   const [currentBrightness, setCurrentBrightness] = useState(50);
@@ -26,6 +28,7 @@ export default function App() {
       }
       setDeviceSelected(message.device);
       setCurrentColor(message.currentColor);
+      setCurrentColor2(message.currentColor2);
     });
   }, []);
 
@@ -54,6 +57,11 @@ export default function App() {
         deviceSelected={deviceSelected}
         currentColor={currentColor}
         setCurrentColor={setCurrentColor}
+      />
+      <CustomColor2
+        deviceSelected={deviceSelected}
+        currentColor2={currentColor2}
+        setCurrentColor2={setCurrentColor2}
       />
       {deviceSelected == 'Mouse' && (
         <MouseSensitivity
