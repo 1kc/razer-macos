@@ -46,7 +46,7 @@ export default function App() {
   };
 
   return (
-    <div>
+    <span className="no-select">
       <header id="titlebar">
         <div id="drag-region">
           <div id="window-title">
@@ -57,7 +57,7 @@ export default function App() {
       <Tabs>
         <TabList>
           <Tab>Primary custom color</Tab>
-          {deviceSelected === "Keyboard" && (<Tab>Secondary custom color</Tab>)}
+          <Tab disabled={deviceSelected !== "Keyboard"}>Secondary custom color</Tab>
         </TabList>
 
         <TabPanel>
@@ -75,8 +75,6 @@ export default function App() {
           />
         </TabPanel>
       </Tabs>
-
-
       {deviceSelected === 'Mouse' && (
         <MouseSensitivity
           currentSensitivity={currentSensitivity}
@@ -86,8 +84,7 @@ export default function App() {
         <Brightness
           brightness={currentBrightness}
           onBrightnessChange={handleBrightnessChange}
-        />
-      )}
-    </div>
+        />)}
+    </span>
   );
 }
