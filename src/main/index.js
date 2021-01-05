@@ -1005,7 +1005,7 @@ let keyboardMenu = [
         // getBrightness could give -1 when not keyboard not detected
         currentBrightness: currentBrightness < 0 ? 0 : currentBrightness,
       });
-      // window.setSize(700, 780);
+      window.setSize(500, 450);
       window.show();
     },
   },
@@ -1196,7 +1196,7 @@ let mouseMenu = [
         currentColor: customMouseColor,
         currentSensitivity: addon.mouseGetDpi(),
       });
-      window.setSize(520, 460);
+      window.setSize(500, 480);
       window.show();
     },
   },
@@ -1740,7 +1740,7 @@ function createWindow() {
   window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
     titleBarStyle: 'hidden',
-    height: 430, // This is adjusted later with window.setSize
+    height: 450, // This is adjusted later with window.setSize
     resizable: false,
     width: 500,
     y: 100,
