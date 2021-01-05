@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import './react-tabs.css';
 import CustomColor from './components/CustomColor';
 import CustomColor2 from './components/CustomColor2';
 import { ipcRenderer } from 'electron';
@@ -52,18 +54,30 @@ export default function App() {
           </div>
         </div>
       </header>
+      <Tabs>
+        <TabList>
+          <Tab>Primary custom color</Tab>
+          {deviceSelected === "Keyboard" && (<Tab>Secondary custom color</Tab>)}
+        </TabList>
 
-      <CustomColor
-        deviceSelected={deviceSelected}
-        currentColor={currentColor}
-        setCurrentColor={setCurrentColor}
-      />
-      <CustomColor2
-        deviceSelected={deviceSelected}
-        currentColor2={currentColor2}
-        setCurrentColor2={setCurrentColor2}
-      />
-      {deviceSelected == 'Mouse' && (
+        <TabPanel>
+          <CustomColor
+            deviceSelected={deviceSelected}
+            currentColor={currentColor}
+            setCurrentColor={setCurrentColor}
+          />
+        </TabPanel>
+        <TabPanel>
+          <CustomColor2
+            deviceSelected={deviceSelected}
+            currentColor2={currentColor2}
+            setCurrentColor2={setCurrentColor2}
+          />
+        </TabPanel>
+      </Tabs>
+
+
+      {deviceSelected === 'Mouse' && (
         <MouseSensitivity
           currentSensitivity={currentSensitivity}
         ></MouseSensitivity>

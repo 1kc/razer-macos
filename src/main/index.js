@@ -995,7 +995,7 @@ let keyboardMenu = [
     ],
   },
   {
-    label: 'Custom settings',
+    label: 'Keyboard custom settings',
     click() {
       const currentBrightness = addon.KbdGetBrightness();
       window.webContents.send('device-selected', {
@@ -1005,7 +1005,7 @@ let keyboardMenu = [
         // getBrightness could give -1 when not keyboard not detected
         currentBrightness: currentBrightness < 0 ? 0 : currentBrightness,
       });
-      window.setSize(700, 780);
+      // window.setSize(700, 780);
       window.show();
     },
   },
@@ -1189,14 +1189,14 @@ let mouseMenu = [
     ],
   },
   {
-    label: 'Custom settings',
+    label: 'Mouse custom settings',
     click() {
       window.webContents.send('device-selected', {
         device: 'Mouse',
         currentColor: customMouseColor,
         currentSensitivity: addon.mouseGetDpi(),
       });
-      window.setSize(500, 460);
+      window.setSize(520, 460);
       window.show();
     },
   },
@@ -1740,13 +1740,13 @@ function createWindow() {
   window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
     titleBarStyle: 'hidden',
-    height: 420, // This is adjusted later with window.setSize
+    height: 430, // This is adjusted later with window.setSize
     resizable: false,
     width: 500,
     y: 100,
     // Set the default background color of the window to match the CSS
     // background color of the page, this prevents any white flickering
-    backgroundColor: '#242424',
+    backgroundColor: '#202124',
     // Don't show the window until it's ready, this prevents any white flickering
     show: false,
   });
@@ -1810,11 +1810,8 @@ function createTray() {
     }
   }
 
-  if (nativeTheme.shouldUseDarkColors) {
-    tray = new Tray(path.join(__static, '/assets/icon-darkmode.png'));
-  } else {
-    tray = new Tray(path.join(__static, '/assets/icon-lightmode.png'));
-  }
+  tray = new Tray(path.join(__static, '/assets/icon-darkmode.png'));
+
 
   refreshTray();
 }

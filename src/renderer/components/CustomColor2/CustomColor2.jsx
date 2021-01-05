@@ -21,8 +21,7 @@ export default function CustomColor2({
 
   return (
     <div className="settings">
-      <p className="ui-center-text">Secondary custom color selection</p>
-      <p className="ui-center-text">(Starlight Dual Mode only)</p>
+      <p className="ui-center-text">Secondary custom color selection (Starlight Dual Mode only)</p>
       <div className="control">
         <HuePicker color={currentColor2} onChange={handleChange2} />
       </div>
@@ -30,7 +29,7 @@ export default function CustomColor2({
         <MaterialPicker color={currentColor2} onChange={handleChange2} />
       </div>
       <div className="control">
-        <button onClick={handleClick2}>Save secondary custom color</button>
+        <button onClick={handleClick2}>Save custom color</button>
       </div>
     </div>
   );
