@@ -51,7 +51,7 @@ function loadItemsFromStorage() {
     if (error) throw error;
     customKdbColor2 = data;
     if (isEmpty(customKdbColor2)) {
-      customKdbColor = {
+      customKdbColor2 = {
         hex: '#ffff00',
         rgb: {
           r: 255,
