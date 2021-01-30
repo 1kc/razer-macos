@@ -28,7 +28,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
-    "electron": "^8.5.2",
+    "electron": "^9.4.0",
     "electron-builder": "^21.0.11",
     "electron-webpack": "^2.7.4",
     "mini-css-extract-plugin": "^0.9.0",
