@@ -28,7 +28,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
-    "electron": "^9.4.0",
+    "electron": "^11.2.2",
     "electron-builder": "^21.0.11",
     "electron-webpack": "^2.7.4",
     "mini-css-extract-plugin": "^0.9.0",
@@ -68,7 +68,17 @@
     "mac": {
       "category": "public.app-category.developer-tools",
       "icon": "icon.icns",
-      "type": "distribution"
+      "type": "distribution",
+      "hardenedRuntime": "true",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ]
     }
   }
 }

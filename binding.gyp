@@ -14,8 +14,11 @@
           '-framework CoreFoundation'
       ],
       'xcode_settings': {
+          'VALID_ARCHS': 'arm64e x86_64',
+          'ONLY_ACTIVE_ARCH': 'NO',
+          'OTHER_CODE_SIGN_FLAGS': 'timestamp --options=runtime',
           'CLANG_CXX_LIBRARY': 'libc++',
-          'MACOSX_DEPLOYMENT_TARGET': '10.9',
+          'MACOSX_DEPLOYMENT_TARGET': '10.15',
           'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
           'OTHER_LDFLAGS': [
               '-framework IOKit',
