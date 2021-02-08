@@ -91,7 +91,7 @@ A: Use the "Refresh Device List" option.
 
 ## Developer usage
 
-Ensure xcode command line tools are installed,
+Ensure xcode command line tools are installed and if building for arm64, a valid Developer ID Application certificate as only notarized apps will run by default. In order to run unsigned and/or unnotarized apps on Apple Silicon, you will need to boot into 1TR (One True Recovery) and run `bputil -n` to downgrade security to permissive.
 
 Install node package dependencies:
 
@@ -105,9 +105,15 @@ During development, every time the driver code has been updated, a rebuild is re
 
     yarn rebuild
 
-For building a distribution ready app and dmg:
+For building a signed distribution ready app and dmg:
 
-    yarn dist
+    Edit release.sh to include your Apple Developer ID username and app specific password.
+
+    `./release.sh`
+
+    The script will display instructions to check notarization status as well as instructions to staple the notarization ticket once approved by Apple.
+
+    Once approved by Apple, run `./dmg.sh` to generate a dmg.
 
 ## Implementation
 
