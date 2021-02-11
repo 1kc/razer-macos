@@ -49,7 +49,6 @@ static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report 
     case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
-    case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
         return razer_get_usb_response(usb_dev, 0x00, request_report, 0x00, response_report, RAZER_VIPER_MOUSE_RECEIVER_WAIT_MIN_US);
         break;
 
@@ -887,7 +886,6 @@ ssize_t razer_attr_write_scroll_mode_static(IOUSBDeviceInterface **usb_dev, cons
             case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
             case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
-            case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, SCROLL_WHEEL_LED, (struct razer_rgb*)&buf[0]);
                 break;
 
@@ -1052,7 +1050,6 @@ ssize_t razer_attr_write_scroll_mode_static_no_store(IOUSBDeviceInterface **usb_
             case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
             case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
-            case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
                 report = razer_chroma_extended_matrix_effect_static(NOSTORE, SCROLL_WHEEL_LED, (struct razer_rgb*)&buf[0]);
                 break;
 
@@ -1198,7 +1195,6 @@ ssize_t razer_attr_write_scroll_mode_spectrum(IOUSBDeviceInterface **usb_dev, co
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
-        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, SCROLL_WHEEL_LED);
             break;
 
@@ -1382,7 +1378,6 @@ ssize_t razer_attr_write_scroll_mode_breath(IOUSBDeviceInterface **usb_dev, cons
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
-        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             switch(count) {
                 case 3: // Single colour mode
                     report = razer_chroma_extended_matrix_effect_breathing_single(VARSTORE, SCROLL_WHEEL_LED, (struct razer_rgb*)&buf[0]);
@@ -1538,7 +1533,6 @@ ssize_t razer_attr_write_scroll_mode_none(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
-        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, SCROLL_WHEEL_LED);
             break;
 
@@ -1722,7 +1716,6 @@ ssize_t razer_attr_write_scroll_mode_reactive(IOUSBDeviceInterface **usb_dev, co
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
-        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_reactive(VARSTORE, SCROLL_WHEEL_LED, speed, (struct razer_rgb*)&buf[1]);
             break;
 
@@ -1835,7 +1828,6 @@ ssize_t razer_attr_read_get_battery(IOUSBDeviceInterface **usb_dev, char *buf)
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
-        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report.transaction_id.id = 0x3f;
             break;
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
@@ -1868,7 +1860,6 @@ ssize_t razer_attr_read_is_charging(IOUSBDeviceInterface **usb_dev, char *buf)
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
-        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report.transaction_id.id = 0x3f;
             break;
         case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
