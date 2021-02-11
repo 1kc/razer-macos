@@ -189,6 +189,20 @@ bool is_headphone(IOUSBDeviceInterface **usb_dev)
     return false;
 }
 
+bool is_accessory(IOUSBDeviceInterface **usb_dev)
+{
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch (product)
+    {
+        case USB_DEVICE_ID_RAZER_BASE_STATION_V2_CHROMA:
+            return true;
+    }
+
+    return false;
+}
+
 IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 {
 	CFMutableDictionaryRef matchingDict;
@@ -294,6 +308,13 @@ IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 				  continue;
 			    }
 			  break;
+            case TYPE_ACCESSORY:
+                if (!is_accessory(dev))
+                {
+                    (*dev)->Release(dev);
+                    continue;
+                }
+                break;
         
 		    default:
 			    // Unsupported Razer peripheral type
