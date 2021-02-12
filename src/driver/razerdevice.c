@@ -55,6 +55,7 @@ bool is_keyboard(IOUSBDeviceInterface **usb_dev)
 	case USB_DEVICE_ID_RAZER_ANANSI:
 	case USB_DEVICE_ID_RAZER_CYNOSA_V2:
 	case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
+	case USB_DEVICE_ID_RAZER_BLACKWIDOW_V3:
 		return true;
 	}
 
