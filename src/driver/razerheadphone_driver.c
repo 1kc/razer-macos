@@ -70,6 +70,9 @@ ssize_t razer_headphone_attr_read_device_type(IOUSBDeviceInterface **usb_dev, ch
         case USB_DEVICE_ID_RAZER_KRAKEN_V2:
             device_type = "Razer Kraken V2\n";
             break;
+        case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
+            device_type = "Razer Kraken Ultimate\n";
+            break;
         default:
             device_type = "Unknown Device\n";
             break;
@@ -92,6 +95,7 @@ ssize_t razer_headphone_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, con
 
     switch(product) {
         case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
+        case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, ZERO_LED);
             report.transaction_id.id = 0x1F;
             break;
@@ -119,6 +123,7 @@ ssize_t razer_headphone_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, c
 
     switch(product) {
         case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
+        case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
             switch(count) {
                 case 3: // Single colour mode
                     report = razer_chroma_extended_matrix_effect_breathing_single(VARSTORE, ZERO_LED, (struct razer_rgb *)&buf[0]);
@@ -181,6 +186,7 @@ ssize_t razer_headphone_attr_write_mode_static(IOUSBDeviceInterface **usb_dev, c
     if(count == 3) {
         switch(product) {
             case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
+            case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, ZERO_LED, (struct razer_rgb *)&buf[0]);
                 report.transaction_id.id = 0x1F;
                 break;
@@ -216,6 +222,7 @@ ssize_t razer_headphone_attr_write_mode_static_no_store(IOUSBDeviceInterface **u
     if(count == 3) {
         switch(product) {
             case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
+            case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, ZERO_LED, (struct razer_rgb *)&buf[0]);
                 report.transaction_id.id = 0x1F;
                 break;
