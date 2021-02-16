@@ -55,6 +55,7 @@ bool is_keyboard(IOUSBDeviceInterface **usb_dev)
 	case USB_DEVICE_ID_RAZER_ANANSI:
 	case USB_DEVICE_ID_RAZER_CYNOSA_V2:
 	case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
+	case USB_DEVICE_ID_RAZER_BLACKWIDOW_V3:
 		return true;
 	}
 
@@ -183,6 +184,7 @@ bool is_headphone(IOUSBDeviceInterface **usb_dev)
     {
         case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
         case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+        case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
             return true;
     }
 
