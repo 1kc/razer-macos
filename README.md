@@ -29,10 +29,12 @@ Please see FAQ section below if color changes are not working, otherwise open a 
 - 🖱️ Mouse
 - 📜 Mouse mat
 - 🌈 e-GPU
-- 🎧 Headphones
+- 🎧 Headphones and stand
 - 💻 Blade laptop
+- 🔊 Speakers
+- 🍺 Mug
 
-For a complete list of supported keyboards, please see [openrazer](https://openrazer.github.io).
+For a complete list of supported devices, please see [openrazer](https://openrazer.github.io).
 
 Confirmed working for:
 
@@ -71,6 +73,10 @@ Laptops:
 Headphones:
 
 - Razer Kraken V2
+
+Accessories:
+
+- Razer Base Station V2
 
 Please feel free to open pull requests for new devices you have tested.
 
