@@ -46,6 +46,7 @@ static int razer_get_report(IOUSBDeviceInterface **usb_dev, struct razer_report 
 
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+    case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         return razer_get_usb_response(usb_dev, 0x00, request_report, 0x00, response_report, RAZER_VIPER_MOUSE_RECEIVER_WAIT_MIN_US);
@@ -272,6 +273,10 @@ ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *
         device_type = "Razer Viper\n";
         break;
 
+    case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
+        device_type = "Razer Viper 8KHz\n";
+        break;
+
     case USB_DEVICE_ID_RAZER_VIPER_MINI:
         device_type = "Razer Viper Mini\n";
         break;
@@ -311,6 +316,10 @@ ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *
 
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         device_type = "Razer DeathAdder V2 Pro (Wireless)\n";
+        break;
+
+    case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
+        device_type = "Razer Deathadder V2 Mini\n";
         break;
 
     default:
@@ -381,8 +390,10 @@ ssize_t razer_attr_write_side_mode_static(IOUSBDeviceInterface **usb_dev, const 
             case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
             case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
             case USB_DEVICE_ID_RAZER_VIPER:
+            case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
             case USB_DEVICE_ID_RAZER_VIPER_MINI:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+            case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
             case USB_DEVICE_ID_RAZER_BASILISK:
             case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
@@ -390,6 +401,7 @@ ssize_t razer_attr_write_side_mode_static(IOUSBDeviceInterface **usb_dev, const 
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
+            case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
                 report = razer_chroma_extended_matrix_effect_static(VARSTORE, side, (struct razer_rgb*)&buf[0]);
                 break;
 
@@ -438,8 +450,10 @@ ssize_t razer_attr_write_side_mode_static_no_store(IOUSBDeviceInterface **usb_de
             case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
             case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
             case USB_DEVICE_ID_RAZER_VIPER:
+            case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
             case USB_DEVICE_ID_RAZER_VIPER_MINI:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+            case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
             case USB_DEVICE_ID_RAZER_BASILISK:
             case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
@@ -447,6 +461,7 @@ ssize_t razer_attr_write_side_mode_static_no_store(IOUSBDeviceInterface **usb_de
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
+            case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
                 report = razer_chroma_extended_matrix_effect_static(NOSTORE, side, (struct razer_rgb*)&buf[0]);
                 break;
 
@@ -492,8 +507,10 @@ ssize_t razer_attr_write_side_mode_spectrum(IOUSBDeviceInterface **usb_dev, cons
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -501,6 +518,7 @@ ssize_t razer_attr_write_side_mode_spectrum(IOUSBDeviceInterface **usb_dev, cons
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, side);
             break;
 
@@ -559,8 +577,10 @@ ssize_t razer_attr_write_side_mode_breath(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -568,6 +588,7 @@ ssize_t razer_attr_write_side_mode_breath(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             switch(count) {
                 case 3: // Single colour mode
                     report = razer_chroma_extended_matrix_effect_breathing_single(VARSTORE, side, (struct razer_rgb*)&buf[0]);
@@ -625,8 +646,10 @@ ssize_t razer_attr_write_side_mode_none(IOUSBDeviceInterface **usb_dev, const ch
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -634,6 +657,7 @@ ssize_t razer_attr_write_side_mode_none(IOUSBDeviceInterface **usb_dev, const ch
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_none(VARSTORE, side);
             break;
 
@@ -782,8 +806,10 @@ ssize_t razer_attr_write_logo_mode_static(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -791,6 +817,7 @@ ssize_t razer_attr_write_logo_mode_static(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_static(VARSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
             break;
 
@@ -848,8 +875,10 @@ ssize_t razer_attr_write_scroll_mode_static(IOUSBDeviceInterface **usb_dev, cons
             case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
             case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
             case USB_DEVICE_ID_RAZER_VIPER:
+            case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
             case USB_DEVICE_ID_RAZER_VIPER_MINI:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+            case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -938,8 +967,10 @@ ssize_t razer_attr_write_logo_mode_static_no_store(IOUSBDeviceInterface **usb_de
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
-        case USB_DEVICE_ID_RAZER_VIPER_MINI:        
+        case USB_DEVICE_ID_RAZER_VIPER_MINI:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -947,6 +978,7 @@ ssize_t razer_attr_write_logo_mode_static_no_store(IOUSBDeviceInterface **usb_de
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
         case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_static(NOSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
             break;
 
@@ -1007,8 +1039,10 @@ ssize_t razer_attr_write_scroll_mode_static_no_store(IOUSBDeviceInterface **usb_
             case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
             case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
             case USB_DEVICE_ID_RAZER_VIPER:
+            case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
             case USB_DEVICE_ID_RAZER_VIPER_MINI:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+            case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
             case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
             case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -1091,8 +1125,10 @@ ssize_t razer_attr_write_logo_mode_spectrum(IOUSBDeviceInterface **usb_dev, cons
     case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
     case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
     case USB_DEVICE_ID_RAZER_VIPER:
+    case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
     case USB_DEVICE_ID_RAZER_VIPER_MINI:
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+    case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -1100,6 +1136,7 @@ ssize_t razer_attr_write_logo_mode_spectrum(IOUSBDeviceInterface **usb_dev, cons
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+    case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
         report = razer_chroma_extended_matrix_effect_spectrum(VARSTORE, LOGO_LED);
         break;
 
@@ -1147,8 +1184,10 @@ ssize_t razer_attr_write_scroll_mode_spectrum(IOUSBDeviceInterface **usb_dev, co
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -1240,8 +1279,10 @@ ssize_t razer_attr_write_logo_mode_breath(IOUSBDeviceInterface **usb_dev, const 
     case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
     case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
     case USB_DEVICE_ID_RAZER_VIPER:
+    case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
     case USB_DEVICE_ID_RAZER_VIPER_MINI:
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+    case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -1249,6 +1290,7 @@ ssize_t razer_attr_write_logo_mode_breath(IOUSBDeviceInterface **usb_dev, const 
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+    case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
         switch(count) {
         case 3: // Single colour mode
             report = razer_chroma_extended_matrix_effect_breathing_single(VARSTORE, LOGO_LED, (struct razer_rgb*)&buf[0]);
@@ -1325,8 +1367,10 @@ ssize_t razer_attr_write_scroll_mode_breath(IOUSBDeviceInterface **usb_dev, cons
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -1416,8 +1460,10 @@ ssize_t razer_attr_write_logo_mode_none(IOUSBDeviceInterface **usb_dev, const ch
     case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
     case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
     case USB_DEVICE_ID_RAZER_VIPER:
+    case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
     case USB_DEVICE_ID_RAZER_VIPER_MINI:
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+    case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
     case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -1425,6 +1471,7 @@ ssize_t razer_attr_write_logo_mode_none(IOUSBDeviceInterface **usb_dev, const ch
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE:
     case USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+    case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
         report = razer_chroma_extended_matrix_effect_none(VARSTORE, LOGO_LED);
         break;
 
@@ -1475,8 +1522,10 @@ ssize_t razer_attr_write_scroll_mode_none(IOUSBDeviceInterface **usb_dev, const 
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
@@ -1602,13 +1651,16 @@ ssize_t razer_attr_write_logo_mode_reactive(IOUSBDeviceInterface **usb_dev, cons
         case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
         case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
         case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
         case USB_DEVICE_ID_RAZER_VIPER_MINI:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
         case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
         case USB_DEVICE_ID_RAZER_BASILISK:
         case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
             report = razer_chroma_extended_matrix_effect_reactive(VARSTORE, LOGO_LED, speed, (struct razer_rgb*)&buf[1]);
             break;
 

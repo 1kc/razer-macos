@@ -55,6 +55,7 @@ bool is_keyboard(IOUSBDeviceInterface **usb_dev)
 	case USB_DEVICE_ID_RAZER_ANANSI:
 	case USB_DEVICE_ID_RAZER_CYNOSA_V2:
 	case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
+	case USB_DEVICE_ID_RAZER_BLACKWIDOW_V3:
 		return true;
 	}
 
@@ -113,12 +114,15 @@ bool is_mouse(IOUSBDeviceInterface **usb_dev)
 	case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
 	case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
 	case USB_DEVICE_ID_RAZER_VIPER:
+	case USB_DEVICE_ID_RAZER_VIPER_8KHZ:
 	case USB_DEVICE_ID_RAZER_VIPER_MINI:
+	case USB_DEVICE_ID_RAZER_BASILISK_V2:
 	case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
 	case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
 	case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
 	case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
     case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
+	case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
 		return true;
 	}
 
@@ -181,6 +185,27 @@ bool is_headphone(IOUSBDeviceInterface **usb_dev)
     {
         case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
         case USB_DEVICE_ID_RAZER_KRAKEN_V2:
+        case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
+            return true;
+    }
+
+    return false;
+}
+
+bool is_accessory(IOUSBDeviceInterface **usb_dev)
+{
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch (product)
+    {
+        case USB_DEVICE_ID_RAZER_NOMMO_CHROMA:
+        case USB_DEVICE_ID_RAZER_NOMMO_PRO:
+        case USB_DEVICE_ID_RAZER_CHROMA_MUG:
+        case USB_DEVICE_ID_RAZER_CHROMA_BASE:
+        case USB_DEVICE_ID_RAZER_CHROMA_HDK:
+        case USB_DEVICE_ID_RAZER_MOUSE_BUNGEE_V3_CHROMA:
+        case USB_DEVICE_ID_RAZER_BASE_STATION_V2_CHROMA:
             return true;
     }
 
@@ -292,6 +317,13 @@ IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type)
 				  continue;
 			    }
 			  break;
+            case TYPE_ACCESSORY:
+                if (!is_accessory(dev))
+                {
+                    (*dev)->Release(dev);
+                    continue;
+                }
+                break;
         
 		    default:
 			    // Unsupported Razer peripheral type

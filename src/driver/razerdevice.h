@@ -15,6 +15,7 @@
 #include "razerheadphone_driver.h"
 #include "razeregpu_driver.h"
 #include "razerkraken_driver.h"
+#include "razeraccessory_driver.h"
 
 #define TYPE_KEYBOARD 0
 #define TYPE_BLADE 1
@@ -23,6 +24,7 @@
 #define TYPE_MOUSE_MAT 4
 #define TYPE_EGPU 5
 #define TYPE_HEADPHONE 6
+#define TYPE_ACCESSORY 7
 
 #ifndef USB_VENDOR_ID_RAZER
 #define USB_VENDOR_ID_RAZER 0x1532

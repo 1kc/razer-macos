@@ -22,6 +22,7 @@ let customMouseDockColor = null;
 let customMouseMatColor = null;
 let customEgpuColor = null;
 let customHeadphoneColor = null;
+let customAccessoryColor = null;
 let cycleColors = null;
 
 function isEmpty(obj) {
@@ -141,6 +142,22 @@ function loadItemsFromStorage() {
     }
   });
 
+  storage.get('customAccessoryColor', function (error, data) {
+    if (error) throw error;
+
+    customAccessoryColor = data;
+    if (isEmpty(customAccessoryColor)) {
+      customAccessoryColor = {
+        hex: '#ffff00',
+        rgb: {
+          r: 255,
+          g: 255,
+          b: 0,
+        },
+      };
+    }
+  });
+
   storage.get('cycleColors', function (error, data) {
     if (error) throw error;
 
@@ -224,6 +241,13 @@ function setDevicesCycleColors(colors) {
       colors[cycleColorsIndex].g,
       colors[cycleColorsIndex].b,
     ])
+  );
+  addon.accessorySetModeStaticNoStore(
+      new Uint8Array([
+        colors[cycleColorsIndex].r,
+        colors[cycleColorsIndex].g,
+        colors[cycleColorsIndex].b,
+      ])
   );
 
   cycleColorsIndex++;
@@ -1604,6 +1628,240 @@ let headphoneMenu = [
   },
 ];
 
+let accessoryMenu = [
+  { type: 'separator' },
+  {
+    label: 'No accessory found',
+    enabled: false,
+  },
+  { type: 'separator' },
+  {
+    label: 'None',
+    click() {
+      clearInterval(cycleColorsInterval);
+      addon.accessorySetModeNone();
+    },
+  },
+  {
+    label: 'Static',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.accessorySetModeStatic(
+              new Uint8Array([
+                customAccessoryColor.rgb.r,
+                customAccessoryColor.rgb.g,
+                customAccessoryColor.rgb.b,
+              ])
+          );
+        },
+      },
+      {
+        label: 'White',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.accessorySetModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
+        },
+      },
+      {
+        label: 'Red',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.accessorySetModeStatic(new Uint8Array([0xff, 0, 0]));
+        },
+      },
+      {
+        label: 'Green',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.accessorySetModeStatic(new Uint8Array([0, 0xff, 0]));
+        },
+      },
+      {
+        label: 'Blue',
+        click() {
+          clearInterval(cycleColorsInterval);
+          addon.accessorySetModeStatic(new Uint8Array([0, 0, 0xff]));
+        },
+      },
+    ],
+  },
+  {
+    label: 'Wave',
+    submenu: [
+      {
+        label: 'Left',
+        submenu: [
+          {
+            label: 'Turtle Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_turtle');
+            },
+          },
+          {
+            label: 'Slowest Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_slowest');
+            },
+          },
+          {
+            label: 'Slower Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_slower');
+            },
+          },
+          {
+            label: 'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_slow');
+            },
+          },
+          {
+            label: 'Normal Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_default');
+            },
+          },
+          {
+            label: 'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_fast');
+            },
+          },
+          {
+            label: 'Faster Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_faster');
+            },
+          },
+          {
+            label: 'Fastest Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_fastest');
+            },
+          },
+          {
+            label: 'Lightning Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('left_lightning');
+            },
+          },
+        ],
+      },
+      {
+        label: 'Right',
+        submenu: [
+          {
+            label: 'Turtle Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_turtle');
+            },
+          },
+          {
+            label: 'Slowest Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_slowest');
+            },
+          },
+          {
+            label: 'Slower Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_slower');
+            },
+          },
+          {
+            label: 'Slow Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_slow');
+            },
+          },
+
+          {
+            label: 'Normal Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_default');
+            },
+          },
+          {
+            label: 'Fast Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_fast');
+            },
+          },
+          {
+            label: 'Faster Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_faster');
+            },
+          },
+          {
+            label: 'Fastest Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_fastest');
+            },
+          },
+          {
+            label: 'Lightning Speed',
+            click() {
+              clearInterval(cycleColorsInterval);
+              addon.accessorySetModeWave('right_lightning');
+            },
+          },
+
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Spectrum',
+    click() {
+      clearInterval(cycleColorsInterval);
+      addon.accessorySetModeSpectrum();
+    },
+  },
+  {
+    label: 'Breathe',
+    click() {
+      clearInterval(cycleColorsInterval);
+      addon.accessorySetModeBreathe(
+          new Uint8Array([
+            0, // random
+          ])
+      );
+    },
+  },
+  {
+    label: 'Set custom color',
+    click() {
+      window.webContents.send('device-selected', {
+        device: 'Accessory',
+        currentColor: customAccessoryColor,
+      });
+      window.setSize(500, 300);
+      window.show();
+    },
+  },
+];
+
 let mainMenuBottom = [
   { type: 'separator' },
   {
@@ -1630,6 +1888,7 @@ let mouseDockDeviceName = '';
 let mouseMatDeviceName = '';
 let egpuDeviceName = '';
 let headphoneDeviceName = '';
+let accessoryDeviceName = '';
 let mouseBatteryLevel = -1;
 let mouseCharging = false;
 
@@ -1641,6 +1900,7 @@ const refreshDevices = () => {
   addon.closeMouseMatDevice();
   addon.closeEgpuDevice();
   addon.closeHeadphoneDevice();
+  addon.closeAccessoryDevice();
 
   // get devices
   keyboardDeviceName = addon.getKeyboardDevice();
@@ -1652,6 +1912,7 @@ const refreshDevices = () => {
   mouseBatteryLevel = addon.getBatteryLevel();
   mouseCharging = addon.getChargingStatus();
   headphoneDeviceName = addon.getHeadphoneDevice();
+  accessoryDeviceName = addon.getAccessoryDevice();
 };
 
 app.on('ready', () => {
@@ -1670,6 +1931,7 @@ app.on('quit', () => {
   addon.closeMouseMatDevice();
   addon.closeEgpuDevice();
   addon.closeHeadphoneDevice();
+  addon.closeAccessoryDevice();
 });
 
 nativeTheme.on('updated', () => {
@@ -1722,6 +1984,10 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
       case 'Headphone':
         customHeadphoneColor = color;
         storage.set('customHeadphoneColor', customHeadphoneColor);
+        break;
+      case 'Accessory':
+        customAccessoryColor = color;
+        storage.set('customAccessoryColor', customAccessoryColor);
         break;
       default:
     }
@@ -1810,7 +2076,8 @@ function createTray() {
     }
   }
 
-  tray = new Tray(path.join(__static, '/assets/icon-darkmode.png'));
+  // *Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
+  tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
 
 
   refreshTray();
@@ -1856,6 +2123,10 @@ function refreshTray() {
   if (headphoneDeviceName) {
     headphoneMenu[1].label = headphoneDeviceName;
     menu = menu.concat(headphoneMenu);
+  }
+  if (accessoryDeviceName) {
+    accessoryMenu[1].label = accessoryDeviceName;
+    menu = menu.concat(accessoryMenu);
   }
   menu = menu.concat(mainMenuBottom);
 
