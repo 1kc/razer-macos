@@ -199,6 +199,12 @@ bool is_accessory(IOUSBDeviceInterface **usb_dev)
 
     switch (product)
     {
+        case USB_DEVICE_ID_RAZER_NOMMO_CHROMA:
+        case USB_DEVICE_ID_RAZER_NOMMO_PRO:
+        case USB_DEVICE_ID_RAZER_CHROMA_MUG:
+        case USB_DEVICE_ID_RAZER_CHROMA_BASE:
+        case USB_DEVICE_ID_RAZER_CHROMA_HDK:
+        case USB_DEVICE_ID_RAZER_MOUSE_BUNGEE_V3_CHROMA:
         case USB_DEVICE_ID_RAZER_BASE_STATION_V2_CHROMA:
             return true;
     }
