@@ -2076,7 +2076,8 @@ function createTray() {
     }
   }
 
-  tray = new Tray(path.join(__static, '/assets/icon-darkmode.png'));
+  // *Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
+  tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
 
 
   refreshTray();
