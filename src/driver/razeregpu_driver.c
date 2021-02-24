@@ -82,32 +82,6 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
 }
 
 /**
- * Read device file "device_type"
- *
- * Returns friendly string of device type
- */
-ssize_t razer_egpu_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf)
-{
-    UInt16 product = -1;
-    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-
-    char *device_type = "";
-
-    switch (product)
-    {
-    case USB_DEVICE_ID_RAZER_CORE_X_CHROMA:
-        device_type = "Razer Core X Chroma\n";
-        break;
-
-    default:
-        device_type = "Unknown Device\n";
-        break;
-    }
-
-    return sprintf(buf, "%s", device_type);
-}
-
-/**
  * Write device file "mode_none"
  *
  * No effect is activated whenever this file is written to

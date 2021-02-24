@@ -11,9 +11,19 @@ import Brightness from './components/Brightness/Brightness';
  * Root React component
  */
 export default function App() {
+
+  const componentToHex = (c) => {
+    var hex = c.toString(16);
+    return hex.length == 1 ? '0' + hex : hex;
+  };
+
+  const rgbToHex = ({ r, g, b }) => {
+    return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  };
+
   const INITIAL_COLOR = {};
   const INITIAL_COLOR2 = {};
-  const [deviceSelected, setDeviceSelected] = useState('Keyboard');
+  const [deviceSelected, setDeviceSelected] = useState(null);
   const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
   const [currentColor2, setCurrentColor2] = useState(INITIAL_COLOR2);
   const [currentSensitivity, setCurrentSensitivity] = useState(3200);
@@ -22,34 +32,33 @@ export default function App() {
 
   useEffect(() => {
     ipcRenderer.on('device-selected', (event, message) => {
-      if (message.currentSensitivity != null) {
-        setCurrentSensitivity(message.currentSensitivity);
-      }
-      if (message.currentBrightness != null) {
-        setCurrentBrightness(message.currentBrightness);
-      }
       setDeviceSelected(message.device);
-      setCurrentColor(message.currentColor);
-      setCurrentColor2(message.currentColor2);
+      setCurrentColor({
+        hex: rgbToHex(message.device.settings.customColor1),
+        rgb: message.device.settings.customColor1,
+      });
+      
+      if (message.device.settings.customColor2 != null) {
+        setCurrentColor2({
+          hex: rgbToHex(message.device.settings.customColor2),
+          rgb: message.device.settings.customColor2,
+        });
+      }
+
+      if (message.device.settings.customSensitivity != null) {
+        setCurrentSensitivity(message.device.settings.customSensitivity);
+      }
+      if (message.device.settings.customBrightness != null) {
+        setCurrentBrightness(message.device.settings.customBrightness);
+      }
     });
   }, []);
 
-  useEffect(() => {
-    let payload = {
-      brightness: currentBrightness,
-    };
-    ipcRenderer.send('update-keyboard-brightness', payload);
-  }, [currentBrightness]);
-
-  const handleBrightnessChange = (value) => {
-    setCurrentBrightness(value);
-  };
-
   return (
-    <span className="no-select">
-      <header id="titlebar">
-        <div id="drag-region">
-          <div id="window-title">
+    <span className='no-select'>
+      <header id='titlebar'>
+        <div id='drag-region'>
+          <div id='window-title'>
             <span>{deviceSelected} settings</span>
           </div>
         </div>
@@ -57,7 +66,7 @@ export default function App() {
       <Tabs>
         <TabList>
           <Tab>Primary custom color</Tab>
-          <Tab disabled={deviceSelected !== "Keyboard"}>Secondary custom color</Tab>
+          <Tab disabled={deviceSelected.settings.customColor2 != null}>Secondary custom color</Tab>
         </TabList>
 
         <TabPanel>
@@ -75,15 +84,16 @@ export default function App() {
           />
         </TabPanel>
       </Tabs>
-      {deviceSelected === 'Mouse' && (
+      {deviceSelected.settings.customSensitivity != null && (
         <MouseSensitivity
+          deviceSelected={deviceSelected}
           currentSensitivity={currentSensitivity}
         ></MouseSensitivity>
       )}
-      {deviceSelected === 'Keyboard' && (
+      {deviceSelected.settings.customBrightness != null && (
         <Brightness
+          deviceSelected={deviceSelected}
           brightness={currentBrightness}
-          onBrightnessChange={handleBrightnessChange}
         />)}
     </span>
   );

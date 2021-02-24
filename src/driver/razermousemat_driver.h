@@ -31,7 +31,6 @@ struct razer_mousemat_device {
     char phys[64];
 };
 
-ssize_t razer_mouse_mat_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_mouse_mat_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_mouse_mat_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_mouse_mat_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);

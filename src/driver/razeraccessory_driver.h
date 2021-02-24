@@ -26,7 +26,6 @@
 #define RAZER_ACCESSORY_WAIT_MIN_US 600
 #define RAZER_ACCESSORY_WAIT_MAX_US 1000
 
-ssize_t razer_accessory_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_accessory_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_accessory_attr_write_mode_spectrum(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_accessory_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count, int speed);

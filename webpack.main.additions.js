@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   module: {
@@ -10,6 +11,16 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: "src/devices", to: "../devices" },
+      ],
+      options: {
+        concurrency: 100,
+      },
+    }),
+  ],
   resolve: {
     extensions: ['.node'],
   },

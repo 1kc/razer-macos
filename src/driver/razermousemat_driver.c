@@ -72,47 +72,6 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
 }
 
 /**
- * Read device file "device_type"
- *
- * Returns friendly string of device type
- */
-ssize_t razer_mouse_mat_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf)
-{
-    UInt16 product = -1;
-    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    
-    char *device_type = "";
-
-    switch (product) {
-    case USB_DEVICE_ID_RAZER_FIREFLY:
-        device_type = "Razer Firefly\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_FIREFLY_V2:
-        device_type = "Razer Firefly v2\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
-        device_type = "Razer Firefly Hyperflux\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
-        device_type = "Razer Goliathus\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
-        device_type = "Razer Goliathus Extended\n";
-        break;
-
-    default:
-        device_type = "Unknown Device\n";
-        break;
-    }
-
-    return sprintf(buf, "%s", device_type);
-}
-
-/**
  * Write device file "mode_none"
  *
  * No effect is activated whenever this file is written to

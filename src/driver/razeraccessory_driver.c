@@ -69,59 +69,6 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
     return response_report;
 }
 
-
-
-/**
- * Read device file "device_type"
- *
- * Returns friendly string of device type
- */
-ssize_t razer_accessory_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf)
-{
-    UInt16 product = -1;
-    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-
-    char *device_type;
-
-    switch (product) {
-        case USB_DEVICE_ID_RAZER_CHROMA_MUG:
-            device_type = "Razer Chroma Mug Holder\n";
-            break;
-
-        case USB_DEVICE_ID_RAZER_CHROMA_HDK:
-            device_type = "Razer Chroma HDK\n";
-            break;
-
-        case USB_DEVICE_ID_RAZER_CHROMA_BASE:
-            device_type = "Razer Base Station Chroma\n";
-            break;
-
-        case USB_DEVICE_ID_RAZER_BASE_STATION_V2_CHROMA:
-            device_type = "Razer Base Station V2 Chroma\n";
-            break;
-
-        case USB_DEVICE_ID_RAZER_NOMMO_PRO:
-            device_type = "Razer Nommo Pro\n";
-            break;
-
-        case USB_DEVICE_ID_RAZER_NOMMO_CHROMA:
-            device_type = "Razer Nommo Chroma\n";
-            break;
-
-        case USB_DEVICE_ID_RAZER_MOUSE_BUNGEE_V3_CHROMA:
-            device_type = "Razer Mouse Bungee V3 Chroma\n";
-            break;
-
-        default:
-            device_type = "Unknown Device\n";
-            break;
-    }
-
-    return sprintf(buf, "%s", device_type);
-}
-
-
-
 /**
  * Write device file "mode_spectrum"
  *

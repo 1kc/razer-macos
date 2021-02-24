@@ -12,9 +12,9 @@ export default function CustomColor({
   };
 
   const handleClick = () => {
+    deviceSelected.settings.customColor1 = currentColor;
     let payload = {
-      device: deviceSelected,
-      color: currentColor,
+      device: deviceSelected
     };
     ipcRenderer.send('request-set-custom-color', payload);
   };

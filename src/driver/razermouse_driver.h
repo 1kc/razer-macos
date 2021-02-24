@@ -122,7 +122,6 @@
 // 14      --->  Logo LED
 // 15      --->  Scroll LED
 
-ssize_t razer_mouse_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_scroll_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_left_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);

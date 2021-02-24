@@ -19,7 +19,6 @@
 #define RAZER_EGPU_WAIT_MIN_US 900
 #define RAZER_EGPU_WAIT_MAX_US 1000
 
-ssize_t razer_egpu_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_egpu_attr_write_mode_none(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_egpu_attr_write_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_egpu_attr_write_mode_breath(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);

@@ -79,31 +79,6 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
     return response_report;
 }
 
-
-/**
- * Read device file "device_type"
- *
- * Returns friendly string of device type
- */
-ssize_t razer_mouse_dock_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf)
-{
-    UInt16 product = -1;
-    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-    char *device_type = "";
-
-    switch (product) {
-    case USB_DEVICE_ID_RAZER_MOUSE_CHARGING_DOCK:
-        device_type = "Razer Mouse Charging Dock\n";
-        break;
-
-    default:
-        device_type = "Unknown Device\n";
-    }
-
-    return sprintf(buf, "%s", device_type);
-}
-
-
 /**
  * Write device file "mode_static"
  *
