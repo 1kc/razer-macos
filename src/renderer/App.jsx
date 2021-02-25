@@ -13,6 +13,9 @@ import Brightness from './components/Brightness/Brightness';
 export default function App() {
 
   const componentToHex = (c) => {
+    if(typeof c === 'undefined') {
+      return '00';
+    }
     var hex = c.toString(16);
     return hex.length == 1 ? '0' + hex : hex;
   };
@@ -23,7 +26,8 @@ export default function App() {
 
   const INITIAL_COLOR = {};
   const INITIAL_COLOR2 = {};
-  const [deviceSelected, setDeviceSelected] = useState(null);
+  const NULL_DEVICE = { settings: {} }
+  const [deviceSelected, setDeviceSelected] = useState(NULL_DEVICE);
   const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
   const [currentColor2, setCurrentColor2] = useState(INITIAL_COLOR2);
   const [currentSensitivity, setCurrentSensitivity] = useState(3200);
@@ -34,14 +38,14 @@ export default function App() {
     ipcRenderer.on('device-selected', (event, message) => {
       setDeviceSelected(message.device);
       setCurrentColor({
-        hex: rgbToHex(message.device.settings.customColor1),
-        rgb: message.device.settings.customColor1,
+        hex: rgbToHex(message.device.settings.customColor1.rgb),
+        rgb: message.device.settings.customColor1.rgb,
       });
-      
+
       if (message.device.settings.customColor2 != null) {
         setCurrentColor2({
-          hex: rgbToHex(message.device.settings.customColor2),
-          rgb: message.device.settings.customColor2,
+          hex: rgbToHex(message.device.settings.customColor2.rgb),
+          rgb: message.device.settings.customColor2.rgb,
         });
       }
 
@@ -59,14 +63,14 @@ export default function App() {
       <header id='titlebar'>
         <div id='drag-region'>
           <div id='window-title'>
-            <span>{deviceSelected} settings</span>
+            <span>{deviceSelected.name} settings</span>
           </div>
         </div>
       </header>
       <Tabs>
         <TabList>
           <Tab>Primary custom color</Tab>
-          <Tab disabled={deviceSelected.settings.customColor2 != null}>Secondary custom color</Tab>
+          <Tab disabled={deviceSelected.settings.customColor2 == null}>Secondary custom color</Tab>
         </TabList>
 
         <TabPanel>

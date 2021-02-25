@@ -85,4 +85,8 @@ export class RazerDeviceManager {
       return razerDevice !== null;
     });
   }
+
+  getByInternalId(internalId) {
+    return this.activeRazerDevices.find(device => device.internalId === internalId);
+  }
 }

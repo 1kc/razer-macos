@@ -61,6 +61,6 @@ export function createMenuFor(razerApp, razerDevice) {
 
   const featureMenu = features.map(feature => featureMapping[feature](razerDevice, razerApp))
   deviceMenu = deviceMenu.concat(featureMenu);
-  deviceMenu = deviceMenu.concat([getMenuItemSetCustomColor(razerDevice, 'Custom settings')])
+  deviceMenu = deviceMenu.concat([getMenuItemSetCustomColor(razerDevice, 'Custom settings', razerApp)])
   return deviceMenu;
 }

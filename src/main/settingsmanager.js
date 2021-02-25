@@ -2,7 +2,7 @@ const storage = require('electron-json-storage');
 
 export async function getSettingsFor(device) {
   if (await hasKey(device.getSettingsKey())) {
-    return await getKey(device.getSettingsKey());
+    return getKey(device.getSettingsKey());
   }
   return createStandardSettingsFor(device);
 }
@@ -44,7 +44,8 @@ export async function getKey(key) {
   });
 }
 
-export function createStandardSettingsFor(device) {
+async function createStandardSettingsFor(device) {
+
   const whiteColorSetting = {
     hex: '#ffff00',
     rgb: {
@@ -53,21 +54,26 @@ export function createStandardSettingsFor(device) {
       b: 0,
     },
   };
+  let settings;
   switch (device.mainType) {
     case 'keyboard':
-      return {
+      settings = {
         customColor1: whiteColorSetting,
         customColor2: whiteColorSetting,
         customBrightness: 50,
       };
+      break;
     case 'mouse':
-      return {
+      settings =  {
         customSensitivity: 3200,
         customColor1: whiteColorSetting,
       };
+      break;
     default:
-      return {
+      settings = {
         customColor1: whiteColorSetting,
       };
   }
+
+  return Promise.resolve(settings);
 }

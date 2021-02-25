@@ -29,4 +29,15 @@ export class RazerDevice {
   setModeStatic(color) {}
   setSpectrum() {}
   setBreathe(color) {}
+
+  serialize() {
+    return {
+      name: this.name,
+      productId: this.productId,
+      internalId: this.internalId,
+      mainType: this.mainType,
+      features: this.features,
+      settings: this.settings,
+    };
+  }
 }

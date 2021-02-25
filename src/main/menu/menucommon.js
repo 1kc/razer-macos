@@ -49,15 +49,15 @@ export function getMenuItemBreathe(device) {
   };
 }
 
-export function getMenuItemSetCustomColor(device, label) {
+export function getMenuItemSetCustomColor(device, label, razerApp) {
   return {
     label: label,
     click() {
-      window.webContents.send('device-selected', {
-        device: device,
+      razerApp.window.webContents.send('device-selected', {
+        device: device.serialize(),
       });
-      window.setSize(500, 300);
-      window.show();
+      razerApp.window.setSize(500, 300);
+      razerApp.window.show();
     },
   };
 }
