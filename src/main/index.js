@@ -37,7 +37,7 @@ let mainMenu = [
   {
     label: 'Refresh Device List',
     click() {
-      refreshTray();
+      refreshTray(true);
     },
   },
   { type: 'separator' },
@@ -185,7 +185,7 @@ ipcMain.on('update-keyboard-brightness', (_, arg) => {
   const currentDevice = razerApp.deviceManager.getByInternalId(device.internalId);
   currentDevice.settings = device.settings;
   saveSettingsFor(currentDevice);
-  device.setBrightness(currentDevice.settings.customBrightness);
+  currentDevice.setBrightness(currentDevice.settings.customBrightness);
   refreshTray();
 });
 
@@ -276,14 +276,16 @@ function createTray() {
 
   // *Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
   razerApp.tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
+  razerApp.tray.setToolTip('Razer macOS menu');
 
-  refreshTray();
+  refreshTray(true);
 }
 
-function refreshTray() {
-  razerApp.deviceManager.refreshRazerDevices(razerApp.addon).then(() => {
+function refreshTray(withDeviceRefresh) {
+  const refresh = withDeviceRefresh ? razerApp.deviceManager.refreshRazerDevices(razerApp.addon).then(() => {
     return razerApp.init();
-  }).then(() => {
+  }) : Promise.resolve(true);
+  refresh.then(() => {
     buildCustomColorsCycleMenu();
 
     const deviceMenus = razerApp.deviceManager.activeRazerDevices.map(device => createMenuFor(razerApp, device)).flat();
@@ -291,22 +293,21 @@ function refreshTray() {
     const menu = mainMenu.concat(deviceMenus).concat(mainMenuBottom);
     patch(menu);
     const contextMenu = Menu.buildFromTemplate(menu);
-    razerApp.tray.setToolTip('Razer macOS menu');
     razerApp.tray.setContextMenu(contextMenu);
   });
 }
 
 function patch(deviceMenu) {
   deviceMenu.forEach(menuItem => {
-    if(menuItem.hasOwnProperty('click')) {
+    if (menuItem.hasOwnProperty('click')) {
       const originalClick = menuItem['click'];
       menuItem['click'] = (ev) => {
         razerApp.spectrumAnimation.stop();
         razerApp.cycleAnimation.stop();
         originalClick(ev);
-      }
-    } else if(menuItem.hasOwnProperty('submenu')) {
+      };
+    } else if (menuItem.hasOwnProperty('submenu')) {
       patch(menuItem['submenu']);
     }
-  })
+  });
 }

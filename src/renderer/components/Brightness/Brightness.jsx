@@ -5,8 +5,8 @@ import { ipcRenderer } from 'electron';
 export default function Brightness({deviceSelected, brightness}) {
   const [currentBrightness, setCurrentBrightness] = useState(brightness);
 
-  const handleClick = () => {
-    deviceSelected.settings.customBrightness = currentBrightness;
+  const handleClick = (value) => {
+    deviceSelected.settings.customBrightness = value;
     let payload = {
       device: deviceSelected,
     };
@@ -15,7 +15,7 @@ export default function Brightness({deviceSelected, brightness}) {
 
   const handleBrightnessChange = (value) => {
     setCurrentBrightness(value);
-    handleClick();
+    handleClick(value);
   };
 
     return (
@@ -27,7 +27,7 @@ export default function Brightness({deviceSelected, brightness}) {
             trackClassName="slider-track"
             min={0}
             max={100}
-            value={brightness}
+            value={currentBrightness}
             onChange={handleBrightnessChange}
             renderThumb={(props, state) => (
                 <div {...props}>{state.valueNow + '%'}</div>
