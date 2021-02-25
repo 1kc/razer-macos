@@ -17,25 +17,8 @@ export async function getSpectrumAnimation(app) {
   let cycleColorsInterval = null;
 
   function setDevicesCycleColors() {
-    app.activeRazerDevices.forEach(device => {
-      let setModeStaticNoStoreFunc = () => {};
-      if(device.mainType === "accessory") {
-        setModeStaticNoStoreFunc = app.addon.accessorySetModeStaticNoStore;
-      } else if(device.mainType === "egpu") {
-        setModeStaticNoStoreFunc = app.addon.egpuSetModeStaticNoStore;
-      } else if(device.mainType === "headphone") {
-        setModeStaticNoStoreFunc = app.addon.headphoneSetModeStaticNoStore;
-      } else if(device.mainType === "keyboard") {
-        setModeStaticNoStoreFunc = app.addon.kbdSetModeStaticNoStore;
-      } else if(device.mainType === "mouse") {
-        setModeStaticNoStoreFunc = app.addon.mouseSetLogoModeStaticNoStore;
-      } else if(device.mainType === "mousedock") {
-        setModeStaticNoStoreFunc = app.addon.mouseDockSetModeStaticNoStore;
-      } else if(device.mainType === "mousemat") {
-        setModeStaticNoStoreFunc = app.addon.mouseMatSetModeStaticNoStore;
-      }
-
-      setModeStaticNoStoreFunc(device.internalId, new Uint8Array([
+    app.deviceManager.activeRazerDevices.forEach(device => {
+      device.setModeStaticNoStore(new Uint8Array([
         spectrumColors[cycleColorsIndex].r,
         spectrumColors[cycleColorsIndex].g,
         spectrumColors[cycleColorsIndex].b,

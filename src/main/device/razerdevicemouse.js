@@ -1,14 +1,14 @@
 import { RazerDevice } from './razerdevice';
 
 export class RazerDeviceMouse extends RazerDevice {
-  constructor(razerProperties) {
-    super(razerProperties);
+  constructor(addon, razerProperties) {
+    super(addon, razerProperties);
   }
 
-  async init(addon) {
-    await super.init(addon);
-    this.batteryLevel = addon.getBatteryLevel(this.internalId);
-    this.chargingStatus = addon.getChargingStatus(this.internalId);
+  async init() {
+    await super.init();
+    this.batteryLevel = this.addon.getBatteryLevel(this.internalId);
+    this.chargingStatus = this.addon.getChargingStatus(this.internalId);
     return this;
   }
 
@@ -22,5 +22,36 @@ export class RazerDeviceMouse extends RazerDevice {
         return super.getName() + ' - 🔋'+this.batteryLevel.toString()+'%';
       }
     }
+  }
+
+  setModeNone() {
+    this.addon.mouseSetLogoModeNone(this.internalId);
+  }
+
+  setModeStaticNoStore(color) {
+    this.addon.mouseSetLogoModeStaticNoStore(this.internalId, color);
+  }
+
+  setModeStatic(color) {
+    this.addon.mouseSetLogoModeStatic(this.internalId, color);
+  }
+
+  setSpectrum() {
+    this.addon.mouseSetLogoModeSpectrum(this.internalId);
+  }
+
+  setBreathe(color) {
+    this.addon.mouseSetLogoModeBreathe(this.internalId, color);
+  }
+
+  // device specific
+  setWaveSimple(direction) {
+    this.addon.mouseSetLogoModeWave(this.internalId, direction);
+  }
+  setReactive(colorMode) {
+    this.addon.mouseSetLogoModeReactive(this.internalId, colorMode);
+  }
+  setLogoLEDEffect(effect) {
+    this.addon.mouseSetLogoLEDEffect(this.internalId, effect);
   }
 }

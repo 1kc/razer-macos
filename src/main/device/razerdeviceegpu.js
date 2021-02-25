@@ -1,7 +1,30 @@
 import { RazerDevice } from './razerdevice';
 
 export class RazerDeviceEgpu extends RazerDevice {
-  constructor(razerProperties) {
-    super(razerProperties);
+  constructor(addon, razerProperties) {
+    super(addon, razerProperties);
+  }
+
+  setModeNone() {
+    this.addon.egpuSetModeNone(this.internalId);
+  }
+
+  setModeStaticNoStore(color) {
+    this.addon.egpuSetModeStaticNoStore(this.internalId, color);
+  }
+
+  setModeStatic(color) {
+    this.addon.egpuSetModeStatic(this.internalId, color);
+  }
+  setSpectrum() {
+    this.addon.egpuSetModeSpectrum(this.internalId);
+  }
+  setBreathe(color) {
+    this.addon.egpuSetModeBreathe(this.internalId, color);
+  }
+
+  //device specific
+  setWaveSimple(direction) {
+    this.addon.egpuSetModeWave(this.internalId, direction);
   }
 }

@@ -3,19 +3,11 @@
 import { app, Menu, Tray, BrowserWindow, nativeTheme, ipcMain } from 'electron';
 import addon from '../driver';
 import path from 'path';
-import { getAllRazerDeviceConfigurations } from './razerdevices';
-import { getSettingsFor, saveSettingsFor } from './settingsmanager';
+import { RazerDeviceManager } from './razerdevicemanager';
 import { getSpectrumAnimation } from './animation/spectrumanimation';
 import { getCycleAnimation } from './animation/cycleanimation';
 import { createMenuFor } from './menu/menubuilder';
-import { RazerDevice } from './device/razerdevice';
-import { RazerDeviceKeyboard } from './device/razerdevicekeyboard';
-import { RazerDeviceMouse } from './device/razerdevicemouse';
-import { RazerDeviceMouseDock } from './device/razerdevicemousedock';
-import { RazerDeviceMouseMat } from './device/razerdevicemousemat';
-import { RazerDeviceEgpu } from './device/razerdeviceegpu';
-import { RazerDeviceHeadphone } from './device/razerdeviceheadphone';
-import { RazerDeviceAccessory } from './device/razerdeviceaccessory';
+import { saveSettingsFor } from './settingsmanager';
 
 const APP_VERSION = require('../../package.json').version;
 
@@ -23,14 +15,12 @@ const isDevelopment = process.env.NODE_ENV == 'development';
 
 const razerApp = {
   addon: addon,
-  allRazerDeviceConfigurations: getAllRazerDeviceConfigurations(path.join(__dirname, '../devices')),
+  deviceManager: new RazerDeviceManager(path.join(__dirname, '../devices')),
+  refreshTray: refreshTray,
   spectrumAnimation: null,
   cycleAnimation: null,
-  activeRazerDevices: null,
 };
-razerApp.init = function(activeRazerDevices) {
-  this.activeRazerDevices = activeRazerDevices;
-
+razerApp.init = function() {
   const spectrumPromise = getSpectrumAnimation(razerApp).then(animation => {
     this.spectrumAnimation = animation;
   });
@@ -44,58 +34,52 @@ let tray = null;
 let window = null;
 let forceQuit = false;
 
-function getActiveRazerDevices() {
-  const devicePromises = razerApp.addon.getAllDevices()
-    .map(async foundDevice => {
-      const configurationDevice = razerApp.allRazerDeviceConfigurations.find(d => d.productId === foundDevice.productId);
-      if (configurationDevice === undefined) {
-        return null;
-      }
-      const razerProperties = {
-        name: configurationDevice.name,
-        productId: foundDevice.productId,
-        internalId: foundDevice.internalDeviceId,
-        mainType: configurationDevice.mainType,
-        features: configurationDevice.features,
-      };
-      const razerDevice = createRazerDeviceFrom(razerProperties);
-      return razerDevice.init(razerApp.addon);
-    });
-  return Promise.all(devicePromises, devices => {
-    return devices.filter(device => device !== null);
-  });
-}
-
-function createRazerDeviceFrom(razerProperties) {
-  switch (razerProperties.mainType) {
-    case 'keyboard':
-      return new RazerDeviceKeyboard(razerProperties);
-    case 'mouse':
-      return new RazerDeviceMouse(razerProperties);
-    case 'mousedock':
-      return new RazerDeviceMouseDock(razerProperties);
-    case 'mousemat':
-      return new RazerDeviceMouseMat(razerProperties);
-    case 'egpu':
-      return new RazerDeviceEgpu(razerProperties);
-    case 'headphone':
-      return new RazerDeviceHeadphone(razerProperties);
-    case 'accessory':
-      return new RazerDeviceAccessory(razerProperties);
-    default:
-      return new RazerDevice(razerProperties);
-  }
-}
 
 let mainMenu = [
   {
     label: 'Refresh Device List',
     click() {
-      refreshDevices();
       refreshTray();
     },
   },
   { type: 'separator' },
+  {
+    label: 'None All Devices',
+    click() {
+      razerApp.deviceManager.activeRazerDevices.forEach(device => {
+        device.setModeNone();
+      });
+    },
+  },
+  {
+    label: 'Color All Devices',
+    submenu: [
+      {
+        label: 'Red',
+        click() {
+          razerApp.deviceManager.activeRazerDevices.forEach(device => {
+            device.setModeStaticNoStore(new Uint8Array([0xff, 0, 0]));
+          });
+        },
+      },
+      {
+        label: 'Green',
+        click() {
+          razerApp.deviceManager.activeRazerDevices.forEach(device => {
+            device.setModeStaticNoStore(new Uint8Array([0, 0xff, 0]));
+          });
+        },
+      },
+      {
+        label: 'Blue',
+        click() {
+          razerApp.deviceManager.activeRazerDevices.forEach(device => {
+            device.setModeStaticNoStore(new Uint8Array([0, 0, 0xff]));
+          });
+        },
+      },
+    ],
+  },
   {
     label: 'Spectrum All Devices',
     click() {
@@ -153,7 +137,7 @@ function buildCustomColorsCycleMenu() {
     };
   });
   cccMenu = cccMenu.concat(colorItems);
-  mainMenu[3].submenu = cccMenu;
+  mainMenu[5].submenu = cccMenu;
 }
 
 const mainMenuBottom = [
@@ -176,25 +160,16 @@ const mainMenuBottom = [
 ];
 
 const refreshDevices = () => {
-  if (razerApp.activeRazerDevices != null) {
-    razerApp.addon.closeAllDevices();
-  }
-  return getActiveRazerDevices().then(allDevices => {
-    razerApp.activeRazerDevices = allDevices;
-  });
+  return razerApp.deviceManager.refreshRazerDevices(razerApp.addon);
 };
 
 app.on('ready', () => {
-  getActiveRazerDevices().then(activeDevices => {
-    return razerApp.init(activeDevices);
-  }).then(() => {
-    createTray();
-    createWindow();
-  });
+  createTray();
+  createWindow();
 });
 
 app.on('quit', () => {
-  razerApp.addon.closeAllDevices();
+  razerApp.deviceManager.closeDevices(razerApp.addon);
 });
 
 nativeTheme.on('updated', () => {
@@ -204,14 +179,14 @@ nativeTheme.on('updated', () => {
 // mouse dpi rpc listener
 ipcMain.on('request-set-dpi', (event, arg) => {
   const { device } = arg;
-  razerApp.addon.mouseSetDpi(device.settings.customSensitivity);
+  razerApp.addon.mouseSetDpi(device.internalId, device.settings.customSensitivity);
 });
 
 // keyboard brightness rpc listener
 ipcMain.on('update-keyboard-brightness', (_, arg) => {
   const { device } = arg;
   saveSettingsFor(device);
-  razerApp.addon.KbdSetBrightness(device.settings.customBrightness);
+  device.setBrightness(device.settings.customBrightness);
   refreshTray();
 });
 
@@ -297,18 +272,37 @@ function createTray() {
   // *Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
   tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
 
-
   refreshTray();
 }
 
 function refreshTray() {
-  buildCustomColorsCycleMenu();
-  const deviceMenus = razerApp.activeRazerDevices.map(device => createMenuFor(device)).flat();
+  razerApp.deviceManager.refreshRazerDevices(razerApp.addon).then(() => {
+    return razerApp.init();
+  }).then(() => {
+    buildCustomColorsCycleMenu();
 
-  //patch click events to stop animation before every click TODO: recursive
+    const deviceMenus = razerApp.deviceManager.activeRazerDevices.map(device => createMenuFor(razerApp, device)).flat();
 
-  const menu = mainMenu.concat(deviceMenus).concat(mainMenuBottom);
-  const contextMenu = Menu.buildFromTemplate(menu);
-  tray.setToolTip('Razer macOS menu');
-  tray.setContextMenu(contextMenu);
+    const menu = mainMenu.concat(deviceMenus).concat(mainMenuBottom);
+    patch(menu);
+    const contextMenu = Menu.buildFromTemplate(menu);
+    tray.setToolTip('Razer macOS menu');
+    tray.setContextMenu(contextMenu);
+  });
+}
+
+function patch(deviceMenu) {
+  deviceMenu.forEach(menuItem => {
+    if(menuItem.hasOwnProperty('click')) {
+      const originalClick = menuItem['click'];
+      menuItem['click'] = (ev) => {
+        console.log('stop animations');
+        razerApp.spectrumAnimation.stop();
+        razerApp.cycleAnimation.stop();
+        originalClick(ev);
+      }
+    } else if(menuItem.hasOwnProperty('submenu')) {
+      patch(menuItem['submenu']);
+    }
+  })
 }

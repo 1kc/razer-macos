@@ -1,7 +1,8 @@
 import { getSettingsFor } from '../settingsmanager';
 
 export class RazerDevice {
-  constructor(razerProperties) {
+  constructor(addon, razerProperties) {
+    this.addon = addon;
     this.name = razerProperties.name;
     this.productId = razerProperties.productId;
     this.internalId = razerProperties.internalId;
@@ -9,7 +10,7 @@ export class RazerDevice {
     this.features = razerProperties.features;
   }
 
-  async init(addon) {
+  async init() {
     this.settings = await getSettingsFor(this);
     return this;
   }
@@ -21,4 +22,11 @@ export class RazerDevice {
   getSettingsKey() {
     return 'razer_'+this.productId;
   }
+
+  //override in device types
+  setModeNone() {}
+  setModeStaticNoStore(color) {}
+  setModeStatic(color) {}
+  setSpectrum() {}
+  setBreathe(color) {}
 }
