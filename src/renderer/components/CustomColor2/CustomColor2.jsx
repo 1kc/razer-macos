@@ -31,7 +31,9 @@ export default function CustomColor2({ deviceSelected }) {
     };
     ipcRenderer.send('request-set-custom-color2', payload);
   };
-  const styles = { 'default': { picker: { background: '#202124', boxShadow: 'none'} }};
+  const styles = { 'default': { picker: { background: '#202124', boxShadow: 'none'}, body: {
+        padding: '12px 0 0'
+      } }};
   return (
     <div>
       <p>Secondary custom color selection (Starlight Dual Mode only)</p>

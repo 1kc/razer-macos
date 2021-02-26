@@ -33,7 +33,7 @@ export default function App() {
     <span className='no-select'>
       <div id='body'>
         <div id='product'>
-          <div className='product-image'><img src={deviceSelected.img} /></div>
+          <div className='product-image'><img src={'https://assets.razerzone.com/eeimages/support/products/729/729_kraken_71_v2.png'} /></div>
           <div className='product-description'>{deviceSelected.name}</div>
         </div>
         <div id='settings'>

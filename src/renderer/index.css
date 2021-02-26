@@ -40,7 +40,7 @@ div#body {
   height:125px;
 }
 #product .product-description {
-  color:white;
+  color: #47e10c;
   font-size: 30px;
   align-items: center;
   display: flex;
@@ -56,8 +56,7 @@ div#body {
   padding-left:10px;
   padding-top: 5px;
   padding-bottom: 5px;
-  background-color:#47e10c;
-  border-bottom: 1px solid black;
+  background-color: #47e10c;
   text-shadow: 0 0px 3px #557948;
 }
 p {
@@ -74,11 +73,27 @@ p {
 
 .control > button {
   font-size: 12px;
+  background-color: #35363a;
+  border: 1px solid black;
+  padding: 8px;
+  color: #47e10c;
+  width:100%;
+  outline: none !important;
+}
+.control > button:hover {
+  background-color: #47e10c;
+  color: black;
+  cursor: pointer;
+}
+.control > button:active {
+  background-color: #47e10c;
 }
 
 .settings-block-body input {
   background-color: transparent !important;
-  color:white !important;;
+  color:#47e10c !important;
+  border: 1px solid #47e10c !important;
+  box-shadow: none !important;
 }
 
 #no-device {
@@ -100,8 +115,9 @@ p {
 .horizontal-slider .slider-track {
   top: 16px;
   height: 16px;
-  background-color: rgb(51, 42, 245);
+  background-color:black;
   border-radius: 24px;
+  border: 1px solid #47e10c;
 }
 
 .horizontal-slider .slider-thumb {
@@ -109,11 +125,24 @@ p {
   width: 36px;
   height: 36px;
   line-height: 36px;
-  background-color: white;
+  background-color: #35363a;
+  color:#47e10c;
   text-align: center;
   border-radius: 24px;
   font-family: 'SF Display Pro', sans-serif;
   font-size: 12px;
+  outline: none !important;
+  box-shadow: 0 0 6px black;
+  cursor: grab;
+}
+.horizontal-slider .slider-thumb:hover {
+  color:black;
+  background-color: #47e10c;
+}
+.horizontal-slider .slider-thumb:active {
+  color:black;
+  background-color: #47e10c;
+  cursor: grabbing;
 }
 
 .ui-center-text {
@@ -131,4 +160,16 @@ p {
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.react-tabs__tab:focus {
+  box-shadow: none;
+  border-color: transparent;
+}
+.react-tabs__tab--selected {
+  color: #47e10c;
+}
+.react-tabs__tab {
+  border:none;
+  border-radius: 0;
 }
