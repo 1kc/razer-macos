@@ -229,7 +229,7 @@ function createWindow() {
   razerApp.window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
     //titleBarStyle: 'hidden',
-    height: 450, // This is adjusted later with window.setSize
+    height: 800, // This is adjusted later with window.setSize
     resizable: false,
     width: 500,
     minWidth:320,

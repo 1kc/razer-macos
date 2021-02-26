@@ -38,13 +38,13 @@ div#body {
 #product .product-image img {
   width:125px;
   height:125px;
+  margin-right: 10px;
 }
 #product .product-description {
   color: #47e10c;
   font-size: 30px;
   align-items: center;
   display: flex;
-  margin-left: 10px;
 }
 
 .settings-block {
@@ -60,7 +60,7 @@ div#body {
   text-shadow: 0 0px 3px #557948;
 }
 p {
-  color:white;
+  color:gray;
   margin-left:10px;
   font-size: 13px;
 }
@@ -86,7 +86,7 @@ p {
   cursor: pointer;
 }
 .control > button:active {
-  background-color: #47e10c;
+  background-color: #287c08;
 }
 
 .settings-block-body input {
