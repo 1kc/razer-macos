@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Slider from '../Slider/Slider';
 import { ipcRenderer } from 'electron';
 
-export default function Brightness({deviceSelected, brightness}) {
-  const [currentBrightness, setCurrentBrightness] = useState(brightness);
+export default function Brightness({deviceSelected}) {
+  const [currentBrightness, setCurrentBrightness] = useState(deviceSelected.settings.customBrightness);
 
   const handleClick = (value) => {
     deviceSelected.settings.customBrightness = value;

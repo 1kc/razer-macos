@@ -60,12 +60,12 @@ async function createStandardSettingsFor(device) {
       settings = {
         customColor1: whiteColorSetting,
         customColor2: whiteColorSetting,
-        customBrightness: 50,
+        customBrightness: device.getBrightness(),
       };
       break;
     case 'mouse':
       settings =  {
-        customSensitivity: 3200,
+        customSensitivity: device.getDPI(),
         customColor1: whiteColorSetting,
       };
       break;
@@ -76,4 +76,15 @@ async function createStandardSettingsFor(device) {
   }
 
   return Promise.resolve(settings);
+}
+
+export function clearAllSettings() {
+  return new Promise((res, rej) => {
+    storage.clear((err) => {
+      if (err) {
+        rej(err);
+      }
+      res();
+    });
+  });
 }

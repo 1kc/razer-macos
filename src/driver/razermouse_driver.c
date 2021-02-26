@@ -75,18 +75,18 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
         if(response_report.remaining_packets != request_report->remaining_packets ||
            response_report.command_class != request_report->command_class ||
            response_report.command_id.id != request_report->command_id.id) {
-            printf("Response doesn't match request");
-//        } else if (response_report.status == RAZER_CMD_BUSY) {
-//            print_erroneous_report(&response_report, "razermouse", "Device is busy");
+            printf("Response doesn't match request (mouse)\n");
+        } else if (response_report.status == RAZER_CMD_BUSY) {
+            printf("Device is busy (mouse)\n");
         } else if (response_report.status == RAZER_CMD_FAILURE) {
-            printf("Command failed");
+            printf("Command failed (mouse)\n");
         } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {
-            printf("Command not supported");
+            printf("Command not supported (mouse)\n");
         } else if (response_report.status == RAZER_CMD_TIMEOUT) {
-            printf("Command timed out");
+            printf("Command timed out (mouse)\n");
         }
     } else {
-        printf("Invalid Report Length");
+        printf("Invalid Report Length (mouse)\n");
     }
 
     return response_report;

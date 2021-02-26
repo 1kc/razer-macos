@@ -1,3 +1,5 @@
+import { saveSettingsFor } from '../settingsmanager';
+
 export function getMenuItemNone(device) {
   return {
     label: 'None',
@@ -257,6 +259,14 @@ export function getMenuItemOldMouseEffects(device) {
 }
 
 export function getMenuItemBrightness(device, razerApp) {
+
+  const updateBrightness = (brightness) => {
+    device.settings.customBrightness = brightness;
+    saveSettingsFor(device);
+    device.setBrightness(device.settings.customBrightness);
+    razerApp.refreshTray();
+  }
+
   return {
     label: 'Brightness',
     submenu: [
@@ -267,15 +277,13 @@ export function getMenuItemBrightness(device, razerApp) {
       {
         label: 'Set to 0%',
         click() {
-          device.setBrightness(0);
-          razerApp.refreshTray();
+          updateBrightness(0);
         },
       },
       {
         label: 'Set to 100%',
         click() {
-          device.setBrightness(100);
-          razerApp.refreshTray();
+          updateBrightness(100);
         },
       },
     ],

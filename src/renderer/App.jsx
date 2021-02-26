@@ -11,50 +11,20 @@ import Brightness from './components/Brightness/Brightness';
  * Root React component
  */
 export default function App() {
-
-  const componentToHex = (c) => {
-    if(typeof c === 'undefined') {
-      return '00';
+  const NULLDEVICE = {
+    settings: {
+      customColor1: {
+        rgb:{ r: 255, g: 255, b: 0 }
+      },
     }
-    var hex = c.toString(16);
-    return hex.length == 1 ? '0' + hex : hex;
-  };
-
-  const rgbToHex = ({ r, g, b }) => {
-    return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
-  };
-
-  const INITIAL_COLOR = {};
-  const INITIAL_COLOR2 = {};
-  const NULL_DEVICE = { settings: {} }
-  const [deviceSelected, setDeviceSelected] = useState(NULL_DEVICE);
-  const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
-  const [currentColor2, setCurrentColor2] = useState(INITIAL_COLOR2);
-  const [currentSensitivity, setCurrentSensitivity] = useState(3200);
-  // 0-100. In debug mode, this will be set to 50 when the UI is loaded
-  const [currentBrightness, setCurrentBrightness] = useState(50);
+  }
+  const [deviceSelected, setDeviceSelected] = useState(NULLDEVICE);
 
   useEffect(() => {
     ipcRenderer.on('device-selected', (event, message) => {
+      //force refresh by setting to NULL device first
+      setDeviceSelected(NULLDEVICE);
       setDeviceSelected(message.device);
-      setCurrentColor({
-        hex: rgbToHex(message.device.settings.customColor1.rgb),
-        rgb: message.device.settings.customColor1.rgb,
-      });
-
-      if (message.device.settings.customColor2 != null) {
-        setCurrentColor2({
-          hex: rgbToHex(message.device.settings.customColor2.rgb),
-          rgb: message.device.settings.customColor2.rgb,
-        });
-      }
-
-      if (message.device.settings.customSensitivity != null) {
-        setCurrentSensitivity(message.device.settings.customSensitivity);
-      }
-      if (message.device.settings.customBrightness != null) {
-        setCurrentBrightness(message.device.settings.customBrightness);
-      }
     });
   }, []);
 
@@ -74,31 +44,19 @@ export default function App() {
         </TabList>
 
         <TabPanel>
-          <CustomColor
-            deviceSelected={deviceSelected}
-            currentColor={currentColor}
-            setCurrentColor={setCurrentColor}
-          />
+          <CustomColor deviceSelected={deviceSelected} />
         </TabPanel>
         <TabPanel>
-          <CustomColor2
-            deviceSelected={deviceSelected}
-            currentColor2={currentColor2}
-            setCurrentColor2={setCurrentColor2}
-          />
+          {deviceSelected.settings.customColor2 != null && (
+            <CustomColor2 deviceSelected={deviceSelected} />
+          )}
         </TabPanel>
       </Tabs>
       {deviceSelected.settings.customSensitivity != null && (
-        <MouseSensitivity
-          deviceSelected={deviceSelected}
-          currentSensitivity={currentSensitivity}
-        ></MouseSensitivity>
+        <MouseSensitivity deviceSelected={deviceSelected} />
       )}
       {deviceSelected.settings.customBrightness != null && (
-        <Brightness
-          deviceSelected={deviceSelected}
-          brightness={currentBrightness}
-        />)}
+        <Brightness deviceSelected={deviceSelected} />)}
     </span>
   );
 }

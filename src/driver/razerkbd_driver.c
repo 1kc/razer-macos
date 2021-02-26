@@ -1348,8 +1348,6 @@ ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
         brightness = round(brightness / 2.55);
     }
 
-    printf("Current keyboard brightness %d\n", brightness);
-
     return brightness;
 }
 
@@ -1514,26 +1512,18 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct
             response_report.command_class != request_report->command_class ||
             response_report.command_id.id != request_report->command_id.id)
         {
-            printf("Response doesnt match request\n");
-            //        } else if (response_report.status == RAZER_CMD_BUSY) {
-            //            printf("Device is busy\n");
+            printf("Response doesnt match request (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_BUSY) {
+            printf("Device is busy (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_FAILURE) {
+            printf("Command failed (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {
+            printf("Command not supported (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_TIMEOUT) {
+            printf("Command timed out (keyboard)\n");
         }
-        else if (response_report.status == RAZER_CMD_FAILURE)
-        {
-            printf("Command failed\n");
-        }
-        else if (response_report.status == RAZER_CMD_NOT_SUPPORTED)
-        {
-            printf("Command not supported\n");
-        }
-        else if (response_report.status == RAZER_CMD_TIMEOUT)
-        {
-            printf("Command timed out\n");
-        }
-    }
-    else
-    {
-        printf("Invalid Report Length");
+    } else {
+        printf("Invalid Report Length (keyboard)\n");
     }
 
     return response_report;

@@ -367,7 +367,6 @@ Napi::Number MouseGetDpi(const Napi::CallbackInfo &info) {
     RazerDevice device = getRazerDeviceFor(info);
 
     ushort dpi = razer_attr_read_dpi(device.usbDevice);
-
     return Napi::Number::New(env, dpi);
 }
 

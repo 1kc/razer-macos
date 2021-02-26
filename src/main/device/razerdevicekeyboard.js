@@ -6,9 +6,8 @@ export class RazerDeviceKeyboard extends RazerDevice {
   }
 
   async init() {
-    await super.init();
     this.brightness = this.addon.KbdGetBrightness(this.internalId);
-    return this;
+    return super.init();
   }
 
   setModeNone() {
@@ -40,6 +39,9 @@ export class RazerDeviceKeyboard extends RazerDevice {
   }
   setStarlight(mode) {
     this.addon.kbdSetModeStarlight(this.internalId, mode);
+  }
+  getBrightness() {
+    return this.brightness;
   }
   setBrightness(brightness) {
     this.brightness = brightness;

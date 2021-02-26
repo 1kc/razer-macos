@@ -1,11 +1,11 @@
 'use strict';
 
-import { app, Menu, Tray, BrowserWindow, nativeTheme, ipcMain } from 'electron';
+import { app, Menu, Tray, BrowserWindow, nativeTheme, ipcMain, dialog } from 'electron';
 import addon from '../driver';
 import path from 'path';
 import { RazerDeviceManager } from './razerdevicemanager';
 import { createMenuFor } from './menu/menubuilder';
-import { saveSettingsFor } from './settingsmanager';
+import { clearAllSettings, saveSettingsFor } from './settingsmanager';
 import { RazerAnimationCycleCustom } from './animation/animationcyclecustom';
 import { RazerAnimationCycleSpectrum } from './animation/animationcyclespectrum';
 
@@ -39,6 +39,23 @@ let mainMenu = [
     click() {
       refreshTray(true);
     },
+  },
+  {
+    label: 'Clear all settings',
+    click() {
+      app.focus();
+      dialog.showMessageBox({
+        buttons: ["Yes","No"], message: "Really clear all settings?"
+      }).then(result => {
+        if(result.response === 0) {
+          return clearAllSettings();
+        } else {
+          return Promise.resolve();
+        }
+      }).then(() => {
+        refreshTray(true);
+      }).catch(() => {});
+    }
   },
   { type: 'separator' },
   {
@@ -175,7 +192,7 @@ ipcMain.on('request-set-dpi', (event, arg) => {
   const { device } = arg;
   const currentDevice = razerApp.deviceManager.getByInternalId(device.internalId);
   currentDevice.settings = device.settings;
-  razerApp.addon.mouseSetDpi(currentDevice.internalId, currentDevice.settings.customSensitivity);
+  currentDevice.setDPI(currentDevice.settings.customSensitivity);
   refreshTray();
 });
 

@@ -52,18 +52,18 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
         if(response_report.remaining_packets != request_report->remaining_packets ||
            response_report.command_class != request_report->command_class ||
            response_report.command_id.id != request_report->command_id.id) {
-            //print_erroneous_report(&response_report, "razeraccessory", "Response doesn't match request");
-//        } else if (response_report.status == RAZER_CMD_BUSY) {
-//           // print_erroneous_report(&response_report, "razermouse", "Device is busy");
+            printf("Response doesn't match request (accessory)\n");
+        } else if (response_report.status == RAZER_CMD_BUSY) {
+            printf("Device is busy (accessory)\n");
         } else if (response_report.status == RAZER_CMD_FAILURE) {
-            //print_erroneous_report(&response_report, "razeraccessory", "Command failed");
+            printf("Command failed (accessory)\n");
         } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {
-            //print_erroneous_report(&response_report, "razeraccessory", "Command not supported");
+            printf("Command not supported (accessory)\n");
         } else if (response_report.status == RAZER_CMD_TIMEOUT) {
-            //print_erroneous_report(&response_report, "razeraccessory", "Command timed out");
+            printf("Command timed out (accessory)\n");
         }
     } else {
-        //print_erroneous_report(&response_report, "razeraccessory", "Invalid Report Length");
+        printf("Invalid Report Length (accessory)\n");
     }
 
     return response_report;

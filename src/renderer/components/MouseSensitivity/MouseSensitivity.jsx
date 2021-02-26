@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import ReactSlider from 'react-slider';
 
-export default function MouseSensitivity({ deviceSelected, currentSensitivity }) {
-  const [currentDpi, setCurrentDpi] = useState(currentSensitivity);
+export default function MouseSensitivity({ deviceSelected }) {
+  const [currentDpi, setCurrentDpi] = useState(deviceSelected.settings.customSensitivity);
 
   const handleClick = () => {
     deviceSelected.settings.customSensitivity = currentDpi;

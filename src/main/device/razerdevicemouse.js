@@ -6,10 +6,10 @@ export class RazerDeviceMouse extends RazerDevice {
   }
 
   async init() {
-    await super.init();
     this.batteryLevel = this.addon.getBatteryLevel(this.internalId);
     this.chargingStatus = this.addon.getChargingStatus(this.internalId);
-    return this;
+    this.dpi = this.addon.mouseGetDpi(this.internalId);
+    return super.init();
   }
 
   getName() {
@@ -53,5 +53,13 @@ export class RazerDeviceMouse extends RazerDevice {
   }
   setLogoLEDEffect(effect) {
     this.addon.mouseSetLogoLEDEffect(this.internalId, effect);
+  }
+
+  getDPI() {
+    return this.dpi;
+  }
+  setDPI(dpi) {
+    this.dpi = dpi;
+    this.addon.mouseSetDpi(this.internalId, dpi);
   }
 }
