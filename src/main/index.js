@@ -98,7 +98,9 @@ let mainMenu = [
   {
     label: 'Spectrum All Devices',
     click() {
-      razerApp.spectrumAnimation.start();
+      razerApp.deviceManager.activeRazerDevices.forEach(device => {
+        device.setSpectrum();
+      });
     },
   },
   {
@@ -152,7 +154,7 @@ function buildCustomColorsCycleMenu() {
     };
   });
   cccMenu = cccMenu.concat(colorItems);
-  mainMenu[5].submenu = cccMenu;
+  mainMenu[6].submenu = cccMenu;
 }
 
 const mainMenuBottom = [
@@ -226,10 +228,12 @@ ipcMain.on('request-set-custom-color2', (event, arg) => {
 function createWindow() {
   razerApp.window = new BrowserWindow({
     webPreferences: { nodeIntegration: true },
-    titleBarStyle: 'hidden',
+    //titleBarStyle: 'hidden',
     height: 450, // This is adjusted later with window.setSize
     resizable: false,
     width: 500,
+    minWidth:320,
+    minHeight: 320,
     y: 100,
     // Set the default background color of the window to match the CSS
     // background color of the page, this prevents any white flickering
@@ -265,7 +269,7 @@ function createWindow() {
 
     if (isDevelopment) {
       // auto-open dev tools
-      razerApp.window.webContents.openDevTools();
+      //razerApp.window.webContents.openDevTools();
 
       // add inspect element on right click menu
       razerApp.window.webContents.on('context-menu', (e, props) => {

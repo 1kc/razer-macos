@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HuePicker, MaterialPicker } from 'react-color';
+import { ChromePicker, HuePicker, MaterialPicker } from 'react-color';
 import { ipcRenderer } from 'electron';
 
 export default function CustomColor2({ deviceSelected }) {
@@ -31,15 +31,12 @@ export default function CustomColor2({ deviceSelected }) {
     };
     ipcRenderer.send('request-set-custom-color2', payload);
   };
-
+  const styles = { 'default': { picker: { background: '#202124', boxShadow: 'none'} }};
   return (
-    <div className='settings'>
-      <p className='ui-center-text'>Secondary custom color selection (Starlight Dual Mode only)</p>
+    <div>
+      <p>Secondary custom color selection (Starlight Dual Mode only)</p>
       <div className='control'>
-        <HuePicker color={currentColor} onChange={handleChange} />
-      </div>
-      <div className='control'>
-        <MaterialPicker color={currentColor} onChange={handleChange} />
+        <ChromePicker color={currentColor} onChange={handleChange} width='100%' disableAlpha={true} styles={styles} defaultView={'rgb'}/>
       </div>
       <div className='control'>
         <button onClick={handleClick}>Save custom color</button>

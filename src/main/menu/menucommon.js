@@ -58,7 +58,7 @@ export function getMenuItemSetCustomColor(device, label, razerApp) {
       razerApp.window.webContents.send('device-selected', {
         device: device.serialize(),
       });
-      razerApp.window.setSize(500, 300);
+      //razerApp.window.setSize(500, 300);
       razerApp.window.show();
     },
   };

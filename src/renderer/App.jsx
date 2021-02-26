@@ -11,52 +11,68 @@ import Brightness from './components/Brightness/Brightness';
  * Root React component
  */
 export default function App() {
-  const NULLDEVICE = {
-    settings: {
-      customColor1: {
-        rgb:{ r: 255, g: 255, b: 0 }
-      },
-    }
-  }
-  const [deviceSelected, setDeviceSelected] = useState(NULLDEVICE);
+  const [deviceSelected, setDeviceSelected] = useState(null);
 
   useEffect(() => {
     ipcRenderer.on('device-selected', (event, message) => {
       //force refresh by setting to NULL device first
-      setDeviceSelected(NULLDEVICE);
+      setDeviceSelected(null);
       setDeviceSelected(message.device);
     });
   }, []);
 
+  if (deviceSelected == null) {
+    return (
+      <span className='no-select'>
+        <div id='no-device'>Please select a device to configure</div>
+      </span>
+    );
+  }
+
   return (
     <span className='no-select'>
-      <header id='titlebar'>
-        <div id='drag-region'>
-          <div id='window-title'>
-            <span>{deviceSelected.name} settings</span>
-          </div>
+      <div id='body'>
+        <div id='product'>
+          <div className='product-image'><img src={deviceSelected.img} /></div>
+          <div className='product-description'>{deviceSelected.name}</div>
         </div>
-      </header>
-      <Tabs>
-        <TabList>
-          <Tab>Primary custom color</Tab>
-          <Tab disabled={deviceSelected.settings.customColor2 == null}>Secondary custom color</Tab>
-        </TabList>
+        <div id='settings'>
+          <div className='settings-block'>
+            <div className='settings-block-title'>Colors</div>
+            <div className='settings-block-body'>
+              <Tabs>
+                <TabList>
+                  <Tab>Primary custom color</Tab>
+                  <Tab disabled={deviceSelected.settings.customColor2 == null}>Secondary custom color</Tab>
+                </TabList>
 
-        <TabPanel>
-          <CustomColor deviceSelected={deviceSelected} />
-        </TabPanel>
-        <TabPanel>
-          {deviceSelected.settings.customColor2 != null && (
-            <CustomColor2 deviceSelected={deviceSelected} />
+                <TabPanel>
+                  <CustomColor deviceSelected={deviceSelected} />
+                </TabPanel>
+                <TabPanel>
+                  {deviceSelected.settings.customColor2 != null && (
+                    <CustomColor2 deviceSelected={deviceSelected} />
+                  )}
+                </TabPanel>
+              </Tabs>
+            </div>
+          </div>
+
+          {deviceSelected.settings.customSensitivity != null && (
+            <div className='settings-block'>
+              <div className='settings-block-title'>Mouse DPI</div>
+              <div className='settings-block-body'><MouseSensitivity deviceSelected={deviceSelected} /></div>
+            </div>
           )}
-        </TabPanel>
-      </Tabs>
-      {deviceSelected.settings.customSensitivity != null && (
-        <MouseSensitivity deviceSelected={deviceSelected} />
-      )}
-      {deviceSelected.settings.customBrightness != null && (
-        <Brightness deviceSelected={deviceSelected} />)}
+          {deviceSelected.settings.customBrightness != null && (
+            <div className='settings-block'>
+              <div className='settings-block-title'>Brightness</div>
+              <div className='settings-block-body'><Brightness deviceSelected={deviceSelected} /></div>
+            </div>
+
+            )}
+        </div>
+        </div>
     </span>
   );
 }
