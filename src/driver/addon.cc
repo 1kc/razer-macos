@@ -21,7 +21,7 @@ IOUSBDeviceInterface **headphoneDev;
 IOUSBDeviceInterface **accDev;
 
 /**
-* Get the Razer Keyboard USB device interface and device name, 
+* Get the Razer Keyboard USB device interface and device name,
 * return JS Null if non found
 */
 Napi::Value GetKeyboardDevice(const Napi::CallbackInfo &info)
@@ -260,7 +260,7 @@ void KbdSetBrightness(const Napi::CallbackInfo &info)
   }
 
   Napi::Number brightness_number = info[0].ToNumber();
-  
+
   ushort brightness = brightness_number.Int32Value();
 
   razer_attr_write_set_brightness(kbdDev, brightness, 1);
@@ -290,17 +290,43 @@ void KbdSetModeStarlight(const Napi::CallbackInfo &info)
   {
     razer_attr_write_mode_starlight(kbdDev, buf, 1);
   }
-  else //exception 
+  else //exception
   {
     Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
         .ThrowAsJavaScriptException();
     return;
-  
+
  }
 }
 
+void KbdSetModeCustom(const Napi::CallbackInfo &info)
+{
+  if (kbdDev == NULL)
+  {
+    return;
+  }
+
+  razer_attr_write_mode_custom(kbdDev, "1", 1);
+}
+
+void KbdSetCustomFrame(const Napi::CallbackInfo &info)
+{
+  if (kbdDev == NULL)
+  {
+    return;
+  }
+
+  Napi::Uint8Array argsArr = info[0].As<Napi::Uint8Array>();
+  int argsArr_len = argsArr.ElementLength();
+
+  // Cast unsigned char array into char array
+  char *buf = (char *)info[0].As<Napi::Uint8Array>().Data();
+
+  razer_attr_write_matrix_custom_frame(kbdDev, buf, argsArr_len);
+}
+
 /**
-* Get the Razer Mouse USB device interface and device name, 
+* Get the Razer Mouse USB device interface and device name,
 * return JS Null if non found
 */
 Napi::Value GetMouseDevice(const Napi::CallbackInfo &info)
@@ -371,7 +397,7 @@ void MouseSetLogoLEDEffect(const Napi::CallbackInfo &info)
   }
   std::string effectString = info[0].ToString().Utf8Value();
   const char* effect = effectString.c_str();
-    
+
   if (std::strncmp(effect, "static", 6) == 0)
   {
     razer_attr_write_logo_led_effect(mouseDev, "0", 1);
@@ -580,7 +606,7 @@ void MouseSetDpi(const Napi::CallbackInfo &info)
 }
 
 /**
-* Get the Razer Mouse Dock USB device interface and device name, 
+* Get the Razer Mouse Dock USB device interface and device name,
 * return JS Null if non found
 */
 Napi::Value GetMouseDockDevice(const Napi::CallbackInfo &info)
@@ -679,7 +705,7 @@ void MouseDockSetModeNone(const Napi::CallbackInfo &info)
 }
 
 /**
-* Get the Razer eGPU USB device interface and device name, 
+* Get the Razer eGPU USB device interface and device name,
 * return JS Null if non found
 */
 Napi::Value GetEgpuDevice(const Napi::CallbackInfo &info)
@@ -794,7 +820,7 @@ void EgpuSetModeWave(const Napi::CallbackInfo &info)
 }
 
 /**
-* Get the Razer Mouse Mat USB device interface and device name, 
+* Get the Razer Mouse Mat USB device interface and device name,
 * return JS Null if non found
 */
 Napi::Value GetMouseMatDevice(const Napi::CallbackInfo &info)
@@ -1245,6 +1271,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("KbdGetBrightness", Napi::Function::New(env, KbdGetBrightness));
   exports.Set("KbdSetBrightness", Napi::Function::New(env, KbdSetBrightness));
   exports.Set("kbdSetModeStarlight", Napi::Function::New(env, KbdSetModeStarlight));
+  exports.Set("kbdSetModeCustom", Napi::Function::New(env, KbdSetModeCustom));
+  exports.Set("kbdSetCustomFrame", Napi::Function::New(env, KbdSetCustomFrame));
 
   exports.Set("getMouseDevice", Napi::Function::New(env, GetMouseDevice));
   exports.Set("getBatteryLevel", Napi::Function::New(env, GetMousebatteryLevel));
@@ -1291,7 +1319,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("egpuSetModeStaticNoStore", Napi::Function::New(env, EgpuSetModeStaticNoStore));
   exports.Set("egpuSetModeWave", Napi::Function::New(env, EgpuSetModeWave));
   exports.Set("egpuSetModeSpectrum", Napi::Function::New(env, EgpuSetModeSpectrum));
-  
+
   // Headphones
   exports.Set("getHeadphoneDevice", Napi::Function::New(env, GetHeadphoneDevice));
   exports.Set("closeHeadphoneDevice", Napi::Function::New(env, CloseHeadphoneDevice));

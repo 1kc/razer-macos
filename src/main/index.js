@@ -4,6 +4,7 @@ import { app, Menu, Tray, BrowserWindow, nativeTheme, ipcMain } from 'electron';
 import addon from '../driver';
 import path from 'path';
 import { format as formatUrl } from 'url';
+import ioHook from 'iohook';
 
 const APP_VERSION = require('../../package.json').version;
 
@@ -24,6 +25,114 @@ let customEgpuColor = null;
 let customHeadphoneColor = null;
 let customAccessoryColor = null;
 let cycleColors = null;
+
+const KEY_MAPPING = {
+  1: [0, 1],
+  59: [0, 3],
+  60: [0, 4],
+  61: [0, 5],
+  62: [0, 6],
+  63: [0, 7],
+  64: [0, 8],
+  65: [0, 9],
+  66: [0, 10],
+  67: [0, 11],
+  68: [0, 12],
+  87: [0, 13],
+  88: [0, 14],
+  91: [0, 15],
+  92: [0, 16],
+  93: [0, 17],
+  57378: [0, 19],
+  57376: [0, 21],
+  41: [1, 1],
+  2: [1, 2],
+  3: [1, 3],
+  4: [1, 4],
+  5: [1, 5],
+  6: [1, 6],
+  7: [1, 7],
+  8: [1, 8],
+  9: [1, 9],
+  10: [1, 10],
+  11: [1, 11],
+  12: [1, 12],
+  13: [1, 13],
+  14: [1, 14],
+  3666: [1, 15],
+  3655: [1, 16],
+  3657: [1, 17],
+  69: [1, 18],
+  3637: [1, 19],
+  55: [1, 20],
+  74: [1, 21],
+  15: [2, 1],
+  16: [2, 2],
+  17: [2, 3],
+  18: [2, 4],
+  19: [2, 5],
+  20: [2, 6],
+  21: [2, 7],
+  22: [2, 8],
+  23: [2, 9],
+  24: [2, 10],
+  25: [2, 11],
+  26: [2, 12],
+  27: [2, 13],
+  43: [2, 14],
+  3667: [2, 15],
+  3663: [2, 16],
+  3665: [2, 17],
+  71: [2, 18],
+  72: [2, 19],
+  73: [2, 20],
+  78: [2, 21],
+  58: [3, 1],
+  30: [3, 2],
+  31: [3, 3],
+  32: [3, 4],
+  33: [3, 5],
+  34: [3, 6],
+  35: [3, 7],
+  36: [3, 8],
+  37: [3, 9],
+  38: [3, 10],
+  39: [3, 11],
+  40: [3, 12],
+  28: [3, 14],
+  75: [3, 18],
+  76: [3, 19],
+  77: [3, 20],
+  42: [4, 1],
+  44: [4, 3],
+  45: [4, 4],
+  46: [4, 5],
+  47: [4, 6],
+  48: [4, 7],
+  49: [4, 8],
+  50: [4, 9],
+  51: [4, 10],
+  52: [4, 11],
+  53: [4, 12],
+  54: [4, 14],
+  57416: [4, 16],
+  79: [4, 18],
+  80: [4, 19],
+  81: [4, 20],
+  3612: [4, 21],
+  29: [5, 1],
+  3675: [5, 2],
+  56: [5, 3],
+  57: [5, 7],
+  3640: [5, 11],
+  0: [5, 13],
+  3613: [5, 14],
+  57419: [5, 15],
+  57424: [5, 16],
+  57421: [5, 17],
+  82: [5, 19],
+  83: [5, 20],
+};
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -243,11 +352,11 @@ function setDevicesCycleColors(colors) {
     ])
   );
   addon.accessorySetModeStaticNoStore(
-      new Uint8Array([
-        colors[cycleColorsIndex].r,
-        colors[cycleColorsIndex].g,
-        colors[cycleColorsIndex].b,
-      ])
+    new Uint8Array([
+      colors[cycleColorsIndex].r,
+      colors[cycleColorsIndex].g,
+      colors[cycleColorsIndex].b,
+    ])
   );
 
   cycleColorsIndex++;
@@ -270,7 +379,7 @@ let mainMenu = [
       // with normal spectrum each device's spectrum can vary slightly causing a mismatched look.
       // must set interval to 4 seconds or the change can look too abrupt.
 
-      clearInterval(cycleColorsInterval);
+      clean();
       cycleColorsIndex = 0;
       setDevicesCycleColors(spectrumColors);
       cycleColorsInterval = setInterval(
@@ -290,7 +399,7 @@ function buildCustomColorsCycleMenu() {
     {
       label: 'Cycle All Devices',
       click() {
-        clearInterval(cycleColorsInterval);
+        clean();
         cycleColorsIndex = 0;
         setDevicesCycleColors(cycleColors);
         cycleColorsInterval = setInterval(
@@ -360,7 +469,7 @@ let keyboardMenu = [
   {
     label: 'None',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.kbdSetModeNone();
     },
   },
@@ -370,7 +479,7 @@ let keyboardMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeStatic(
             new Uint8Array([
               customKdbColor.rgb.r,
@@ -383,28 +492,28 @@ let keyboardMenu = [
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeStatic(new Uint8Array([0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeStatic(new Uint8Array([0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeStatic(new Uint8Array([0, 0, 0xff]));
         },
       },
@@ -419,63 +528,63 @@ let keyboardMenu = [
           {
             label: 'Turtle Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_turtle');
             },
           },
           {
             label: 'Slowest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_slowest');
             },
           },
           {
             label: 'Slower Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_slower');
             },
           },
           {
             label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_slow');
             },
           },
           {
             label: 'Normal Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_default');
             },
           },
           {
             label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_fast');
             },
           },
           {
             label: 'Faster Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_faster');
             },
           },
           {
             label: 'Fastest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_fastest');
             },
           },
           {
             label: 'Lightning Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('left_lightning');
             },
           },
@@ -487,28 +596,28 @@ let keyboardMenu = [
           {
             label: 'Turtle Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_turtle');
             },
           },
           {
             label: 'Slowest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_slowest');
             },
           },
           {
             label: 'Slower Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_slower');
             },
           },
           {
             label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_slow');
             },
           },
@@ -516,39 +625,38 @@ let keyboardMenu = [
           {
             label: 'Normal Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_default');
             },
           },
           {
             label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_fast');
             },
           },
           {
             label: 'Faster Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_faster');
             },
           },
           {
             label: 'Fastest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_fastest');
             },
           },
           {
             label: 'Lightning Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeWave('right_lightning');
             },
           },
-
         ],
       },
     ],
@@ -556,7 +664,7 @@ let keyboardMenu = [
   {
     label: 'Spectrum',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.kbdSetModeSpectrum();
     },
   },
@@ -566,7 +674,7 @@ let keyboardMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeReactive(
             new Uint8Array([
               3,
@@ -580,21 +688,21 @@ let keyboardMenu = [
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
-          addon.kbdSetModeReactive(new Uint8Array([3, 0xff, 0, 0])); 
+          clean();
+          addon.kbdSetModeReactive(new Uint8Array([3, 0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeReactive(new Uint8Array([3, 0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.kbdSetModeReactive(new Uint8Array([3, 0, 0, 0xff]));
         },
       },
@@ -603,7 +711,7 @@ let keyboardMenu = [
   {
     label: 'Breathe',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.kbdSetModeBreathe(
         new Uint8Array([
           0, // random
@@ -616,379 +724,428 @@ let keyboardMenu = [
     submenu: [
       {
         label: 'Custom color',
-        submenu: 
-        [
-          {
-          label: 'Slow Speed',
-            click() {
-              clearInterval(cycleColorsInterval);
-              addon.kbdSetModeStarlight(
-                new Uint8Array([
-                  3,
-                  customKdbColor.rgb.r,
-                  customKdbColor.rgb.g,
-                  customKdbColor.rgb.b,
-                ])
-              );
-            },
-          },
-          {
-          label: 'Medium Speed',
-            click() {
-              clearInterval(cycleColorsInterval);
-              addon.kbdSetModeStarlight(
-                new Uint8Array([
-                  2,
-                  customKdbColor.rgb.r,
-                  customKdbColor.rgb.g,
-                  customKdbColor.rgb.b,
-                ])
-              );
-            },
-          },
-          {
-          label: 'Fast Speed',
-            click() {
-              clearInterval(cycleColorsInterval);
-              addon.kbdSetModeStarlight(
-                new Uint8Array([
-                  1,
-                  customKdbColor.rgb.r,
-                  customKdbColor.rgb.g,
-                  customKdbColor.rgb.b,
-                ])
-              );
-            },
-          },
-        ]
-      },
-      {
-        label: 'Custom dual color',
-        submenu: 
-        [
-          {
-          label: 'Slow Speed',
-            click() {
-              clearInterval(cycleColorsInterval);
-              addon.kbdSetModeStarlight(
-                new Uint8Array([
-                  3,
-                  customKdbColor.rgb.r,
-                  customKdbColor.rgb.g,
-                  customKdbColor.rgb.b,
-                  customKdbColor2.rgb.r,
-                  customKdbColor2.rgb.g,
-                  customKdbColor2.rgb.b,
-
-                ])
-              );
-            },
-          },
-          {
-          label: 'Medium Speed',
-            click() {
-              clearInterval(cycleColorsInterval);
-              addon.kbdSetModeStarlight(
-                new Uint8Array([
-                  2,
-                  customKdbColor.rgb.r,
-                  customKdbColor.rgb.g,
-                  customKdbColor.rgb.b,
-                  customKdbColor2.rgb.r,
-                  customKdbColor2.rgb.g,
-                  customKdbColor2.rgb.b,
-                ])
-              );
-            },
-          },
-          {
-          label: 'Fast Speed',
-            click() {
-              clearInterval(cycleColorsInterval);
-              addon.kbdSetModeStarlight(
-                new Uint8Array([
-                  1,
-                  customKdbColor.rgb.r,
-                  customKdbColor.rgb.g,
-                  customKdbColor.rgb.b,
-                  customKdbColor2.rgb.r,
-                  customKdbColor2.rgb.g,
-                  customKdbColor2.rgb.b,
-                ])
-              );
-            },
-          },
-        ]
-      }, 
-      {
-        label: 'Random',
-        submenu:
-        [
+        submenu: [
           {
             label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  3,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                ])
+              );
+            },
+          },
+          {
+            label: 'Medium Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  2,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                ])
+              );
+            },
+          },
+          {
+            label: 'Fast Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  1,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                ])
+              );
+            },
+          },
+        ],
+      },
+      {
+        label: 'Custom dual color',
+        submenu: [
+          {
+            label: 'Slow Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  3,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                  customKdbColor2.rgb.r,
+                  customKdbColor2.rgb.g,
+                  customKdbColor2.rgb.b,
+                ])
+              );
+            },
+          },
+          {
+            label: 'Medium Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  2,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                  customKdbColor2.rgb.r,
+                  customKdbColor2.rgb.g,
+                  customKdbColor2.rgb.b,
+                ])
+              );
+            },
+          },
+          {
+            label: 'Fast Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([
+                  1,
+                  customKdbColor.rgb.r,
+                  customKdbColor.rgb.g,
+                  customKdbColor.rgb.b,
+                  customKdbColor2.rgb.r,
+                  customKdbColor2.rgb.g,
+                  customKdbColor2.rgb.b,
+                ])
+              );
+            },
+          },
+        ],
+      },
+      {
+        label: 'Random',
+        submenu: [
+          {
+            label: 'Slow Speed',
+            click() {
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([3]));
             },
           },
           {
             label: 'Medium Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([2]));
             },
           },
           {
             label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([1]));
             },
-          }
+          },
         ],
       },
       {
         label: 'Red',
-        submenu:[
+        submenu: [
           {
-          label:'Slow Speed',
+            label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0]));
-              },
+            },
           },
           {
-          label:'Medium Speed',
+            label: 'Medium Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0, 0]));
-               },
+            },
           },
           {
-          label:'Fast Speed',
+            label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0, 0]));
-              },
+            },
           },
-
-      ], 
+        ],
       },
       {
         label: 'Green',
-        submenu:
-        [
+        submenu: [
           {
-          label:'Slow Speed',
+            label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0xff, 0]));
-              },
+            },
           },
           {
-          label:'Medium Speed',
+            label: 'Medium Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0xff, 0]));
-               },
+            },
           },
           {
-          label:'Fast Speed',
+            label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0xff, 0]));
-              },
+            },
           },
-        ], 
+        ],
       },
       {
         label: 'Blue',
-        submenu:
-        [
+        submenu: [
           {
-          label:'Slow Speed',
+            label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0, 0xff]));
-              },
+            },
           },
           {
-          label:'Medium Speed',
+            label: 'Medium Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0, 0xff]));
-               },
+            },
           },
           {
-          label:'Fast Speed',
+            label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0, 0xff]));
-              },
+            },
           },
-        ], 
+        ],
       },
       {
         label: 'Purple',
-        submenu:
-        [
+        submenu: [
           {
-          label:'Slow Speed',
+            label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([3, 0x80, 0, 0x80]));
-              },
+            },
           },
           {
-          label:'Medium Speed',
+            label: 'Medium Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([2, 0x80, 0, 0x80]));
-               },
+            },
           },
           {
-          label:'Fast Speed',
+            label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([1, 0x80, 0, 0x80]));
-              },
+            },
           },
-        ], 
+        ],
       },
       {
         label: 'Aqua',
-        submenu:
-        [
+        submenu: [
           {
-          label:'Slow Speed',
+            label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0xff, 0xff]));
-              },
+            },
           },
           {
-          label:'Medium Speed',
+            label: 'Medium Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0xff, 0xff]));
-               },
+            },
           },
           {
-          label:'Fast Speed',
+            label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0xff, 0xff]));
-              },
+            },
           },
-        ], 
+        ],
       },
       {
         label: 'Orange',
-        submenu:
-        [
+        submenu: [
           {
-          label:'Slow Speed',
+            label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0x45, 0]));
-              },
+            },
           },
           {
-          label:'Medium Speed',
+            label: 'Medium Speed',
             click() {
-              clearInterval(cycleColorsInterval);
-              addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0x45, 0])); },
-                        },
+              clean();
+              addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0x45, 0]));
+            },
+          },
           {
-          label:'Fast Speed',
+            label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0x45, 0]));
-              },
+            },
           },
-        ], 
+        ],
       },
 
       {
         label: 'Red and Green',
-        submenu: 
-        [
+        submenu: [
           {
-          label: 'Slow Speed',
-          click(){
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0, 0, 0xff, 0])); //red + green
+            label: 'Slow Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([3, 0xff, 0, 0, 0, 0xff, 0])
+              ); //red + green
             },
           },
           {
-          label: 'Medium Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0, 0, 0, 0xff, 0])); //red + green
+            label: 'Medium Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([2, 0xff, 0, 0, 0, 0xff, 0])
+              ); //red + green
             },
           },
           {
-          label: 'Fast Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0, 0, 0, 0xff, 0])); //red + green
+            label: 'Fast Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([1, 0xff, 0, 0, 0, 0xff, 0])
+              ); //red + green
             },
           },
         ],
       },
       {
         label: 'Red and Blue',
-        submenu:
-        [
+        submenu: [
           {
-          label: 'Slow Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([3, 0xff, 0, 0, 0, 0, 0xff])); //red + blue
+            label: 'Slow Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([3, 0xff, 0, 0, 0, 0, 0xff])
+              ); //red + blue
             },
           },
           {
-          label: 'Medium Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([2, 0xff, 0, 0, 0, 0, 0xff])); //red + blue
+            label: 'Medium Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([2, 0xff, 0, 0, 0, 0, 0xff])
+              ); //red + blue
             },
           },
           {
-          label: 'Fast Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([1, 0xff, 0, 0, 0, 0, 0xff])); //red + blue
+            label: 'Fast Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([1, 0xff, 0, 0, 0, 0, 0xff])
+              ); //red + blue
             },
           },
         ],
       },
       {
         label: 'Blue and Green',
-        submenu:
-        [
+        submenu: [
           {
-          label: 'Slow Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([3, 0, 0, 0xff, 0, 0xff, 0])); //blue + green
+            label: 'Slow Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([3, 0, 0, 0xff, 0, 0xff, 0])
+              ); //blue + green
             },
           },
           {
-          label: 'Medium Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([2, 0, 0, 0xff, 0, 0xff, 0])); //blue + green
+            label: 'Medium Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([2, 0, 0, 0xff, 0, 0xff, 0])
+              ); //blue + green
             },
           },
           {
-          label: 'Fast Speed',
-          click() {
-            clearInterval(cycleColorsInterval);
-            addon.kbdSetModeStarlight(new Uint8Array([1, 0, 0, 0xff, 0, 0xff, 0])); //blue + green
+            label: 'Fast Speed',
+            click() {
+              clean();
+              addon.kbdSetModeStarlight(
+                new Uint8Array([1, 0, 0, 0xff, 0, 0xff, 0])
+              ); //blue + green
             },
           },
         ],
+      },
+    ],
+  },
+  {
+    label: 'Ripple',
+    submenu: [
+      {
+        label: 'Custom color',
+        click() {
+          clean();
+          setRippleEffect(Object.values(customKdbColor.rgb).slice(0, 3));
+        },
+      },
+      {
+        label: 'Custom dual color',
+        click() {
+          clean();
+          setRippleEffect(
+            Object.values(customKdbColor.rgb).slice(0, 3),
+            Object.values(customKdbColor2.rgb).slice(0, 3)
+          );
+        },
+      },
+      {
+        label: 'Red',
+        click() {
+          clean();
+          setRippleEffect([0xff, 0, 0]);
+        },
+      },
+      {
+        label: 'Green',
+        click() {
+          clean();
+          setRippleEffect([0, 0xff, 0]);
+        },
+      },
+      {
+        label: 'Blue',
+        click() {
+          clean();
+          setRippleEffect([0, 0, 0xff]);
+        },
       },
     ],
   },
@@ -1003,7 +1160,7 @@ let keyboardMenu = [
       {
         label: 'Set to 0%',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.KbdSetBrightness(0);
           refreshTray();
         },
@@ -1011,7 +1168,7 @@ let keyboardMenu = [
       {
         label: 'Set to 100%',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.KbdSetBrightness(100);
           refreshTray();
         },
@@ -1045,7 +1202,7 @@ let mouseMenu = [
   {
     label: 'None',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseSetLogoModeNone();
     },
   },
@@ -1055,7 +1212,7 @@ let mouseMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeStatic(
             new Uint8Array([
               customMouseColor.rgb.r,
@@ -1068,28 +1225,28 @@ let mouseMenu = [
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeStatic(new Uint8Array([0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeStatic(new Uint8Array([0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeStatic(new Uint8Array([0, 0, 0xff]));
         },
       },
@@ -1101,14 +1258,14 @@ let mouseMenu = [
       {
         label: 'Left',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeWave('left');
         },
       },
       {
         label: 'Right',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeWave('right');
         },
       },
@@ -1117,7 +1274,7 @@ let mouseMenu = [
   {
     label: 'Spectrum',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseSetLogoModeSpectrum();
     },
   },
@@ -1127,7 +1284,7 @@ let mouseMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeReactive(
             new Uint8Array([
               3,
@@ -1141,28 +1298,28 @@ let mouseMenu = [
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeReactive(new Uint8Array([3, 0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeReactive(new Uint8Array([3, 0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeReactive(new Uint8Array([3, 0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoModeReactive(new Uint8Array([3, 0, 0, 0xff]));
         },
       },
@@ -1171,7 +1328,7 @@ let mouseMenu = [
   {
     label: 'Breathe',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseSetLogoModeBreathe(
         new Uint8Array([
           0, // random
@@ -1185,28 +1342,28 @@ let mouseMenu = [
       {
         label: 'Static',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoLEDEffect('static');
         },
       },
       {
         label: 'Blinking',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoLEDEffect('blinking');
         },
       },
       {
         label: 'Pulsate',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoLEDEffect('pulsate');
         },
       },
       {
         label: 'Scroll',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseSetLogoLEDEffect('scroll');
         },
       },
@@ -1236,7 +1393,7 @@ let mouseDockMenu = [
   {
     label: 'None',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseDockSetModeNone();
     },
   },
@@ -1246,7 +1403,7 @@ let mouseDockMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseDockSetModeStatic(
             new Uint8Array([
               customMouseDockColor.rgb.r,
@@ -1259,28 +1416,28 @@ let mouseDockMenu = [
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseDockSetModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseDockSetModeStatic(new Uint8Array([0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseDockSetModeStatic(new Uint8Array([0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseDockSetModeStatic(new Uint8Array([0, 0, 0xff]));
         },
       },
@@ -1289,14 +1446,14 @@ let mouseDockMenu = [
   {
     label: 'Spectrum',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseDockSetModeSpectrum();
     },
   },
   {
     label: 'Breathe',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseDockSetModeBreathe(
         new Uint8Array([
           0, // random
@@ -1327,7 +1484,7 @@ let mouseMatMenu = [
   {
     label: 'None',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseMatSetModeNone();
     },
   },
@@ -1337,7 +1494,7 @@ let mouseMatMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseMatSetModeStatic(
             new Uint8Array([
               customMouseMatColor.rgb.r,
@@ -1350,28 +1507,28 @@ let mouseMatMenu = [
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseMatSetModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseMatSetModeStatic(new Uint8Array([0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseMatSetModeStatic(new Uint8Array([0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseMatSetModeStatic(new Uint8Array([0, 0, 0xff]));
         },
       },
@@ -1383,14 +1540,14 @@ let mouseMatMenu = [
       {
         label: 'Left',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseMatSetModeWave('left');
         },
       },
       {
         label: 'Right',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.mouseMatSetModeWave('right');
         },
       },
@@ -1399,14 +1556,14 @@ let mouseMatMenu = [
   {
     label: 'Spectrum',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseMatSetModeSpectrum();
     },
   },
   {
     label: 'Breathe',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.mouseMatSetModeBreathe(
         new Uint8Array([
           0, // random
@@ -1437,7 +1594,7 @@ let egpuMenu = [
   {
     label: 'None',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.egpuSetModeNone();
     },
   },
@@ -1447,7 +1604,7 @@ let egpuMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.egpuSetModeStatic(
             new Uint8Array([
               customEgpuColor.rgb.r,
@@ -1460,28 +1617,28 @@ let egpuMenu = [
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.egpuSetModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.egpuSetModeStatic(new Uint8Array([0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.egpuSetModeStatic(new Uint8Array([0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.egpuSetModeStatic(new Uint8Array([0, 0, 0xff]));
         },
       },
@@ -1493,14 +1650,14 @@ let egpuMenu = [
       {
         label: 'Left',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.egpuSetModeWave('left');
         },
       },
       {
         label: 'Right',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.egpuSetModeWave('right');
         },
       },
@@ -1509,14 +1666,14 @@ let egpuMenu = [
   {
     label: 'Spectrum',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.egpuSetModeSpectrum();
     },
   },
   {
     label: 'Breathe',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.egpuSetModeBreathe(
         new Uint8Array([
           0, // random
@@ -1547,7 +1704,7 @@ let headphoneMenu = [
   {
     label: 'None',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.headphoneSetModeNone();
     },
   },
@@ -1557,7 +1714,7 @@ let headphoneMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.headphoneSetModeStatic(
             new Uint8Array([
               customHeadphoneColor.rgb.r,
@@ -1570,28 +1727,28 @@ let headphoneMenu = [
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.headphoneSetModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.headphoneSetModeStatic(new Uint8Array([0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.headphoneSetModeStatic(new Uint8Array([0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.headphoneSetModeStatic(new Uint8Array([0, 0, 0xff]));
         },
       },
@@ -1600,14 +1757,14 @@ let headphoneMenu = [
   {
     label: 'Spectrum',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.headphoneSetModeSpectrum();
     },
   },
   {
     label: 'Breathe',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.headphoneSetModeBreathe(
         new Uint8Array([
           0, // random
@@ -1638,7 +1795,7 @@ let accessoryMenu = [
   {
     label: 'None',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.accessorySetModeNone();
     },
   },
@@ -1648,41 +1805,41 @@ let accessoryMenu = [
       {
         label: 'Custom color',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.accessorySetModeStatic(
-              new Uint8Array([
-                customAccessoryColor.rgb.r,
-                customAccessoryColor.rgb.g,
-                customAccessoryColor.rgb.b,
-              ])
+            new Uint8Array([
+              customAccessoryColor.rgb.r,
+              customAccessoryColor.rgb.g,
+              customAccessoryColor.rgb.b,
+            ])
           );
         },
       },
       {
         label: 'White',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.accessorySetModeStatic(new Uint8Array([0xff, 0xff, 0xff]));
         },
       },
       {
         label: 'Red',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.accessorySetModeStatic(new Uint8Array([0xff, 0, 0]));
         },
       },
       {
         label: 'Green',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.accessorySetModeStatic(new Uint8Array([0, 0xff, 0]));
         },
       },
       {
         label: 'Blue',
         click() {
-          clearInterval(cycleColorsInterval);
+          clean();
           addon.accessorySetModeStatic(new Uint8Array([0, 0, 0xff]));
         },
       },
@@ -1697,63 +1854,63 @@ let accessoryMenu = [
           {
             label: 'Turtle Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_turtle');
             },
           },
           {
             label: 'Slowest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_slowest');
             },
           },
           {
             label: 'Slower Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_slower');
             },
           },
           {
             label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_slow');
             },
           },
           {
             label: 'Normal Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_default');
             },
           },
           {
             label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_fast');
             },
           },
           {
             label: 'Faster Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_faster');
             },
           },
           {
             label: 'Fastest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_fastest');
             },
           },
           {
             label: 'Lightning Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('left_lightning');
             },
           },
@@ -1765,28 +1922,28 @@ let accessoryMenu = [
           {
             label: 'Turtle Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_turtle');
             },
           },
           {
             label: 'Slowest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_slowest');
             },
           },
           {
             label: 'Slower Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_slower');
             },
           },
           {
             label: 'Slow Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_slow');
             },
           },
@@ -1794,39 +1951,38 @@ let accessoryMenu = [
           {
             label: 'Normal Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_default');
             },
           },
           {
             label: 'Fast Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_fast');
             },
           },
           {
             label: 'Faster Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_faster');
             },
           },
           {
             label: 'Fastest Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_fastest');
             },
           },
           {
             label: 'Lightning Speed',
             click() {
-              clearInterval(cycleColorsInterval);
+              clean();
               addon.accessorySetModeWave('right_lightning');
             },
           },
-
         ],
       },
     ],
@@ -1834,18 +1990,18 @@ let accessoryMenu = [
   {
     label: 'Spectrum',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.accessorySetModeSpectrum();
     },
   },
   {
     label: 'Breathe',
     click() {
-      clearInterval(cycleColorsInterval);
+      clean();
       addon.accessorySetModeBreathe(
-          new Uint8Array([
-            0, // random
-          ])
+        new Uint8Array([
+          0, // random
+        ])
       );
     },
   },
@@ -1995,12 +2151,9 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
 });
 ipcMain.on('request-set-custom-color2', (event, arg) => {
   const { color } = arg;
-        customKdbColor2 = color;
-        storage.set('customKdbColor2', customKdbColor2);
+  customKdbColor2 = color;
+  storage.set('customKdbColor2', customKdbColor2);
 });
-
-
-
 
 function createWindow() {
   window = new BrowserWindow({
@@ -2079,7 +2232,6 @@ function createTray() {
   // *Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
   tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
 
-
   refreshTray();
 }
 
@@ -2091,7 +2243,7 @@ function refreshTray() {
   if (keyboardDeviceName) {
     keyboardMenu[1].label = keyboardDeviceName;
     keyboardBrightnessLevel = addon.KbdGetBrightness();
-    keyboardMenu[10].submenu[0].label = `Brightness: ${keyboardBrightnessLevel}%`;
+    keyboardMenu[11].submenu[0].label = `Brightness: ${keyboardBrightnessLevel}%`;
     menu = menu.concat(keyboardMenu);
   }
   if (mouseDeviceName) {
@@ -2133,4 +2285,80 @@ function refreshTray() {
   const contextMenu = Menu.buildFromTemplate(menu);
   tray.setToolTip('Razer macOS menu');
   tray.setContextMenu(contextMenu);
+}
+
+let rippleEffectInterval = null;
+function setRippleEffect(color, backgroundColor = [0, 0, 0]) {
+  ioHook.start();
+
+  const nRows = 6;
+  const nCols = 22;
+  const refreshRate = 0.05; // in seconds
+  const eventDuration = 1; // in seconds
+  const speed = 20; // number of keys per second
+  const width = 2; // number of keys
+
+  // initialization
+  let matrix = Array(nRows)
+    .fill()
+    .map(() => Array(nCols).fill(backgroundColor));
+  for (let i = 0; i < nRows; i++) {
+    let row = [i, 0, nCols - 1, ...matrix[i].flat()];
+    addon.kbdSetCustomFrame(new Uint8Array(row));
+  }
+  addon.kbdSetModeCustom();
+  let keyEvents = [];
+
+  // keyboard listener
+  ioHook.on('keydown', (event) => {
+    if (!(event.keycode in KEY_MAPPING)) return;
+    const rowIdx = KEY_MAPPING[event.keycode][0];
+    const colIdx = KEY_MAPPING[event.keycode][1];
+
+    keyEvents.push({
+      rowIdx,
+      colIdx,
+      startTime: Date.now() / 1000,
+    });
+  });
+
+  rippleEffectInterval = setInterval(function () {
+    keyEvents = keyEvents.filter(
+      (event) => event.startTime + eventDuration > Date.now() / 1000
+    );
+
+    // clear keyboard
+    matrix = Array(nRows)
+      .fill()
+      .map(() => Array(nCols).fill(backgroundColor));
+
+    // set color
+    for (let i = 0; i < nRows; i++) {
+      for (let j = 0; j < nCols; j++) {
+        for (let event of keyEvents) {
+          const radius = (Date.now() / 1000 - event.startTime) * speed;
+          const distance = Math.sqrt(
+            Math.pow(event.rowIdx - i, 2) + Math.pow(event.colIdx - j, 2)
+          );
+          if (radius - width <= distance && distance <= radius) {
+            matrix[i][j] = color;
+            break;
+          }
+        }
+      }
+    }
+
+    // set ripple effect
+    for (let i = 0; i < nRows; i++) {
+      let row = [i, 0, nCols - 1, ...matrix[i].flat()];
+      addon.kbdSetCustomFrame(new Uint8Array(row));
+    }
+    addon.kbdSetModeCustom();
+  }, refreshRate);
+}
+
+function clean() {
+  clearInterval(cycleColorsInterval);
+  clearInterval(rippleEffectInterval);
+  ioHook.stop();
 }
