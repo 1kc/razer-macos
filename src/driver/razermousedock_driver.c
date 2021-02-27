@@ -64,7 +64,7 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
            response_report.command_id.id != request_report->command_id.id) {
             printf("Response doesn't match request (mousedock)\n");
         } else if (response_report.status == RAZER_CMD_BUSY) {
-            printf("Device is busy (mousedock)\n");
+            //printf("Device is busy (mousedock)\n");
         } else if (response_report.status == RAZER_CMD_FAILURE) {
             printf("Command failed (mousedock)\n");
         } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {

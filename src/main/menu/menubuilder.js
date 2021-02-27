@@ -1,6 +1,6 @@
 import {
   getMenuItemBreathe, getMenuItemBrightness,
-  getMenuItemNone, getMenuItemOldMouseEffects, getMenuItemReactive, getMenuItemSetCustomColor,
+  getMenuItemNone, getMenuItemOldMouseEffects, getMenuItemReactive, getMenuItemRipple, getMenuItemSetCustomColor,
   getMenuItemSpectrum, getMenuItemStarlight,
   getMenuItemStatic,
   getMenuItemWaveExtended, getMenuItemWaveSimple,
@@ -16,7 +16,8 @@ const featureMapping = {
   'reactive': getMenuItemReactive,
   'starlight': getMenuItemStarlight,
   'brightness': getMenuItemBrightness,
-  'oldMouseEffects': getMenuItemOldMouseEffects
+  'oldMouseEffects': getMenuItemOldMouseEffects,
+  'ripple': getMenuItemRipple,
 };
 
 export function createMenuFor(razerApp, razerDevice) {
@@ -34,7 +35,7 @@ export function createMenuFor(razerApp, razerDevice) {
     // build menu based on device type
     switch (razerDevice.mainType) {
       case 'keyboard':
-        features = ["none","static", "waveExtended", "spectrum", "reactive", "breathe", "starlight", "brightness"];
+        features = ["none","static", "waveExtended", "spectrum", "reactive", "breathe", "starlight", "ripple", "brightness"];
         break;
       case 'mouse':
         features = ["none","static", "waveSimple", "spectrum", "reactive", "breathe", "oldMouseEffects"];

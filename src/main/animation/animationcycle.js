@@ -3,7 +3,8 @@ import { RazerDeviceAnimation } from './animation';
 export class RazerAnimationCycle extends RazerDeviceAnimation {
 
   constructor(razerApp) {
-    super(razerApp);
+    super();
+    this.razerApp = razerApp;
     this.cycleColorsIndex = 0;
     this.cycleColorsInterval = null;
     this.cycleColors = [];

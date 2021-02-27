@@ -1514,7 +1514,7 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct
         {
             printf("Response doesnt match request (keyboard)\n");
         } else if (response_report.status == RAZER_CMD_BUSY) {
-            printf("Device is busy (keyboard)\n");
+            //printf("Device is busy (keyboard)\n");
         } else if (response_report.status == RAZER_CMD_FAILURE) {
             printf("Command failed (keyboard)\n");
         } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {

@@ -265,7 +265,7 @@ export function getMenuItemBrightness(device, razerApp) {
     saveSettingsFor(device);
     device.setBrightness(device.settings.customBrightness);
     razerApp.refreshTray();
-  }
+  };
 
   return {
     label: 'Brightness',
@@ -286,6 +286,32 @@ export function getMenuItemBrightness(device, razerApp) {
           updateBrightness(100);
         },
       },
+    ],
+  };
+}
+
+export function getMenuItemRipple(device) {
+
+  const singleItem = (label, color, backgroundColor) => {
+    return {
+      label: label,
+      click() {
+        device.setRippleEffect(color, backgroundColor);
+      },
+    };
+  };
+
+  return {
+    label: 'Ripple',
+    submenu: [
+      singleItem('Custom color', Object.values(device.settings.customColor1.rgb).slice(0, 3)),
+      singleItem('Custom dual color',
+        Object.values(device.settings.customColor1.rgb).slice(0, 3),
+        Object.values(device.settings.customColor2.rgb).slice(0, 3),
+      ),
+      singleItem('Red', [0xff, 0, 0]),
+      singleItem('Green', [0, 0xff, 0]),
+      singleItem('Blue', [0, 0, 0xff]),
     ],
   };
 }

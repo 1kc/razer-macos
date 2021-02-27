@@ -57,7 +57,7 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
         {
             printf("Response doesn't match request (egpu)\n");
         } else if (response_report.status == RAZER_CMD_BUSY) {
-            printf("Device is busy (egpu)\n");
+            //printf("Device is busy (egpu)\n");
         } else if (response_report.status == RAZER_CMD_FAILURE) {
             printf("Command failed (egpu)\n");
         } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {

@@ -194,6 +194,24 @@ void KbdSetModeStarlight(const Napi::CallbackInfo &info) {
     }
 }
 
+void KbdSetModeCustom(const Napi::CallbackInfo &info)
+{
+    RazerDevice device = getRazerDeviceFor(info);
+    razer_attr_write_mode_custom(device.usbDevice, "1", 1);
+}
+
+void KbdSetCustomFrame(const Napi::CallbackInfo &info)
+{
+    RazerDevice device = getRazerDeviceFor(info);
+    Napi::Uint8Array argsArr = info[1].As<Napi::Uint8Array>();
+    int argsArr_len = argsArr.ElementLength();
+
+    // Cast unsigned char array into char array
+    char *buf = (char *)info[1].As<Napi::Uint8Array>().Data();
+
+    razer_attr_write_matrix_custom_frame(device.usbDevice, buf, argsArr_len);
+}
+
 /**
 * Mouse
 */
@@ -779,6 +797,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set("KbdGetBrightness", Napi::Function::New(env, KbdGetBrightness));
     exports.Set("KbdSetBrightness", Napi::Function::New(env, KbdSetBrightness));
     exports.Set("kbdSetModeStarlight", Napi::Function::New(env, KbdSetModeStarlight));
+    exports.Set("kbdSetModeCustom", Napi::Function::New(env, KbdSetModeCustom));
+    exports.Set("kbdSetCustomFrame", Napi::Function::New(env, KbdSetCustomFrame));
 
     exports.Set("getBatteryLevel", Napi::Function::New(env, GetMousebatteryLevel));
     exports.Set("getChargingStatus", Napi::Function::New(env, GetIsMouseCharging));
