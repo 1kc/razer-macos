@@ -1,80 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './react-tabs.css';
-import CustomColor from './components/CustomColor';
-import CustomColor2 from './components/CustomColor2';
 import { ipcRenderer } from 'electron';
-import MouseSensitivity from './components/MouseSensitivity';
-import Brightness from './components/Brightness/Brightness';
+import { ViewDeviceSettings } from './views/viewdevicesettings';
+import { ViewColorSettings } from './views/viewcolorpicker';
 
 /**
  * Root React component
  */
-export default function App() {
-  const [deviceSelected, setDeviceSelected] = useState(null);
+export class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-  useEffect(() => {
-    ipcRenderer.on('device-selected', (event, message) => {
-      //force refresh by setting to NULL device first
-      setDeviceSelected(null);
-      setDeviceSelected(message.device);
-    });
-  }, []);
+    this.state = {
+      mode: 'device',
+      message: null
+    };
 
-  if (deviceSelected == null) {
-    return (
-      <span className='no-select'>
-        <div id='no-device'>Please select a device to configure</div>
-      </span>
-    );
+    ipcRenderer.on('render-view', (event, message) => {
+      const {mode} = message;
+      this.setState({mode: null, message: null});
+      this.setState({mode: mode, message: message});
+    })
   }
 
-  return (
-    <span className='no-select'>
-      <div id='body'>
-        <div id='product'>
-          {deviceSelected.image != null && (
-          <div className='product-image'><img src={deviceSelected.image} /></div>
-          )}
-          <div className='product-description'>{deviceSelected.name}</div>
-        </div>
-        <div id='settings'>
-          <div className='settings-block'>
-            <div className='settings-block-title'>Colors</div>
-            <div className='settings-block-body'>
-              <Tabs>
-                <TabList>
-                  <Tab>Primary custom color</Tab>
-                  <Tab disabled={deviceSelected.settings.customColor2 == null}>Secondary custom color</Tab>
-                </TabList>
+  render() {
+    if(this.state.mode === 'device') {
+      return <ViewDeviceSettings config={this.state.message}></ViewDeviceSettings>;
+    } else if(this.state.mode == 'color') {
+      return <ViewColorSettings config={this.state.message}></ViewColorSettings>;
+    }
+    return <div></div>;
+  }
 
-                <TabPanel>
-                  <CustomColor deviceSelected={deviceSelected} />
-                </TabPanel>
-                <TabPanel>
-                  {deviceSelected.settings.customColor2 != null && (
-                    <CustomColor2 deviceSelected={deviceSelected} />
-                  )}
-                </TabPanel>
-              </Tabs>
-            </div>
-          </div>
 
-          {deviceSelected.settings.customSensitivity != null && (
-            <div className='settings-block'>
-              <div className='settings-block-title'>Mouse DPI</div>
-              <div className='settings-block-body'><MouseSensitivity deviceSelected={deviceSelected} /></div>
-            </div>
-          )}
-          {deviceSelected.settings.customBrightness != null && (
-            <div className='settings-block'>
-              <div className='settings-block-title'>Brightness</div>
-              <div className='settings-block-body'><Brightness deviceSelected={deviceSelected} /></div>
-            </div>
-
-            )}
-        </div>
-        </div>
-    </span>
-  );
 }

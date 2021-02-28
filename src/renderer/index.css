@@ -161,15 +161,3 @@ p {
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
-
-.react-tabs__tab:focus {
-  box-shadow: none;
-  border-color: transparent;
-}
-.react-tabs__tab--selected {
-  color: #47e10c;
-}
-.react-tabs__tab {
-  border:none;
-  border-radius: 0;
-}

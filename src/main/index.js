@@ -70,10 +70,18 @@ let mainMenu = [
     label: 'Color All Devices',
     submenu: [
       {
+        label: 'Custom',
+        click() {
+          razerApp.deviceManager.activeRazerDevices.forEach(device => {
+            device.setModeStatic(new Uint8Array(Object.values(device.settings.customColor1.rgb).slice(0,3)));
+          });
+        },
+      },
+      {
         label: 'Red',
         click() {
           razerApp.deviceManager.activeRazerDevices.forEach(device => {
-            device.setModeStaticNoStore(new Uint8Array([0xff, 0, 0]));
+            device.setModeStatic(new Uint8Array([0xff, 0, 0]));
           });
         },
       },
@@ -81,7 +89,7 @@ let mainMenu = [
         label: 'Green',
         click() {
           razerApp.deviceManager.activeRazerDevices.forEach(device => {
-            device.setModeStaticNoStore(new Uint8Array([0, 0xff, 0]));
+            device.setModeStatic(new Uint8Array([0, 0xff, 0]));
           });
         },
       },
@@ -89,7 +97,7 @@ let mainMenu = [
         label: 'Blue',
         click() {
           razerApp.deviceManager.activeRazerDevices.forEach(device => {
-            device.setModeStaticNoStore(new Uint8Array([0, 0, 0xff]));
+            device.setModeStatic(new Uint8Array([0, 0, 0xff]));
           });
         },
       },
@@ -142,14 +150,11 @@ function buildCustomColorsCycleMenu() {
     return {
       label: 'Color ' + (index + 1),
       click: () => {
-        // TODO Own color picker without dependency to a device??
-        // razerApp.window.webContents.send('device-selected', {
-        //   currentColor: {
-        //     hex: rgbToHex(color),
-        //     rgb: color,
-        //   },
-        // });
-        // razerApp.window.show();
+        razerApp.window.webContents.send('render-view', {
+          mode: 'color',
+          index: index,
+          color: color
+        });
       },
     };
   });
@@ -216,11 +221,10 @@ ipcMain.on('request-set-custom-color', (event, arg) => {
   saveSettingsFor(currentDevice);
   refreshTray();
 });
-ipcMain.on('request-set-custom-color2', (event, arg) => {
-  const { device } = arg;
-  const currentDevice = razerApp.deviceManager.getByInternalId(device.internalId);
-  currentDevice.settings = device.settings;
-  saveSettingsFor(currentDevice);
+
+ipcMain.on('request-cycle-color', (_, arg) => {
+  const { index, color } = arg;
+  razerApp.cycleAnimation.updateColor(index, color.rgb);
   refreshTray();
 });
 

@@ -29,7 +29,7 @@ export default function CustomColor2({ deviceSelected }) {
     let payload = {
       device: deviceSelected,
     };
-    ipcRenderer.send('request-set-custom-color2', payload);
+    ipcRenderer.send('request-set-custom-color', payload);
   };
   const styles = { 'default': { picker: { background: '#202124', boxShadow: 'none'}, body: {
         padding: '12px 0 0'
