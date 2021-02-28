@@ -1,5 +1,4 @@
 import { RazerDeviceAnimation } from './animation';
-import ioHook from 'iohook';
 
 export class RazerAnimationRipple extends RazerDeviceAnimation {
 
@@ -121,7 +120,8 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
   }
 
   start() {
-    ioHook.start();
+    this.ioHook = require('iohook');
+    this.ioHook.start();
 
     const nRows = 6;
     const nCols = 22;
@@ -142,7 +142,7 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
     let keyEvents = [];
 
     // keyboard listener
-    ioHook.on('keydown', (event) => {
+    this.ioHook.on('keydown', (event) => {
       if (!(event.keycode in this.KEY_MAPPING)) return;
       const rowIdx = this.KEY_MAPPING[event.keycode][0];
       const colIdx = this.KEY_MAPPING[event.keycode][1];
@@ -189,6 +189,9 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
 
   stop() {
     clearTimeout(this.rippleEffectInterval);
-    ioHook.stop();
+    if(this.ioHook) {
+      this.ioHook.stop();
+      this.ioHook.unload();
+    }
   }
 }
