@@ -4,7 +4,6 @@ import { app, Menu, Tray, BrowserWindow, nativeTheme, ipcMain, dialog } from 'el
 import addon from '../driver';
 import path from 'path';
 import { RazerDeviceManager } from './razerdevicemanager';
-import { createMenuFor } from './menu/menubuilder';
 import { clearAllSettings, saveSettingsFor } from './settingsmanager';
 import { RazerAnimationCycleCustom } from './animation/animationcyclecustom';
 import { RazerAnimationCycleSpectrum } from './animation/animationcyclespectrum';
@@ -313,7 +312,7 @@ function refreshTray(withDeviceRefresh) {
   refresh.then(() => {
     buildCustomColorsCycleMenu();
 
-    const deviceMenus = razerApp.deviceManager.activeRazerDevices.map(device => createMenuFor(razerApp, device)).flat();
+    const deviceMenus = razerApp.deviceManager.activeRazerDevices.map(device => device.getMenuItem(razerApp)).flat();
 
     const menu = mainMenu.concat(deviceMenus).concat(mainMenuBottom);
     patch(menu);

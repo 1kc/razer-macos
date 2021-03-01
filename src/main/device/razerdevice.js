@@ -1,4 +1,6 @@
 import { getSettingsFor } from '../settingsmanager';
+import { getMenuItemSetCustomColor } from '../menu/menucommon';
+import { FeatureHelper } from '../feature/featurehelper';
 
 export class RazerDevice {
   constructor(addon, razerProperties) {
@@ -7,8 +9,13 @@ export class RazerDevice {
     this.productId = razerProperties.productId;
     this.internalId = razerProperties.internalId;
     this.mainType = razerProperties.mainType;
-    this.features = razerProperties.features;
     this.image = razerProperties.image;
+
+    if(razerProperties.features == null) {
+      this.features = FeatureHelper.getStandardFeaturesFor(this.mainType);
+    } else {
+      this.features = razerProperties.features.map(featureConfig => FeatureHelper.createFeatureFrom(featureConfig));
+    }
   }
 
   async init() {
@@ -22,6 +29,21 @@ export class RazerDevice {
 
   getSettingsKey() {
     return 'razer_'+this.productId;
+  }
+
+  getMenuItem(razerApp) {
+    let deviceMenu = [
+      { type: 'separator' },
+      {
+        label: this.getName(),
+      },
+      { type: 'separator' },
+    ];
+
+    const featureMenu = this.features.map(feature => feature.getMenuItemFor(this, razerApp));
+    deviceMenu = deviceMenu.concat(featureMenu);
+    deviceMenu = deviceMenu.concat([getMenuItemSetCustomColor(this, 'Custom settings', razerApp)]);
+    return deviceMenu;
   }
 
   //override in device types
