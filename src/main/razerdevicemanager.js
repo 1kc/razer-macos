@@ -38,7 +38,25 @@ export class RazerDeviceManager {
     return Promise.all(devicePromises, devices => {
       return devices.filter(device => device !== null);
     }).then((devices) => {
-      this.activeRazerDevices = devices;
+      this.activeRazerDevices = this.sortDevices(devices);
+    });
+  }
+
+  sortDevices(devices) {
+    const deviceOrder = ['keyboard', 'mouse', 'mousedock', 'mousemat', 'egpu', 'headphone', 'accessory']; // we could offer this as a personal setting in the future
+    return devices.sort((deviceA, deviceB) => {
+      const mainTypeAOrder = deviceOrder.indexOf(deviceA.mainType);
+      const mainTypeBOrder = deviceOrder.indexOf(deviceB.mainType);
+      if(mainTypeAOrder === mainTypeBOrder) {
+        if (deviceA.name < deviceB.name) {
+          return -1;
+        }
+        if (deviceA.name > deviceB.name) {
+          return 1;
+        }
+        return 0;
+      }
+      return mainTypeAOrder - mainTypeBOrder;
     });
   }
 
