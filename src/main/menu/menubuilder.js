@@ -31,7 +31,7 @@ export function createMenuFor(razerApp, razerDevice) {
   ];
 
   let features = razerDevice.features;
-  if (!features) {
+  if (features == null) {
     // build menu based on device type
     switch (razerDevice.mainType) {
       case 'keyboard':
@@ -60,7 +60,12 @@ export function createMenuFor(razerApp, razerDevice) {
     }
   }
 
-  const featureMenu = features.map(feature => featureMapping[feature](razerDevice, razerApp))
+  const featureMenu = features.filter(feature => typeof feature !== 'undefined' && feature !== '').map(feature => {
+    if(!featureMapping.hasOwnProperty(feature)) {
+      throw 'Feature "'+feature+'" defined for device "'+razerDevice.name+'" is not available. Available feature are: '+Object.keys(featureMapping);
+    }
+    return featureMapping[feature](razerDevice, razerApp)
+  });
   deviceMenu = deviceMenu.concat(featureMenu);
   deviceMenu = deviceMenu.concat([getMenuItemSetCustomColor(razerDevice, 'Custom settings', razerApp)])
   return deviceMenu;

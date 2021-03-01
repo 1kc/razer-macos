@@ -2,5 +2,6 @@
   "name": "Razer Basilisk V2",
   "productId": "0x0085",
   "mainType": "mouse",
-  "image": null
+  "image": null,
+  "features": null
 }

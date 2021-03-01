@@ -2,5 +2,6 @@
   "name": "Razer BlackWidow Overwatch",
   "productId": "0x0211",
   "mainType": "keyboard",
-  "image": null
+  "image": null,
+  "features": null
 }

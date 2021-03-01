@@ -2,5 +2,6 @@
   "name": "Razer Viper",
   "productId": "0x0078",
   "mainType": "mouse",
-  "image": "https://assets.razerzone.com/eeimages/support/products/1539/1539_viper.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/1539/1539_viper.png",
+  "features": null
 }

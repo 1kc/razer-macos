@@ -2,5 +2,6 @@
   "name": "Razer Imperator",
   "productId": "0x002F",
   "mainType": "mouse",
-  "image": "https://assets.razerzone.com/eeimages/support/products/215/215_imperator.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/215/215_imperator.png",
+  "features": null
 }

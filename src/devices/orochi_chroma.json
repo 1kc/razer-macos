@@ -2,5 +2,6 @@
   "name": "Razer Orochi Chroma",
   "productId": "0x0048",
   "mainType": "mouse",
-  "image": null
+  "image": null,
+  "features": null
 }

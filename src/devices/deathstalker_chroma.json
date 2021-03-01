@@ -2,5 +2,6 @@
   "name": "Razer Deathstalker Chroma",
   "productId": "0x0204",
   "mainType": "keyboard",
-  "image": "https://assets.razerzone.com/eeimages/support/products/665/665_deathstalker_chroma.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/665/665_deathstalker_chroma.png",
+  "features": null
 }

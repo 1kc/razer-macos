@@ -2,5 +2,6 @@
   "name": "Razer DeathAdder Elite",
   "productId": "0x005C",
   "mainType": "mouse",
-  "image": "https://assets.razerzone.com/eeimages/support/products/724/724_deathadderelite_500x500.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/724/724_deathadderelite_500x500.png",
+  "features": null
 }

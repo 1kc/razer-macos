@@ -2,5 +2,6 @@
   "name": "Razer Diamondback Chroma",
   "productId": "0x004C",
   "mainType": "mouse",
-  "image": "https://assets.razerzone.com/eeimages/support/products/613/613_diamondback.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/613/613_diamondback.png",
+  "features": null
 }

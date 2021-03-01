@@ -2,5 +2,6 @@
   "name": "Razer Naga Chroma",
   "productId": "0x0053",
   "mainType": "mouse",
-  "image": "https://assets.razerzone.com/eeimages/support/products/636/636_naga_chroma.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/636/636_naga_chroma.png",
+  "features": null
 }

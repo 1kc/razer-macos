@@ -2,5 +2,6 @@
   "name": "Razer BlackWidow Chroma V2",
   "productId": "0x0221",
   "mainType": "keyboard",
-  "image": "https://assets.razerzone.com/eeimages/support/products/1179/1179_blackwidow_chroma_v2_alt.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/1179/1179_blackwidow_chroma_v2_alt.png",
+  "features": null
 }

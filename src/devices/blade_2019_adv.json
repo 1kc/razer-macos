@@ -2,5 +2,6 @@
   "name": "Razer Blade 15 (2019) Advanced",
   "productId": "0x023a",
   "mainType": "keyboard",
-  "image": "https://assets.razerzone.com/eeimages/support/products/1482/blade15.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/1482/blade15.png",
+  "features": null
 }

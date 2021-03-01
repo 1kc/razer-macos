@@ -2,5 +2,6 @@
   "name": "Razer Nommo Chroma",
   "productId": "0x0517",
   "mainType": "accessory",
-  "image": null
+  "image": null,
+  "features": null
 }

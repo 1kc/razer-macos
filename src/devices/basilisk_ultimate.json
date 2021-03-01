@@ -2,5 +2,6 @@
   "name": "Razer Basilisk Ultimate",
   "productId": "0x0086",
   "mainType": "mouse",
-  "image": null
+  "image": null,
+  "features": null
 }

@@ -2,5 +2,6 @@
   "name": "Razer Huntsman",
   "productId": "0x0227",
   "mainType": "keyboard",
-  "image": "https://assets.razerzone.com/eeimages/support/products/1360/1360_huntsman-3.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/1360/1360_huntsman-3.png",
+  "features": null
 }

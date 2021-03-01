@@ -2,5 +2,6 @@
   "name": "Razer Anansi",
   "productId": "0x010F",
   "mainType": "keyboard",
-  "image": "https://assets.razerzone.com/eeimages/support/products/54/54_anansi.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/54/54_anansi.png",
+  "features": null
 }

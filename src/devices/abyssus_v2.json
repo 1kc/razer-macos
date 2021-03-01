@@ -2,5 +2,6 @@
   "name": "Razer Abyssus V2",
   "productId": "0x005B",
   "mainType": "mouse",
-  "image": "https://assets.razerzone.com/eeimages/support/products/721/721_abyssusv2.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/721/721_abyssusv2.png",
+  "features": null
 }

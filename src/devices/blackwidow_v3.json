@@ -2,5 +2,6 @@
   "name": "Razer BlackWidow V3",
   "productId": "0x024e",
   "mainType": "keyboard",
-  "image": null
+  "image": null,
+  "features": null
 }

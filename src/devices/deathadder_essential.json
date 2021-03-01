@@ -2,5 +2,6 @@
   "name": "Razer DeathAdder Essential",
   "productId": "0x006E",
   "mainType": "mouse",
-  "image": "https://assets.razerzone.com/eeimages/support/products/1385/1385_deathadderessential.png"
+  "image": "https://assets.razerzone.com/eeimages/support/products/1385/1385_deathadderessential.png",
+  "features": null
 }

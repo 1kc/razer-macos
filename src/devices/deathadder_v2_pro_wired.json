@@ -2,5 +2,6 @@
   "name": "Razer DeathAdder V2 Pro Wired",
   "productId": "0x007C",
   "mainType": "mouse",
-  "image": null
+  "image": null,
+  "features": null
 }
