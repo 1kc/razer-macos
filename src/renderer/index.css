@@ -31,20 +31,41 @@ div#body {
 }
 
 #product {
+  position: relative;
   display:flex;
   flex-direction: row;
-  margin:10px;
+  padding:10px;
+}
+#product .product-image-background {
+  position: absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center center;
+  z-index: -1;
+  filter: blur(3px);
+}
+#product .product-image {
+  box-shadow: inset 0 0 5px #47e10c;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-color: black;
 }
 #product .product-image img {
-  width:125px;
-  height:125px;
-  margin-right: 10px;
+  width:65px;
+  height:65px;
+  margin: 10px;
 }
 #product .product-description {
   color: #47e10c;
   font-size: 30px;
   align-items: center;
   display: flex;
+  flex:1;
+  text-shadow: 0 0 5px #000;
 }
 
 .settings-block {

@@ -1,5 +1,6 @@
 {
-  "name": "Razer Kraken Classic Alt",
+  "name": "Razer Kraken 7.1",
   "productId": "0x0506",
-  "mainType": "headphone"
+  "mainType": "headphone",
+  "image": "https://assets.razerzone.com/eeimages/support/products/229/229_kraken_71.png"
 }

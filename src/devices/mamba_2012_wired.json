@@ -1,5 +1,6 @@
 {
   "name": "Razer Mamba 2012 Wired",
   "productId": "0x0024",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/192/192_mamba_2012.png"
 }

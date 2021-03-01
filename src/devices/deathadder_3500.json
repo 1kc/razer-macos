@@ -1,5 +1,6 @@
 {
-  "name": "Razer Deathadder 3500",
+  "name": "Razer DeathAdder 3500",
   "productId": "0x0054",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/561/561_deathadder_classic.png"
 }

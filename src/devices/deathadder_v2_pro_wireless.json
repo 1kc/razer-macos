@@ -1,5 +1,6 @@
 {
-  "name": "Razer Deathadder V2 Pro Wireless",
+  "name": "Razer DeathAdder V2 Pro Wireless",
   "productId": "0x007D",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": null
 }

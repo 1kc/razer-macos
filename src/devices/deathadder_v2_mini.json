@@ -1,5 +1,6 @@
 {
-  "name": "Razer Deathadder V2 Mini",
+  "name": "Razer DeathAdder V2 Mini",
   "productId": "0x008C",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": null
 }

@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blade Stealth Late 2019",
+  "name": "Razer Blade Stealth (Late 2019)",
   "productId": "0x024a",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets2.razerzone.com/images/blade-stealth-13/shop/stealth-l2p-1.jpg"
 }

@@ -1,5 +1,6 @@
 {
-  "name": "Razer Mamba Wireless Receiver",
+  "name": "Razer Mamba (Receiver)",
   "productId": "0x0072",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1404/1404_mamba_wireless.png"
 }

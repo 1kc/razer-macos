@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blackwidow Chroma",
+  "name": "Razer BlackWidow Chroma",
   "productId": "0x0203",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/279/279_blackwidow_chroma.png"
 }

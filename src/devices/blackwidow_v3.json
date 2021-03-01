@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blackwidow V3",
+  "name": "Razer BlackWidow V3",
   "productId": "0x024e",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": null
 }

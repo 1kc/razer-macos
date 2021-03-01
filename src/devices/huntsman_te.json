@@ -1,5 +1,6 @@
 {
-  "name": "Razer Huntsman TE",
+  "name": "Razer Huntsman Tournament Edition",
   "productId": "0x0243",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1537/1537_huntsman_te.png"
 }

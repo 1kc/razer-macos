@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blackwidow Elite",
+  "name": "Razer BlackWidow Elite",
   "productId": "0x0228",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1398/1398_blackwidowelite.png"
 }

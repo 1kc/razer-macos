@@ -28,7 +28,10 @@ export class ViewDeviceSettings extends React.Component {
       <div id='body'>
         <div id='product'>
           {this.deviceSelected.image != null && (
-            <div className='product-image'><img src={this.deviceSelected.image} /></div>
+            <div>
+              <div className='product-image-background' style={{ backgroundImage: 'url('+this.deviceSelected.image+')' }}></div>
+              <div className='product-image'><img src={this.deviceSelected.image} /></div>
+            </div>
           )}
           <div className='product-description'>{this.deviceSelected.name}</div>
         </div>

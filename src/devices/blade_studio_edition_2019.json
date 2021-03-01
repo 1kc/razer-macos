@@ -1,5 +1,6 @@
 {
   "name": "Razer Blade Studio Edition 2019",
   "productId": "0x024d",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": null
 }

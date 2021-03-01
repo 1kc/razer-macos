@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blackwidow X Ultimate",
+  "name": "Razer BlackWidow X Ultimate",
   "productId": "0x0217",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/718/718_blackwidow_x_ultimate.png"
 }

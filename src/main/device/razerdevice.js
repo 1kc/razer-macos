@@ -8,6 +8,7 @@ export class RazerDevice {
     this.internalId = razerProperties.internalId;
     this.mainType = razerProperties.mainType;
     this.features = razerProperties.features;
+    this.image = razerProperties.image;
   }
 
   async init() {
@@ -38,6 +39,7 @@ export class RazerDevice {
       mainType: this.mainType,
       features: this.features,
       settings: this.settings,
+      image: this.image,
     };
   }
 }

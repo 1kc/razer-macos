@@ -1,5 +1,6 @@
 {
   "name": "Razer Cynosa V2",
   "productId": "0x025E",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1694/1694-2.png"
 }

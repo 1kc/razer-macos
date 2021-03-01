@@ -1,5 +1,6 @@
 {
   "name": "Razer Lancehead Wireless Wired",
   "productId": "0x0070",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": null
 }

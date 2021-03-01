@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blade Stealth Late 2016",
+  "name": "Razer Blade Stealth (Late 2016)",
   "productId": "0x0220",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/667/667_blade_stealth_2016_6500u.png"
 }

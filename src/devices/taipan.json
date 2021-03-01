@@ -1,5 +1,6 @@
 {
   "name": "Razer Taipan",
   "productId": "0x0034",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/19/19_taipan.png"
 }

@@ -1,5 +1,6 @@
 {
-  "name": "Razer Deathadder V2",
+  "name": "Razer DeathAdder V2",
   "productId": "0x0084",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1612/1612_razerdeathadderv2.png"
 }

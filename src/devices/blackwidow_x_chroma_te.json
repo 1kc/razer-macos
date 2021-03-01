@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blackwidow X Chroma TE",
+  "name": "Razer BlackWidow X Chroma Tournament Edition",
   "productId": "0x021A",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/717/717_blackwidow_x_tournament_edition_chroma.png"
 }

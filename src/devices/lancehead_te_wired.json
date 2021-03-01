@@ -1,5 +1,6 @@
 {
-  "name": "Razer Lancehead TE Wired",
+  "name": "Razer Lancehead Tournament Edition",
   "productId": "0x0060",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1203/1206_lanceheadte.png"
 }

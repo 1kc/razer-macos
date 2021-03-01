@@ -1,5 +1,6 @@
 {
-  "name": "Razer Blackwidow Essential",
+  "name": "Razer BlackWidow Essential",
   "productId": "0x0237",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1501/1501-blackwidow2019.png"
 }

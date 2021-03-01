@@ -1,5 +1,6 @@
 {
   "name": "Razer Ornata V2",
   "productId": "0x025D",
-  "mainType": "keyboard"
+  "mainType": "keyboard",
+  "image": null
 }

@@ -1,5 +1,6 @@
 {
   "name": "Razer Naga Hex",
   "productId": "0x0041",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/23/23_naga_hex.png"
 }

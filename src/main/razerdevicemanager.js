@@ -29,6 +29,7 @@ export class RazerDeviceManager {
           productId: foundDevice.productId,
           internalId: foundDevice.internalDeviceId,
           mainType: configurationDevice.mainType,
+          image: configurationDevice.image,
           features: configurationDevice.features,
         };
         const razerDevice = this.createRazerDeviceFrom(addon, razerProperties);
@@ -96,6 +97,8 @@ export class RazerDeviceManager {
           name: razerConfigDevice.name,
           productId: parseInt(razerConfigDevice.productId, 16),
           mainType: razerConfigDevice.mainType,
+          features: razerConfigDevice.features,
+          image: razerConfigDevice.image,
         };
       }
       return null;

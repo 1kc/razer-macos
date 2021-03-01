@@ -1,5 +1,6 @@
 {
   "name": "Razer Core X Chroma",
   "productId": "0x0f1a",
-  "mainType": "egpu"
+  "mainType": "egpu",
+  "image": null
 }

@@ -1,5 +1,6 @@
 {
   "name": "Razer Abyssus Essential",
   "productId": "0x006B",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1290/1290_abyssusessential.png"
 }

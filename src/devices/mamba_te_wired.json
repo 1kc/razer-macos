@@ -1,5 +1,6 @@
 {
-  "name": "Razer Mamba TE Wired",
+  "name": "Razer Mamba Tournament Edition",
   "productId": "0x0046",
-  "mainType": "mouse"
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/606/606_mambate_500x500.png"
 }
