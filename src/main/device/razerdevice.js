@@ -1,10 +1,10 @@
-import { getSettingsFor } from '../settingsmanager';
 import { getMenuItemSetCustomColor } from '../menu/menucommon';
 import { FeatureHelper } from '../feature/featurehelper';
 
 export class RazerDevice {
-  constructor(addon, razerProperties) {
+  constructor(addon, settingsManager, razerProperties) {
     this.addon = addon;
+    this.settingsManager = settingsManager;
     this.name = razerProperties.name;
     this.productId = razerProperties.productId;
     this.internalId = razerProperties.internalId;
@@ -28,7 +28,7 @@ export class RazerDevice {
   }
 
   async init() {
-    this.settings = await getSettingsFor(this);
+    this.settings = await this.settingsManager.getSettingsFor(this);
     return this;
   }
 
@@ -44,6 +44,11 @@ export class RazerDevice {
     return {
       customColor1: this.defaultColorSettings
     };
+  }
+
+  async setSettings(settings) {
+    this.settings = settings;
+    return this.settingsManager.saveSettingsFor(this);
   }
 
   getMenuItem(razerApp) {

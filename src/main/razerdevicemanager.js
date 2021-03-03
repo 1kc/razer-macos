@@ -16,7 +16,7 @@ export class RazerDeviceManager {
     this.activeRazerDevices = null;
   }
 
-  refreshRazerDevices(addon) {
+  refreshRazerDevices(addon, settingsManager) {
     this.closeDevices(addon);
 
     const devicePromises = addon.getAllDevices().map(async foundDevice => {
@@ -32,7 +32,7 @@ export class RazerDeviceManager {
           image: configurationDevice.image,
           features: configurationDevice.features,
         };
-        const razerDevice = this.createRazerDeviceFrom(addon, razerProperties);
+        const razerDevice = this.createRazerDeviceFrom(addon, settingsManager, razerProperties);
         return razerDevice.init();
       });
 
@@ -68,24 +68,24 @@ export class RazerDeviceManager {
     }
   }
 
-  createRazerDeviceFrom(addon, razerProperties) {
+  createRazerDeviceFrom(addon, settingsManager, razerProperties) {
     switch (razerProperties.mainType) {
       case 'keyboard':
-        return new RazerDeviceKeyboard(addon, razerProperties);
+        return new RazerDeviceKeyboard(addon, settingsManager, razerProperties);
       case 'mouse':
-        return new RazerDeviceMouse(addon, razerProperties);
+        return new RazerDeviceMouse(addon, settingsManager, razerProperties);
       case 'mousedock':
-        return new RazerDeviceMouseDock(addon, razerProperties);
+        return new RazerDeviceMouseDock(addon, settingsManager, razerProperties);
       case 'mousemat':
-        return new RazerDeviceMouseMat(addon, razerProperties);
+        return new RazerDeviceMouseMat(addon, settingsManager, razerProperties);
       case 'egpu':
-        return new RazerDeviceEgpu(addon, razerProperties);
+        return new RazerDeviceEgpu(addon, settingsManager, razerProperties);
       case 'headphone':
-        return new RazerDeviceHeadphone(addon, razerProperties);
+        return new RazerDeviceHeadphone(addon, settingsManager, razerProperties);
       case 'accessory':
-        return new RazerDeviceAccessory(addon, razerProperties);
+        return new RazerDeviceAccessory(addon, settingsManager, razerProperties);
       default:
-        return new RazerDevice(addon, razerProperties);
+        return new RazerDevice(addon, settingsManager, razerProperties);
     }
   }
 

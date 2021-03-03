@@ -1,10 +1,9 @@
 import { RazerDevice } from './razerdevice';
 import { RazerAnimationRipple } from '../animation/animationripple';
-import { saveSettingsFor } from '../settingsmanager';
 
 export class RazerDeviceKeyboard extends RazerDevice {
-  constructor(addon, razerProperties) {
-    super(addon, razerProperties);
+  constructor(addon, settingsManager, razerProperties) {
+    super(addon, settingsManager, razerProperties);
     this.rippleAnimation = null;
   }
 
@@ -63,7 +62,6 @@ export class RazerDeviceKeyboard extends RazerDevice {
     return this.brightness;
   }
   setBrightness(brightness) {
-    saveSettingsFor(this);
     this.brightness = brightness;
     this.addon.KbdSetBrightness(this.internalId, brightness);
   }

@@ -4,7 +4,7 @@ import { app, Menu, Tray, BrowserWindow, nativeTheme, ipcMain, dialog } from 'el
 import addon from '../driver';
 import path from 'path';
 import { RazerDeviceManager } from './razerdevicemanager';
-import { saveSettingsFor } from './settingsmanager';
+import { SettingsManager } from './settingsmanager';
 import { RazerAnimationCycleCustom } from './animation/animationcyclecustom';
 import { RazerAnimationCycleSpectrum } from './animation/animationcyclespectrum';
 import { getMenuFor } from './menu/menubuilder';
@@ -23,6 +23,7 @@ const razerApp = {
   APP_VERSION: APP_VERSION,
   addon: addon,
   deviceManager: new RazerDeviceManager(path.join(__dirname, '../devices')),
+  settingsManager: new SettingsManager(),
   spectrumAnimation: null,
   cycleAnimation: null,
 };
@@ -62,8 +63,7 @@ ipcMain.on('request-set-dpi', (event, arg) => {
 ipcMain.on('update-keyboard-brightness', (_, arg) => {
   const { device } = arg;
   const currentDevice = razerApp.deviceManager.getByInternalId(device.internalId);
-  currentDevice.settings = device.settings;
-  saveSettingsFor(currentDevice);
+  currentDevice.setSettings(device.settings);
   currentDevice.setBrightness(currentDevice.settings.customBrightness);
   refreshTray();
 });
@@ -72,8 +72,7 @@ ipcMain.on('update-keyboard-brightness', (_, arg) => {
 ipcMain.on('request-set-custom-color', (event, arg) => {
   const { device } = arg;
   const currentDevice = razerApp.deviceManager.getByInternalId(device.internalId);
-  currentDevice.settings = device.settings;
-  saveSettingsFor(currentDevice);
+  currentDevice.setSettings(device.settings);
   refreshTray();
 });
 
@@ -163,7 +162,7 @@ function createTray() {
 }
 
 function refreshTray(withDeviceRefresh) {
-  const refresh = withDeviceRefresh ? razerApp.deviceManager.refreshRazerDevices(razerApp.addon).then(() => {
+  const refresh = withDeviceRefresh ? razerApp.deviceManager.refreshRazerDevices(razerApp.addon, razerApp.settingsManager).then(() => {
     return razerApp.init();
   }) : Promise.resolve(true);
   refresh.then(() => {

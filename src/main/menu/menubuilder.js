@@ -1,5 +1,3 @@
-import { clearAllSettings } from '../settingsmanager';
-
 export function getMenuFor(razerApp) {
   const fullMenu = getMainMenu(razerApp)
     .concat(getCustomColorsCycleMenu(razerApp))
@@ -41,7 +39,7 @@ function getMainMenu(razerApp) {
           buttons: ["Yes","No"], message: "Really clear all settings?"
         }).then(result => {
           if(result.response === 0) {
-            return clearAllSettings();
+            return razerApp.settingsManager.clearAll();
           } else {
             return Promise.resolve();
           }

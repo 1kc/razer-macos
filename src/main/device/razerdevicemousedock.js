@@ -1,8 +1,8 @@
 import { RazerDevice } from './razerdevice';
 
 export class RazerDeviceMouseDock extends RazerDevice {
-  constructor(addon, razerProperties) {
-    super(addon, razerProperties);
+  constructor(addon, settingsManager, razerProperties) {
+    super(addon, settingsManager, razerProperties);
   }
 
   setModeNone() {
