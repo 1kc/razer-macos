@@ -25,10 +25,6 @@ export class RazerDevice {
     return this;
   }
 
-  getName() {
-    return this.name;
-  }
-
   getSettingsKey() {
     return 'razer_'+this.productId;
   }

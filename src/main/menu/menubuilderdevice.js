@@ -1,40 +1,79 @@
 export function getDeviceMenuFor(application, razerDevice) {
   let deviceMenu = [
     { type: 'separator' },
-    {
-      label: razerDevice.getName(),
-      enabled: false,
-    },
+    getHeaderFor(application, razerDevice),
     { type: 'separator' },
   ];
 
   const featureMenu = razerDevice.features.map(feature => getFeatureMenuFor(application, razerDevice, feature));
   deviceMenu = deviceMenu.concat(featureMenu);
-  deviceMenu = deviceMenu.concat([{
-    label: 'Custom settings',
+  return deviceMenu;
+}
+
+function getHeaderFor(application, razerDevice) {
+
+  let label = razerDevice.name;
+  let icon = null;
+  switch (razerDevice.mainType) {
+    case 'keyboard':
+      break;
+    case 'mouse':
+      if (razerDevice.batteryLevel !== -1) {
+        if(razerDevice.chargingStatus) {
+          label = label+ ' - ⚡'+razerDevice.batteryLevel.toString()+'%';
+        } else {
+          label = label+ ' - 🔋'+razerDevice.batteryLevel.toString()+'%';
+        }
+      }
+      break;
+    case 'mousedock':
+      break;
+    case 'mousemat':
+      break;
+    case 'egpu':
+      break;
+    case 'headphone':
+      break;
+    case 'accessory':
+      break;
+  }
+
+  return {
+    label: label,
+    icon: icon,
     click() {
       application.showView({
         mode: 'device',
         device: razerDevice.serialize(),
       });
     },
-  }]);
-  return deviceMenu;
+  };
 }
 
 function getFeatureMenuFor(application, device, feature) {
   switch (feature.featureIdentifier) {
-    case 'none': return getFeatureNone(application, device, feature);
-    case 'static': return getFeatureStatic(application, device, feature);
-    case 'waveSimple': return getFeatureWaveSimple(application, device, feature);
-    case 'waveExtended': return getFeatureWaveExtended(application, device, feature);
-    case 'spectrum': return getFeatureSpectrum(application, device, feature);
-    case 'reactive': return getFeatureReactive(application, device, feature);
-    case 'breathe': return getFeatureBreath(application, device, feature);
-    case 'starlight': return getFeatureStarlight(application, device, feature);
-    case 'brightness': return getFeatureBrightness(application, device, feature);
-    case 'ripple': return getFeatureRipple(application, device, feature);
-    case 'oldMouseEffects': return getFeatureOldMouseEffect(application, device, feature);
+    case 'none':
+      return getFeatureNone(application, device, feature);
+    case 'static':
+      return getFeatureStatic(application, device, feature);
+    case 'waveSimple':
+      return getFeatureWaveSimple(application, device, feature);
+    case 'waveExtended':
+      return getFeatureWaveExtended(application, device, feature);
+    case 'spectrum':
+      return getFeatureSpectrum(application, device, feature);
+    case 'reactive':
+      return getFeatureReactive(application, device, feature);
+    case 'breathe':
+      return getFeatureBreath(application, device, feature);
+    case 'starlight':
+      return getFeatureStarlight(application, device, feature);
+    case 'brightness':
+      return getFeatureBrightness(application, device, feature);
+    case 'ripple':
+      return getFeatureRipple(application, device, feature);
+    case 'oldMouseEffects':
+      return getFeatureOldMouseEffect(application, device, feature);
   }
 }
 
@@ -96,19 +135,19 @@ function getFeatureOldMouseEffect(application, device, feature) {
         device.setLogoLEDEffect('static');
       },
     },
-    feature.configuration != null && feature.configuration.disabledBlinking ? null :{
+    feature.configuration != null && feature.configuration.disabledBlinking ? null : {
       label: 'Blinking',
       click() {
         device.setLogoLEDEffect('blinking');
       },
     },
-    feature.configuration != null && feature.configuration.disabledPulsate ? null :{
+    feature.configuration != null && feature.configuration.disabledPulsate ? null : {
       label: 'Pulsate',
       click() {
         device.setLogoLEDEffect('pulsate');
       },
     },
-    feature.configuration != null && feature.configuration.disabledScroll ? null :{
+    feature.configuration != null && feature.configuration.disabledScroll ? null : {
       label: 'Scroll',
       click() {
         device.setLogoLEDEffect('scroll');
@@ -118,7 +157,7 @@ function getFeatureOldMouseEffect(application, device, feature) {
 
   return {
     label: 'Older model effects',
-    submenu: submenu.filter(s => s !== null)
+    submenu: submenu.filter(s => s !== null),
   };
 }
 
@@ -264,7 +303,7 @@ function getFeatureStatic(application, device, feature) {
     singleItem('Custom color', [device.settings.customColor1.rgb.r, device.settings.customColor1.rgb.g, device.settings.customColor1.rgb.b]),
     feature.configuration != null && feature.configuration.disabledWhite ? null : singleItem('White', [0xff, 0xff, 0xff]),
     feature.configuration != null && feature.configuration.disabledRed ? null : singleItem('Red', [0xff, 0, 0]),
-    feature.configuration != null && feature.configuration.disabledGreen? null : singleItem('Green', [0, 0xff, 0]),
+    feature.configuration != null && feature.configuration.disabledGreen ? null : singleItem('Green', [0, 0xff, 0]),
     feature.configuration != null && feature.configuration.disabledBlue ? null : singleItem('Blue', [0, 0, 0xff]),
   ];
 

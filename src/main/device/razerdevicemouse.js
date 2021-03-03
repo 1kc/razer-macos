@@ -12,18 +12,6 @@ export class RazerDeviceMouse extends RazerDevice {
     return super.init();
   }
 
-  getName() {
-    if (this.batteryLevel === -1) {
-      return super.getName();
-    } else {
-      if(this.chargingStatus) {
-        return super.getName() + ' - ⚡'+this.batteryLevel.toString()+'%';
-      } else {
-        return super.getName() + ' - 🔋'+this.batteryLevel.toString()+'%';
-      }
-    }
-  }
-
   getDefaultSettings() {
     return {
       customSensitivity: this.getDPI(),
