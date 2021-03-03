@@ -1,3 +1,4 @@
+import addon from '../driver';
 import { RazerDeviceKeyboard } from './device/razerdevicekeyboard';
 import { RazerDeviceMouse } from './device/razerdevicemouse';
 import { RazerDeviceMouseDock } from './device/razerdevicemousedock';
@@ -6,37 +7,56 @@ import { RazerDeviceEgpu } from './device/razerdeviceegpu';
 import { RazerDeviceHeadphone } from './device/razerdeviceheadphone';
 import { RazerDeviceAccessory } from './device/razerdeviceaccessory';
 import { RazerDevice } from './device/razerdevice';
+import { FeatureNone } from './feature/featurenone';
+import { FeatureStatic } from './feature/featurestatic';
+import { FeatureWaveExtended } from './feature/featurewaveextended';
+import { FeatureSpectrum } from './feature/featurespectrum';
+import { FeatureReactive } from './feature/featurereactive';
+import { FeatureBreathe } from './feature/featurebreathe';
+import { FeatureStarlight } from './feature/featurestarlight';
+import { FeatureRipple } from './feature/featureripple';
+import { FeatureBrightness } from './feature/featurebrightness';
+import { FeatureWaveSimple } from './feature/featurewavesimple';
+import { FeatureOldMouseEffects } from './feature/featureoldmouseeffects';
+import { FeatureHelper } from './feature/featurehelper';
 
 const fs = require('fs');
 
+/**
+ * Responsible to fetch all attached Razer devices and map them to RazerDevice instances with features
+ * @constructor
+ */
 export class RazerDeviceManager {
-  constructor(configFolder) {
+  constructor(settingsManager, configFolder) {
+    this.addon = addon;
+    this.settingsManager = settingsManager;
     this.configFolder = configFolder;
     this.razerConfigDevices = this.getAllRazerDeviceConfigurations();
     this.activeRazerDevices = null;
   }
 
-  refreshRazerDevices(addon, settingsManager) {
-    this.closeDevices(addon);
+  async refreshRazerDevices() {
+    this.closeDevices();
 
-    const devicePromises = addon.getAllDevices().map(async foundDevice => {
-        const configurationDevice = this.razerConfigDevices.find(d => d.productId === foundDevice.productId);
-        if (configurationDevice === undefined) {
-          return null;
-        }
-        const razerProperties = {
-          name: configurationDevice.name,
-          productId: foundDevice.productId,
-          internalId: foundDevice.internalDeviceId,
-          mainType: configurationDevice.mainType,
-          image: configurationDevice.image,
-          features: configurationDevice.features,
-        };
-        const razerDevice = this.createRazerDeviceFrom(addon, settingsManager, razerProperties);
-        return razerDevice.init();
-      });
+    const devicePromises = this.addon.getAllDevices().map(async foundDevice => {
+      const configurationDevice = this.razerConfigDevices.find(d => d.productId === foundDevice.productId);
+      if (configurationDevice === undefined) {
+        return null;
+      }
+      const razerProperties = {
+        name: configurationDevice.name,
+        productId: foundDevice.productId,
+        internalId: foundDevice.internalDeviceId,
+        mainType: configurationDevice.mainType,
+        image: configurationDevice.image,
+        features: configurationDevice.features,
+        featuresMissing: configurationDevice.featuresMissing,
+      };
+      const razerDevice = this.createRazerDeviceFrom(razerProperties);
+      return razerDevice.init();
+    });
 
-    return Promise.all(devicePromises, devices => {
+    return Promise.all(devicePromises).then(devices => {
       return devices.filter(device => device !== null);
     }).then((devices) => {
       this.activeRazerDevices = this.sortDevices(devices);
@@ -48,7 +68,7 @@ export class RazerDeviceManager {
     return devices.sort((deviceA, deviceB) => {
       const mainTypeAOrder = deviceOrder.indexOf(deviceA.mainType);
       const mainTypeBOrder = deviceOrder.indexOf(deviceB.mainType);
-      if(mainTypeAOrder === mainTypeBOrder) {
+      if (mainTypeAOrder === mainTypeBOrder) {
         if (deviceA.name < deviceB.name) {
           return -1;
         }
@@ -61,32 +81,117 @@ export class RazerDeviceManager {
     });
   }
 
-  closeDevices(addon) {
-    if(this.activeRazerDevices !== null) {
-      addon.closeAllDevices();
+  closeDevices() {
+    if (this.activeRazerDevices !== null) {
+      this.addon.closeAllDevices();
       this.activeRazerDevices = null;
     }
   }
 
-  createRazerDeviceFrom(addon, settingsManager, razerProperties) {
+  createRazerDeviceFrom(razerProperties) {
+    let device;
+    let deviceFeatures;
+
     switch (razerProperties.mainType) {
       case 'keyboard':
-        return new RazerDeviceKeyboard(addon, settingsManager, razerProperties);
+        device = RazerDeviceKeyboard;
+        deviceFeatures = [
+          new FeatureNone(),
+          new FeatureStatic(),
+          new FeatureWaveExtended(),
+          new FeatureSpectrum(),
+          new FeatureReactive(),
+          new FeatureBreathe(),
+          new FeatureStarlight(),
+          new FeatureRipple(),
+          new FeatureBrightness(),
+        ];
+        break;
       case 'mouse':
-        return new RazerDeviceMouse(addon, settingsManager, razerProperties);
+        device = RazerDeviceMouse;
+        deviceFeatures = [
+          new FeatureNone(),
+          new FeatureStatic(),
+          new FeatureWaveSimple(),
+          new FeatureSpectrum(),
+          new FeatureReactive(),
+          new FeatureBreathe(),
+          new FeatureOldMouseEffects(),
+        ];
+        break;
       case 'mousedock':
-        return new RazerDeviceMouseDock(addon, settingsManager, razerProperties);
+        device = RazerDeviceMouseDock;
+        deviceFeatures = [
+          new FeatureNone(),
+          new FeatureStatic(),
+          new FeatureSpectrum(),
+          new FeatureBreathe(),
+        ];
+        break;
       case 'mousemat':
-        return new RazerDeviceMouseMat(addon, settingsManager, razerProperties);
+        device = RazerDeviceMouseMat;
+        deviceFeatures = [
+          new FeatureNone(),
+          new FeatureStatic(),
+          new FeatureWaveSimple(),
+          new FeatureSpectrum(),
+          new FeatureBreathe(),
+        ];
+        break;
       case 'egpu':
-        return new RazerDeviceEgpu(addon, settingsManager, razerProperties);
+        device = RazerDeviceEgpu;
+        deviceFeatures = [
+          new FeatureNone(),
+          new FeatureStatic(),
+          new FeatureWaveSimple(),
+          new FeatureSpectrum(),
+          new FeatureBreathe(),
+        ];
+        break;
       case 'headphone':
-        return new RazerDeviceHeadphone(addon, settingsManager, razerProperties);
+        device = RazerDeviceHeadphone;
+        deviceFeatures = [
+          new FeatureNone(),
+          new FeatureStatic(),
+          new FeatureSpectrum(),
+          new FeatureBreathe(),
+        ];
+        break;
       case 'accessory':
-        return new RazerDeviceAccessory(addon, settingsManager, razerProperties);
+        device = RazerDeviceAccessory;
+        deviceFeatures = [
+          new FeatureNone(),
+          new FeatureStatic(),
+          new FeatureWaveExtended(),
+          new FeatureSpectrum(),
+          new FeatureBreathe(),
+        ];
+        break;
       default:
-        return new RazerDevice(addon, settingsManager, razerProperties);
+        device = RazerDevice;
+        deviceFeatures = [];
     }
+
+    const razerDeviceProperties = {
+      name: razerProperties.name,
+      productId: razerProperties.productId,
+      internalId: razerProperties.internalId,
+      mainType: razerProperties.mainType,
+      image: razerProperties.image,
+      features: null,
+    };
+
+    if (razerProperties.features == null) {
+      razerDeviceProperties.features = deviceFeatures;
+    } else {
+      razerDeviceProperties.features = razerProperties.features.map(featureConfig => FeatureHelper.createFeatureFrom(featureConfig));
+    }
+
+    if (razerProperties.featuresMissing != null) {
+      razerDeviceProperties.features = razerDeviceProperties.features.filter(feature => !razerProperties.featuresMissing.some(missingFeature => missingFeature === feature.featureIdentifier));
+    }
+
+    return new device(this.addon, this.settingsManager, razerDeviceProperties);
   }
 
   getAllRazerDeviceConfigurations() {
@@ -98,6 +203,7 @@ export class RazerDeviceManager {
           productId: parseInt(razerConfigDevice.productId, 16),
           mainType: razerConfigDevice.mainType,
           features: razerConfigDevice.features,
+          featuresMissing: razerConfigDevice.featuresMissing,
           image: razerConfigDevice.image,
         };
       }

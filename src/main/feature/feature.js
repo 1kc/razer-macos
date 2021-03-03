@@ -3,9 +3,4 @@ export class Feature {
     this.featureIdentifier = featureIdentifier;
     this.configuration = config;
   }
-
-  // Override in
-  getMenuItemFor(device, razerApp) {
-    return null;
-  }
 }

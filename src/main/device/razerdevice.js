@@ -1,21 +1,14 @@
-import { getMenuItemSetCustomColor } from '../menu/menucommon';
-import { FeatureHelper } from '../feature/featurehelper';
-
 export class RazerDevice {
-  constructor(addon, settingsManager, razerProperties) {
+  constructor(addon, settingsManager, razerDeviceProperties) {
     this.addon = addon;
     this.settingsManager = settingsManager;
-    this.name = razerProperties.name;
-    this.productId = razerProperties.productId;
-    this.internalId = razerProperties.internalId;
-    this.mainType = razerProperties.mainType;
-    this.image = razerProperties.image;
 
-    if(razerProperties.features == null) {
-      this.features = FeatureHelper.getStandardFeaturesFor(this.mainType);
-    } else {
-      this.features = razerProperties.features.map(featureConfig => FeatureHelper.createFeatureFrom(featureConfig));
-    }
+    this.name = razerDeviceProperties.name;
+    this.productId = razerDeviceProperties.productId;
+    this.internalId = razerDeviceProperties.internalId;
+    this.mainType = razerDeviceProperties.mainType;
+    this.image = razerDeviceProperties.image;
+    this.features = razerDeviceProperties.features;
 
     this.defaultColorSettings = {
       hex: '#ffff00',
@@ -49,21 +42,6 @@ export class RazerDevice {
   async setSettings(settings) {
     this.settings = settings;
     return this.settingsManager.saveSettingsFor(this);
-  }
-
-  getMenuItem(razerApp) {
-    let deviceMenu = [
-      { type: 'separator' },
-      {
-        label: this.getName(),
-      },
-      { type: 'separator' },
-    ];
-
-    const featureMenu = this.features.map(feature => feature.getMenuItemFor(this, razerApp));
-    deviceMenu = deviceMenu.concat(featureMenu);
-    deviceMenu = deviceMenu.concat([getMenuItemSetCustomColor(this, 'Custom settings', razerApp)]);
-    return deviceMenu;
   }
 
   //override in device types
