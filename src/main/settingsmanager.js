@@ -4,7 +4,7 @@ export async function getSettingsFor(device) {
   if (await hasKey(device.getSettingsKey())) {
     return getKey(device.getSettingsKey());
   }
-  return createStandardSettingsFor(device);
+  return device.getDefaultSettings();
 }
 
 export async function saveSettingsFor(device) {
@@ -42,40 +42,6 @@ export async function getKey(key) {
       res(data);
     });
   });
-}
-
-async function createStandardSettingsFor(device) {
-
-  const whiteColorSetting = {
-    hex: '#ffff00',
-    rgb: {
-      r: 255,
-      g: 255,
-      b: 0,
-    },
-  };
-  let settings;
-  switch (device.mainType) {
-    case 'keyboard':
-      settings = {
-        customColor1: whiteColorSetting,
-        customColor2: whiteColorSetting,
-        customBrightness: device.getBrightness(),
-      };
-      break;
-    case 'mouse':
-      settings =  {
-        customSensitivity: device.getDPI(),
-        customColor1: whiteColorSetting,
-      };
-      break;
-    default:
-      settings = {
-        customColor1: whiteColorSetting,
-      };
-  }
-
-  return Promise.resolve(settings);
 }
 
 export function clearAllSettings() {

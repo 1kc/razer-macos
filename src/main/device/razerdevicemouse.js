@@ -24,6 +24,13 @@ export class RazerDeviceMouse extends RazerDevice {
     }
   }
 
+  getDefaultSettings() {
+    return {
+      customSensitivity: this.getDPI(),
+      customColor1: this.defaultColorSettings,
+    }
+  }
+
   setModeNone() {
     this.addon.mouseSetLogoModeNone(this.internalId);
   }

@@ -16,6 +16,15 @@ export class RazerDevice {
     } else {
       this.features = razerProperties.features.map(featureConfig => FeatureHelper.createFeatureFrom(featureConfig));
     }
+
+    this.defaultColorSettings = {
+      hex: '#ffff00',
+      rgb: {
+        r: 255,
+        g: 255,
+        b: 0,
+      }
+    };
   }
 
   async init() {
@@ -29,6 +38,12 @@ export class RazerDevice {
 
   getSettingsKey() {
     return 'razer_'+this.productId;
+  }
+
+  getDefaultSettings() {
+    return {
+      customColor1: this.defaultColorSettings
+    };
   }
 
   getMenuItem(razerApp) {

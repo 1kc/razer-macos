@@ -13,6 +13,14 @@ export class RazerDeviceKeyboard extends RazerDevice {
     return super.init();
   }
 
+  getDefaultSettings() {
+    return {
+      customColor1: this.defaultColorSettings,
+      customColor2: this.defaultColorSettings,
+      customBrightness: this.getBrightness(),
+    }
+  }
+
   setModeNone() {
     this.stopAnimations();
     this.addon.kbdSetModeNone(this.internalId)
