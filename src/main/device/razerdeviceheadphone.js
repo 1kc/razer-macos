@@ -14,6 +14,7 @@ export class RazerDeviceHeadphone extends RazerDevice {
   }
 
   setModeStatic(color) {
+    super.setModeStatic(color);
     this.addon.headphoneSetModeStatic(this.internalId, color);
   }
 

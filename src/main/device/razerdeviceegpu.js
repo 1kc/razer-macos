@@ -14,6 +14,7 @@ export class RazerDeviceEgpu extends RazerDevice {
   }
 
   setModeStatic(color) {
+    super.setModeStatic(color);
     this.addon.egpuSetModeStatic(this.internalId, color);
   }
   setSpectrum() {

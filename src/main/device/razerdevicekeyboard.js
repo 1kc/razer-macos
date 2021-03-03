@@ -31,6 +31,7 @@ export class RazerDeviceKeyboard extends RazerDevice {
   }
 
   setModeStatic(color) {
+    super.setModeStatic(color);
     this.stopAnimations();
     this.addon.kbdSetModeStatic(this.internalId, color);
   }

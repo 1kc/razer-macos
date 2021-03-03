@@ -14,6 +14,7 @@ export class RazerDeviceAccessory extends RazerDevice {
   }
 
   setModeStatic(color) {
+    super.setModeStatic(color);
     this.addon.accessorySetModeStatic(this.internalId, color);
   }
   setSpectrum() {

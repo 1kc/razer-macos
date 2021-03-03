@@ -14,6 +14,7 @@ export class RazerDeviceMouseDock extends RazerDevice {
   }
 
   setModeStatic(color) {
+    super.setModeStatic(color);
     this.addon.mouseDockSetModeStatic(this.internalId, color);
   }
 

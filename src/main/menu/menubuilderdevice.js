@@ -3,6 +3,7 @@ export function getDeviceMenuFor(application, razerDevice) {
     { type: 'separator' },
     {
       label: razerDevice.getName(),
+      enabled: false,
     },
     { type: 'separator' },
   ];
@@ -270,6 +271,7 @@ function getFeatureStatic(application, device, feature) {
   return {
     label: 'Static',
     submenu: subMenu.filter(s => s !== null),
+    checked: device.isModeStaticActive(),
   };
 }
 

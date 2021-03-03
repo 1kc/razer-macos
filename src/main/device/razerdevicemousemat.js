@@ -14,6 +14,7 @@ export class RazerDeviceMouseMat extends RazerDevice {
   }
 
   setModeStatic(color) {
+    super.setModeStatic(color);
     this.addon.mouseMatSetModeStatic(this.internalId, color);
   }
 

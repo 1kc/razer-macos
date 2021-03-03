@@ -40,6 +40,7 @@ export class RazerDeviceMouse extends RazerDevice {
   }
 
   setModeStatic(color) {
+    super.setModeStatic(color);
     this.addon.mouseSetLogoModeStatic(this.internalId, color);
   }
 

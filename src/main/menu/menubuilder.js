@@ -48,7 +48,12 @@ function getMainMenu(application) {
     },
     { type: 'separator' },
     {
-      label: 'None All Devices',
+      label: 'All Devices',
+      enabled: false,
+    },
+    { type: 'separator' },
+    {
+      label: 'None',
       click() {
         application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
           device.setModeNone();
@@ -56,7 +61,7 @@ function getMainMenu(application) {
       },
     },
     {
-      label: 'Color All Devices',
+      label: 'Static',
       submenu: [
         {
           label: 'Custom',
@@ -93,7 +98,7 @@ function getMainMenu(application) {
       ],
     },
     {
-      label: 'Spectrum All Devices',
+      label: 'Spectrum',
       click() {
         application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
           device.setSpectrum();
@@ -106,9 +111,15 @@ function getMainMenu(application) {
 function getCustomColorsCycleMenu(application) {
   const cccMenu = [
     {
-      label: 'Cycle All Devices',
+      label: 'Start Cycle',
       click() {
         application.razerApplication.cycleAnimation.start();
+      },
+    },
+    {
+      label: 'Stop Cycle',
+      click() {
+        application.razerApplication.cycleAnimation.stop();
       },
     },
     { type: 'separator' },
@@ -147,7 +158,7 @@ function getCustomColorsCycleMenu(application) {
   });
 
   return [{
-    label: 'Cycle All Devices',
+    label: 'Cycle',
     submenu: cccMenu.concat(colorItems)
   }]
 }

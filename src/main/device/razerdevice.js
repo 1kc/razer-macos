@@ -47,7 +47,12 @@ export class RazerDevice {
   //override in device types
   setModeNone() {}
   setModeStaticNoStore(color) {}
-  setModeStatic(color) {}
+  setModeStatic(color) {
+    this._isModeStaticActive = true;
+  }
+  isModeStaticActive() {
+    return this._isModeStaticActive;
+  }
   setSpectrum() {}
   setBreathe(color) {}
 
