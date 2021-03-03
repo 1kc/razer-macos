@@ -1,6 +1,8 @@
 import { RazerApplication } from './razerapplication';
 import { app, dialog, BrowserWindow, ipcMain, Menu, nativeTheme, Tray } from 'electron';
 import path from 'path';
+import { getMenuFor } from './menu/menubuilder';
+const version = require('../../package.json').version;
 
 /**
  * Application is a small wrapper around an electron app (browserwindow, tray, dialog...)
@@ -16,12 +18,12 @@ export class Application {
     this.browserWindow = null;
     this.app = app;
     this.dialog = dialog;
+    this.APP_VERSION = version;
 
     this.initListeners();
 
     // Init the main application
-    this.razerApplication = new RazerApplication(this);
-    this.razerApplication.initListeners(ipcMain);
+    this.razerApplication = new RazerApplication();
   }
 
   initListeners() {
@@ -36,6 +38,39 @@ export class Application {
 
     nativeTheme.on('updated', () => {
       this.createTray();
+    });
+
+    // mouse dpi rpc listener
+    ipcMain.on('request-set-dpi', (_, arg) => {
+      const { device } = arg;
+      const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
+      currentDevice.setSettings(device.settings);
+      currentDevice.setDPI(currentDevice.settings.customSensitivity);
+      this.refreshTray();
+    });
+
+    // keyboard brightness rpc listener
+    ipcMain.on('update-keyboard-brightness', (_, arg) => {
+      const { device } = arg;
+      const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
+      currentDevice.setSettings(device.settings);
+      currentDevice.setBrightness(currentDevice.settings.customBrightness);
+      this.refreshTray();
+    });
+
+    // custom color rpc listener
+    ipcMain.on('request-set-custom-color', (_, arg) => {
+      const { device } = arg;
+      const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
+      currentDevice.setSettings(device.settings);
+      this.refreshTray();
+    });
+
+    // custom cycle color rpc listener
+    ipcMain.on('request-cycle-color', (_, arg) => {
+      const { index, color } = arg;
+      this.razerApplication.cycleAnimation.updateColor(index, color.rgb);
+      this.refreshTray();
     });
   }
 
@@ -123,8 +158,21 @@ export class Application {
   refreshTray(withDeviceRefresh) {
     const refresh = withDeviceRefresh ? this.razerApplication.refresh() : Promise.resolve(true);
     refresh.then(() => {
-      const contextMenu = Menu.buildFromTemplate(this.razerApplication.getMenu());
+      const contextMenu = Menu.buildFromTemplate(getMenuFor(this));
       this.tray.setContextMenu(contextMenu);
     });
+  }
+  showConfirm(message) {
+    this.app.focus();
+    return this.dialog.showMessageBox({
+      buttons: ["Yes","No"], message: message
+    });
+  }
+  showView(args) {
+    this.browserWindow.webContents.send('render-view', args);
+    this.browserWindow.show();
+  }
+  quit() {
+    this.app.quit();
   }
 }

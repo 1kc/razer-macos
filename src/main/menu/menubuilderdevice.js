@@ -1,4 +1,4 @@
-export function getDeviceMenuFor(razerApplication, razerDevice) {
+export function getDeviceMenuFor(application, razerDevice) {
   let deviceMenu = [
     { type: 'separator' },
     {
@@ -7,12 +7,12 @@ export function getDeviceMenuFor(razerApplication, razerDevice) {
     { type: 'separator' },
   ];
 
-  const featureMenu = razerDevice.features.map(feature => getFeatureMenuFor(razerApplication, razerDevice, feature));
+  const featureMenu = razerDevice.features.map(feature => getFeatureMenuFor(application, razerDevice, feature));
   deviceMenu = deviceMenu.concat(featureMenu);
   deviceMenu = deviceMenu.concat([{
     label: 'Custom settings',
     click() {
-      razerApplication.showView({
+      application.showView({
         mode: 'device',
         device: razerDevice.serialize(),
       });
@@ -21,23 +21,23 @@ export function getDeviceMenuFor(razerApplication, razerDevice) {
   return deviceMenu;
 }
 
-function getFeatureMenuFor(razerApp, device, feature) {
+function getFeatureMenuFor(application, device, feature) {
   switch (feature.featureIdentifier) {
-    case 'none': return getFeatureNone(razerApp, device, feature);
-    case 'static': return getFeatureStatic(razerApp, device, feature);
-    case 'waveSimple': return getFeatureWaveSimple(razerApp, device, feature);
-    case 'waveExtended': return getFeatureWaveExtended(razerApp, device, feature);
-    case 'spectrum': return getFeatureSpectrum(razerApp, device, feature);
-    case 'reactive': return getFeatureReactive(razerApp, device, feature);
-    case 'breathe': return getFeatureBreath(razerApp, device, feature);
-    case 'starlight': return getFeatureStarlight(razerApp, device, feature);
-    case 'brightness': return getFeatureBrightness(razerApp, device, feature);
-    case 'ripple': return getFeatureRipple(razerApp, device, feature);
-    case 'oldMouseEffects': return getFeatureOldMouseEffect(razerApp, device, feature);
+    case 'none': return getFeatureNone(application, device, feature);
+    case 'static': return getFeatureStatic(application, device, feature);
+    case 'waveSimple': return getFeatureWaveSimple(application, device, feature);
+    case 'waveExtended': return getFeatureWaveExtended(application, device, feature);
+    case 'spectrum': return getFeatureSpectrum(application, device, feature);
+    case 'reactive': return getFeatureReactive(application, device, feature);
+    case 'breathe': return getFeatureBreath(application, device, feature);
+    case 'starlight': return getFeatureStarlight(application, device, feature);
+    case 'brightness': return getFeatureBrightness(application, device, feature);
+    case 'ripple': return getFeatureRipple(application, device, feature);
+    case 'oldMouseEffects': return getFeatureOldMouseEffect(application, device, feature);
   }
 }
 
-function getFeatureBreath(razerApp, device, feature) {
+function getFeatureBreath(application, device, feature) {
   return {
     label: 'Breathe',
     click() {
@@ -47,11 +47,11 @@ function getFeatureBreath(razerApp, device, feature) {
   };
 }
 
-function getFeatureBrightness(razerApp, device, feature) {
+function getFeatureBrightness(application, device, feature) {
   const updateBrightness = (brightness) => {
     device.settings.customBrightness = brightness;
     device.setBrightness(device.settings.customBrightness);
-    razerApp.refreshTray();
+    application.refreshTray();
   };
 
   return {
@@ -77,7 +77,7 @@ function getFeatureBrightness(razerApp, device, feature) {
   };
 }
 
-function getFeatureNone(razerApp, device, feature) {
+function getFeatureNone(application, device, feature) {
   return {
     label: 'None',
     click() {
@@ -86,7 +86,7 @@ function getFeatureNone(razerApp, device, feature) {
   };
 }
 
-function getFeatureOldMouseEffect(razerApp, device, feature) {
+function getFeatureOldMouseEffect(application, device, feature) {
 
   const submenu = [
     feature.configuration != null && feature.configuration.disabledStatic ? null : {
@@ -121,7 +121,7 @@ function getFeatureOldMouseEffect(razerApp, device, feature) {
   };
 }
 
-function getFeatureReactive(razerApp, device, feature) {
+function getFeatureReactive(application, device, feature) {
   const singleItem = (label, colorMode) => {
     return {
       label: label,
@@ -141,7 +141,7 @@ function getFeatureReactive(razerApp, device, feature) {
   };
 }
 
-function getFeatureRipple(razerApp, device, feature) {
+function getFeatureRipple(application, device, feature) {
   const singleItem = (label, color, backgroundColor) => {
     return {
       label: label,
@@ -166,7 +166,7 @@ function getFeatureRipple(razerApp, device, feature) {
   };
 }
 
-function getFeatureSpectrum(razerApp, device, feature) {
+function getFeatureSpectrum(application, device, feature) {
   return {
     label: 'Spectrum',
     click() {
@@ -175,7 +175,7 @@ function getFeatureSpectrum(razerApp, device, feature) {
   };
 }
 
-function getFeatureStarlight(razerApp, device, feature) {
+function getFeatureStarlight(application, device, feature) {
   const singleItem = (label, speed, colors) => {
     return {
       label: label,
@@ -249,7 +249,7 @@ function getFeatureStarlight(razerApp, device, feature) {
   };
 }
 
-function getFeatureStatic(razerApp, device, feature) {
+function getFeatureStatic(application, device, feature) {
   const singleItem = (label, color) => {
     return {
       label: label,
@@ -273,7 +273,7 @@ function getFeatureStatic(razerApp, device, feature) {
   };
 }
 
-function getFeatureWaveExtended(razerApp, device, feature) {
+function getFeatureWaveExtended(application, device, feature) {
   const singleItem = (label, directionSpeed) => {
     return {
       label: label,
@@ -312,7 +312,7 @@ function getFeatureWaveExtended(razerApp, device, feature) {
   };
 }
 
-function getFeatureWaveSimple(razerApp, device, feature) {
+function getFeatureWaveSimple(application, device, feature) {
   return {
     label: 'Wave',
     submenu: [

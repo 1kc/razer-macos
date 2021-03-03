@@ -1,49 +1,48 @@
 import { getDeviceMenuFor } from './menubuilderdevice';
 
-export function getMenuFor(razerApplication) {
-  const fullMenu = getMainMenu(razerApplication)
-    .concat(getCustomColorsCycleMenu(razerApplication))
-    .concat(getDeviceMenu(razerApplication))
-    .concat(getMainMenuBottom(razerApplication));
+export function getMenuFor(application) {
+  const fullMenu = getMainMenu(application)
+    .concat(getCustomColorsCycleMenu(application))
+    .concat(getDeviceMenu(application))
+    .concat(getMainMenuBottom(application));
 
-  patch(fullMenu, razerApplication);
+  patch(fullMenu, application);
   return fullMenu;
 }
 
-function patch(deviceMenu, razerApplication) {
+function patch(deviceMenu, application) {
   deviceMenu.forEach(menuItem => {
     if (menuItem.hasOwnProperty('click')) {
       const originalClick = menuItem['click'];
       menuItem['click'] = (ev) => {
-        razerApplication.spectrumAnimation.stop();
-        razerApplication.cycleAnimation.stop();
+        application.razerApplication.stopAnimations();
         originalClick(ev);
       };
     } else if (menuItem.hasOwnProperty('submenu')) {
-      patch(menuItem['submenu'], razerApplication);
+      patch(menuItem['submenu'], application);
     }
   });
 }
 
-function getMainMenu(razerApplication) {
+function getMainMenu(application) {
   return [
     {
       label: 'Refresh Device List',
       click() {
-        razerApplication.refreshTray(true);
+        application.refreshTray(true);
       },
     },
     {
       label: 'Clear all settings',
       click() {
-        razerApplication.showConfirm("Really clear all settings?").then(result => {
+        application.showConfirm("Really clear all settings?").then(result => {
           if(result.response === 0) {
-            return razerApplication.settingsManager.clearAll();
+            return application.razerApplication.settingsManager.clearAll();
           } else {
             return Promise.resolve();
           }
         }).then(() => {
-          razerApplication.refreshTray(true);
+          application.refreshTray(true);
         }).catch(() => {});
       }
     },
@@ -51,7 +50,7 @@ function getMainMenu(razerApplication) {
     {
       label: 'None All Devices',
       click() {
-        razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+        application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
           device.setModeNone();
         });
       },
@@ -62,7 +61,7 @@ function getMainMenu(razerApplication) {
         {
           label: 'Custom',
           click() {
-            razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+            application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
               device.setModeStatic(new Uint8Array(Object.values(device.settings.customColor1.rgb).slice(0,3)));
             });
           },
@@ -70,7 +69,7 @@ function getMainMenu(razerApplication) {
         {
           label: 'Red',
           click() {
-            razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+            application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
               device.setModeStatic(new Uint8Array([0xff, 0, 0]));
             });
           },
@@ -78,7 +77,7 @@ function getMainMenu(razerApplication) {
         {
           label: 'Green',
           click() {
-            razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+            application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
               device.setModeStatic(new Uint8Array([0, 0xff, 0]));
             });
           },
@@ -86,7 +85,7 @@ function getMainMenu(razerApplication) {
         {
           label: 'Blue',
           click() {
-            razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+            application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
               device.setModeStatic(new Uint8Array([0, 0, 0xff]));
             });
           },
@@ -96,7 +95,7 @@ function getMainMenu(razerApplication) {
     {
       label: 'Spectrum All Devices',
       click() {
-        razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+        application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
           device.setSpectrum();
         });
       },
@@ -104,41 +103,41 @@ function getMainMenu(razerApplication) {
   ];
 }
 
-function getCustomColorsCycleMenu(razerApplication) {
+function getCustomColorsCycleMenu(application) {
   const cccMenu = [
     {
       label: 'Cycle All Devices',
       click() {
-        razerApplication.cycleAnimation.start();
+        application.razerApplication.cycleAnimation.start();
       },
     },
     { type: 'separator' },
     {
       label: 'Add Color',
       click() {
-        razerApplication.cycleAnimation.addColor({ r: 0x00, g: 0xff, b: 0x00 });
-        razerApplication.refreshTray();
+        application.razerApplication.cycleAnimation.addColor({ r: 0x00, g: 0xff, b: 0x00 });
+        application.refreshTray();
       },
     },
     {
       label: 'Reset Colors',
       click() {
-        razerApplication.cycleAnimation.setColor([
+        application.razerApplication.cycleAnimation.setColor([
           { r: 0xff, g: 0x00, b: 0x00 },
           { r: 0x00, g: 0xff, b: 0x00 },
           { r: 0x00, g: 0x00, b: 0xff },
         ]);
-        razerApplication.refreshTray();
+        application.refreshTray();
       },
     },
     { type: 'separator' },
   ];
 
-  const colorItems = razerApplication.cycleAnimation.getAllColors().map((color, index) => {
+  const colorItems = application.razerApplication.cycleAnimation.getAllColors().map((color, index) => {
     return {
       label: 'Color ' + (index + 1),
       click: () => {
-        razerApplication.showView({
+        application.showView({
           mode: 'color',
           index: index,
           color: color
@@ -153,18 +152,18 @@ function getCustomColorsCycleMenu(razerApplication) {
   }]
 }
 
-function getDeviceMenu(razerApplication) {
-  return razerApplication.deviceManager.activeRazerDevices.map(device => getDeviceMenuFor(razerApplication, device)).flat();
+function getDeviceMenu(application) {
+  return application.razerApplication.deviceManager.activeRazerDevices.map(device => getDeviceMenuFor(application, device)).flat();
 }
 
-function getMainMenuBottom(razerApplication) {
+function getMainMenuBottom(application) {
   return [
     { type: 'separator' },
     {
       label: 'About',
       submenu: [
         {
-          label: `Version: ${razerApplication.APP_VERSION}`,
+          label: `Version: ${application.APP_VERSION}`,
           enabled: false,
         },
       ],
@@ -172,7 +171,7 @@ function getMainMenuBottom(razerApplication) {
     {
       label: 'Quit',
       click() {
-        razerApplication.quit();
+        application.quit();
       },
     },
   ]
