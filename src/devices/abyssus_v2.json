@@ -9,7 +9,6 @@
     },
     {
       "static": {
-        "disabledWhite": true,
         "disabledRed": true
       }
     },

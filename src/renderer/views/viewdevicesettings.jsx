@@ -1,9 +1,8 @@
-import React, { useState} from 'react';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import CustomColor from '../components/CustomColor';
-import CustomColor2 from '../components/CustomColor2';
-import MouseSensitivity from '../components/MouseSensitivity';
-import Brightness from '../components/Brightness/Brightness';
+import React from 'react';
+import { SectionSettingBrightness } from '../sections/sectionsettingbrightness';
+import { SectionSettingSensitivity } from '../sections/sectionsettingsensitivity';
+import { SectionSettingColor } from '../sections/sectionsettingcolor';
+import { SectionProductHeader } from '../sections/sectionproductheader';
 
 export class ViewDeviceSettings extends React.Component {
 
@@ -26,49 +25,11 @@ export class ViewDeviceSettings extends React.Component {
     return (
       <span className='no-select'>
       <div id='body'>
-        <div id='product'>
-          {this.deviceSelected.image != null && (
-            <div>
-              <div className='product-image-background' style={{ backgroundImage: 'url('+this.deviceSelected.image+')' }}></div>
-              <div className='product-image'><img src={this.deviceSelected.image} /></div>
-            </div>
-          )}
-          <div className='product-description'>{this.deviceSelected.name}</div>
-        </div>
+        <SectionProductHeader deviceSelected={this.deviceSelected}/>
         <div id='settings'>
-          <div className='settings-block'>
-            <div className='settings-block-title'>Colors</div>
-            <div className='settings-block-body'>
-              <Tabs>
-                <TabList>
-                  <Tab>Primary custom color</Tab>
-                  <Tab disabled={this.deviceSelected.settings.customColor2 == null}>Secondary custom color</Tab>
-                </TabList>
-
-                <TabPanel>
-                  <CustomColor deviceSelected={this.deviceSelected} />
-                </TabPanel>
-                <TabPanel>
-                  {this.deviceSelected.settings.customColor2 != null && (
-                    <CustomColor2 deviceSelected={this.deviceSelected} />
-                  )}
-                </TabPanel>
-              </Tabs>
-            </div>
-          </div>
-
-          {this.deviceSelected.settings.customSensitivity != null && (
-            <div className='settings-block'>
-              <div className='settings-block-title'>Mouse DPI</div>
-              <div className='settings-block-body'><MouseSensitivity deviceSelected={this.deviceSelected} /></div>
-            </div>
-          )}
-          {this.deviceSelected.settings.customBrightness != null && (
-            <div className='settings-block'>
-              <div className='settings-block-title'>Brightness</div>
-              <div className='settings-block-body'><Brightness deviceSelected={this.deviceSelected} /></div>
-            </div>
-          )}
+          <SectionSettingColor deviceSelected={this.deviceSelected} />
+          <SectionSettingSensitivity deviceSelected={this.deviceSelected} />
+          <SectionSettingBrightness deviceSelected={this.deviceSelected} />
         </div>
         </div>
     </span>

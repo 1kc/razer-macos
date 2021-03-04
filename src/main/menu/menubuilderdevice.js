@@ -301,7 +301,7 @@ function getFeatureStatic(application, device, feature) {
 
   const subMenu = [
     singleItem('Custom color', [device.settings.customColor1.rgb.r, device.settings.customColor1.rgb.g, device.settings.customColor1.rgb.b]),
-    feature.configuration != null && feature.configuration.disabledWhite ? null : singleItem('White', [0xff, 0xff, 0xff]),
+    feature.configuration != null && !feature.hasAllColors() ? null : singleItem('White', [0xff, 0xff, 0xff]),
     feature.configuration != null && feature.configuration.disabledRed ? null : singleItem('Red', [0xff, 0, 0]),
     feature.configuration != null && feature.configuration.disabledGreen ? null : singleItem('Green', [0, 0xff, 0]),
     feature.configuration != null && feature.configuration.disabledBlue ? null : singleItem('Blue', [0, 0, 0xff]),
