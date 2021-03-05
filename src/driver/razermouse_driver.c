@@ -20,10 +20,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "razermouse_driver.h"
 #include "razercommon.h"
 #include "razerchromacommon.h"
+
+/**
+ * Static values for mouse devices
+ */
+// Setup orochi2011
+int orochi2011_dpi = 0x4c;
+int orochi2011_poll = 500;
+
+// Setup default values for DeathAdder 3.5G
+DeathAdder3_5g da3_5g = {
+        .leds = 3, // Lights up all lights
+        .dpi = 1, // 3500 DPI
+        .profile = 1, // Profile 1
+        .poll = 1 // Poll rate 1000
+};
 
 /**
  * Send report to the mouse
@@ -1633,4 +1649,562 @@ ssize_t razer_attr_read_is_charging(IOUSBDeviceInterface **usb_dev, char *buf)
 
     response_report = razer_send_payload(usb_dev, &report);
     return sprintf(buf, "%d\n", response_report.arguments[1]);
+}
+
+/**
+ * Read device file "poll_rate"
+ *
+ * Returns a string
+ */
+ushort razer_attr_read_poll_rate(IOUSBDeviceInterface **usb_dev)
+{
+    struct razer_report report = razer_chroma_misc_get_polling_rate();
+    struct razer_report response_report = {0};
+    unsigned short polling_rate = 0;
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_DEATHADDER_3_5G:
+            switch(da3_5g.poll) {
+                case 0x01:
+                    polling_rate = 1000;
+                    break;
+                case 0x02:
+                    polling_rate = 500;
+                    break;
+                case 0x03:
+                    polling_rate = 125;
+                    break;
+            }
+            return polling_rate;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_BASILISK:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
+            report.transaction_id.id = 0x3f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_ATHERIS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
+            report.transaction_id.id = 0x1f;
+            break;
+    }
+
+    if(product == USB_DEVICE_ID_RAZER_OROCHI_2011) {
+        response_report.arguments[0] = orochi2011_poll;
+    } else {
+        response_report = razer_send_payload(usb_dev, &report);
+    }
+
+    switch(response_report.arguments[0]) {
+        case 0x01:
+            polling_rate = 1000;
+            break;
+        case  0x02:
+            polling_rate = 500;
+            break;
+        case  0x08:
+            polling_rate = 125;
+            break;
+    }
+
+    return polling_rate;
+}
+
+void deathadder3_5g_set_poll_rate(IOUSBDeviceInterface **usb_dev, unsigned short poll_rate)
+{
+    switch(poll_rate) {
+        case 1000:
+            da3_5g.poll = 1;
+            break;
+        case 500:
+            da3_5g.poll = 2;
+            break;
+        case 125:
+            da3_5g.poll = 3;
+            break;
+        default: // 500
+            da3_5g.poll = 2;
+            break;
+    }
+
+    razer_send_control_msg_old_device(usb_dev, &da3_5g, 0x10, 0x00, 4);
+}
+
+/**
+ * Write device file "poll_rate"
+ *
+ * Sets the poll rate
+ */
+void razer_attr_write_poll_rate(IOUSBDeviceInterface **usb_dev, ushort polling_rate)
+{
+    struct razer_report report = razer_chroma_misc_set_polling_rate(polling_rate);
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_DEATHADDER_3_5G:
+            deathadder3_5g_set_poll_rate(usb_dev, polling_rate);
+            return;
+
+        case USB_DEVICE_ID_RAZER_OROCHI_2011:
+            orochi2011_poll = polling_rate;
+            report = razer_chroma_misc_set_orochi2011_poll_dpi(orochi2011_poll, orochi2011_dpi, orochi2011_dpi);
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRED:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_BASILISK:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
+            report.transaction_id.id = 0x3f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_ATHERIS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
+            report.transaction_id.id = 0x1f;
+            break;
+    }
+
+    razer_send_payload(usb_dev, &report);
+}
+
+/**
+ * Write device file "matrix_brightness"
+ *
+ * Sets the brightness to the ASCII number written to this file.
+ */
+
+void razer_attr_write_matrix_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness)
+{
+    brightness = round(brightness * 2.55);
+    struct razer_report report = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS:
+            report = razer_chroma_misc_set_dock_brightness(brightness);
+            break;
+
+        case USB_DEVICE_ID_RAZER_OROCHI_CHROMA:
+            // Orochi sets brightness of scroll wheel apparently
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, SCROLL_WHEEL_LED, brightness);
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, BACKLIGHT_LED, brightness);
+            report.transaction_id.id = 0x3f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, 0x00, brightness);
+            report.transaction_id.id = 0x1F;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
+            // Naga Trinity uses the LED 0x00 and Matrix Brightness
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, 0x00, brightness);
+            break;
+
+        default:
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, BACKLIGHT_LED, brightness);
+            break;
+    }
+    razer_send_payload(usb_dev, &report);
+}
+
+/**
+ * Read device file "matrix_brightness"
+ *
+ * Returns a string
+ */
+ushort razer_attr_read_matrix_brightness(IOUSBDeviceInterface **usb_dev)
+{
+    struct razer_report report = {0};
+    struct razer_report response = {0};
+    unsigned char brightness_index = 0x02;
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS:
+            report = razer_chroma_misc_get_dock_brightness();
+            brightness_index = 0x00;
+            break;
+
+        case USB_DEVICE_ID_RAZER_OROCHI_CHROMA:
+            // Orochi sets brightness of scroll wheel apparently
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, SCROLL_WHEEL_LED);
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+            // Orochi sets brightness of scroll wheel apparently
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, BACKLIGHT_LED);
+            report.transaction_id.id = 0x3f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, 0x00);
+            report.transaction_id.id = 0x1F;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_TRINITY:
+            // Naga Trinity uses the LED 0x00 and Matrix Brightness
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, 0x00);
+            break;
+
+        default:
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, BACKLIGHT_LED);
+            break;
+    }
+    response = razer_send_payload(usb_dev, &report);
+
+    if (response.status != RAZER_CMD_SUCCESSFUL) {
+        return 0;
+    }
+    // Brightness is at arg[0] for dock and arg[1] for led_brightness
+    ushort brightness = response.arguments[brightness_index];
+    brightness = round(brightness / 2.55);
+    return brightness;
+}
+
+/**
+ * Read device file "scroll_led_brightness"
+ */
+ushort razer_attr_read_scroll_led_brightness(IOUSBDeviceInterface **usb_dev)
+{
+    struct razer_report report = razer_chroma_standard_get_led_brightness(VARSTORE, SCROLL_WHEEL_LED);
+    struct razer_report response = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, SCROLL_WHEEL_LED);
+            report.transaction_id.id = 0x3F;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, SCROLL_WHEEL_LED);
+            report.transaction_id.id = 0x1f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_BASILISK:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, SCROLL_WHEEL_LED);
+            break;
+
+        default:
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, SCROLL_WHEEL_LED);
+            break;
+    }
+
+    response = razer_send_payload(usb_dev, &report);
+
+    ushort brightness = response.arguments[2];
+    brightness = round(brightness / 2.55);
+    return brightness;
+}
+
+/**
+ * Write device file "scroll_led_brightness"
+ */
+void razer_attr_write_scroll_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness)
+{
+    struct razer_report report = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, SCROLL_WHEEL_LED, brightness);
+            report.transaction_id.id = 0x3F;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, SCROLL_WHEEL_LED, brightness);
+            report.transaction_id.id = 0x1f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_BASILISK:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, SCROLL_WHEEL_LED, brightness);
+            break;
+
+        default:
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, SCROLL_WHEEL_LED, brightness);
+            break;
+    }
+
+    razer_send_payload(usb_dev, &report);
+}
+
+/**
+ * Read device file "logo_led_brightness"
+ */
+ushort razer_attr_read_logo_led_brightness(IOUSBDeviceInterface **usb_dev)
+{
+    struct razer_report report = {0};
+    struct razer_report response = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, LOGO_LED);
+            report.transaction_id.id = 0x3F;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, LOGO_LED);
+            report.transaction_id.id = 0x1f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
+        case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
+        case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_MINI:
+        case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
+        case USB_DEVICE_ID_RAZER_BASILISK:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, LOGO_LED);
+            break;
+
+        default:
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, LOGO_LED);
+            break;
+    }
+
+    response = razer_send_payload(usb_dev, &report);
+
+    ushort brightness = response.arguments[2];
+    brightness = round(brightness / 2.55);
+    return brightness;
+}
+
+/**
+ * Write device file "logo_led_brightness"
+ */
+void razer_attr_write_logo_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness)
+{
+    struct razer_report report = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_NAGA_HEX_V2:
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, LOGO_LED, brightness);
+            report.transaction_id.id = 0x3F;
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+        case USB_DEVICE_ID_RAZER_BASILISK_V2:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, LOGO_LED, brightness);
+            report.transaction_id.id = 0x1f;
+            break;
+
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ELITE:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_ESSENTIAL_WHITE_EDITION:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_MAMBA_WIRELESS_WIRED:
+        case USB_DEVICE_ID_RAZER_ABYSSUS_ELITE_DVA_EDITION:
+        case USB_DEVICE_ID_RAZER_ABYSSUS_ESSENTIAL:
+        case USB_DEVICE_ID_RAZER_VIPER:
+        case USB_DEVICE_ID_RAZER_VIPER_MINI:
+        case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRED:
+        case USB_DEVICE_ID_RAZER_VIPER_ULTIMATE_WIRELESS:
+        case USB_DEVICE_ID_RAZER_BASILISK:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRED:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_PRO_WIRELESS:
+        case USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, LOGO_LED, brightness);
+            break;
+
+        default:
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, LOGO_LED, brightness);
+            break;
+    }
+
+    razer_send_payload(usb_dev, &report);
+}
+
+ushort razer_attr_read_side_led_brightness(IOUSBDeviceInterface **usb_dev, int side)
+{
+    struct razer_report report = {0};
+    struct razer_report response = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, side);
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            report = razer_chroma_extended_matrix_get_brightness(VARSTORE, side);
+            report.transaction_id.id = 0x1f;
+            break;
+
+        default:
+            report = razer_chroma_standard_get_led_brightness(VARSTORE, side);
+            break;
+    }
+
+    response = razer_send_payload(usb_dev, &report);
+
+    ushort brightness = response.arguments[2];
+    brightness = round(brightness / 2.55);
+    return brightness;
+}
+
+void razer_attr_write_side_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness, int side)
+{
+    struct razer_report report = {0};
+
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    switch(product) {
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_RECEIVER:
+        case USB_DEVICE_ID_RAZER_LANCEHEAD_WIRELESS_WIRED:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, side, brightness);
+            break;
+
+        case USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020:
+        case USB_DEVICE_ID_RAZER_MAMBA_ELITE:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, side, brightness);
+            report.transaction_id.id = 0x1f;
+            break;
+
+        default:
+            report = razer_chroma_standard_set_led_brightness(VARSTORE, side, brightness);
+            break;
+    }
+
+    razer_send_payload(usb_dev, &report);
+}
+
+/**
+ * Read device file "left_led_brightness"
+ */
+ushort razer_attr_read_left_led_brightness(IOUSBDeviceInterface **usb_dev)
+{
+    return razer_attr_read_side_led_brightness(usb_dev, LEFT_SIDE_LED);
+}
+
+/**
+ * Write device file "left_led_brightness"
+ */
+void razer_attr_write_left_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness)
+{
+    return razer_attr_write_side_led_brightness(usb_dev, brightness, LEFT_SIDE_LED);
+}
+
+/**
+ * Read device file "right_led_brightness"
+ */
+ushort razer_attr_read_right_led_brightness(IOUSBDeviceInterface **usb_dev)
+{
+    return razer_attr_read_side_led_brightness(usb_dev, RIGHT_SIDE_LED);
+}
+
+/**
+ * Write device file "right_led_brightness"
+ */
+void razer_attr_write_right_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness)
+{
+    return razer_attr_write_side_led_brightness(usb_dev, brightness, RIGHT_SIDE_LED);
 }

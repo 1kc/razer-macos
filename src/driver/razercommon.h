@@ -108,6 +108,7 @@ struct razer_report {
 };
 
 IOReturn razer_send_control_msg(IOUSBDeviceInterface **dev, void const *data, uint report_index);
+IOReturn razer_send_control_msg_old_device(IOUSBDeviceInterface **dev, void const *data, uint report_value, uint report_index, uint report_size);
 IOReturn razer_get_usb_response(IOUSBDeviceInterface **dev, uint report_index, struct razer_report* request_report, uint response_index, struct razer_report* response_report, int wait_us);
 unsigned char razer_calculate_crc(struct razer_report *report);
 struct razer_report get_razer_report(unsigned char command_class, unsigned char command_id, unsigned char data_size);

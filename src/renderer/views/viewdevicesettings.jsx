@@ -3,6 +3,7 @@ import { SectionSettingBrightness } from '../sections/sectionsettingbrightness';
 import { SectionSettingSensitivity } from '../sections/sectionsettingsensitivity';
 import { SectionSettingColor } from '../sections/sectionsettingcolor';
 import { SectionProductHeader } from '../sections/sectionproductheader';
+import { SectionSettingPollRate } from '../sections/sectionsettingpollrate';
 
 export class ViewDeviceSettings extends React.Component {
 
@@ -29,6 +30,7 @@ export class ViewDeviceSettings extends React.Component {
         <div id='settings'>
           <SectionSettingColor deviceSelected={this.deviceSelected} />
           <SectionSettingSensitivity deviceSelected={this.deviceSelected} />
+          <SectionSettingPollRate deviceSelected={this.deviceSelected} />
           <SectionSettingBrightness deviceSelected={this.deviceSelected} />
         </div>
         </div>

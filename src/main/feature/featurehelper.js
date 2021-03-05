@@ -9,6 +9,8 @@ import { FeatureRipple } from './featureripple';
 import { FeatureBrightness } from './featurebrightness';
 import { FeatureWaveSimple } from './featurewavesimple';
 import { FeatureOldMouseEffects } from './featureoldmouseeffects';
+import { FeatureMouseBrightness } from './featuremousebrightness';
+import { FeatureMousePollRate } from './featuremousepollrate';
 
 export class FeatureHelper {
 
@@ -27,6 +29,8 @@ export class FeatureHelper {
       case 'brightness': return new FeatureBrightness(configuration);
       case 'ripple': return new FeatureRipple(configuration);
       case 'oldMouseEffects': return new FeatureOldMouseEffects(configuration);
+      case 'mouseBrightness': return new FeatureMouseBrightness(configuration);
+      case 'pollRate': return new FeatureMousePollRate(configuration);
       default:
         throw featureIdentifier+' is not a valid feature identifier!'
     }

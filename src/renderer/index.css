@@ -80,18 +80,27 @@ div#body {
   background-color: #47e10c;
   text-shadow: 0 0px 3px #557948;
 }
+.settings-brightness {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+.settings-brightness > div:first-child {
+  color:#47e10c;
+  width: 100px;
+}
+.settings-brightness > div:last-child {
+  flex:1;
+}
 p {
   color:gray;
   margin-left:10px;
   font-size: 13px;
 }
-.control {
-  display: flex;
-  margin-left:10px;
-  margin-right:10px;
-  margin-bottom: 20px;
-}
 
+.control {
+  margin-bottom: 10px;
+}
 .control > button {
   font-size: 12px;
   background-color: #35363a;
@@ -109,8 +118,11 @@ p {
 .control > button:active {
   background-color: #287c08;
 }
-
-.settings-block-body input {
+.settings-block-body {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.settings-block-body .chrome-picker input {
   background-color: transparent !important;
   color:#47e10c !important;
   border: 1px solid #47e10c !important;
@@ -130,7 +142,7 @@ p {
 
 .horizontal-slider {
   width: 100%;
-  height: 50px;
+  height: 40px;
 }
 
 .horizontal-slider .slider-track {

@@ -79,7 +79,7 @@ export default function CustomColor({ deviceSelected }) {
         )}
         {!allColors && (
           <GithubPicker color={currentColor} onChange={handleChange} width='100%' colors={colors} styles={stylesGithub}/>
-        )};
+        )}
       </div>
       <div className='control'>
         <button onClick={handleClick}>Save custom color</button>

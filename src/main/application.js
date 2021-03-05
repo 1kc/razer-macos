@@ -72,6 +72,23 @@ export class Application {
       this.razerApplication.cycleAnimation.updateColor(index, color.rgb);
       this.refreshTray();
     });
+
+    // mouse brightness
+    ['Logo', 'Scroll', 'Left', 'Right'].forEach(brightnessMouseIdentifier => {
+      ipcMain.on('update-mouse-'+brightnessMouseIdentifier.toLowerCase()+'-brightness', (_, arg) => {
+        const { device, brightness } = arg;
+        const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
+        currentDevice['setBrightness'+brightnessMouseIdentifier](brightness);
+        this.refreshTray();
+      });
+    });
+
+    // poll rate
+    ipcMain.on('update-mouse-pollrate', (_, arg) => {
+      const { device, pollRate } = arg;
+      const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
+      currentDevice.setPollRate(pollRate);
+    });
   }
 
 
@@ -79,9 +96,9 @@ export class Application {
     this.browserWindow = new BrowserWindow({
       webPreferences: { nodeIntegration: true },
       //titleBarStyle: 'hidden',
-      height: 800, // This is adjusted later with window.setSize
+      height: 1200, // This is adjusted later with window.setSize
       resizable: false,
-      width: 500,
+      width: 400,
       minWidth: 320,
       minHeight: 320,
       y: 100,

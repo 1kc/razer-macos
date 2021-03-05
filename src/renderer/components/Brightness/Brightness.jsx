@@ -1,37 +1,28 @@
 import React, { useState } from 'react';
 import Slider from '../Slider/Slider';
-import { ipcRenderer } from 'electron';
 
-export default function Brightness({deviceSelected}) {
-  const [currentBrightness, setCurrentBrightness] = useState(deviceSelected.settings.customBrightness);
+export default function Brightness({ title, currentBrightness, handleBrightnessChange }) {
 
-  const handleClick = (value) => {
-    deviceSelected.settings.customBrightness = value;
-    let payload = {
-      device: deviceSelected,
-    };
-    ipcRenderer.send('update-keyboard-brightness', payload);
-  }
+  const [brightness, setBrightness] = useState(currentBrightness);
 
-  const handleBrightnessChange = (value) => {
-    setCurrentBrightness(value);
-    handleClick(value);
+  const onChange = (value) => {
+    setBrightness(value);
+    handleBrightnessChange(value);
   };
-
-    return (
-        <Slider
-            title={"Adjust keyboard brightness"}
-            step={1}
-            className="horizontal-slider"
-            thumbClassName="slider-thumb"
-            trackClassName="slider-track"
-            min={0}
-            max={100}
-            value={currentBrightness}
-            onChange={handleBrightnessChange}
-            renderThumb={(props, state) => (
-                <div {...props}>{state.valueNow + '%'}</div>
-            )}
-        />
-    );
+  return (
+    <Slider
+      title={title}
+      step={1}
+      className='horizontal-slider'
+      thumbClassName='slider-thumb'
+      trackClassName='slider-track'
+      min={0}
+      max={100}
+      value={brightness}
+      onChange={onChange}
+      renderThumb={(props, state) => (
+        <div {...props}>{state.valueNow + '%'}</div>
+      )}
+    />
+  );
 }

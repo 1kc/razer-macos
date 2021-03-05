@@ -46,6 +46,7 @@
 #define USB_DEVICE_ID_RAZER_DEATHADDER_ELITE 0x005C
 #define USB_DEVICE_ID_RAZER_ABYSSUS_2000 0x005E
 #define USB_DEVICE_ID_RAZER_LANCEHEAD_TE_WIRED 0x0060
+#define USB_DEVICE_ID_RAZER_ATHERIS_RECEIVER 0x0062
 #define USB_DEVICE_ID_RAZER_BASILISK 0x0064
 #define USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE 0x0086
 #define USB_DEVICE_ID_RAZER_BASILISK_ULTIMATE_RECEIVER 0x0088
@@ -69,6 +70,7 @@
 #define USB_DEVICE_ID_RAZER_DEATHADDER_V2_MINI 0x008C
 #define USB_DEVICE_ID_RAZER_VIPER_MINI 0x008A
 #define USB_DEVICE_ID_RAZER_BASILISK_V2 0x0085
+#define USB_DEVICE_ID_RAZER_NAGA_LEFT_HANDED_2020 0x008D
 
 /* Each keyboard report has 90 bytes*/
 #define RAZER_REPORT_LEN 0x5A
@@ -122,6 +124,13 @@
 // 14      --->  Logo LED
 // 15      --->  Scroll LED
 
+typedef struct {
+    unsigned char poll;
+    unsigned char dpi;
+    unsigned char profile;
+    unsigned char leds;
+} DeathAdder3_5g;
+
 ssize_t razer_attr_write_logo_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_scroll_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
 ssize_t razer_attr_write_left_mode_wave(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);
@@ -160,6 +169,26 @@ ssize_t razer_attr_write_right_mode_reactive(IOUSBDeviceInterface **usb_dev, con
 
 ushort razer_attr_read_dpi(IOUSBDeviceInterface **usb_dev);
 void razer_attr_write_dpi(IOUSBDeviceInterface **usb_dev, ushort dpi_x, ushort dpi_y);
+
+// Poll
+ushort razer_attr_read_poll_rate(IOUSBDeviceInterface **usb_dev);
+void razer_attr_write_poll_rate(IOUSBDeviceInterface **usb_dev, ushort polling_rate);
+
+// Brightness
+ushort razer_attr_read_matrix_brightness(IOUSBDeviceInterface **usb_dev);
+void razer_attr_write_matrix_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness);
+
+ushort razer_attr_read_scroll_led_brightness(IOUSBDeviceInterface **usb_dev);
+void razer_attr_write_scroll_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness);
+
+ushort razer_attr_read_logo_led_brightness(IOUSBDeviceInterface **usb_dev);
+void razer_attr_write_logo_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness);
+
+ushort razer_attr_read_left_led_brightness(IOUSBDeviceInterface **usb_dev);
+void razer_attr_write_left_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness);
+
+ushort razer_attr_read_right_led_brightness(IOUSBDeviceInterface **usb_dev);
+void razer_attr_write_right_led_brightness(IOUSBDeviceInterface **usb_dev, unsigned char brightness);
 
 // Older mouse
 ssize_t razer_attr_write_logo_led_effect(IOUSBDeviceInterface **usb_dev, const char *buf, size_t count);

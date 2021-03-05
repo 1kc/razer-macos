@@ -9,7 +9,7 @@ export class SectionSettingSensitivity extends SectionSettingBlock {
   }
 
   renderTitle() {
-    return 'Mouse DPI';
+    return 'DPI';
   }
 
   renderSettings() {

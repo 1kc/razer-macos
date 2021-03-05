@@ -53,14 +53,13 @@ export class RazerDevice {
   setBreathe(color) {}
 
   serialize() {
-    return {
-      name: this.name,
-      productId: this.productId,
-      internalId: this.internalId,
-      mainType: this.mainType,
-      features: this.features,
-      settings: this.settings,
-      image: this.image,
-    };
+    const ignoreProperties = ['addon', 'settingsManager'];
+    const serializedDevice = {};
+    Object.entries(this)
+      .filter(([key]) => !ignoreProperties.find(ignored => ignored === key))
+      .forEach(([key, value]) => {
+        serializedDevice[key] = value;
+      })
+    return serializedDevice;
   }
 }

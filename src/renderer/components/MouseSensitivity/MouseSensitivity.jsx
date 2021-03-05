@@ -19,7 +19,6 @@ export default function MouseSensitivity({ deviceSelected }) {
 
   return (
     <div className="settings">
-      <p className="ui-center-text">Set mouse sensitivity DPI</p>
       <div className="control">
         <ReactSlider
           step={100}

@@ -5,7 +5,7 @@ export function getDeviceMenuFor(application, razerDevice) {
     { type: 'separator' },
   ];
 
-  const featureMenu = razerDevice.features.map(feature => getFeatureMenuFor(application, razerDevice, feature));
+  const featureMenu = razerDevice.features.map(feature => getFeatureMenuFor(application, razerDevice, feature)).filter(item => item != null);
   deviceMenu = deviceMenu.concat(featureMenu);
   return deviceMenu;
 }
@@ -19,10 +19,10 @@ function getHeaderFor(application, razerDevice) {
       break;
     case 'mouse':
       if (razerDevice.batteryLevel !== -1) {
-        if(razerDevice.chargingStatus) {
-          label = label+ ' - ⚡'+razerDevice.batteryLevel.toString()+'%';
+        if (razerDevice.chargingStatus) {
+          label = label + ' - ⚡' + razerDevice.batteryLevel.toString() + '%';
         } else {
-          label = label+ ' - 🔋'+razerDevice.batteryLevel.toString()+'%';
+          label = label + ' - 🔋' + razerDevice.batteryLevel.toString() + '%';
         }
       }
       break;
@@ -74,6 +74,12 @@ function getFeatureMenuFor(application, device, feature) {
       return getFeatureRipple(application, device, feature);
     case 'oldMouseEffects':
       return getFeatureOldMouseEffect(application, device, feature);
+    case 'mouseBrightness':
+      return getFeatureMouseBrightness(application, device, feature);
+    case 'pollRate':
+      return null;
+    default:
+      throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';
   }
 }
 
@@ -370,5 +376,87 @@ function getFeatureWaveSimple(application, device, feature) {
         },
       },
     ],
+  };
+}
+
+function getFeatureMouseBrightness(application, device, feature) {
+
+  const submenu = [
+    feature.configuration == null || !feature.configuration.disabledLogo ? {
+      label: 'Logo (' + device.getBrightnessLogo() + '%)',
+      submenu: [
+        {
+          label: '0%', click() {
+            device.setBrightnessLogo(0);
+            application.refreshTray();
+          },
+        },
+        {
+          label: '100%', click() {
+            device.setBrightnessLogo(100);
+            application.refreshTray();
+          },
+        },
+      ],
+    } : null,
+    feature.configuration == null || !feature.configuration.disabledScroll ?
+      {
+        label: 'Scroll (' + device.getBrightnessScroll() + '%)',
+        submenu: [
+          {
+            label: '0%', click() {
+              device.setBrightnessScroll(0);
+              application.refreshTray();
+            },
+          },
+          {
+            label: '100%', click() {
+              device.setBrightnessScroll(100);
+              application.refreshTray();
+            },
+          },
+        ],
+      } : null,
+    feature.configuration == null || !feature.configuration.disabledLeft ?
+      {
+        label: 'Left (' + device.getBrightnessLeft() + '%)',
+        submenu: [
+          {
+            label: '0%', click() {
+              device.setBrightnessLeft(0);
+              application.refreshTray();
+            },
+          },
+          {
+            label: '100%', click() {
+              device.setBrightnessLeft(100);
+              application.refreshTray();
+            },
+          },
+        ],
+      } : null,
+    feature.configuration == null || !feature.configuration.disabledRight ?
+      {
+        label: 'Right (' + device.getBrightnessRight() + '%)',
+        submenu: [
+          {
+            label: '0%', click() {
+              device.setBrightnessRight(0);
+              application.refreshTray();
+            },
+          },
+          {
+            label: '100%', click() {
+              device.setBrightnessRight(100);
+              application.refreshTray();
+            },
+          },
+        ],
+      } : null,
+  ];
+
+  return {
+    label: 'Brightness',
+    submenu: submenu.filter(s => s!= null),
   };
 }

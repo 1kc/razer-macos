@@ -19,6 +19,8 @@ import { FeatureBrightness } from './feature/featurebrightness';
 import { FeatureWaveSimple } from './feature/featurewavesimple';
 import { FeatureOldMouseEffects } from './feature/featureoldmouseeffects';
 import { FeatureHelper } from './feature/featurehelper';
+import { FeatureMouseBrightness } from './feature/featuremousebrightness';
+import { FeatureMousePollRate } from './feature/featuremousepollrate';
 
 const fs = require('fs');
 
@@ -51,6 +53,7 @@ export class RazerDeviceManager {
         image: configurationDevice.image,
         features: configurationDevice.features,
         featuresMissing: configurationDevice.featuresMissing,
+        featuresConfig: configurationDevice.featuresConfig,
       };
       const razerDevice = this.createRazerDeviceFrom(razerProperties);
       return razerDevice.init();
@@ -117,6 +120,8 @@ export class RazerDeviceManager {
           new FeatureReactive(),
           new FeatureBreathe(),
           new FeatureOldMouseEffects(),
+          new FeatureMouseBrightness(),
+          new FeatureMousePollRate(),
         ];
         break;
       case 'mousedock':
@@ -181,14 +186,29 @@ export class RazerDeviceManager {
       features: null,
     };
 
+    /// create from device standard or from feature list
     if (razerProperties.features == null) {
       razerDeviceProperties.features = deviceFeatures;
     } else {
       razerDeviceProperties.features = razerProperties.features.map(featureConfig => FeatureHelper.createFeatureFrom(featureConfig));
     }
 
+    /// remove features which are stated being missing
     if (razerProperties.featuresMissing != null) {
       razerDeviceProperties.features = razerDeviceProperties.features.filter(feature => !razerProperties.featuresMissing.some(missingFeature => missingFeature === feature.featureIdentifier));
+    }
+
+    /// override configs if available
+    if (razerProperties.featuresConfig != null) {
+      razerProperties.featuresConfig.forEach(featureConfig => {
+        const featureIdentifier = Object.keys(featureConfig)[0];
+        const overriddenFeatureConfig = Object.values(featureConfig)[0];
+        const feature = razerDeviceProperties.features.find(f => f.featureIdentifier === featureIdentifier);
+
+        if(feature) {
+          feature.configuration = overriddenFeatureConfig;
+        }
+      });
     }
 
     return new device(this.addon, this.settingsManager, razerDeviceProperties);
@@ -204,6 +224,7 @@ export class RazerDeviceManager {
           mainType: razerConfigDevice.mainType,
           features: razerConfigDevice.features,
           featuresMissing: razerConfigDevice.featuresMissing,
+          featuresConfig: razerConfigDevice.featuresConfig,
           image: razerConfigDevice.image,
         };
       }

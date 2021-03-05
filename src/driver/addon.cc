@@ -396,6 +396,86 @@ void MouseSetDpi(const Napi::CallbackInfo &info) {
     razer_attr_write_dpi(device.usbDevice, dpi, dpi);
 }
 
+Napi::Number MouseGetPollRate(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+
+    ushort dpi = razer_attr_read_poll_rate(device.usbDevice);
+    return Napi::Number::New(env, dpi);
+}
+
+void MouseSetPollRate(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    Napi::Number pollRate = info[1].ToNumber();
+    ushort poll_rate = pollRate.Int32Value();
+
+    razer_attr_write_poll_rate(device.usbDevice, poll_rate);
+}
+
+Napi::Number MouseGetLogoBrightness(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+    ushort brightness = razer_attr_read_logo_led_brightness(device.usbDevice);
+    return Napi::Number::New(env, brightness);
+}
+
+void MouseSetLogoBrightness(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+
+    Napi::Number brightness_number = info[1].ToNumber();
+    ushort brightness = brightness_number.Int32Value();
+
+    razer_attr_write_logo_led_brightness(device.usbDevice, brightness);
+}
+
+Napi::Number MouseGetScrollBrightness(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+    ushort brightness = razer_attr_read_scroll_led_brightness(device.usbDevice);
+    return Napi::Number::New(env, brightness);
+}
+
+void MouseSetScrollBrightness(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+
+    Napi::Number brightness_number = info[1].ToNumber();
+    ushort brightness = brightness_number.Int32Value();
+
+    razer_attr_write_scroll_led_brightness(device.usbDevice, brightness);
+}
+
+Napi::Number MouseGetLeftBrightness(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+    ushort brightness = razer_attr_read_left_led_brightness(device.usbDevice);
+    return Napi::Number::New(env, brightness);
+}
+
+void MouseSetLeftBrightness(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+
+    Napi::Number brightness_number = info[1].ToNumber();
+    ushort brightness = brightness_number.Int32Value();
+
+    razer_attr_write_left_led_brightness(device.usbDevice, brightness);
+}
+
+Napi::Number MouseGetRightBrightness(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+    ushort brightness = razer_attr_read_right_led_brightness(device.usbDevice);
+    return Napi::Number::New(env, brightness);
+}
+
+void MouseSetRightBrightness(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+
+    Napi::Number brightness_number = info[1].ToNumber();
+    ushort brightness = brightness_number.Int32Value();
+
+    razer_attr_write_right_led_brightness(device.usbDevice, brightness);
+}
+
 /**
 * Mouse docks
 */
@@ -812,6 +892,18 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
     exports.Set("mouseGetDpi", Napi::Function::New(env, MouseGetDpi));
     exports.Set("mouseSetDpi", Napi::Function::New(env, MouseSetDpi));
+
+    exports.Set("mouseGetPollRate", Napi::Function::New(env, MouseGetPollRate));
+    exports.Set("mouseSetPollRate", Napi::Function::New(env, MouseSetPollRate));
+
+    exports.Set("mouseGetScrollBrightness", Napi::Function::New(env, MouseGetScrollBrightness));
+    exports.Set("mouseSetScrollBrightness", Napi::Function::New(env, MouseSetScrollBrightness));
+    exports.Set("mouseGetLogoBrightness", Napi::Function::New(env, MouseGetLogoBrightness));
+    exports.Set("mouseSetLogoBrightness", Napi::Function::New(env, MouseSetLogoBrightness));
+    exports.Set("mouseGetLeftBrightness", Napi::Function::New(env, MouseGetLeftBrightness));
+    exports.Set("mouseSetLeftBrightness", Napi::Function::New(env, MouseSetLeftBrightness));
+    exports.Set("mouseGetRightBrightness", Napi::Function::New(env, MouseGetRightBrightness));
+    exports.Set("mouseSetRightBrightness", Napi::Function::New(env, MouseSetRightBrightness));
 
     exports.Set("mouseDockSetModeNone", Napi::Function::New(env, MouseDockSetModeNone));
     exports.Set("mouseDockSetModeBreathe", Napi::Function::New(env, MouseDockSetModeBreathe));
