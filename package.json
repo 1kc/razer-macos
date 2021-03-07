@@ -30,7 +30,6 @@
   "devDependencies": {
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
-    "copy-webpack-plugin": "^6.4.1",
     "electron": "^11.2.2",
     "electron-builder": "^21.0.11",
     "electron-webpack": "^2.7.4",

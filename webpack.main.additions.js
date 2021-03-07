@@ -11,16 +11,6 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        { from: "src/devices", to: "../devices" },
-      ],
-      options: {
-        concurrency: 100,
-      },
-    }),
-  ],
   resolve: {
     extensions: ['.node'],
   },

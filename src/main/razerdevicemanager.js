@@ -22,17 +22,14 @@ import { FeatureHelper } from './feature/featurehelper';
 import { FeatureMouseBrightness } from './feature/featuremousebrightness';
 import { FeatureMousePollRate } from './feature/featuremousepollrate';
 
-const fs = require('fs');
-
 /**
  * Responsible to fetch all attached Razer devices and map them to RazerDevice instances with features
  * @constructor
  */
 export class RazerDeviceManager {
-  constructor(settingsManager, configFolder) {
+  constructor(settingsManager) {
     this.addon = addon;
     this.settingsManager = settingsManager;
-    this.configFolder = configFolder;
     this.razerConfigDevices = this.getAllRazerDeviceConfigurations();
     this.activeRazerDevices = null;
   }
@@ -215,22 +212,18 @@ export class RazerDeviceManager {
   }
 
   getAllRazerDeviceConfigurations() {
-    return fs.readdirSync(this.configFolder).map(filename => {
-      if (filename.endsWith('.json')) {
-        const razerConfigDevice = JSON.parse(fs.readFileSync(this.configFolder + '/' + filename, 'utf-8'));
-        return {
-          name: razerConfigDevice.name,
-          productId: parseInt(razerConfigDevice.productId, 16),
-          mainType: razerConfigDevice.mainType,
-          features: razerConfigDevice.features,
-          featuresMissing: razerConfigDevice.featuresMissing,
-          featuresConfig: razerConfigDevice.featuresConfig,
-          image: razerConfigDevice.image,
-        };
-      }
-      return null;
-    }).filter(razerDevice => {
-      return razerDevice !== null;
+    const allFiles = require.context('../devices', true, /\.json$/i);
+    return allFiles.keys().map((key) => {
+      const razerConfigDevice = allFiles(key);
+      return {
+        name: razerConfigDevice.name,
+        productId: parseInt(razerConfigDevice.productId, 16),
+        mainType: razerConfigDevice.mainType,
+        features: razerConfigDevice.features,
+        featuresMissing: razerConfigDevice.featuresMissing,
+        featuresConfig: razerConfigDevice.featuresConfig,
+        image: razerConfigDevice.image,
+      };
     });
   }
 

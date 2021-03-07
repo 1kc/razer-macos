@@ -2,7 +2,6 @@ import { RazerDeviceManager } from './razerdevicemanager';
 import { SettingsManager } from './settingsmanager';
 import { RazerAnimationCycleSpectrum } from './animation/animationcyclespectrum';
 import { RazerAnimationCycleCustom } from './animation/animationcyclecustom';
-import path from 'path';
 
 /**
  * Main application
@@ -15,7 +14,7 @@ import path from 'path';
 export class RazerApplication {
   constructor() {
     this.settingsManager = new SettingsManager();
-    this.deviceManager = new RazerDeviceManager(this.settingsManager, path.join(__dirname, '../devices'));
+    this.deviceManager = new RazerDeviceManager(this.settingsManager);
     this.spectrumAnimation = null;
     this.cycleAnimation = null;
   }
