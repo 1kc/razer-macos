@@ -3,7 +3,7 @@ html, body {
   height:100%;
   margin:0;
   padding:0;
-  overflow: hidden;
+  overflow-x: hidden;
   font-family: 'SF Display Pro', sans-serif;
 }
 body {
@@ -84,6 +84,7 @@ div#body {
   display:flex;
   flex-direction: row;
   align-items: center;
+  padding-left:10px;
 }
 .settings-brightness > div:first-child {
   color:#47e10c;
@@ -100,6 +101,8 @@ p {
 
 .control {
   margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .control > button {
   font-size: 12px;
@@ -117,10 +120,6 @@ p {
 }
 .control > button:active {
   background-color: #287c08;
-}
-.settings-block-body {
-  padding-left: 10px;
-  padding-right: 10px;
 }
 .settings-block-body .chrome-picker input {
   background-color: transparent !important;
