@@ -30,7 +30,19 @@
 #define USB_VENDOR_ID_RAZER 0x1532
 #endif
 
-bool is_keyboard(IOUSBDeviceInterface **dev);
-bool is_razer_device(IOUSBDeviceInterface **dev);
+typedef struct {
+    IOUSBDeviceInterface **usbDevice;
+    UInt16 productId;
+    int internalDeviceId;
+} RazerDevice;
+
+typedef struct {
+    RazerDevice *devices;
+    int size;
+} RazerDevices;
+
 IOUSBDeviceInterface **getRazerUSBDeviceInterface(int type);
 void closeRazerUSBDeviceInterface(IOUSBDeviceInterface **dev);
+
+RazerDevices getAllRazerDevices();
+void closeAllRazerDevices(RazerDevices devices);

@@ -1,0 +1,21 @@
+{
+  "name": "Razer Abyssus V2",
+  "productId": "0x005B",
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/721/721_abyssusv2.png",
+  "features": [
+    {
+      "none": null
+    },
+    {
+      "static": {
+        "disabledRed": true
+      }
+    },
+    {
+      "oldMouseEffects": {
+        "disabledScroll": true
+      }
+    }
+  ]
+}

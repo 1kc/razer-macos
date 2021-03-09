@@ -127,7 +127,7 @@
 // };
 
 bool is_blade_laptop(IOUSBDeviceInterface **usb_dev);
-ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf);
+
 ssize_t razer_attr_read_mode_game(IOUSBDeviceInterface **usb_dev, char *buf);
 ssize_t razer_attr_write_mode_macro(IOUSBDeviceInterface **usb_dev, const char *buf, int count);
 ssize_t razer_attr_write_mode_macro_effect(IOUSBDeviceInterface **usb_dev, const char *buf, int count);

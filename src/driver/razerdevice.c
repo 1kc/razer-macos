@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "razerdevice.h"
 
 bool is_razer_device(IOUSBDeviceInterface **dev)
@@ -354,4 +355,112 @@ void closeRazerUSBDeviceInterface(IOUSBDeviceInterface **dev)
 	kern_return_t kr;
 	kr = (*dev)->USBDeviceClose(dev);
 	kr = (*dev)->Release(dev);
+}
+
+RazerDevices getAllRazerDevices()
+{
+    RazerDevices allDevices = { .devices = NULL, .size = 0 };
+
+    CFMutableDictionaryRef matchingDict;
+    matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
+    if (matchingDict == NULL)
+    {
+        return allDevices;
+    }
+
+    io_iterator_t iter;
+    kern_return_t kReturn =
+            IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &iter);
+    if (kReturn != kIOReturnSuccess)
+    {
+        return allDevices;
+    }
+
+    int array_size = 0;
+    int array_index = -1;
+    RazerDevice *razerDevices = malloc(array_size * sizeof(RazerDevice));
+
+    io_service_t usbDevice;
+    while ((usbDevice = IOIteratorNext(iter)))
+    {
+        IOCFPlugInInterface **plugInInterface = NULL;
+        SInt32 score;
+
+        kReturn = IOCreatePlugInInterfaceForService(
+                usbDevice, kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID, &plugInInterface, &score);
+
+        IOObjectRelease(usbDevice); // Not needed after plugin created
+        if ((kReturn != kIOReturnSuccess) || plugInInterface == NULL)
+        {
+            // printf("Unable to create plugin (0x%08x)\n", kReturn);
+            continue;
+        }
+
+        IOUSBDeviceInterface **dev = NULL;
+        HRESULT hResult = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID), (LPVOID *)&dev);
+
+        (*plugInInterface)->Release(plugInInterface); // Not needed after device interface created
+        if (hResult || !dev)
+        {
+            // printf("Couldn’t create a device interface (0x%08x)\n", (int) hResult);
+            continue;
+        }
+
+        // Filter out non-Razer devices
+        if (!is_razer_device(dev))
+        {
+            (*dev)->Release(dev);
+            continue;
+        }
+
+        if(!is_keyboard(dev)
+        && !is_blade_laptop(dev)
+        && !is_mouse(dev)
+        && !is_mouse_dock(dev)
+        && !is_mouse_dock(dev)
+        && !is_mouse_mat(dev)
+        && !is_headphone(dev)
+        && !is_egpu(dev)
+        && !is_accessory(dev)
+        ) {
+            (*dev)->Release(dev);
+            continue;
+        }
+
+        kReturn = (*dev)->USBDeviceOpen(dev);
+        if (kReturn != kIOReturnSuccess)
+        {
+            printf("Unable to open USB device: %08x\n", kReturn);
+            (*dev)->Release(dev);
+            continue;
+        }
+
+        // Success. We found the Razer USB device.
+        // Caller is responsible for closing USB and release device.
+        array_size++;
+        razerDevices = realloc(razerDevices, array_size * sizeof(RazerDevice));
+        array_index++;
+
+        UInt16 productId;
+        (*dev)->GetDeviceProduct(dev, &productId);
+
+        RazerDevice newDevice = { .usbDevice = dev, .internalDeviceId = array_index, .productId = productId };
+        razerDevices[array_index] = newDevice;
+    }
+
+    IOObjectRelease(iter);
+    allDevices.devices = razerDevices;
+    allDevices.size = array_size;
+    return allDevices;
+}
+
+void closeAllRazerDevices(RazerDevices devices)
+{
+    for(int counter=0; counter < devices.size; ++counter) {
+        IOUSBDeviceInterface **dev = devices.devices[counter].usbDevice;
+        (*dev)->USBDeviceClose(dev);
+        (*dev)->Release(dev);
+    }
+    free(devices.devices);
+    devices.devices = NULL;
 }

@@ -1,90 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './react-tabs.css';
-import CustomColor from './components/CustomColor';
-import CustomColor2 from './components/CustomColor2';
 import { ipcRenderer } from 'electron';
-import MouseSensitivity from './components/MouseSensitivity';
-import Brightness from './components/Brightness/Brightness';
+import { ViewDeviceSettings } from './views/viewdevicesettings';
+import { ViewColorSettings } from './views/viewcolorpicker';
 
 /**
  * Root React component
  */
-export default function App() {
-  const INITIAL_COLOR = {};
-  const INITIAL_COLOR2 = {};
-  const [deviceSelected, setDeviceSelected] = useState('Keyboard');
-  const [currentColor, setCurrentColor] = useState(INITIAL_COLOR);
-  const [currentColor2, setCurrentColor2] = useState(INITIAL_COLOR2);
-  const [currentSensitivity, setCurrentSensitivity] = useState(3200);
-  // 0-100. In debug mode, this will be set to 50 when the UI is loaded
-  const [currentBrightness, setCurrentBrightness] = useState(50);
+export class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-  useEffect(() => {
-    ipcRenderer.on('device-selected', (event, message) => {
-      if (message.currentSensitivity != null) {
-        setCurrentSensitivity(message.currentSensitivity);
-      }
-      if (message.currentBrightness != null) {
-        setCurrentBrightness(message.currentBrightness);
-      }
-      setDeviceSelected(message.device);
-      setCurrentColor(message.currentColor);
-      setCurrentColor2(message.currentColor2);
-    });
-  }, []);
-
-  useEffect(() => {
-    let payload = {
-      brightness: currentBrightness,
+    this.state = {
+      mode: 'device',
+      message: null
     };
-    ipcRenderer.send('update-keyboard-brightness', payload);
-  }, [currentBrightness]);
 
-  const handleBrightnessChange = (value) => {
-    setCurrentBrightness(value);
-  };
+    ipcRenderer.on('render-view', (event, message) => {
+      const {mode} = message;
+      this.setState({mode: null, message: null});
+      this.setState({mode: mode, message: message});
+    })
+  }
 
-  return (
-    <span className="no-select">
-      <header id="titlebar">
-        <div id="drag-region">
-          <div id="window-title">
-            <span>{deviceSelected} settings</span>
-          </div>
-        </div>
-      </header>
-      <Tabs>
-        <TabList>
-          <Tab>Primary custom color</Tab>
-          <Tab disabled={deviceSelected !== "Keyboard"}>Secondary custom color</Tab>
-        </TabList>
+  render() {
+    if(this.state.mode === 'device') {
+      return <ViewDeviceSettings config={this.state.message}></ViewDeviceSettings>;
+    } else if(this.state.mode == 'color') {
+      return <ViewColorSettings config={this.state.message}></ViewColorSettings>;
+    }
+    return <div></div>;
+  }
 
-        <TabPanel>
-          <CustomColor
-            deviceSelected={deviceSelected}
-            currentColor={currentColor}
-            setCurrentColor={setCurrentColor}
-          />
-        </TabPanel>
-        <TabPanel>
-          <CustomColor2
-            deviceSelected={deviceSelected}
-            currentColor2={currentColor2}
-            setCurrentColor2={setCurrentColor2}
-          />
-        </TabPanel>
-      </Tabs>
-      {deviceSelected === 'Mouse' && (
-        <MouseSensitivity
-          currentSensitivity={currentSensitivity}
-        ></MouseSensitivity>
-      )}
-      {deviceSelected === 'Keyboard' && (
-        <Brightness
-          brightness={currentBrightness}
-          onBrightnessChange={handleBrightnessChange}
-        />)}
-    </span>
-  );
+
 }

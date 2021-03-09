@@ -155,3 +155,17 @@ unsigned short clamp_u16(unsigned short value, unsigned short min, unsigned shor
         return min;
     return value;
 }
+
+IOReturn razer_send_control_msg_old_device(IOUSBDeviceInterface **dev, void const *data, uint report_value, uint report_index, uint report_size)
+{
+    IOUSBDevRequest request;
+
+    request.bRequest = HID_REQ_SET_REPORT; // 0x09
+    request.bmRequestType = USB_TYPE_CLASS | USB_RECIP_INTERFACE | USB_DIR_OUT; // 0x21
+    request.wValue = report_value;
+    request.wIndex = report_index;
+    request.wLength = report_size;
+    request.pData = (void*)data;
+
+    return (*dev)->DeviceRequest(dev, &request);
+}

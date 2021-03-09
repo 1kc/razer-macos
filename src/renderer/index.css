@@ -1,56 +1,155 @@
+html, body {
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow-x: hidden;
+  font-family: 'SF Display Pro', sans-serif;
+}
 body {
-  margin: 3px;
+  display:flex;
+  flex:1;
+  flex-direction: column;
+}
+#app {
+  display:flex;
+  flex-direction: column;
+  flex:1;
 }
 
-.settings {
-  margin: 30px 10px 30px 10px;
-  /* -webkit-app-region: no-drag; */
+#app > span.no-select {
+  display:flex;
+  flex:1;
+  flex-direction: column;
+}
+
+div#body {
+  display:flex;
+  flex:1;
+  flex-direction: column;
+  overflow:auto;
+}
+
+#product {
+  position: relative;
+  display:flex;
+  flex-direction: row;
+  padding:10px;
+}
+#product .product-image-background {
+  position: absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center center;
+  z-index: -1;
+  filter: blur(3px);
+}
+#product .product-image {
+  box-shadow: inset 0 0 5px #47e10c;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-color: black;
+}
+#product .product-image img {
+  width:65px;
+  height:65px;
+  margin: 10px;
+}
+#product .product-description {
+  color: #47e10c;
+  font-size: 30px;
+  align-items: center;
+  display: flex;
+  flex:1;
+  text-shadow: 0 0 5px #000;
+}
+
+.settings-block {
+  display:flex;
+  flex-direction: column;
+  margin-top:0;
+}
+.settings-block-title {
+  padding-left:10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #47e10c;
+  text-shadow: 0 0px 3px #557948;
+}
+.settings-brightness {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left:10px;
+}
+.settings-brightness > div:first-child {
+  color:#47e10c;
+  width: 100px;
+}
+.settings-brightness > div:last-child {
+  flex:1;
+}
+p {
+  color:gray;
+  margin-left:10px;
+  font-size: 13px;
 }
 
 .control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
-
 .control > button {
   font-size: 12px;
+  background-color: #35363a;
+  border: 1px solid black;
+  padding: 8px;
+  color: #47e10c;
+  width:100%;
+  outline: none !important;
+}
+.control > button:hover {
+  background-color: #47e10c;
+  color: black;
+  cursor: pointer;
+}
+.control > button:active {
+  background-color: #287c08;
+}
+.settings-block-body .chrome-picker input {
+  background-color: transparent !important;
+  color:#47e10c !important;
+  border: 1px solid #47e10c !important;
+  box-shadow: none !important;
 }
 
-#titlebar {
-  color: #fff;
-}
-
-#titlebar #drag-region {
-  -webkit-app-region: drag;
-}
-
-#window-title {
-  text-align: center;
-  overflow: hidden;
+#no-device {
   font-family: 'SF Display Pro', sans-serif;
-  font-size: 12px;
-}
-
-#window-title span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 1.5;
+  display: flex;
+  flex: 1;
+  font-size: 20px;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .horizontal-slider {
   width: 100%;
-  max-width: 500px;
-  height: 50px;
+  height: 40px;
 }
 
 .horizontal-slider .slider-track {
   top: 16px;
   height: 16px;
-  background-color: rgb(51, 42, 245);
+  background-color:black;
   border-radius: 24px;
+  border: 1px solid #47e10c;
 }
 
 .horizontal-slider .slider-thumb {
@@ -58,11 +157,24 @@ body {
   width: 36px;
   height: 36px;
   line-height: 36px;
-  background-color: white;
+  background-color: #35363a;
+  color:#47e10c;
   text-align: center;
   border-radius: 24px;
   font-family: 'SF Display Pro', sans-serif;
   font-size: 12px;
+  outline: none !important;
+  box-shadow: 0 0 6px black;
+  cursor: grab;
+}
+.horizontal-slider .slider-thumb:hover {
+  color:black;
+  background-color: #47e10c;
+}
+.horizontal-slider .slider-thumb:active {
+  color:black;
+  background-color: #47e10c;
+  cursor: grabbing;
 }
 
 .ui-center-text {

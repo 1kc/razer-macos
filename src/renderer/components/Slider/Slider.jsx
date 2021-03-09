@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 const Slider = (props) => {
     return (
-        <div className="settings">
-            <p className="ui-center-text">{props.title}</p>
+        <div>
             <div className="control">
                 <ReactSlider
                     step={props.step}

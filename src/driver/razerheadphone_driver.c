@@ -36,49 +36,19 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
         if(response_report.remaining_packets != request_report->remaining_packets ||
             response_report.command_class != request_report->command_class ||
             response_report.command_id.id != request_report->command_id.id) {
-            printf("Response doesn't match request");
+            printf("Response doesn't match request (headphone)\n");
         } else if (response_report.status == RAZER_CMD_FAILURE) {
-            printf("Command failed");
+            printf("Command failed (headphone)\n");
         } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {
-            printf("Command not supported");
+            printf("Command not supported (headphone)\n");
         } else if (response_report.status == RAZER_CMD_TIMEOUT) {
-            printf("Command timed out");
+            printf("Command timed out (headphone)\n");
         }
     } else {
-        printf("Invalid Report Length");
+        printf("Invalid Report Length (headphone)\n");
     }
 
     return response_report;
-}
-
-/**
- * Read device file "device_type"
- *
- * Returns friendly string of device type
- */
-ssize_t razer_headphone_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf)
-{
-    UInt16 product = -1;
-    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-
-    char *device_type = "";
-
-    switch (product) {
-        case USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION:
-            device_type = "Razer Kraken Kitty Edition\n";
-            break;
-        case USB_DEVICE_ID_RAZER_KRAKEN_V2:
-            device_type = "Razer Kraken V2\n";
-            break;
-        case USB_DEVICE_ID_RAZER_KRAKEN_ULTIMATE:
-            device_type = "Razer Kraken Ultimate\n";
-            break;
-        default:
-            device_type = "Unknown Device\n";
-            break;
-    }
-
-    return sprintf(buf, "%s", device_type);
 }
 
 /**

@@ -60,238 +60,6 @@ bool is_blade_laptop(IOUSBDeviceInterface **usb_dev)
 }
 
 /**
- * Read device file "device_type"
- *
- * Returns friendly string of device type
- */
-ssize_t razer_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf)
-{
-    UInt16 product = -1;
-    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-
-    char *device_type = "";
-
-    switch (product)
-    {
-    case USB_DEVICE_ID_RAZER_NOSTROMO:
-        device_type = "Razer Nostromo\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_ORBWEAVER:
-        device_type = "Razer Orbweaver\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_ORBWEAVER_CHROMA:
-        device_type = "Razer Orbweaver Chroma\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_STEALTH:
-        device_type = "Razer BlackWidow Stealth\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_STEALTH_EDITION:
-        device_type = "Razer BlackWidow Stealth Edition\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2012:
-        device_type = "Razer BlackWidow Ultimate 2012\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2013:
-        device_type = "Razer BlackWidow Ultimate 2013\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_ULTIMATE_2016:
-        device_type = "Razer BlackWidow Ultimate 2016\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_ULTIMATE:
-        device_type = "Razer BlackWidow X Ultimate\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_STEALTH:
-        device_type = "Razer Blade Stealth\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2019:
-        device_type = "Razer Blade Stealth (Late 2019)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2016:
-        device_type = "Razer Blade Stealth (Late 2016)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_STEALTH_MID_2017:
-        device_type = "Razer Blade Stealth (Mid 2017)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_QHD:
-        device_type = "Razer Blade Stealth (QHD)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_PRO_LATE_2016:
-        device_type = "Razer Blade Pro (Late 2016)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_2018:
-        device_type = "Razer Blade 15 (2018)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_2018_MERCURY:
-        device_type = "Razer Blade 15 (2018) Mercury\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_2018_BASE:
-        device_type = "Razer Blade 15 (2018) Base Model\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_2019_ADV:
-        device_type = "Razer Blade 15 (2019) Advanced\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_2019_BASE:
-        device_type = "Razer Blade 15 (2019) Base Model\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_MID_2019_MERCURY:
-        device_type = "Razer Blade 15 (Mid 2019) Mercury White\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_STUDIO_EDITION_2019:
-        device_type = "Razer Blade 15 Studio Edition (2019)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_LATE_2016:
-        device_type = "Razer Blade (Late 2016)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_PRO_2017:
-        device_type = "Razer Blade Pro (2017)\n";
-        break;
-    case USB_DEVICE_ID_RAZER_BLADE_PRO_2017_FULLHD:
-        device_type = "Razer Blade Pro FullHD (2017)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_STEALTH_LATE_2017:
-        device_type = "Razer Blade Stealth (Late 2017)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLADE_STEALTH_2019:
-        device_type = "Razer Blade Stealth (2019)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_TARTARUS:
-        device_type = "Razer Tartarus\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_TARTARUS_CHROMA:
-        device_type = "Razer Tartarus Chroma\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_TARTARUS_V2:
-        device_type = "Razer Tartarus V2\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_OVERWATCH:
-        device_type = "Razer BlackWidow Chroma (Overwatch)\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA:
-        device_type = "Razer BlackWidow Chroma\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_DEATHSTALKER_EXPERT:
-        device_type = "Razer Deathstalker Expert\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_DEATHSTALKER_CHROMA:
-        device_type = "Razer DeathStalker Chroma\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA_TE:
-        device_type = "Razer BlackWidow Chroma Tournament Edition\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_CHROMA:
-        device_type = "Razer BlackWidow X Chroma\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_X_CHROMA_TE:
-        device_type = "Razer BlackWidow X Chroma Tournament Edition\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_LITE:
-        device_type = "Razer BlackWidow Lite\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_2019:
-        device_type = "Razer BlackWidow 2019\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_ESSENTIAL:
-        device_type = "Razer BlackWidow Essential\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_ORNATA:
-        device_type = "Razer Ornata\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_ORNATA_CHROMA:
-        device_type = "Razer Ornata Chroma\n";
-        break;
-            
-    case USB_DEVICE_ID_RAZER_ORNATA_V2:
-        device_type = "Razer Ornata V2\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_HUNTSMAN_ELITE:
-        device_type = "Razer Huntsman Elite\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_HUNTSMAN_TE:
-        device_type = "Razer Huntsman Tournament Edition\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
-        device_type = "Razer BlackWidow Elite\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_HUNTSMAN:
-        device_type = "Razer Huntsman\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_CYNOSA_CHROMA:
-        device_type = "Razer Cynosa Chroma\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_CHROMA_V2:
-        device_type = "Razer BlackWidow Chroma V2\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_BLACKWIDOW_V3:
-        device_type = "Razer BlackWidow V3\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_ANANSI:
-        device_type = "Razer Anansi\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_CYNOSA_V2:
-        device_type = "Razer Cynosa V2\n";
-        break;
-
-    case USB_DEVICE_ID_RAZER_CYNOSA_LITE:
-        device_type = "Razer Cynosa Lite\n";
-        break;
-
-    default:
-        device_type = "Unknown Device\n";
-    }
-
-    return sprintf(buf, "%s", device_type);
-}
-
-/**
  * Read device file "game_mode"
  *
  * Returns a string
@@ -1580,8 +1348,6 @@ ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
         brightness = round(brightness / 2.55);
     }
 
-    printf("Current keyboard brightness %d\n", brightness);
-
     return brightness;
 }
 
@@ -1746,26 +1512,18 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **dev, struct
             response_report.command_class != request_report->command_class ||
             response_report.command_id.id != request_report->command_id.id)
         {
-            printf("Response doesnt match request\n");
-            //        } else if (response_report.status == RAZER_CMD_BUSY) {
-            //            printf("Device is busy\n");
+            printf("Response doesnt match request (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_BUSY) {
+            //printf("Device is busy (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_FAILURE) {
+            printf("Command failed (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {
+            printf("Command not supported (keyboard)\n");
+        } else if (response_report.status == RAZER_CMD_TIMEOUT) {
+            printf("Command timed out (keyboard)\n");
         }
-        else if (response_report.status == RAZER_CMD_FAILURE)
-        {
-            printf("Command failed\n");
-        }
-        else if (response_report.status == RAZER_CMD_NOT_SUPPORTED)
-        {
-            printf("Command not supported\n");
-        }
-        else if (response_report.status == RAZER_CMD_TIMEOUT)
-        {
-            printf("Command timed out\n");
-        }
-    }
-    else
-    {
-        printf("Invalid Report Length");
+    } else {
+        printf("Invalid Report Length (keyboard)\n");
     }
 
     return response_report;

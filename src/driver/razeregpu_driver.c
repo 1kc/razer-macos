@@ -49,62 +49,27 @@ static struct razer_report razer_send_payload(IOUSBDeviceInterface **usb_dev, st
 
     retval = razer_get_report(usb_dev, request_report, &response_report);
 
-    if (retval == 0)
-    {
+    if (retval == 0) {
         // Check the packet number, class and command are the same
         if (response_report.remaining_packets != request_report->remaining_packets ||
             response_report.command_class != request_report->command_class ||
             response_report.command_id.id != request_report->command_id.id)
         {
-            printf("Response doesn't match request");
-            //        } else if (response_report.status == RAZER_CMD_BUSY) {
-            //            print_erroneous_report(&response_report, "razermouse", "Device is busy");
+            printf("Response doesn't match request (egpu)\n");
+        } else if (response_report.status == RAZER_CMD_BUSY) {
+            //printf("Device is busy (egpu)\n");
+        } else if (response_report.status == RAZER_CMD_FAILURE) {
+            printf("Command failed (egpu)\n");
+        } else if (response_report.status == RAZER_CMD_NOT_SUPPORTED) {
+            printf("Command not supported (egpu)\n");
+        } else if (response_report.status == RAZER_CMD_TIMEOUT) {
+            printf("Command timed out (egpu)\n");
         }
-        else if (response_report.status == RAZER_CMD_FAILURE)
-        {
-            printf("Command failed");
-        }
-        else if (response_report.status == RAZER_CMD_NOT_SUPPORTED)
-        {
-            printf("Command not supported");
-        }
-        else if (response_report.status == RAZER_CMD_TIMEOUT)
-        {
-            printf("Command timed out");
-        }
-    }
-    else
-    {
-        printf("Invalid Report Length");
+    } else {
+        printf("Invalid Report Length (egpu)\n");
     }
 
     return response_report;
-}
-
-/**
- * Read device file "device_type"
- *
- * Returns friendly string of device type
- */
-ssize_t razer_egpu_attr_read_device_type(IOUSBDeviceInterface **usb_dev, char *buf)
-{
-    UInt16 product = -1;
-    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
-
-    char *device_type = "";
-
-    switch (product)
-    {
-    case USB_DEVICE_ID_RAZER_CORE_X_CHROMA:
-        device_type = "Razer Core X Chroma\n";
-        break;
-
-    default:
-        device_type = "Unknown Device\n";
-        break;
-    }
-
-    return sprintf(buf, "%s", device_type);
 }
 
 /**

@@ -108,3 +108,6 @@ dist
 
 .DS_Store
 build/
+
+# IntelliJ
+.idea

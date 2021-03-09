@@ -50,3 +50,15 @@
   .react-tabs__tab-panel--selected {
     display: block;
   }
+
+.react-tabs__tab:focus {
+  box-shadow: none;
+  border-color: transparent;
+}
+.react-tabs__tab--selected {
+  color: #47e10c;
+}
+.react-tabs__tab {
+  border:none;
+  border-radius: 0;
+}
