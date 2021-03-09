@@ -16,7 +16,7 @@
 
 [Latest release](https://github.com/1kc/razer-macos/releases)
 
-## Installation
+## Installation instructions
 
 Install by drag and drop to Applications.
 If you get a security warning when opening the app, you need to go to your Mac's "System Preferences", "Security and Privacy", "General" and click "Open" at the bottom to allow Razer macOS to run.
@@ -79,11 +79,6 @@ Accessories:
 - Razer Base Station V2
 
 Please feel free to open pull requests for new devices you have tested.
-
-## Roadmap
-
-- Add speed control for light effects
-- Add brightness control for mouse
 
 ## FAQ
 
