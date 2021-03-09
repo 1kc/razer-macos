@@ -1,8 +1,9 @@
 import { Feature } from './feature';
+import { FeatureHelper } from './featurehelper';
 
 export class FeatureStatic extends Feature {
   constructor(config) {
-    super('static', config);
+    super(FeatureHelper.FEATURE_STATIC, config);
   }
 
   hasAllColors() {

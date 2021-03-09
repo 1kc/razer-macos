@@ -1,3 +1,5 @@
+import { FeatureHelper } from '../feature/featurehelper';
+
 export function getDeviceMenuFor(application, razerDevice) {
   let deviceMenu = [
     { type: 'separator' },
@@ -52,31 +54,31 @@ function getHeaderFor(application, razerDevice) {
 
 function getFeatureMenuFor(application, device, feature) {
   switch (feature.featureIdentifier) {
-    case 'none':
+    case FeatureHelper.FEATURE_NONE:
       return getFeatureNone(application, device, feature);
-    case 'static':
+    case FeatureHelper.FEATURE_STATIC:
       return getFeatureStatic(application, device, feature);
-    case 'waveSimple':
+    case FeatureHelper.FEATURE_WAVE_SIMPLE:
       return getFeatureWaveSimple(application, device, feature);
-    case 'waveExtended':
+    case FeatureHelper.FEATURE_WAVE_EXTENDED:
       return getFeatureWaveExtended(application, device, feature);
-    case 'spectrum':
+    case FeatureHelper.FEATURE_SPECTRUM:
       return getFeatureSpectrum(application, device, feature);
-    case 'reactive':
+    case FeatureHelper.FEATURE_REACTIVE:
       return getFeatureReactive(application, device, feature);
-    case 'breathe':
+    case FeatureHelper.FEATURE_BREATHE:
       return getFeatureBreath(application, device, feature);
-    case 'starlight':
+    case FeatureHelper.FEATURE_STARLIGHT:
       return getFeatureStarlight(application, device, feature);
-    case 'brightness':
+    case FeatureHelper.FEATURE_BRIGHTNESS:
       return getFeatureBrightness(application, device, feature);
-    case 'ripple':
+    case FeatureHelper.FEATURE_RIPPLE:
       return getFeatureRipple(application, device, feature);
-    case 'oldMouseEffects':
+    case FeatureHelper.FEATURE_OLD_MOUSE_EFFECTS:
       return getFeatureOldMouseEffect(application, device, feature);
-    case 'mouseBrightness':
+    case FeatureHelper.FEATURE_MOUSE_BRIGHTNESS:
       return getFeatureMouseBrightness(application, device, feature);
-    case 'pollRate':
+    case FeatureHelper.FEATURE_POLL_RATE:
       return null;
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';

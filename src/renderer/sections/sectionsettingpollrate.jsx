@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { SectionSettingBlock } from './sectionsettingblock';
 import { ipcRenderer } from 'electron';
+import { FeatureHelper } from '../../main/feature/featurehelper';
 
 export class SectionSettingPollRate extends SectionSettingBlock {
 
   constructor(props) {
     super(props);
-    this.pollRateFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === 'pollRate');
+    this.pollRateFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureHelper.FEATURE_POLL_RATE);
     this.state = {
       pollRate: { value: this.deviceSelected.pollRate, label: this.deviceSelected.pollRate + 'Hz' },
     };

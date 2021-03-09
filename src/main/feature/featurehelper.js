@@ -18,21 +18,35 @@ export class FeatureHelper {
     const featureIdentifier = Object.keys(featureConfig)[0];
     const configuration = featureConfig[featureIdentifier];
     switch (featureIdentifier) {
-      case 'none': return new FeatureNone(configuration);
-      case 'static': return new FeatureStatic(configuration);
-      case 'waveSimple': return new FeatureWaveSimple(configuration);
-      case 'waveExtended': return new FeatureWaveExtended(configuration);
-      case 'spectrum': return new FeatureSpectrum(configuration);
-      case 'reactive': return new FeatureReactive(configuration);
-      case 'breathe': return new FeatureBreathe(configuration);
-      case 'starlight': return new FeatureStarlight(configuration);
-      case 'brightness': return new FeatureBrightness(configuration);
-      case 'ripple': return new FeatureRipple(configuration);
-      case 'oldMouseEffects': return new FeatureOldMouseEffects(configuration);
-      case 'mouseBrightness': return new FeatureMouseBrightness(configuration);
-      case 'pollRate': return new FeatureMousePollRate(configuration);
+      case FeatureHelper.FEATURE_NONE: return new FeatureNone(configuration);
+      case FeatureHelper.FEATURE_STATIC: return new FeatureStatic(configuration);
+      case FeatureHelper.FEATURE_WAVE_SIMPLE: return new FeatureWaveSimple(configuration);
+      case FeatureHelper.FEATURE_WAVE_EXTENDED: return new FeatureWaveExtended(configuration);
+      case FeatureHelper.FEATURE_SPECTRUM: return new FeatureSpectrum(configuration);
+      case FeatureHelper.FEATURE_REACTIVE: return new FeatureReactive(configuration);
+      case FeatureHelper.FEATURE_BREATHE: return new FeatureBreathe(configuration);
+      case FeatureHelper.FEATURE_STARLIGHT: return new FeatureStarlight(configuration);
+      case FeatureHelper.FEATURE_BRIGHTNESS: return new FeatureBrightness(configuration);
+      case FeatureHelper.FEATURE_RIPPLE: return new FeatureRipple(configuration);
+      case FeatureHelper.FEATURE_OLD_MOUSE_EFFECTS: return new FeatureOldMouseEffects(configuration);
+      case FeatureHelper.FEATURE_MOUSE_BRIGHTNESS: return new FeatureMouseBrightness(configuration);
+      case FeatureHelper.FEATURE_POLL_RATE: return new FeatureMousePollRate(configuration);
       default:
         throw featureIdentifier+' is not a valid feature identifier!'
     }
   }
 }
+
+FeatureHelper.FEATURE_NONE = 'none';
+FeatureHelper.FEATURE_STATIC = 'static';
+FeatureHelper.FEATURE_WAVE_SIMPLE = 'waveSimple';
+FeatureHelper.FEATURE_WAVE_EXTENDED = 'waveExtended';
+FeatureHelper.FEATURE_SPECTRUM = 'spectrum';
+FeatureHelper.FEATURE_REACTIVE = 'reactive';
+FeatureHelper.FEATURE_BREATHE = 'breathe';
+FeatureHelper.FEATURE_STARLIGHT = 'starlight';
+FeatureHelper.FEATURE_BRIGHTNESS = 'brightness';
+FeatureHelper.FEATURE_RIPPLE = 'ripple';
+FeatureHelper.FEATURE_OLD_MOUSE_EFFECTS = 'oldMouseEffects';
+FeatureHelper.FEATURE_MOUSE_BRIGHTNESS = 'mouseBrightness';
+FeatureHelper.FEATURE_POLL_RATE = 'pollRate';
