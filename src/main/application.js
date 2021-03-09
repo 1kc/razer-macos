@@ -96,9 +96,9 @@ export class Application {
     this.browserWindow = new BrowserWindow({
       webPreferences: { nodeIntegration: true },
       //titleBarStyle: 'hidden',
-      height: 1200, // This is adjusted later with window.setSize
+      height: 800, // This is adjusted later with window.setSize
       resizable: false,
-      width: 400,
+      width: 500,
       minWidth: 320,
       minHeight: 320,
       y: 100,
