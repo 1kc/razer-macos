@@ -99,12 +99,25 @@ function getMainMenu(application) {
     },
     {
       label: 'Spectrum',
-      click() {
-        application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
-          device.setSpectrum();
-        });
-      },
-    }
+      submenu: [
+        {
+          label: 'By device',
+          toolTip: 'Runs spectrum mode for all attached devices',
+          click() {
+            application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+              device.setSpectrum();
+            });
+          }
+        },
+        {
+          label: 'By animation',
+          toolTip: 'Starts timed animation which changes color for all attached devices',
+          click() {
+            application.razerApplication.spectrumAnimation.start();
+          }
+        },
+      ]
+    },
   ];
 }
 
