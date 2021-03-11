@@ -117,10 +117,10 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
     this.backgroundColor = backgroundColor;
 
     this.device = device;
+    this.ioHook = require('iohook');
   }
 
   start() {
-    this.ioHook = require('iohook');
     this.ioHook.start();
 
     const nRows = 6;
@@ -189,9 +189,11 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
 
   stop() {
     clearTimeout(this.rippleEffectInterval);
-    if(this.ioHook) {
-      this.ioHook.stop();
-      this.ioHook.unload();
-    }
+    this.ioHook.stop();
+  }
+
+  destroy() {
+    this.stop();
+    this.ioHook.unload();
   }
 }

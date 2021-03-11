@@ -35,6 +35,10 @@ export class RazerDevice {
     };
   }
 
+  destroy() {
+    this.addon = null;
+  }
+
   async setSettings(settings) {
     this.settings = settings;
     return this.settingsManager.saveSettingsFor(this);

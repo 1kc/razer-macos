@@ -81,13 +81,6 @@ export class RazerDeviceManager {
     });
   }
 
-  closeDevices() {
-    if (this.activeRazerDevices !== null) {
-      this.addon.closeAllDevices();
-      this.activeRazerDevices = null;
-    }
-  }
-
   createRazerDeviceFrom(razerProperties) {
     let device;
     let deviceFeatures;
@@ -229,5 +222,18 @@ export class RazerDeviceManager {
 
   getByInternalId(internalId) {
     return this.activeRazerDevices.find(device => device.internalId === internalId);
+  }
+
+  closeDevices() {
+    if (this.activeRazerDevices !== null) {
+      this.addon.closeAllDevices();
+      this.activeRazerDevices = null;
+    }
+  }
+
+  destroy() {
+    this.activeRazerDevices.forEach(device => device.destroy());
+    this.closeDevices();
+    this.addon = null;
   }
 }

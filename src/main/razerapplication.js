@@ -31,8 +31,8 @@ export class RazerApplication {
     });
   }
 
-  closeDevices() {
-    this.deviceManager.closeDevices();
+  destroy() {
+    this.deviceManager.destroy();
   }
 
   stopAnimations() {

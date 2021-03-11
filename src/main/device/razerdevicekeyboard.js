@@ -24,6 +24,11 @@ export class RazerDeviceKeyboard extends RazerDevice {
     return super.getSerializeIgnoredProperties().concat(['rippleAnimation']);
   }
 
+  destroy() {
+    super.destroy();
+    this.rippleAnimation.destroy();
+  }
+
   setModeNone() {
     this.stopAnimations();
     this.addon.kbdSetModeNone(this.internalId)

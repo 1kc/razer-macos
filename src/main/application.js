@@ -33,7 +33,7 @@ export class Application {
     });
 
     this.app.on('quit', () => {
-      this.razerApplication.closeDevices();
+      this.razerApplication.destroy();
     });
 
     nativeTheme.on('updated', () => {
