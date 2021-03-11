@@ -2,6 +2,6 @@
   "name": "Razer Mouse Charging Dock",
   "productId": "0x007E",
   "mainType": "mousedock",
-  "image": null,
+  "image": "https://assets.razerzone.com/eeimages/support/products/1711/1711_-_mouse_dock_chroma.png",
   "features": null
 }
