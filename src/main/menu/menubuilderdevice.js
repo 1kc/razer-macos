@@ -80,6 +80,8 @@ function getFeatureMenuFor(application, device, feature) {
       return getFeatureMouseBrightness(application, device, feature);
     case FeatureHelper.FEATURE_POLL_RATE:
       return null;
+    case FeatureHelper.FEATURE_MOUSE_DPI:
+      return null;
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';
   }

@@ -21,6 +21,7 @@ import { FeatureOldMouseEffects } from './feature/featureoldmouseeffects';
 import { FeatureHelper } from './feature/featurehelper';
 import { FeatureMouseBrightness } from './feature/featuremousebrightness';
 import { FeatureMousePollRate } from './feature/featuremousepollrate';
+import { FeatureMouseDPI } from './feature/featuremousedpi';
 
 /**
  * Responsible to fetch all attached Razer devices and map them to RazerDevice instances with features
@@ -112,6 +113,7 @@ export class RazerDeviceManager {
           new FeatureOldMouseEffects(),
           new FeatureMouseBrightness(),
           new FeatureMousePollRate(),
+          new FeatureMouseDPI(),
         ];
         break;
       case 'mousedock':
