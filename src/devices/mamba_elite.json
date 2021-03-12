@@ -4,5 +4,12 @@
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/1390/1390_mamba_elite.png",
   "features": null,
-  "featuresMissing": ["oldMouseEffects"]
+  "featuresMissing": ["oldMouseEffects"],
+  "featuresConfig": [{
+    "dpi": {
+      "min": 100,
+      "max": 16000,
+      "step": 100
+    }
+  }]
 }

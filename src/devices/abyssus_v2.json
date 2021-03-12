@@ -3,10 +3,8 @@
   "productId": "0x005B",
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/721/721_abyssusv2.png",
-  "features": [
-    {
-      "none": null
-    },
+  "featuresMissing": ["none", "waveSimple", "spectrum", "reactive", "breathe"],
+  "featuresConfig": [
     {
       "static": {
         "disabledRed": true
@@ -15,6 +13,18 @@
     {
       "oldMouseEffects": {
         "disabledScroll": true
+      }
+    },
+    {
+      "mouseBrightness": {
+        "disabledLogo": true,
+        "disabledLeft": true,
+        "disabledRight": true
+      }
+    },
+    {
+      "dpi": {
+        "max": 5000
       }
     }
   ]

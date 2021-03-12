@@ -79,7 +79,7 @@ export default function CustomColor({ deviceSelected }) {
           <ChromePicker color={currentColor} onChange={handleChange} width='100%' disableAlpha={true} styles={styles} defaultView={'rgb'}/>
         )}
         {!allColors && (
-          <GithubPicker color={currentColor} onChange={handleChange} width='100%' colors={colors} styles={stylesGithub}/>
+          <GithubPicker color={currentColor} onChange={handleChange} width='auto' colors={colors} styles={stylesGithub}/>
         )}
       </div>
       <div className='control'>
