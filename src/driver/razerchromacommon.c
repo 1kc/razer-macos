@@ -185,7 +185,7 @@ struct razer_report razer_chroma_standard_set_led_brightness(unsigned char varia
     struct razer_report report = get_razer_report(0x03, 0x03, 0x03);
     report.arguments[0] = variable_storage;
     report.arguments[1] = led_id;
-    report.arguments[2] = brightness;
+    report.arguments[2] = round(brightness * 2.55); //Razer macOS special: brightness is coming [0-100], matrix brightness range is from [0-255] though
 
     return report;
 }
