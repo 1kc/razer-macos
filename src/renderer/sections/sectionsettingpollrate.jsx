@@ -35,16 +35,9 @@ export class SectionSettingPollRate extends SectionSettingBlock {
       return null;
     }
 
-    const options = this.pollRateFeature.configuration != null ?
-      this.pollRateFeature.configuration.pollRates.map(rate => {
-        return { value: rate, label: rate + 'Hz' };
-      }) :
-      [
-        { value: 125, label: '125Hz' },
-        { value: 250, label: '250Hz' },
-        { value: 500, label: '500Hz' },
-        { value: 1000, label: '1000Hz' },
-      ];
+    const options = this.pollRateFeature.configuration.pollRates.map(rate => {
+      return { value: rate, label: rate + 'Hz' };
+    });
 
     const customStyles = {
       option: (provided, state) => ({

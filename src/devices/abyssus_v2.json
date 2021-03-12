@@ -7,19 +7,19 @@
   "featuresConfig": [
     {
       "static": {
-        "disabledRed": true
+        "enabledRed": false
       }
     },
     {
       "oldMouseEffects": {
-        "disabledScroll": true
+        "enabledScroll": false
       }
     },
     {
       "mouseBrightness": {
-        "disabledLogo": true,
-        "disabledLeft": true,
-        "disabledRight": true
+        "enabledLogo": false,
+        "enabledLeft": false,
+        "enabledRight": false
       }
     },
     {

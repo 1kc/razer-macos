@@ -46,28 +46,28 @@ export class SectionSettingBrightness extends SectionSettingBlock {
 
     if (this.mouseBrightnessFeature) {
       return (<div>
-        {(this.mouseBrightnessFeature.configuration == null || !this.mouseBrightnessFeature.configuration.disabledLogo) &&
+        {(this.mouseBrightnessFeature.configuration.enabledLogo) &&
         <div className={'settings-brightness'}>
           <div>Logo</div>
           <Brightness title={"Adjust mouse logo brightness"}
                     currentBrightness={this.deviceSelected.brightnessLogo}
                     handleBrightnessChange={(value) => {this.updateMouseBrightness('logo', value); }} />
         </div>}
-        {(this.mouseBrightnessFeature.configuration == null || !this.mouseBrightnessFeature.configuration.disabledScroll) &&
+        {(this.mouseBrightnessFeature.configuration.enabledScroll) &&
         <div className={'settings-brightness'}>
           <div>Scroll Wheel</div>
         <Brightness title={"Adjust mouse scroll brightness"}
                     currentBrightness={this.deviceSelected.brightnessScroll}
                     handleBrightnessChange={(value) => {this.updateMouseBrightness('scroll', value); }} />
         </div>}
-        {(this.mouseBrightnessFeature.configuration == null || !this.mouseBrightnessFeature.configuration.disabledLeft) &&
+        {(this.mouseBrightnessFeature.configuration.enabledLeft) &&
         <div className={'settings-brightness'}>
           <div>Left Side</div>
         <Brightness title={"Adjust mouse left brightness"}
                     currentBrightness={this.deviceSelected.brightnessLeft}
                     handleBrightnessChange={(value) => {this.updateMouseBrightness('left', value); }} />
         </div>}
-        {(this.mouseBrightnessFeature.configuration == null || !this.mouseBrightnessFeature.configuration.disabledRight) &&
+        {(this.mouseBrightnessFeature.configuration.enabledRight) &&
         <div className={'settings-brightness'}>
           <div>Right Side</div>
         <Brightness title={"Adjust mouse right brightness"}

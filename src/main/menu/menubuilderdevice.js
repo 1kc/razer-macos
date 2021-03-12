@@ -139,30 +139,30 @@ function getFeatureNone(application, device, feature) {
 function getFeatureOldMouseEffect(application, device, feature) {
 
   const submenu = [
-    feature.configuration != null && feature.configuration.disabledStatic ? null : {
+    feature.configuration.enabledStatic ? {
       label: 'Static',
       click() {
         device.setLogoLEDEffect('static');
       },
-    },
-    feature.configuration != null && feature.configuration.disabledBlinking ? null : {
+    } : null,
+    feature.configuration.enabledBlinking ? {
       label: 'Blinking',
       click() {
         device.setLogoLEDEffect('blinking');
       },
-    },
-    feature.configuration != null && feature.configuration.disabledPulsate ? null : {
+    } : null,
+    feature.configuration.enabledPulsate ? {
       label: 'Pulsate',
       click() {
         device.setLogoLEDEffect('pulsate');
       },
-    },
-    feature.configuration != null && feature.configuration.disabledScroll ? null : {
+    } : null,
+    feature.configuration.enabledScroll ? {
       label: 'Scroll',
       click() {
         device.setLogoLEDEffect('scroll');
       },
-    },
+    } : null,
   ];
 
   return {
@@ -311,10 +311,10 @@ function getFeatureStatic(application, device, feature) {
 
   const subMenu = [
     singleItem('Custom color', [device.settings.customColor1.rgb.r, device.settings.customColor1.rgb.g, device.settings.customColor1.rgb.b]),
-    feature.configuration != null && !feature.hasAllColors() ? null : singleItem('White', [0xff, 0xff, 0xff]),
-    feature.configuration != null && feature.configuration.disabledRed ? null : singleItem('Red', [0xff, 0, 0]),
-    feature.configuration != null && feature.configuration.disabledGreen ? null : singleItem('Green', [0, 0xff, 0]),
-    feature.configuration != null && feature.configuration.disabledBlue ? null : singleItem('Blue', [0, 0, 0xff]),
+    feature.hasAllColors() ? singleItem('White', [0xff, 0xff, 0xff]) : null,
+    feature.configuration.enabledRed ? singleItem('Red', [0xff, 0, 0]) : null,
+    feature.configuration.enabledGreen ? singleItem('Green', [0, 0xff, 0]) : null,
+    feature.configuration.enabledBlue ? singleItem('Blue', [0, 0, 0xff]) : null,
   ];
 
   return {
@@ -386,7 +386,7 @@ function getFeatureWaveSimple(application, device, feature) {
 function getFeatureMouseBrightness(application, device, feature) {
 
   const submenu = [
-    feature.configuration == null || !feature.configuration.disabledLogo ? {
+    feature.configuration.enabledLogo ? {
       label: 'Logo (' + device.getBrightnessLogo() + '%)',
       submenu: [
         {
@@ -403,7 +403,7 @@ function getFeatureMouseBrightness(application, device, feature) {
         },
       ],
     } : null,
-    feature.configuration == null || !feature.configuration.disabledScroll ?
+    feature.configuration.enabledScroll ?
       {
         label: 'Scroll (' + device.getBrightnessScroll() + '%)',
         submenu: [
@@ -421,7 +421,7 @@ function getFeatureMouseBrightness(application, device, feature) {
           },
         ],
       } : null,
-    feature.configuration == null || !feature.configuration.disabledLeft ?
+    feature.configuration.enabledLeft ?
       {
         label: 'Left (' + device.getBrightnessLeft() + '%)',
         submenu: [
@@ -439,7 +439,7 @@ function getFeatureMouseBrightness(application, device, feature) {
           },
         ],
       } : null,
-    feature.configuration == null || !feature.configuration.disabledRight ?
+    feature.configuration.enabledRight ?
       {
         label: 'Right (' + device.getBrightnessRight() + '%)',
         submenu: [

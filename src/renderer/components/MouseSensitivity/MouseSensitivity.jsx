@@ -9,32 +9,16 @@ export default function MouseSensitivity({ dpi, handleClick, configuration }) {
     setCurrentDpi(value);
   };
 
-  let step = 100;
-  let min = 100;
-  let max = 20000;
-
-  if(configuration != null) {
-    if(configuration.step != null) {
-      step = configuration.step;
-    }
-    if(configuration.min != null) {
-      min = configuration.min;
-    }
-    if(configuration.max != null) {
-      max = configuration.max;
-    }
-  }
-
   return (
     <div className="settings">
       <div className="control">
         <ReactSlider
-          step={step}
+          step={configuration.step}
           className="horizontal-slider"
           thumbClassName="slider-thumb"
           trackClassName="slider-track"
-          min={min}
-          max={max}
+          min={configuration.min}
+          max={configuration.max}
           value={currentDpi}
           onChange={changeSliderValue}
           renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}

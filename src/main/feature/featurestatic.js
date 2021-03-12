@@ -6,12 +6,17 @@ export class FeatureStatic extends Feature {
     super(FeatureHelper.FEATURE_STATIC, config);
   }
 
+  getDefaultConfiguration() {
+    return {
+      "enabledRed": true,
+      "enabledGreen": true,
+      "enabledBlue": true
+    };
+  }
+
   hasAllColors() {
-    if(this.configuration == null) {
-      return true;
-    }
-    return !this.configuration.disabledRed
-      && !this.configuration.disabledGreen
-      && !this.configuration.disabledBlue;
+    return this.configuration.enabledRed
+      && this.configuration.enabledGreen
+      && this.configuration.enabledBlue;
   }
 }

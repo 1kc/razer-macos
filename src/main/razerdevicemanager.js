@@ -198,7 +198,7 @@ export class RazerDeviceManager {
         const feature = razerDeviceProperties.features.find(f => f.featureIdentifier === featureIdentifier);
 
         if(feature) {
-          feature.configuration = overriddenFeatureConfig;
+          feature.configuration = Object.assign(feature.configuration, overriddenFeatureConfig);
         }
       });
     }

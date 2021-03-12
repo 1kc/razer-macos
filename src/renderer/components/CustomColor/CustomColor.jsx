@@ -40,12 +40,9 @@ export default function CustomColor({ deviceSelected }) {
   const stylesGithub = { 'default': { card: { background: '#000'}, triangle: {borderBottomColor: '#000'}}};
 
   const hasAllColors = (staticFeature) => {
-    if(staticFeature.configuration == null) {
-      return true;
-    }
-    return !staticFeature.configuration.disabledRed
-      && !staticFeature.configuration.disabledGreen
-      && !staticFeature.configuration.disabledBlue;
+    return staticFeature.configuration.enabledRed
+      && staticFeature.configuration.enabledGreen
+      && staticFeature.configuration.enabledBlue;
   }
 
   const staticFeature = deviceSelected.features.find(feature => feature.featureIdentifier === FeatureHelper.FEATURE_STATIC);
@@ -54,9 +51,9 @@ export default function CustomColor({ deviceSelected }) {
   if(!allColors) {
     const allNoneValues = [0];
     const allColorValues = [0,25,50,75,100,125,150,175,200,225,255];
-    const allReds = staticFeature.configuration.disabledRed ? allNoneValues : allColorValues;
-    const allGreens = staticFeature.configuration.disabledGreen ? allNoneValues : allColorValues;
-    const allBlues = staticFeature.configuration.disabledBlue ? allNoneValues : allColorValues;
+    const allReds = staticFeature.configuration.enabledRed ? allColorValues : allNoneValues;
+    const allGreens = staticFeature.configuration.enabledGreen ?  allColorValues : allNoneValues;
+    const allBlues = staticFeature.configuration.enabledBlue ? allColorValues : allNoneValues;
     allReds.forEach(r => {
       allGreens.forEach(g => {
         allBlues.forEach(b => {
