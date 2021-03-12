@@ -26,7 +26,9 @@ export class RazerDeviceKeyboard extends RazerDevice {
 
   destroy() {
     super.destroy();
-    this.rippleAnimation.destroy();
+    if(this.rippleAnimation != null) {
+      this.rippleAnimation.destroy();
+    }
   }
 
   setModeNone() {
