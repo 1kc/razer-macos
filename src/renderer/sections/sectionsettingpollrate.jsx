@@ -44,20 +44,50 @@ export class SectionSettingPollRate extends SectionSettingBlock {
         ...provided,
         borderBottom: '1px solid grey',
         color: state.isSelected ? '#47e10c' : 'grey',
-        backgroundColor: 'black',
+        padding: '5px 10px',
+        border: '1px solid #47e10c',
+        borderTop: 'none',
+        backgroundColor: state.isSelected ? 'green' : '#000',
+        ':last-child': {
+          borderBottomLeftRadius: '10px',
+          borderBottomRightRadius: '10px',
+        },
+        ':hover': {
+          backgroundColor: state.isSelected ? 'green' : '#002b17',
+        }
       }),
       control: (provided, state) => ({
         ...provided,
         backgroundColor: 'black',
         border: '1px solid #47e10c',
+        borderRadius: '15px',
+        borderBottomLeftRadius: state.menuIsOpen ? '0' : '15px',
+        borderBottomRightRadius: state.menuIsOpen ? '0' : '15px',
         color: '#47e10c',
+        minHeight: 0,
+        boxShadow: 'none',
+        transition: 'none',
+        ":hover": {
+          borderColor: "inherit",
+        },
       }),
       menu: (provided, state) => ({
-        backgroundColor: 'black',
+        ...provided,
+        backgroundColor: 'transparent',
+        margin: 0,
+        zIndex: 100,
+        padding: 0,
+      }),
+      menuList: (provided, state) => ({
+        ...provided,
+        backgroundColor: 'transparent',
+        margin: 0,
+        padding: 0,
       }),
       dropdownIndicator: (provided, state) => ({
         ...provided,
         color: '#47e10c',
+        padding: '0px 8px'
       }),
       indicatorSeparator: (provided, state) => ({
         ...provided,
