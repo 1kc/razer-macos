@@ -4,9 +4,16 @@
       "target_name": "addon",
       "cflags!": [ "-fno-exceptions" ],
       "cflags_cc!": [ "-fno-exceptions" ],
-      "sources": [ "<!@(ls -1 src/driver/*.cc)", "<!@(ls -1 src/driver/*.c)" ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")"
+      ],
+      'conditions': [
+              ['OS=="mac"', {
+                'sources': [ "<!@(ls -1 src/driver/*.cc)", "<!@(ls -1 src/driver/*.c)" ]
+              }],
+              ['OS!="mac"', {
+                'sources': [ 'src/driver/fake-addon.cc' ]
+              }],
       ],
       'defines': [ 'NAPI_DISABLE_CPP_EXCEPTIONS' ],
             'LDFLAGS': [
