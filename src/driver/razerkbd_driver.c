@@ -1429,7 +1429,7 @@ ssize_t razer_attr_write_matrix_custom_frame(IOUSBDeviceInterface **usb_dev, con
         case USB_DEVICE_ID_RAZER_TARTARUS_V2:
         case USB_DEVICE_ID_RAZER_BLACKWIDOW_ELITE:
         case USB_DEVICE_ID_RAZER_CYNOSA_V2:
-        case USB_DEVICE_ID_RAZER_ORNATA_CHROMA_V2
+        case USB_DEVICE_ID_RAZER_ORNATA_CHROMA_V2:
             report = razer_chroma_extended_matrix_set_custom_frame(row_id, start_col, stop_col, (unsigned char *)&buf[offset]);
             report.transaction_id.id = 0x1F;
             break;
