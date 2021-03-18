@@ -2,6 +2,7 @@ import { RazerDeviceManager } from './razerdevicemanager';
 import { SettingsManager } from './settingsmanager';
 import { RazerAnimationCycleSpectrum } from './animation/animationcyclespectrum';
 import { RazerAnimationCycleCustom } from './animation/animationcyclecustom';
+import { StateManager } from './statemanager';
 
 /**
  * Main application
@@ -14,7 +15,8 @@ import { RazerAnimationCycleCustom } from './animation/animationcyclecustom';
 export class RazerApplication {
   constructor() {
     this.settingsManager = new SettingsManager();
-    this.deviceManager = new RazerDeviceManager(this.settingsManager);
+    this.stateManager = new StateManager(this.settingsManager);
+    this.deviceManager = new RazerDeviceManager(this.settingsManager, this.stateManager);
     this.spectrumAnimation = null;
     this.cycleAnimation = null;
   }
@@ -27,7 +29,8 @@ export class RazerApplication {
       const cyclePromise = new RazerAnimationCycleCustom(this).init().then(animation => {
         this.cycleAnimation = animation;
       });
-      return Promise.all([spectrumPromise, cyclePromise]).then(() => true);
+      const resetAll = this.stateManager.init(this.deviceManager.activeRazerDevices);
+      return Promise.all([spectrumPromise, cyclePromise, resetAll]).then(() => true);
     });
   }
 

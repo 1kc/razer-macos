@@ -2,7 +2,7 @@ import { RazerDeviceAnimation } from './animation';
 
 export class RazerAnimationRipple extends RazerDeviceAnimation {
 
-  constructor(device, color, backgroundColor = [0, 0, 0]) {
+  constructor(device, color, backgroundColor = null) {
     super();
     this.KEY_MAPPING = {
       1: [0, 1],
@@ -114,7 +114,7 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
     this.rippleEffectInterval = null;
 
     this.color = color;
-    this.backgroundColor = backgroundColor;
+    this.backgroundColor = backgroundColor != null ? backgroundColor : [0, 0, 0];
 
     this.device = device;
     this.ioHook = require('iohook');
@@ -134,9 +134,10 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
     let matrix = Array(nRows)
       .fill()
       .map(() => Array(nCols).fill(this.backgroundColor));
+
     for (let i = 0; i < nRows; i++) {
       let row = [i, 0, nCols - 1, ...matrix[i].flat()];
-      this.device.setCustomFrame(new Uint8Array(row))
+      this.device.setCustomFrame(row)
     }
     this.device.setModeCustom();
     let keyEvents = [];
@@ -181,7 +182,7 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
       // set ripple effect
       for (let i = 0; i < nRows; i++) {
         let row = [i, 0, nCols - 1, ...matrix[i].flat()];
-        this.device.setCustomFrame(new Uint8Array(row));
+        this.device.setCustomFrame(row);
       }
       this.device.setModeCustom();
     }, refreshRate);

@@ -13,11 +13,11 @@ export class RazerAnimationCycle extends RazerDeviceAnimation {
 
   setDevicesCycleColors() {
     this.razerApp.deviceManager.activeRazerDevices.forEach(device => {
-      device.setModeStaticNoStore(new Uint8Array([
+      device.setModeStaticNoStore([
         this.cycleColors[this.cycleColorsIndex].r,
         this.cycleColors[this.cycleColorsIndex].g,
         this.cycleColors[this.cycleColorsIndex].b,
-      ]));
+      ]);
     });
 
     this.cycleColorsIndex++;

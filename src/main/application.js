@@ -1,7 +1,8 @@
 import { RazerApplication } from './razerapplication';
-import { app, dialog, BrowserWindow, ipcMain, Menu, nativeTheme, Tray } from 'electron';
+import { app, dialog, BrowserWindow, ipcMain, Menu, nativeTheme, Tray, powerMonitor } from 'electron';
 import path from 'path';
 import { getMenuFor } from './menu/menubuilder';
+
 const version = require('../../package.json').version;
 
 /**
@@ -40,6 +41,13 @@ export class Application {
       this.createTray();
     });
 
+    powerMonitor.on('suspend', () => {
+      this.razerApplication.stateManager.sleep();
+    });
+    powerMonitor.on('resume', () => {
+      this.razerApplication.stateManager.wakeUp();
+    });
+
     // mouse dpi rpc listener
     ipcMain.on('request-set-dpi', (_, arg) => {
       const { device } = arg;
@@ -75,10 +83,10 @@ export class Application {
 
     // mouse brightness
     ['Logo', 'Scroll', 'Left', 'Right'].forEach(brightnessMouseIdentifier => {
-      ipcMain.on('update-mouse-'+brightnessMouseIdentifier.toLowerCase()+'-brightness', (_, arg) => {
+      ipcMain.on('update-mouse-' + brightnessMouseIdentifier.toLowerCase() + '-brightness', (_, arg) => {
         const { device, brightness } = arg;
         const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
-        currentDevice['setBrightness'+brightnessMouseIdentifier](brightness);
+        currentDevice['setBrightness' + brightnessMouseIdentifier](brightness);
         this.refreshTray();
       });
     });
@@ -88,6 +96,30 @@ export class Application {
       const { device, pollRate } = arg;
       const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
       currentDevice.setPollRate(pollRate);
+    });
+
+    //state manager
+    ipcMain.on('state-settings-add', async (event, stateName) => {
+      event.returnValue = await this.razerApplication.stateManager.addState(stateName);
+    });
+    ipcMain.on('state-settings-remove', (event, stateName) => {
+      this.razerApplication.stateManager.removeState(stateName);
+    });
+    ipcMain.on('state-settings-activate', (event, stateName) => {
+      this.razerApplication.stateManager.activateState(stateName);
+    });
+
+    ipcMain.on('state-settings-start', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnRefresh = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-sleep', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnSleep = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-wake', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnWake = stateValue;
+      this.razerApplication.stateManager.save();
     });
   }
 
@@ -114,44 +146,43 @@ export class Application {
     } else {
       this.browserWindow.loadFile(path.join(__dirname, 'index.html'));
     }
-    this.browserWindow.webContents.on('did-finish-load', () => {
-      // Handle window logic properly on macOS:
-      // 1. App should not terminate if window has been closed
-      // 2. Click on icon in dock should re-open the window
-      // 3. ⌘+Q should close the window and quit the app
-      this.browserWindow.on('close', (e) => {
-        if (!this.forceQuit) {
-          e.preventDefault();
-          this.browserWindow.hide();
-        }
-      });
 
-      this.app.on('activate', () => {
-        this.browserWindow.show();
-      });
-
-      this.app.on('before-quit', () => {
-        this.forceQuit = true;
-      });
-
-      if (this.isDevelopment) {
-        // auto-open dev tools
-        //this.browserWindow.webContents.openDevTools();
-
-        // add inspect element on right click menu
-        this.browserWindow.webContents.on('context-menu', (e, props) => {
-          const that = this;
-          Menu.buildFromTemplate([
-            {
-              label: 'Inspect element',
-              click() {
-                that.browserWindow.inspectElement(props.x, props.y);
-              },
-            },
-          ]).popup(this.browserWindow);
-        });
+    // Handle window logic properly on macOS:
+    // 1. App should not terminate if window has been closed
+    // 2. Click on icon in dock should re-open the window
+    // 3. ⌘+Q should close the window and quit the app
+    this.browserWindow.on('close', (e) => {
+      if (!this.forceQuit) {
+        e.preventDefault();
+        this.browserWindow.hide();
       }
     });
+
+    this.app.on('activate', () => {
+      this.browserWindow.show();
+    });
+
+    this.app.on('before-quit', () => {
+      this.forceQuit = true;
+    });
+
+    if (this.isDevelopment) {
+      // auto-open dev tools
+      //this.browserWindow.webContents.openDevTools();
+
+      // add inspect element on right click menu
+      this.browserWindow.webContents.on('context-menu', (e, props) => {
+        const that = this;
+        Menu.buildFromTemplate([
+          {
+            label: 'Inspect element',
+            click() {
+              that.browserWindow.inspectElement(props.x, props.y);
+            },
+          },
+        ]).popup(this.browserWindow);
+      });
+    }
   }
 
   createTray() {
@@ -179,16 +210,19 @@ export class Application {
       this.tray.setContextMenu(contextMenu);
     });
   }
+
   showConfirm(message) {
     this.app.focus();
     return this.dialog.showMessageBox({
-      buttons: ["Yes","No"], message: message
+      buttons: ['Yes', 'No'], message: message,
     });
   }
+
   showView(args) {
     this.browserWindow.webContents.send('render-view', args);
     this.browserWindow.show();
   }
+
   quit() {
     this.app.quit();
   }

@@ -28,9 +28,10 @@ import { FeatureMouseDPI } from './feature/featuremousedpi';
  * @constructor
  */
 export class RazerDeviceManager {
-  constructor(settingsManager) {
+  constructor(settingsManager, stateManager) {
     this.addon = addon;
     this.settingsManager = settingsManager;
+    this.stateManager = stateManager;
     this.razerConfigDevices = this.getAllRazerDeviceConfigurations();
     this.activeRazerDevices = null;
   }
@@ -203,7 +204,7 @@ export class RazerDeviceManager {
       });
     }
 
-    return new device(this.addon, this.settingsManager, razerDeviceProperties);
+    return new device(this.addon, this.settingsManager, this.stateManager, razerDeviceProperties);
   }
 
   getAllRazerDeviceConfigurations() {

@@ -1,7 +1,8 @@
 export class RazerDevice {
-  constructor(addon, settingsManager, razerDeviceProperties) {
+  constructor(addon, settingsManager, stateManager, razerDeviceProperties) {
     this.addon = addon;
     this.settingsManager = settingsManager;
+    this.stateManager = stateManager;
 
     this.name = razerDeviceProperties.name;
     this.productId = razerDeviceProperties.productId;
@@ -18,6 +19,8 @@ export class RazerDevice {
         b: 0,
       }
     };
+    this.activeMode = null;
+    this.activeModeArguments = null;
   }
 
   async init() {
@@ -44,20 +47,42 @@ export class RazerDevice {
     return this.settingsManager.saveSettingsFor(this);
   }
 
+  getState() {
+    return {
+      mode: this.activeMode,
+      args: this.activeModeArguments
+    }
+  }
+
+  resetToState(state) {
+    this.stateManager.resetStateFor(this, state);
+  }
+
   //override in device types
-  setModeNone() {}
-  setModeStaticNoStore(color) {}
+  setModeNone() {
+    this.setModeState('none');
+  }
+  setModeStaticNoStore(color) {
+    this.setModeState('staticNoStore', color);
+  }
   setModeStatic(color) {
-    this._isModeStaticActive = true;
+    this.setModeState('static', color);
   }
-  isModeStaticActive() {
-    return this._isModeStaticActive;
+
+  setSpectrum() {
+    this.setModeState('spectrum');
   }
-  setSpectrum() {}
-  setBreathe(color) {}
+  setBreathe(color) {
+    this.setModeState('breathe', color);
+  }
+
+  /*protected*/ setModeState(mode, modeArguments = null) {
+    this.activeMode = mode;
+    this.activeModeArguments = modeArguments;
+  }
 
   getSerializeIgnoredProperties() {
-    return ['addon', 'settingsManager'];
+    return ['addon', 'settingsManager', 'stateManager'];
   }
 
   serialize() {
@@ -68,6 +93,7 @@ export class RazerDevice {
       .forEach(([key, value]) => {
         serializedDevice[key] = value;
       })
+    serializedDevice['state'] = this.getState();
     return serializedDevice;
   }
 }

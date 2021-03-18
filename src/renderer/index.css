@@ -123,6 +123,10 @@ p {
   margin-left:10px;
   font-size: 13px;
 }
+ol {
+  color:gray;
+  font-size: 13px;
+}
 
 .control {
   margin-bottom: 10px;
@@ -146,6 +150,11 @@ p {
 }
 .control > button:active {
   background-color: #287c08;
+}
+.control > button:disabled {
+  background-color: grey;
+  cursor: default;
+  color: black;
 }
 .settings-block-body .chrome-picker input {
   background-color: transparent !important;
@@ -216,6 +225,58 @@ p {
   -khtml-user-select: none; /* Konqueror HTML */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
+  user-select: none; /* Non-prefixed version, currentl∂y
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.state-devices {
+  padding:10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.state-device {
+  display:flex;
+  flex-direction: column;
+  flex: 0 48%;
+  color:#47e10c;
+  margin-bottom:10px;
+}
+.state-device-title {
+  font-size:12px;
+  border-bottom: 1px solid #47e10c;
+}
+.state-device-body-properties {
+  font-size:10px;
+  display:flex;
+  flex-direction: row;
+  color:grey;
+}
+.state-device-body-properties > div:first-child {
+  flex:1;
+}
+
+.state-selectors {
+
+}
+
+.state-selectors p {
+  margin: 20px 0px 5px;
+  border-top:1px solid #47e10c;
+  padding:10px;
+}
+
+.state-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin:0 10px;
+}
+.state-selector > div:first-child {
+  width: 140px;
+  color: #47e10c;
+  font-size: 13px;
+}
+.state-selector > div:last-child {
+  flex:1;
 }
