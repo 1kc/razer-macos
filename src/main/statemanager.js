@@ -2,7 +2,7 @@ export class StateManager {
 
   constructor(settingsManager) {
     this.settingsManager = settingsManager;
-    this.settingsKey = "statemanager";
+    this.settingsKey = 'statemanager';
     this.devices = [];
 
     this.savedStates = [];
@@ -14,33 +14,43 @@ export class StateManager {
 
   async init(devices) {
     this.devices = devices;
-    if (await this.settingsManager.hasKey(this.settingsKey)) {
-      const savedState = await this.settingsManager.getKey(this.settingsKey);
-      this.savedStates = savedState.savedStates;
-      this.stateOnSleep = savedState.stateOnSleep;
-      this.stateOnRefresh = savedState.stateOnRefresh;
-      this.stateOnWake = savedState.stateOnWake;
-    } else {
-      this.savedStates = this.getDefaultStates();
-      this.stateOnSleep = null;
-      this.stateOnRefresh = null;
-      this.stateOnWake = null;
-      await this.save();
+    try {
+      if (await this.settingsManager.hasKey(this.settingsKey)) {
+        const savedState = await this.settingsManager.getKey(this.settingsKey);
+        this.savedStates = savedState.savedStates;
+        this.stateOnSleep = savedState.stateOnSleep;
+        this.stateOnRefresh = savedState.stateOnRefresh;
+        this.stateOnWake = savedState.stateOnWake;
+      } else {
+        await this.createNewState();
+      }
+    } catch {
+      await this.createNewState();
     }
 
     //check for resets on load
-    if(this.stateOnRefresh != null) {
-      return this.activateState(this.stateOnRefresh)
+    if (this.stateOnRefresh != null) {
+      return this.activateState(this.stateOnRefresh);
     }
   }
+
+  async createNewState() {
+    this.savedStates = this.getDefaultStates();
+    this.stateOnSleep = null;
+    this.stateOnRefresh = null;
+    this.stateOnWake = null;
+    await this.save();
+  }
+
   async sleep() {
-    if(this.stateOnSleep != null) {
-      return this.activateState(this.stateOnSleep)
+    if (this.stateOnSleep != null) {
+      return this.activateState(this.stateOnSleep);
     }
   }
+
   async wakeUp() {
-    if(this.stateOnWake != null) {
-      return this.activateState(this.stateOnWake)
+    if (this.stateOnWake != null) {
+      return this.activateState(this.stateOnWake);
     }
   }
 
@@ -53,9 +63,9 @@ export class StateManager {
         currentState.args = null;
         return {
           deviceId: device.productId,
-          state: currentState
-        }
-      })
+          state: currentState,
+        };
+      }),
     };
     return [idleState];
   }
@@ -71,9 +81,17 @@ export class StateManager {
 
   activateState(stateName) {
     const state = this.savedStates.find(s => s.name === stateName);
+    if (state == null) {
+      console.error('State "' + state + '" is not a valid state.');
+      return;
+    }
     state.states.forEach(stateObj => {
       const device = this.devices.find(d => d.productId === stateObj.deviceId);
-      device.resetToState(stateObj.state);
+      if (device != null) {
+        device.resetToState(stateObj.state);
+      } else {
+        console.warn('Device with id "' + stateObj.deviceId + '" has not been found and was skipped.');
+      }
     });
   }
 
@@ -83,31 +101,32 @@ export class StateManager {
       states: this.devices.map(device => {
         return {
           deviceId: device.productId,
-          state: device.getState()
-        }
-      })
+          state: device.getState(),
+        };
+      }),
     };
     this.savedStates.push(newState);
     await this.save();
     return newState;
   }
+
   async removeState(stateName) {
     this.savedStates = this.savedStates.filter(state => state.name !== stateName);
-    if(this.stateOnWake === stateName) {
+    if (this.stateOnWake === stateName) {
       this.stateOnWake = null;
     }
-    if(this.stateOnSleep === stateName) {
+    if (this.stateOnSleep === stateName) {
       this.stateOnSleep = null;
     }
-    if(this.stateOnRefresh === stateName) {
+    if (this.stateOnRefresh === stateName) {
       this.stateOnRefresh = null;
     }
     await this.save();
   }
 
   resetStateFor(device, state) {
-    if(state.mode == null) {
-      console.warn("State mode has never been set. Can't reset to undefined state");
+    if (state.mode == null) {
+      console.warn('State mode has never been set. Can\'t reset to undefined state');
       return;
     }
     switch (state.mode) {
@@ -142,7 +161,7 @@ export class StateManager {
         device.setRippleEffect(state.args[0], state.args[1]);
         break;
       default:
-        console.error("Unknown State mode "+state.mode);
+        console.error('Unknown State mode ' + state.mode);
     }
   }
 
@@ -153,6 +172,6 @@ export class StateManager {
       stateOnRefresh: this.stateOnRefresh,
       stateOnWake: this.stateOnWake,
       stateOnSleep: this.stateOnSleep,
-    }
+    };
   }
 }
