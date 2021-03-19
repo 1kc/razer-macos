@@ -45,7 +45,7 @@ export class Application {
       this.razerApplication.stateManager.sleep();
     });
     powerMonitor.on('resume', () => {
-      this.razerApplication.deviceManager.refreshRazerDevices().then(() => {
+      this.razerApplication.refresh().then(() => {
         return this.razerApplication.stateManager.wakeUp();
       });
     });
