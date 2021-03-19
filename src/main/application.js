@@ -45,7 +45,9 @@ export class Application {
       this.razerApplication.stateManager.sleep();
     });
     powerMonitor.on('resume', () => {
-      this.razerApplication.stateManager.wakeUp();
+      this.razerApplication.deviceManager.refreshRazerDevices().then(() => {
+        return this.razerApplication.stateManager.wakeUp();
+      });
     });
 
     // mouse dpi rpc listener
