@@ -37,6 +37,11 @@ export class RazerDeviceManager {
   }
 
   async refreshRazerDevices() {
+    if(new Date().getTime() < this.lastRefresh + 2000) {
+      /// Refresh is called too fast. Wait a bit...
+      return;
+    }
+    this.lastRefresh = new Date().getTime();
     this.closeDevices();
 
     const devicePromises = this.addon.getAllDevices().map(async foundDevice => {

@@ -6,21 +6,24 @@ export class StateManager {
     this.devices = [];
 
     this.savedStates = [];
-
-    this.stateOnRefresh = null;
-    this.stateOnWake = null;
-    this.stateOnSleep = null;
   }
 
-  async init(devices) {
+  async init(devices, withOnStartState) {
     this.devices = devices;
     try {
       if (await this.settingsManager.hasKey(this.settingsKey)) {
         const savedState = await this.settingsManager.getKey(this.settingsKey);
         this.savedStates = savedState.savedStates;
-        this.stateOnSleep = savedState.stateOnSleep;
-        this.stateOnRefresh = savedState.stateOnRefresh;
-        this.stateOnWake = savedState.stateOnWake;
+        this.stateOnStart = savedState.stateOnStart;
+        this.stateOnResume = savedState.stateOnResume;
+        this.stateOnSuspend = savedState.stateOnSuspend;
+        this.stateOnAc = savedState.stateOnAc;
+        this.stateOnBattery = savedState.stateOnBattery;
+        this.stateOnShutdown = savedState.stateOnShutdown;
+        this.stateOnLockScreen = savedState.stateOnLockScreen;
+        this.stateOnUnlockScreen = savedState.stateOnUnlockScreen;
+        this.stateOnUserDidBecomeActive = savedState.stateOnUserDidBecomeActive;
+        this.stateOnUserDidResignActive = savedState.stateOnUserDidResignActive;
       } else {
         await this.createNewState();
       }
@@ -29,29 +32,58 @@ export class StateManager {
     }
 
     //check for resets on load
-    if (this.stateOnRefresh != null) {
-      return this.activateState(this.stateOnRefresh);
+    if(withOnStartState) {
+      await this.changeToState(this.stateOnStart);
     }
   }
 
   async createNewState() {
     this.savedStates = this.getDefaultStates();
-    this.stateOnSleep = null;
-    this.stateOnRefresh = null;
-    this.stateOnWake = null;
+    this.stateOnStart = null;
+    this.stateOnResume = null;
+    this.stateOnSuspend = null;
+    this.stateOnAc = null;
+    this.stateOnBattery = null;
+    this.stateOnShutdown = null;
+    this.stateOnLockScreen = null;
+    this.stateOnUnlockScreen = null;
+    this.stateOnUserDidBecomeActive = null;
+    this.stateOnUserDidResignActive = null;
     await this.save();
   }
 
-  async sleep() {
-    if (this.stateOnSleep != null) {
-      return this.activateState(this.stateOnSleep);
+  async changeToState(state) {
+    if (state != null && this.savedStates != null && this.savedStates.find(s => s.name == state)) {
+      await this.activateState(state);
     }
   }
 
-  async wakeUp() {
-    if (this.stateOnWake != null) {
-      return this.activateState(this.stateOnWake);
-    }
+  async suspend() {
+    return this.changeToState(this.stateOnSuspend);
+  }
+  async resume() {
+    return this.changeToState(this.stateOnResume);
+  }
+  async onAc() {
+    return this.changeToState(this.stateOnAc);
+  }
+  async onBattery() {
+    return this.changeToState(this.stateOnBattery);
+  }
+  async shutdown() {
+    return this.changeToState(this.stateOnShutdown);
+  }
+  async lockScreen() {
+    return this.changeToState(this.stateOnLockScreen);
+  }
+  async unlockScreen() {
+    return this.changeToState(this.stateOnUnlockScreen);
+  }
+  async userDidBecomeActive() {
+    return this.changeToState(this.stateOnUserDidBecomeActive);
+  }
+  async userDidResignActive() {
+    return this.changeToState(this.stateOnUserDidResignActive);
   }
 
   getDefaultStates() {
@@ -73,9 +105,16 @@ export class StateManager {
   async save() {
     return await this.settingsManager.setKey(this.settingsKey, {
       savedStates: this.savedStates,
-      stateOnSleep: this.stateOnSleep,
-      stateOnRefresh: this.stateOnRefresh,
-      stateOnWake: this.stateOnWake,
+      stateOnStart: this.stateOnStart,
+      stateOnResume: this.stateOnResume,
+      stateOnSuspend: this.stateOnSuspend,
+      stateOnAc: this.stateOnAc,
+      stateOnBattery: this.stateOnBattery,
+      stateOnShutdown: this.stateOnShutdown,
+      stateOnLockScreen: this.stateOnLockScreen,
+      stateOnUnlockScreen: this.stateOnUnlockScreen,
+      stateOnUserDidBecomeActive: this.stateOnUserDidBecomeActive,
+      stateOnUserDidResignActive: this.stateOnUserDidResignActive,
     });
   }
 
@@ -169,9 +208,16 @@ export class StateManager {
     return {
       devices: this.devices.map(device => device.serialize()),
       savedStates: this.savedStates,
-      stateOnRefresh: this.stateOnRefresh,
-      stateOnWake: this.stateOnWake,
-      stateOnSleep: this.stateOnSleep,
+      stateOnStart: this.stateOnStart,
+      stateOnResume: this.stateOnResume,
+      stateOnSuspend: this.stateOnSuspend,
+      stateOnAc: this.stateOnAc,
+      stateOnBattery: this.stateOnBattery,
+      stateOnShutdown: this.stateOnShutdown,
+      stateOnLockScreen: this.stateOnLockScreen,
+      stateOnUnlockScreen: this.stateOnUnlockScreen,
+      stateOnUserDidBecomeActive: this.stateOnUserDidBecomeActive,
+      stateOnUserDidResignActive: this.stateOnUserDidResignActive,
     };
   }
 }

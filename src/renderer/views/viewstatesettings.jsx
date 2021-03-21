@@ -14,15 +14,24 @@ export class ViewStateSettings extends React.Component {
     });
     const optionsWithNull = this.getOptionsWithNull(options);
 
+    console.log(this.stateManager)
+
     this.state = {
       selection: null,
       options: options,
       isLoading: false,
 
       optionsWithNull: optionsWithNull,
-      selectionStart: optionsWithNull.find(o => o.value === this.stateManager.stateOnRefresh),
-      selectionSleep: optionsWithNull.find(o => o.value === this.stateManager.stateOnSleep),
-      selectionWake: optionsWithNull.find(o => o.value === this.stateManager.stateOnWake),
+      selectionStart: optionsWithNull.find(o => o.value === this.stateManager.stateOnStart),
+      selectionResume: optionsWithNull.find(o => o.value === this.stateManager.stateOnResume),
+      selectionSuspend: optionsWithNull.find(o => o.value === this.stateManager.stateOnSuspend),
+      selectionAc: optionsWithNull.find(o => o.value === this.stateManager.stateOnAc),
+      selectionBatt: optionsWithNull.find(o => o.value === this.stateManager.stateOnBattery),
+      selectionShutdown: optionsWithNull.find(o => o.value === this.stateManager.stateOnShutdown),
+      selectionLockscreen: optionsWithNull.find(o => o.value === this.stateManager.stateOnLockScreen),
+      selectionUnlockscreen: optionsWithNull.find(o => o.value === this.stateManager.stateOnUnlockScreen),
+      selectionUserDidBecomeActive: optionsWithNull.find(o => o.value === this.stateManager.stateOnUserDidBecomeActive),
+      selectionUserDidResignActive: optionsWithNull.find(o => o.value === this.stateManager.stateOnUserDidResignActive),
     }
   }
 
@@ -92,15 +101,41 @@ export class ViewStateSettings extends React.Component {
     this.setState({ selectionStart: item });
     ipcRenderer.send('state-settings-start', item.value);
   }
-
-  selectionChangeSleep(item) {
-    this.setState({ selectionSleep: item });
-    ipcRenderer.send('state-settings-sleep', item.value);
+  selectionChangeSuspend(item) {
+    this.setState({ selectionSuspend: item });
+    ipcRenderer.send('state-settings-suspend', item.value);
   }
-
-  selectionChangeWake(item) {
-    this.setState({ selectionWake: item });
-    ipcRenderer.send('state-settings-wake', item.value);
+  selectionChangeResume(item) {
+    this.setState({ selectionResume: item });
+    ipcRenderer.send('state-settings-resume', item.value);
+  }
+  selectionChangeAc(item) {
+    this.setState({ selectionAc: item });
+    ipcRenderer.send('state-settings-ac', item.value);
+  }
+  selectionChangeBattery(item) {
+    this.setState({ selectionBatt: item });
+    ipcRenderer.send('state-settings-battery', item.value);
+  }
+  selectionChangeShutdown(item) {
+    this.setState({ selectionShutdown: item });
+    ipcRenderer.send('state-settings-shutdown', item.value);
+  }
+  selectionChangeLockscreen(item) {
+    this.setState({ selectionLockscreen: item });
+    ipcRenderer.send('state-settings-lockscreen', item.value);
+  }
+  selectionChangeUnlockscreen(item) {
+    this.setState({ selectionUnlockscreen: item });
+    ipcRenderer.send('state-settings-unlockscreen', item.value);
+  }
+  selectionChangeUserDidBecomeActive(item) {
+    this.setState({ selectionUserDidBecomeActive: item });
+    ipcRenderer.send('state-settings-userdidbecomeactive', item.value);
+  }
+  selectionChangeUserDidResignActive(item) {
+    this.setState({ selectionUserDidResignActive: item });
+    ipcRenderer.send('state-settings-userdidresignactive', item.value);
   }
 
   render() {
@@ -208,21 +243,67 @@ export class ViewStateSettings extends React.Component {
             <p>Select a state to be activate on application and system events</p>
           </div>
           <div className={'state-selectors'}>
+
             <p>This state will be activated whenever Razer macOS starts or refreshes its devices.</p>
             <div className={'state-selector'}>
               <div>On application start</div>
               <div><Select value={this.state.selectionStart} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeStart(item)} styles={customStyles} /></div>
             </div>
-            <p>This state will be activated when the system goes to sleep (suspend event).</p>
+
+            <p>This state will be activated when the system goes to sleep ('suspend' event).</p>
             <div className={'state-selector'}>
               <div>On system idle/sleep</div>
-              <div><Select value={this.state.selectionSleep} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeSleep(item)} styles={customStyles} /></div>
+              <div><Select value={this.state.selectionSuspend} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeSuspend(item)} styles={customStyles} /></div>
             </div>
-            <p>This state will be activated when the system wakes up (resume event).</p>
+
+            <p>This state will be activated when the system wakes up ('resume' event).</p>
             <div className={'state-selector'}>
               <div>On system wake up</div>
-              <div><Select value={this.state.selectionWake} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeWake(item)} styles={customStyles} /></div>
+              <div><Select value={this.state.selectionResume} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeResume(item)} styles={customStyles} /></div>
             </div>
+
+            <p>This state will be activated when the system is plugged in ('on-ac' event).</p>
+            <div className={'state-selector'}>
+              <div>On system plugged in</div>
+              <div><Select value={this.state.selectionAc} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeAc(item)} styles={customStyles} /></div>
+            </div>
+
+            <p>This state will be activated when the system is on battery ('on-battery' event).</p>
+            <div className={'state-selector'}>
+              <div>On system on battery</div>
+              <div><Select value={this.state.selectionBatt} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeBattery(item)} styles={customStyles} /></div>
+            </div>
+
+            <p>This state will be activated when the system is about to shutdown ('shutdown' event).</p>
+            <div className={'state-selector'}>
+              <div>On system shutdown</div>
+              <div><Select value={this.state.selectionShutdown} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeShutdown(item)} styles={customStyles} /></div>
+            </div>
+
+            <p>This state will be activated when the system is about to lock the screen ('lock-screen' event).</p>
+            <div className={'state-selector'}>
+              <div>On system lock screen</div>
+              <div><Select value={this.state.selectionLockscreen} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeLockscreen(item)} styles={customStyles} /></div>
+            </div>
+
+            <p>This state will be activated when the system is about to unlock the screen ('unlock-screen' event).</p>
+            <div className={'state-selector'}>
+              <div>On system unlock screen</div>
+              <div><Select value={this.state.selectionUnlockscreen} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeUnlockscreen(item)} styles={customStyles} /></div>
+            </div>
+
+            <p>This state will be activated when the user on the system is about to become active ('user-did-become-active' event).</p>
+            <div className={'state-selector'}>
+              <div>On system user become active</div>
+              <div><Select value={this.state.selectionUserDidBecomeActive} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeUserDidBecomeActive(item)} styles={customStyles} /></div>
+            </div>
+
+            <p>This state will be activated when the user on the system is about to resign active ('user-did-resign-active' event).</p>
+            <div className={'state-selector'}>
+              <div>On system user resign active</div>
+              <div><Select value={this.state.selectionUserDidResignActive} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeUserDidResignActive(item)} styles={customStyles} /></div>
+            </div>
+
           </div>
         </TabPanel>
         <TabPanel>

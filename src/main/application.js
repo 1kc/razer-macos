@@ -42,11 +42,75 @@ export class Application {
     });
 
     powerMonitor.on('suspend', () => {
-      this.razerApplication.stateManager.sleep();
+      if(this.razerApplication.stateManager.stateOnSuspend == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.suspend();
+      });
     });
     powerMonitor.on('resume', () => {
-      this.razerApplication.refresh().then(() => {
-        return this.razerApplication.stateManager.wakeUp();
+      if(this.razerApplication.stateManager.stateOnResume == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.resume();
+      });
+    });
+    powerMonitor.on('on-ac', () => {
+      if(this.razerApplication.stateManager.stateOnAc == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.onAc();
+      });
+    });
+    powerMonitor.on('on-battery', () => {
+      if(this.razerApplication.stateManager.stateOnBattery == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.onBattery();
+      });
+    });
+    powerMonitor.on('shutdown', () => {
+      if(this.razerApplication.stateManager.stateOnShutdown == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.shutdown();
+      });
+    });
+    powerMonitor.on('lock-screen', () => {
+      if(this.razerApplication.stateManager.stateOnLockScreen == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.lockScreen();
+      });
+    });
+    powerMonitor.on('unlock-screen', () => {
+      if(this.razerApplication.stateManager.stateOnUnlockScreen == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.unlockScreen();
+      });
+    });
+    powerMonitor.on('user-did-become-active', () => {
+      if(this.razerApplication.stateManager.stateOnUserDidBecomeActive == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.userDidBecomeActive();
+      });
+    });
+    powerMonitor.on('user-did-resign-active', () => {
+      if(this.razerApplication.stateManager.stateOnUserDidResignActive == null) {
+        return;
+      }
+      this.razerApplication.refresh(false).then(() => {
+        return this.razerApplication.stateManager.userDidResignActive();
       });
     });
 
@@ -112,15 +176,43 @@ export class Application {
     });
 
     ipcMain.on('state-settings-start', (event, stateValue) => {
-      this.razerApplication.stateManager.stateOnRefresh = stateValue;
+      this.razerApplication.stateManager.stateOnStart = stateValue;
       this.razerApplication.stateManager.save();
     });
-    ipcMain.on('state-settings-sleep', (event, stateValue) => {
-      this.razerApplication.stateManager.stateOnSleep = stateValue;
+    ipcMain.on('state-settings-suspend', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnSuspend = stateValue;
       this.razerApplication.stateManager.save();
     });
-    ipcMain.on('state-settings-wake', (event, stateValue) => {
-      this.razerApplication.stateManager.stateOnWake = stateValue;
+    ipcMain.on('state-settings-resume', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnResume = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-ac', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnAc = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-battery', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnBattery = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-shutdown', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnShutdown = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-lockscreen', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnLockScreen = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-unlockscreen', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnUnlockScreen = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-userdidbecomeactive', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnUserDidBecomeActive = stateValue;
+      this.razerApplication.stateManager.save();
+    });
+    ipcMain.on('state-settings-userdidresignactive', (event, stateValue) => {
+      this.razerApplication.stateManager.stateOnUserDidResignActive = stateValue;
       this.razerApplication.stateManager.save();
     });
   }

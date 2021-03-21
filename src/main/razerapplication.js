@@ -21,7 +21,7 @@ export class RazerApplication {
     this.cycleAnimation = null;
   }
 
-  async refresh() {
+  async refresh(withOnStartState = true) {
     return this.deviceManager.refreshRazerDevices().then(() => {
       const spectrumPromise = new RazerAnimationCycleSpectrum(this).init().then(animation => {
         this.spectrumAnimation = animation;
@@ -29,7 +29,7 @@ export class RazerApplication {
       const cyclePromise = new RazerAnimationCycleCustom(this).init().then(animation => {
         this.cycleAnimation = animation;
       });
-      const resetAll = this.stateManager.init(this.deviceManager.activeRazerDevices);
+      const resetAll = this.stateManager.init(this.deviceManager.activeRazerDevices, withOnStartState);
       return Promise.all([spectrumPromise, cyclePromise, resetAll]).then(() => true);
     });
   }
