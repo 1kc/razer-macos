@@ -76,6 +76,20 @@ export class ViewStateSettings extends React.Component {
     const additionalState = ipcRenderer.sendSync('state-settings-add', itemName);
     this.stateManager.savedStates.push(additionalState);
 
+    const devicesWithUndefinedState = additionalState.states.filter(stateObj => !stateObj.state.mode).map(stateObj => {
+      const device = this.stateManager.devices.find(d => d.productId === stateObj.deviceId);
+      return device.name;
+    });
+
+    if(devicesWithUndefinedState.length > 0) {
+      let message = 'The state "'+itemName+'" has been created but the following devices have an undefined state:';
+      message += '\n\n';
+      devicesWithUndefinedState.forEach(deviceName => message += '· '+deviceName+'\n');
+      message += '\n';
+      message += 'Please set the mentioned devices to a defined state by using the Razer macOS menu at the top right and try again.';
+      window.alert(message);
+    }
+
     const newOptions = this.stateManager.savedStates.map(state => {
       return { value: state.name, label: state.name };
     });
