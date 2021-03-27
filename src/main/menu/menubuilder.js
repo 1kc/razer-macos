@@ -206,6 +206,7 @@ function getMainMenuBottom(application) {
       click() {
         application.quit();
       },
+      accelerator: 'Command+Q',
     },
   ]
 }
