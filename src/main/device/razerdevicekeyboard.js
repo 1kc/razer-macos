@@ -103,10 +103,9 @@ export class RazerDeviceKeyboard extends RazerDevice {
     }
   }
 
-  setRippleEffect(color, backgroundColor) {
-    this.setModeState('ripple', [color, backgroundColor]);
+  setRippleEffect(featureConfiguration, color, backgroundColor) {
     this.stopAnimations();
-    this.rippleAnimation = new RazerAnimationRipple(this, color, backgroundColor);
+    this.rippleAnimation = new RazerAnimationRipple(this, featureConfiguration, color, backgroundColor);
     this.rippleAnimation.start();
   }
 

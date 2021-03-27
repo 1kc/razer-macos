@@ -3,5 +3,11 @@
   "productId": "0x0233",
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/1418/1418_blade_2018__base.png",
-  "features": null
+  "features": null,
+  "featuresConfig": [{
+    "ripple": {
+      "rows": 6,
+      "cols": 16
+    }
+  }]
 }

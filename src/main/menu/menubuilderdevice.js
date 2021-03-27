@@ -192,11 +192,19 @@ function getFeatureReactive(application, device, feature) {
 }
 
 function getFeatureRipple(application, device, feature) {
+
+  if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
+    return {
+      label: 'Ripple (missing rows, cols config)',
+      enabled: false
+    };
+  }
+
   const singleItem = (label, color, backgroundColor) => {
     return {
       label: label,
       click() {
-        device.setRippleEffect(color, backgroundColor);
+        device.setRippleEffect(feature.configuration, color, backgroundColor);
       },
     };
   };

@@ -2,7 +2,7 @@ import { RazerDeviceAnimation } from './animation';
 
 export class RazerAnimationRipple extends RazerDeviceAnimation {
 
-  constructor(device, color, backgroundColor = null) {
+constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
     super();
     this.KEY_MAPPING = {
       1: [0, 1],
@@ -118,26 +118,26 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
 
     this.device = device;
     this.ioHook = require('iohook');
+
+    this.nRows = featureConfiguration.rows;
+    this.nCols = featureConfiguration.cols;
   }
 
   start() {
     this.ioHook.start();
 
-    const nRows = 6;
-    const nCols = 22;
     const refreshRate = 0.05; // in seconds
     const eventDuration = 1; // in seconds
     const speed = 20; // number of keys per second
     const width = 2; // number of keys
 
     // initialization
-    let matrix = Array(nRows)
+    let matrix = Array(this.nRows)
       .fill()
-      .map(() => Array(nCols).fill(this.backgroundColor));
-
-    for (let i = 0; i < nRows; i++) {
-      let row = [i, 0, nCols - 1, ...matrix[i].flat()];
-      this.device.setCustomFrame(row)
+      .map(() => Array(this.nCols).fill(this.backgroundColor));
+    for (let i = 0; i < this.nRows; i++) {
+      let row = [i, 0, this.nCols - 1, ...matrix[i].flat()];
+      this.device.setCustomFrame(new Uint8Array(row))
     }
     this.device.setModeCustom();
     let keyEvents = [];
@@ -159,13 +159,13 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
       keyEvents = keyEvents.filter((event) => event.startTime + eventDuration > Date.now() / 1000);
 
       // clear keyboard
-      matrix = Array(nRows)
+      matrix = Array(this.nRows)
         .fill()
-        .map(() => Array(nCols).fill(this.backgroundColor));
+        .map(() => Array(this.nCols).fill(this.backgroundColor));
 
       // set color
-      for (let i = 0; i < nRows; i++) {
-        for (let j = 0; j < nCols; j++) {
+      for (let i = 0; i < this.nRows; i++) {
+        for (let j = 0; j < this.nCols; j++) {
           for (let event of keyEvents) {
             const radius = (Date.now() / 1000 - event.startTime) * speed;
             const distance = Math.sqrt(
@@ -180,9 +180,9 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
       }
 
       // set ripple effect
-      for (let i = 0; i < nRows; i++) {
-        let row = [i, 0, nCols - 1, ...matrix[i].flat()];
-        this.device.setCustomFrame(row);
+      for (let i = 0; i < this.nRows; i++) {
+        let row = [i, 0, this.nCols - 1, ...matrix[i].flat()];
+        this.device.setCustomFrame(new Uint8Array(row));
       }
       this.device.setModeCustom();
     }, refreshRate);

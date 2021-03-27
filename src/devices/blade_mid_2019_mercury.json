@@ -3,5 +3,11 @@
   "productId": "0x0245",
   "mainType": "keyboard",
   "image": "https://assets2.razerzone.com/images/blade-15/shop/blade15-mercury-1.jpg",
-  "features": null
+  "features": null,
+  "featuresConfig": [{
+    "ripple": {
+      "rows": 6,
+      "cols": 16
+    }
+  }]
 }

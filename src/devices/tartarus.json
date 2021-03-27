@@ -3,5 +3,6 @@
   "productId": "0x0201",
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/228/228_tartarus.png",
-  "features": null
+  "features": null,
+  "featuresMissing": ["ripple"]
 }
