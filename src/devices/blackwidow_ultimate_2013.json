@@ -3,5 +3,11 @@
   "productId": "0x011A",
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/245/438_blackwidow_ultimate_2014.png",
-  "features": null
+  "features": null,
+  "featuresConfig": [{
+    "ripple": {
+      "rows": 6,
+      "cols": 22
+    }
+  }]
 }

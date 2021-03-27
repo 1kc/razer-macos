@@ -3,5 +3,11 @@
   "productId": "0x0220",
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/667/667_blade_stealth_2016_6500u.png",
-  "features": null
+  "features": null,
+  "featuresConfig": [{
+    "ripple": {
+      "rows": 6,
+      "cols": 16
+    }
+  }]
 }

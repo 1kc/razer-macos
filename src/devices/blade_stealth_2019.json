@@ -3,5 +3,6 @@
   "productId": "0x0239",
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/1475/1475_bladestealth13(2019).png",
-  "features": null
+  "features": null,
+  "featuresMissing": ["ripple"]
 }

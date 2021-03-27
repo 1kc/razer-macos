@@ -3,5 +3,11 @@
   "productId": "0x0a24",
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/1709/1709-blackwidow-v3-tkl.png",
-  "features": null
+  "features": null,
+  "featuresConfig": [{
+    "ripple": {
+      "rows": 6,
+      "cols": 18
+    }
+  }]
 }

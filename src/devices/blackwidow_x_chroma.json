@@ -3,5 +3,11 @@
   "productId": "0x0216",
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/716/716_blackwidow_x_chroma.png",
-  "features": null
+  "features": null,
+  "featuresConfig": [{
+    "ripple": {
+      "rows": 6,
+      "cols": 22
+    }
+  }]
 }
