@@ -1,8 +1,8 @@
 import { RazerDevice } from './razerdevice';
 
 export class RazerDeviceMouse extends RazerDevice {
-  constructor(addon, settingsManager, razerProperties) {
-    super(addon, settingsManager, razerProperties);
+  constructor(addon, settingsManager, stateManager, razerProperties) {
+    super(addon, settingsManager, stateManager, razerProperties);
   }
 
   async init() {
@@ -26,35 +26,63 @@ export class RazerDeviceMouse extends RazerDevice {
     }
   }
 
+  getState() {
+    const deviceState = super.getState();
+    deviceState['dpi'] = this.dpi;
+    deviceState['pollRate'] = this.pollRate;
+    deviceState['brightnessLogo'] = this.brightnessLogo;
+    deviceState['brightnessScroll'] = this.brightnessScroll;
+    deviceState['brightnessLeft'] = this.brightnessLeft;
+    deviceState['brightnessRight'] = this.brightnessRight;
+    return deviceState;
+  }
+
+  resetToState(state) {
+    super.resetToState(state);
+    this.setDPI(state.dpi);
+    this.setPollRate(state.pollRate);
+    this.setBrightnessLogo(state.brightnessLogo);
+    this.setBrightnessScroll(state.brightnessScroll);
+    this.setBrightnessLeft(state.brightnessLeft);
+    this.setBrightnessRight(state.brightnessRight);
+  }
+
   setModeNone() {
+    super.setModeNone();
     this.addon.mouseSetLogoModeNone(this.internalId);
   }
 
   setModeStaticNoStore(color) {
-    this.addon.mouseSetLogoModeStaticNoStore(this.internalId, color);
+    super.setModeStaticNoStore(color);
+    this.addon.mouseSetLogoModeStaticNoStore(this.internalId, new Uint8Array(color));
   }
 
   setModeStatic(color) {
     super.setModeStatic(color);
-    this.addon.mouseSetLogoModeStatic(this.internalId, color);
+    this.addon.mouseSetLogoModeStatic(this.internalId, new Uint8Array(color));
   }
 
   setSpectrum() {
+    super.setSpectrum();
     this.addon.mouseSetLogoModeSpectrum(this.internalId);
   }
 
   setBreathe(color) {
-    this.addon.mouseSetLogoModeBreathe(this.internalId, color);
+    super.setBreathe(color);
+    this.addon.mouseSetLogoModeBreathe(this.internalId, new Uint8Array(color));
   }
 
   // device specific
   setWaveSimple(direction) {
+    this.setModeState('waveSimple', direction);
     this.addon.mouseSetLogoModeWave(this.internalId, direction);
   }
   setReactive(colorMode) {
-    this.addon.mouseSetLogoModeReactive(this.internalId, colorMode);
+    this.setModeState('reactive', colorMode);
+    this.addon.mouseSetLogoModeReactive(this.internalId, new Uint8Array(colorMode));
   }
   setLogoLEDEffect(effect) {
+    this.setModeState('ledEffect', effect);
     this.addon.mouseSetLogoLEDEffect(this.internalId, effect);
   }
 

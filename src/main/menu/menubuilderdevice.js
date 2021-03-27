@@ -92,7 +92,7 @@ function getFeatureBreath(application, device, feature) {
     label: 'Breathe',
     click() {
       // random
-      device.setBreathe(new Uint8Array([0]));
+      device.setBreathe([0]);
     },
   };
 }
@@ -176,7 +176,7 @@ function getFeatureReactive(application, device, feature) {
     return {
       label: label,
       click() {
-        device.setReactive(new Uint8Array(colorMode));
+        device.setReactive(colorMode);
       },
     };
   };
@@ -238,7 +238,7 @@ function getFeatureStarlight(application, device, feature) {
     return {
       label: label,
       click() {
-        device.setStarlight(new Uint8Array([speed].concat(colors)));
+        device.setStarlight([speed].concat(colors));
       },
     };
   };
@@ -312,7 +312,7 @@ function getFeatureStatic(application, device, feature) {
     return {
       label: label,
       click() {
-        device.setModeStatic(new Uint8Array(color));
+        device.setModeStatic(color);
       },
     };
   };
@@ -328,7 +328,6 @@ function getFeatureStatic(application, device, feature) {
   return {
     label: 'Static',
     submenu: subMenu.filter(s => s !== null),
-    checked: device.isModeStaticActive(),
   };
 }
 

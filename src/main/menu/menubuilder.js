@@ -46,6 +46,15 @@ function getMainMenu(application) {
         }).catch(() => {});
       }
     },
+    {
+      label: 'State manager',
+      click() {
+        application.showView({
+          mode: 'state',
+          state: application.razerApplication.stateManager.serialize(),
+        });
+      },
+    },
     { type: 'separator' },
     {
       label: 'All Devices',
@@ -67,7 +76,7 @@ function getMainMenu(application) {
           label: 'Custom',
           click() {
             application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
-              device.setModeStatic(new Uint8Array(Object.values(device.settings.customColor1.rgb).slice(0,3)));
+              device.setModeStatic(Object.values(device.settings.customColor1.rgb).slice(0,3));
             });
           },
         },
@@ -75,7 +84,7 @@ function getMainMenu(application) {
           label: 'Red',
           click() {
             application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
-              device.setModeStatic(new Uint8Array([0xff, 0, 0]));
+              device.setModeStatic([0xff, 0, 0]);
             });
           },
         },
@@ -83,7 +92,7 @@ function getMainMenu(application) {
           label: 'Green',
           click() {
             application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
-              device.setModeStatic(new Uint8Array([0, 0xff, 0]));
+              device.setModeStatic([0, 0xff, 0]);
             });
           },
         },
@@ -91,7 +100,7 @@ function getMainMenu(application) {
           label: 'Blue',
           click() {
             application.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
-              device.setModeStatic(new Uint8Array([0, 0, 0xff]));
+              device.setModeStatic([0, 0, 0xff]);
             });
           },
         },

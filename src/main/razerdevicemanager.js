@@ -28,14 +28,20 @@ import { FeatureMouseDPI } from './feature/featuremousedpi';
  * @constructor
  */
 export class RazerDeviceManager {
-  constructor(settingsManager) {
+  constructor(settingsManager, stateManager) {
     this.addon = addon;
     this.settingsManager = settingsManager;
+    this.stateManager = stateManager;
     this.razerConfigDevices = this.getAllRazerDeviceConfigurations();
     this.activeRazerDevices = null;
   }
 
   async refreshRazerDevices() {
+    if(new Date().getTime() < this.lastRefresh + 2000) {
+      /// Refresh is called too fast. Wait a bit...
+      return;
+    }
+    this.lastRefresh = new Date().getTime();
     this.closeDevices();
 
     const devicePromises = this.addon.getAllDevices().map(async foundDevice => {
@@ -203,7 +209,7 @@ export class RazerDeviceManager {
       });
     }
 
-    return new device(this.addon, this.settingsManager, razerDeviceProperties);
+    return new device(this.addon, this.settingsManager, this.stateManager, razerDeviceProperties);
   }
 
   getAllRazerDeviceConfigurations() {

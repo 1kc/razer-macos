@@ -2,7 +2,7 @@ import { RazerDeviceAnimation } from './animation';
 
 export class RazerAnimationRipple extends RazerDeviceAnimation {
 
-  constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
+constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
     super();
     this.KEY_MAPPING = {
       1: [0, 1],
@@ -114,7 +114,7 @@ export class RazerAnimationRipple extends RazerDeviceAnimation {
     this.rippleEffectInterval = null;
 
     this.color = color;
-    this.backgroundColor = backgroundColor;
+    this.backgroundColor = backgroundColor != null ? backgroundColor : [0, 0, 0];
 
     this.device = device;
     this.ioHook = require('iohook');
