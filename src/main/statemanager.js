@@ -197,7 +197,7 @@ export class StateManager {
         device.setStarlight(state.args);
         break;
       case 'ripple':
-        device.setRippleEffect(state.args[0], state.args[1]);
+        device.setRippleEffect(state.args[0], state.args[1], state.args[2]);
         break;
       default:
         console.error('Unknown State mode ' + state.mode);
