@@ -1,9 +1,9 @@
 import { Feature } from './feature';
-import { FeatureHelper } from './featurehelper';
+import { FeatureIdentifier } from './featureidentifier';
 
 export class FeatureMouseBrightness extends Feature {
   constructor(config) {
-    super(FeatureHelper.FEATURE_MOUSE_BRIGHTNESS, config);
+    super(FeatureIdentifier.MOUSE_BRIGHTNESS, config);
   }
 
   getDefaultConfiguration() {

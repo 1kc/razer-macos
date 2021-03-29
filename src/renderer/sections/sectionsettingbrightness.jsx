@@ -2,14 +2,14 @@ import React from 'react';
 import Brightness from '../components/Brightness/Brightness';
 import { SectionSettingBlock } from './sectionsettingblock.jsx';
 import { ipcRenderer } from 'electron';
-import { FeatureHelper } from '../../main/feature/featurehelper';
+import { FeatureIdentifier } from '../../main/feature/featureidentifier';
 
 export class SectionSettingBrightness extends SectionSettingBlock {
 
   constructor(props) {
     super(props);
-    this.brightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureHelper.FEATURE_BRIGHTNESS);
-    this.mouseBrightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureHelper.FEATURE_MOUSE_BRIGHTNESS);
+    this.brightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.BRIGHTNESS);
+    this.mouseBrightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.MOUSE_BRIGHTNESS);
   }
 
   renderTitle() {

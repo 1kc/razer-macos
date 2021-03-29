@@ -1,14 +1,14 @@
 import React from 'react';
 import MouseSensitivity from '../components/MouseSensitivity';
 import { SectionSettingBlock } from './sectionsettingblock';
-import { FeatureHelper } from '../../main/feature/featurehelper';
 import { ipcRenderer } from 'electron';
+import { FeatureIdentifier } from '../../main/feature/featureidentifier';
 
 export class SectionSettingSensitivity extends SectionSettingBlock {
 
   constructor(props) {
     super(props);
-    this.dpiFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureHelper.FEATURE_MOUSE_DPI)
+    this.dpiFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.MOUSE_DPI)
   }
 
   renderTitle() {

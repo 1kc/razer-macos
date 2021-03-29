@@ -1,8 +1,8 @@
 import { Feature } from './feature';
-import { FeatureHelper } from './featurehelper';
+import { FeatureIdentifier } from './featureidentifier';
 
 export class FeatureWaveSimple extends Feature {
   constructor(config) {
-    super(FeatureHelper.FEATURE_WAVE_SIMPLE, config);
+    super(FeatureIdentifier.WAVE_SIMPLE, config);
   }
 }

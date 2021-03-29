@@ -1,4 +1,5 @@
-import { FeatureHelper } from '../feature/featurehelper';
+import { FeatureIdentifier } from '../feature/featureidentifier';
+import { RazerDeviceType } from '../device/razerdevicetype';
 
 export function getDeviceMenuFor(application, razerDevice) {
   let deviceMenu = [
@@ -17,9 +18,9 @@ function getHeaderFor(application, razerDevice) {
   let label = razerDevice.name;
   let icon = null;
   switch (razerDevice.mainType) {
-    case 'keyboard':
+    case RazerDeviceType.KEYBOARD:
       break;
-    case 'mouse':
+    case RazerDeviceType.MOUSE:
       if (razerDevice.batteryLevel !== -1) {
         if (razerDevice.chargingStatus) {
           label = label + ' - ⚡' + razerDevice.batteryLevel.toString() + '%';
@@ -28,15 +29,15 @@ function getHeaderFor(application, razerDevice) {
         }
       }
       break;
-    case 'mousedock':
+    case RazerDeviceType.MOUSEDOCK:
       break;
-    case 'mousemat':
+    case RazerDeviceType.MOUSEMAT:
       break;
-    case 'egpu':
+    case RazerDeviceType.EGPU:
       break;
-    case 'headphone':
+    case RazerDeviceType.HEADPHONE:
       break;
-    case 'accessory':
+    case RazerDeviceType.ACCESSORY:
       break;
   }
 
@@ -54,33 +55,33 @@ function getHeaderFor(application, razerDevice) {
 
 function getFeatureMenuFor(application, device, feature) {
   switch (feature.featureIdentifier) {
-    case FeatureHelper.FEATURE_NONE:
+    case FeatureIdentifier.NONE:
       return getFeatureNone(application, device, feature);
-    case FeatureHelper.FEATURE_STATIC:
+    case FeatureIdentifier.STATIC:
       return getFeatureStatic(application, device, feature);
-    case FeatureHelper.FEATURE_WAVE_SIMPLE:
+    case FeatureIdentifier.WAVE_SIMPLE:
       return getFeatureWaveSimple(application, device, feature);
-    case FeatureHelper.FEATURE_WAVE_EXTENDED:
+    case FeatureIdentifier.WAVE_EXTENDED:
       return getFeatureWaveExtended(application, device, feature);
-    case FeatureHelper.FEATURE_SPECTRUM:
+    case FeatureIdentifier.SPECTRUM:
       return getFeatureSpectrum(application, device, feature);
-    case FeatureHelper.FEATURE_REACTIVE:
+    case FeatureIdentifier.REACTIVE:
       return getFeatureReactive(application, device, feature);
-    case FeatureHelper.FEATURE_BREATHE:
+    case FeatureIdentifier.BREATHE:
       return getFeatureBreath(application, device, feature);
-    case FeatureHelper.FEATURE_STARLIGHT:
+    case FeatureIdentifier.STARLIGHT:
       return getFeatureStarlight(application, device, feature);
-    case FeatureHelper.FEATURE_BRIGHTNESS:
+    case FeatureIdentifier.BRIGHTNESS:
       return getFeatureBrightness(application, device, feature);
-    case FeatureHelper.FEATURE_RIPPLE:
+    case FeatureIdentifier.RIPPLE:
       return getFeatureRipple(application, device, feature);
-    case FeatureHelper.FEATURE_OLD_MOUSE_EFFECTS:
+    case FeatureIdentifier.OLD_MOUSE_EFFECTS:
       return getFeatureOldMouseEffect(application, device, feature);
-    case FeatureHelper.FEATURE_MOUSE_BRIGHTNESS:
+    case FeatureIdentifier.MOUSE_BRIGHTNESS:
       return getFeatureMouseBrightness(application, device, feature);
-    case FeatureHelper.FEATURE_POLL_RATE:
+    case FeatureIdentifier.POLL_RATE:
       return null;
-    case FeatureHelper.FEATURE_MOUSE_DPI:
+    case FeatureIdentifier.MOUSE_DPI:
       return null;
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';

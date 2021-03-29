@@ -1,8 +1,8 @@
 import { Feature } from './feature';
-import { FeatureHelper } from './featurehelper';
+import { FeatureIdentifier } from './featureidentifier';
 
 export class FeatureBreathe extends Feature {
   constructor(config) {
-    super(FeatureHelper.FEATURE_BREATHE, config);
+    super(FeatureIdentifier.BREATHE, config);
   }
 }

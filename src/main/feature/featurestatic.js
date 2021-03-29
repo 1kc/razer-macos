@@ -1,9 +1,9 @@
 import { Feature } from './feature';
-import { FeatureHelper } from './featurehelper';
+import { FeatureIdentifier } from './featureidentifier';
 
 export class FeatureStatic extends Feature {
   constructor(config) {
-    super(FeatureHelper.FEATURE_STATIC, config);
+    super(FeatureIdentifier.STATIC, config);
   }
 
   getDefaultConfiguration() {

@@ -7,21 +7,8 @@ import { RazerDeviceEgpu } from './device/razerdeviceegpu';
 import { RazerDeviceHeadphone } from './device/razerdeviceheadphone';
 import { RazerDeviceAccessory } from './device/razerdeviceaccessory';
 import { RazerDevice } from './device/razerdevice';
-import { FeatureNone } from './feature/featurenone';
-import { FeatureStatic } from './feature/featurestatic';
-import { FeatureWaveExtended } from './feature/featurewaveextended';
-import { FeatureSpectrum } from './feature/featurespectrum';
-import { FeatureReactive } from './feature/featurereactive';
-import { FeatureBreathe } from './feature/featurebreathe';
-import { FeatureStarlight } from './feature/featurestarlight';
-import { FeatureRipple } from './feature/featureripple';
-import { FeatureBrightness } from './feature/featurebrightness';
-import { FeatureWaveSimple } from './feature/featurewavesimple';
-import { FeatureOldMouseEffects } from './feature/featureoldmouseeffects';
 import { FeatureHelper } from './feature/featurehelper';
-import { FeatureMouseBrightness } from './feature/featuremousebrightness';
-import { FeatureMousePollRate } from './feature/featuremousepollrate';
-import { FeatureMouseDPI } from './feature/featuremousedpi';
+import { RazerDeviceType } from './device/razerdevicetype';
 
 /**
  * Responsible to fetch all attached Razer devices and map them to RazerDevice instances with features
@@ -71,7 +58,16 @@ export class RazerDeviceManager {
   }
 
   sortDevices(devices) {
-    const deviceOrder = ['keyboard', 'mouse', 'mousedock', 'mousemat', 'egpu', 'headphone', 'accessory']; // we could offer this as a personal setting in the future
+    const deviceOrder = [
+      RazerDeviceType.KEYBOARD,
+      RazerDeviceType.MOUSE,
+      RazerDeviceType.MOUSEDOCK,
+      RazerDeviceType.MOUSEMAT,
+      RazerDeviceType.EGPU,
+      RazerDeviceType.HEADPHONE,
+      RazerDeviceType.ACCESSORY
+    ]; // we could offer this as a personal setting in the future
+
     return devices.sort((deviceA, deviceB) => {
       const mainTypeAOrder = deviceOrder.indexOf(deviceA.mainType);
       const mainTypeBOrder = deviceOrder.indexOf(deviceB.mainType);
@@ -90,89 +86,31 @@ export class RazerDeviceManager {
 
   createRazerDeviceFrom(razerProperties) {
     let device;
-    let deviceFeatures;
 
     switch (razerProperties.mainType) {
-      case 'keyboard':
+      case RazerDeviceType.KEYBOARD:
         device = RazerDeviceKeyboard;
-        deviceFeatures = [
-          new FeatureNone(),
-          new FeatureStatic(),
-          new FeatureWaveExtended(),
-          new FeatureSpectrum(),
-          new FeatureReactive(),
-          new FeatureBreathe(),
-          new FeatureStarlight(),
-          new FeatureRipple(),
-          new FeatureBrightness(),
-        ];
         break;
-      case 'mouse':
+      case RazerDeviceType.MOUSE:
         device = RazerDeviceMouse;
-        deviceFeatures = [
-          new FeatureNone(),
-          new FeatureStatic(),
-          new FeatureWaveSimple(),
-          new FeatureSpectrum(),
-          new FeatureReactive(),
-          new FeatureBreathe(),
-          new FeatureOldMouseEffects(),
-          new FeatureMouseBrightness(),
-          new FeatureMousePollRate(),
-          new FeatureMouseDPI(),
-        ];
         break;
-      case 'mousedock':
+      case RazerDeviceType.MOUSEDOCK:
         device = RazerDeviceMouseDock;
-        deviceFeatures = [
-          new FeatureNone(),
-          new FeatureStatic(),
-          new FeatureSpectrum(),
-          new FeatureBreathe(),
-        ];
         break;
-      case 'mousemat':
+      case RazerDeviceType.MOUSEMAT:
         device = RazerDeviceMouseMat;
-        deviceFeatures = [
-          new FeatureNone(),
-          new FeatureStatic(),
-          new FeatureWaveSimple(),
-          new FeatureSpectrum(),
-          new FeatureBreathe(),
-        ];
         break;
-      case 'egpu':
+      case RazerDeviceType.EGPU:
         device = RazerDeviceEgpu;
-        deviceFeatures = [
-          new FeatureNone(),
-          new FeatureStatic(),
-          new FeatureWaveSimple(),
-          new FeatureSpectrum(),
-          new FeatureBreathe(),
-        ];
         break;
-      case 'headphone':
+      case RazerDeviceType.HEADPHONE:
         device = RazerDeviceHeadphone;
-        deviceFeatures = [
-          new FeatureNone(),
-          new FeatureStatic(),
-          new FeatureSpectrum(),
-          new FeatureBreathe(),
-        ];
         break;
-      case 'accessory':
+      case RazerDeviceType.ACCESSORY:
         device = RazerDeviceAccessory;
-        deviceFeatures = [
-          new FeatureNone(),
-          new FeatureStatic(),
-          new FeatureWaveExtended(),
-          new FeatureSpectrum(),
-          new FeatureBreathe(),
-        ];
         break;
       default:
         device = RazerDevice;
-        deviceFeatures = [];
     }
 
     const razerDeviceProperties = {
@@ -186,7 +124,7 @@ export class RazerDeviceManager {
 
     /// create from device standard or from feature list
     if (razerProperties.features == null) {
-      razerDeviceProperties.features = deviceFeatures;
+      razerDeviceProperties.features = FeatureHelper.getDefaultFeaturesFor(razerProperties.mainType);
     } else {
       razerDeviceProperties.features = razerProperties.features.map(featureConfig => FeatureHelper.createFeatureFrom(featureConfig));
     }

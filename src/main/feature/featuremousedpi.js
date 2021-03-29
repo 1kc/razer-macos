@@ -1,9 +1,9 @@
 import { Feature } from './feature';
-import { FeatureHelper } from './featurehelper';
+import { FeatureIdentifier } from './featureidentifier';
 
 export class FeatureMouseDPI extends Feature {
   constructor(config) {
-    super(FeatureHelper.FEATURE_MOUSE_DPI, config);
+    super(FeatureIdentifier.MOUSE_DPI, config);
   }
 
   getDefaultConfiguration() {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChromePicker, GithubPicker } from 'react-color';
 import { ipcRenderer } from 'electron';
-import { FeatureHelper } from '../../../main/feature/featurehelper';
+import { FeatureIdentifier } from '../../../main/feature/featureidentifier';
 
 
 export default function CustomColor({ deviceSelected }) {
@@ -45,7 +45,7 @@ export default function CustomColor({ deviceSelected }) {
       && staticFeature.configuration.enabledBlue;
   }
 
-  const staticFeature = deviceSelected.features.find(feature => feature.featureIdentifier === FeatureHelper.FEATURE_STATIC);
+  const staticFeature = deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.STATIC);
   const allColors = hasAllColors(staticFeature);
   let colors = [];
   if(!allColors) {

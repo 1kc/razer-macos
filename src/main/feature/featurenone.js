@@ -1,8 +1,8 @@
 import { Feature } from './feature';
-import { FeatureHelper } from './featurehelper';
+import { FeatureIdentifier } from './featureidentifier';
 
 export class FeatureNone extends Feature {
   constructor(config) {
-    super(FeatureHelper.FEATURE_NONE, config);
+    super(FeatureIdentifier.NONE, config);
   }
 }
