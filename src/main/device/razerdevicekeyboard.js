@@ -86,7 +86,7 @@ export class RazerDeviceKeyboard extends RazerDevice {
   setStarlight(mode) {
     this.setModeState('starlight', mode);
     this.stopAnimations();
-    this.addon.kbdSetModeStarlight(this.internalId, new Uint8Array(color));
+    this.addon.kbdSetModeStarlight(this.internalId, new Uint8Array(mode));
   }
 
   getBrightness() {
