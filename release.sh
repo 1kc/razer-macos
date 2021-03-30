@@ -2,8 +2,8 @@
 
 APPLE_USER=""
 APPLE_PASS=""
-APPID=`cat package.json | grep appId | cut -c 15- | rev | cut -c 3- | rev`
-
+APPID=`jq -r .build.appId package.json`
+VERSION=`jq -r .version package.json`
 
 yarn clean
 rm -rf ./node_modules ./dist
@@ -19,21 +19,12 @@ sed -ie "/force/a\\
 yarn dist
 
 
-echo 'zipping app bundles'
-ditto -c -k --keepParent 'dist/mac-arm64/Razer macOS.app' 'dist/RazermacOS-arm64.app.zip'
-ditto -c -k --keepParent 'dist/mac/Razer macOS.app' 'dist/RazermacOS-x64.app.zip'
+
+echo 'notarizing app'
+
+APP=`xcrun altool --notarize-app --primary-bundle-id com.electron.razer-macos --username "$APPLE_USER" --password "$APPLE_PASS" --file "Razer macOS-${VERSION}-universal.dmg" | grep RequestUUID | cut -c 15-`
 
 
-echo 'notarizing x64 app'
+echo "To check status, run xcrun altool --notarization-info "$APP" --username "$APPLE_USER" --password "$APPLE_PASS""
 
-X86=`xcrun altool --notarize-app --primary-bundle-id com.electron.razer-macos --username "$APPLE_USER" --password "$APPLE_PASS" --file 'dist/RazermacOS-x64.app.zip' | grep RequestUUID | cut -c 15-`
-
-echo "To check status, run xcrun altool --notarization-info "$X86" --username "$APPLE_USER" --password "$APPLE_PASS""
-
-echo 'notarizing arm64 app'
-
-ARM=`xcrun altool --notarize-app --primary-bundle-id com.electron.razer-macos --username "$APPLE_USER" --password "$APPLE_PASS" --file 'dist/RazermacOS-arm64.app.zip' | grep RequestUUID | cut -c 15-`
-
-echo "To check status, run xcrun altool --notarization-info $ARM --username "$APPLE_USER" --password "$APPLE_PASS""
-
-echo "If notarization succeeds, run xcrun stapler staple 'dist/mac/Razer macOS.app' && xcrun stapler staple 'dist/mac-arm64/Razer macOS.app'"
+printf "If notarization succeeds, run \nxcrun stapler staple 'dist/Razer macOS-${VERSION}-universal.dmg'\n"
