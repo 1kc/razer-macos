@@ -24,6 +24,6 @@ echo 'notarizing app'
 APP=`xcrun altool --notarize-app --primary-bundle-id com.electron.razer-macos --username "$APPLE_USER" --password "$APPLE_PASS" --file "dist/Razer macOS-${VERSION}-universal.dmg" | grep RequestUUID | cut -c 15-`
 
 
-echo "To check status, run xcrun altool --notarization-info "$APP" --username "$APPLE_USER" --password "$APPLE_PASS""
+printf "To check status, run \nxcrun altool --notarization-info "$APP" --username "$APPLE_USER" --password "$APPLE_PASS"\n"
 
 printf "If notarization succeeds, run \nxcrun stapler staple 'dist/Razer macOS-${VERSION}-universal.dmg'\n"
