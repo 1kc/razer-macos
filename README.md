@@ -94,6 +94,13 @@ A: Use the "Refresh Device List" option.
 
 Ensure xcode command line tools are installed,
 
+If you have a paid Apple Developer account, edit `release.sh` with your details.
+
+Afterwards, to build, sign, and/or notarize (if applicable,) run `./release`.
+
+
+Or manually:
+
 Install node package dependencies:
 
     yarn
@@ -109,6 +116,11 @@ During development, every time the driver code has been updated, a rebuild is re
 For building a distribution ready app and dmg:
 
     yarn dist
+
+
+If you do not have a valid Apple Developer ID, run codesign before copying to Application folder:
+
+    codesign -s - --deep --force ./dist/mac-universal/Razer\ macOS.app
 
 ## Implementation
 

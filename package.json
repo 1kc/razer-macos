@@ -32,6 +32,7 @@
     "babel-loader": "^8.1.0",
     "electron": "^11.2.2",
     "electron-builder": "^22.10.5",
+    "electron-builder-notarize": "^1.2.0",
     "electron-webpack": "^2.7.4",
     "@electron/universal": "^1.0.4",
     "mini-css-extract-plugin": "^0.9.0",
@@ -68,6 +69,7 @@
       "output": "dist",
       "buildResources": "resources"
     },
+    "afterSign": "electron-builder-notarize",
     "mac": {
       "category": "public.app-category.developer-tools",
       "icon": "icon.icns",
