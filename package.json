@@ -33,14 +33,14 @@
     "electron": "^11.2.2",
     "electron-builder": "^22.10.5",
     "electron-builder-notarize": "^1.2.0",
-    "electron-webpack": "^2.7.4",
+    "electron-webpack": "^2.8.2",
     "@electron/universal": "^1.0.4",
     "mini-css-extract-plugin": "^0.9.0",
     "native-ext-loader": "^2.3.0",
     "node-gyp": "^7.1.2",
     "prettier": "^2.2.1",
     "prop-types": "^15.7.2",
-    "webpack": "^4.43.0",
+    "webpack": "^4.44.2",
     "websocket-extensions": "^0.1.4"
   },
   "electronWebpack": {
@@ -79,7 +79,8 @@
         {
           "target": "dmg",
           "arch": [
-            "universal"
+            "arm64",
+            "x64"
           ]
         }
       ]
@@ -93,7 +94,8 @@
       "darwin"
     ],
     "arches": [
-      "universal"
+      "arm64",
+      "x64"
     ]
   }
 }
