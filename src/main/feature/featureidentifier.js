@@ -10,6 +10,7 @@ FeatureIdentifier.BREATHE = 'breathe';
 FeatureIdentifier.STARLIGHT = 'starlight';
 FeatureIdentifier.BRIGHTNESS = 'brightness';
 FeatureIdentifier.RIPPLE = 'ripple';
+FeatureIdentifier.WHEEL = 'wheel';
 FeatureIdentifier.OLD_MOUSE_EFFECTS = 'oldMouseEffects';
 FeatureIdentifier.MOUSE_BRIGHTNESS = 'mouseBrightness';
 FeatureIdentifier.POLL_RATE = 'pollRate';

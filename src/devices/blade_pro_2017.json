@@ -4,10 +4,18 @@
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/1200/1200_blade_pro_2017.png",
   "features": null,
-  "featuresConfig": [{
-    "ripple": {
-      "rows": 6,
-      "cols": 25
+  "featuresConfig": [
+    {
+      "ripple": {
+          "rows": 6,
+          "cols": 25
+      }
+    },
+    {
+      "wheel": {
+          "rows": 6,
+          "cols": 25
+      }
     }
-  }]
+  ]
 }

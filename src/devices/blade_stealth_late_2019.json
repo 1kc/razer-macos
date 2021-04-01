@@ -4,5 +4,5 @@
   "mainType": "keyboard",
   "image": "https://assets2.razerzone.com/images/blade-stealth-13/shop/stealth-l2p-1.jpg",
   "features": null,
-  "featuresMissing": ["ripple"]
+  "featuresMissing": ["ripple", "wheel"]
 }

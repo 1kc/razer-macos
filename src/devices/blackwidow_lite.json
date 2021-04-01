@@ -4,5 +4,5 @@
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/1456/1456_blackwidowlite_-_2.png",
   "features": null,
-  "featuresMissing": ["ripple"]
+  "featuresMissing": ["ripple", "wheel"]
 }

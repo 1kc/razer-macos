@@ -4,5 +4,5 @@
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/54/54_anansi.png",
   "features": null,
-  "featuresMissing": ["ripple"]
+  "featuresMissing": ["ripple", "wheel"]
 }

@@ -4,5 +4,5 @@
   "mainType": "keyboard",
   "image": "https://assets2.razerzone.com/images/og-image/cynosa-lite-OGimage.jpg",
   "features": null,
-  "featuresMissing": ["ripple"]
+  "featuresMissing": ["ripple", "wheel"]
 }

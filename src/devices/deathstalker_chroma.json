@@ -4,10 +4,18 @@
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/665/665_deathstalker_chroma.png",
   "features": null,
-  "featuresConfig": [{
-    "ripple": {
-      "rows": 1,
-      "cols": 6
+  "featuresConfig": [
+    {
+      "ripple": {
+          "rows": 1,
+          "cols": 6
+      }
+    },
+    {
+      "wheel": {
+          "rows": 1,
+          "cols": 6
+      }
     }
-  }]
+  ]
 }
