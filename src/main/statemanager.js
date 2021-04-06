@@ -199,6 +199,9 @@ export class StateManager {
       case 'ripple':
         device.setRippleEffect(state.args[0], state.args[1], state.args[2]);
         break;
+      case 'wheel':
+        device.setWheelEffect(state.args[0], state.args[1]);
+        break;
       default:
         console.error('Unknown State mode ' + state.mode);
     }

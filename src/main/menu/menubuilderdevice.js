@@ -75,6 +75,8 @@ function getFeatureMenuFor(application, device, feature) {
       return getFeatureBrightness(application, device, feature);
     case FeatureIdentifier.RIPPLE:
       return getFeatureRipple(application, device, feature);
+    case FeatureIdentifier.WHEEL:
+      return getFeatureWheel(application, device, feature);
     case FeatureIdentifier.OLD_MOUSE_EFFECTS:
       return getFeatureOldMouseEffect(application, device, feature);
     case FeatureIdentifier.MOUSE_BRIGHTNESS:
@@ -221,6 +223,34 @@ function getFeatureRipple(application, device, feature) {
       singleItem('Red', [0xff, 0, 0]),
       singleItem('Green', [0, 0xff, 0]),
       singleItem('Blue', [0, 0, 0xff]),
+    ],
+  };
+}
+
+function getFeatureWheel(application, device, feature) {
+
+  if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
+    return {
+      label: 'Wheel (missing rows, cols config)',
+      enabled: false
+    };
+  }
+
+  const singleItem = (label, speed) => {
+    return {
+      label: label,
+      click() {
+        device.setWheelEffect(feature.configuration, speed);
+      },
+    };
+  };
+
+  return {
+    label: 'Wheel',
+    submenu: [
+      singleItem('Slow Speed', 3),
+      singleItem('Medium Speed', 2),
+      singleItem('Fast Speed', 1),
     ],
   };
 }

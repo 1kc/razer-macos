@@ -4,5 +4,5 @@
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/56/56_orbweaver.png",
   "features": null,
-  "featuresMissing": ["ripple"]
+  "featuresMissing": ["ripple", "wheel"]
 }

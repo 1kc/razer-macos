@@ -4,5 +4,5 @@
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/1418/1418_blade_2018__base.png",
   "features": null,
-  "featuresMissing": ["ripple"]
+  "featuresMissing": ["ripple", "wheel"]
 }

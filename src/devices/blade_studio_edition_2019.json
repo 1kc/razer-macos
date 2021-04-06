@@ -8,6 +8,10 @@
     "ripple": {
       "rows": 6,
       "cols": 16
+    },
+    "wheel": {
+      "rows": 6,
+      "cols": 16
     }
   }]
 }
