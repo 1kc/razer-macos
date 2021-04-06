@@ -198,7 +198,8 @@ function getFeatureRipple(application, device, feature) {
 
   if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
     return {
-      label: 'Ripple (missing rows, cols config)',
+      // device missing rows, cols config
+      label: 'Ripple',
       enabled: false
     };
   }
@@ -231,7 +232,8 @@ function getFeatureWheel(application, device, feature) {
 
   if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
     return {
-      label: 'Wheel (missing rows, cols config)',
+      // device missing rows, cols config
+      label: 'Wheel',
       enabled: false
     };
   }
