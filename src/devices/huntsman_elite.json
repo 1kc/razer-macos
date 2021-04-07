@@ -4,14 +4,18 @@
   "mainType": "keyboard",
   "image": "https://assets.razerzone.com/eeimages/support/products/1361/1361_huntsman_elite.png",
   "features": null,
-  "featuresConfig": [{
-    "ripple": {
-      "rows": 9,
-      "cols": 22
+  "featuresConfig": [
+    {
+      "ripple": {
+          "rows": 9,
+          "cols": 22
+      }
     },
-    "wheel": {
-      "rows": 9,
-      "cols": 22
+    {
+      "wheel": {
+          "rows": 9,
+          "cols": 22
+      }
     }
-  }]
+  ]
 }
