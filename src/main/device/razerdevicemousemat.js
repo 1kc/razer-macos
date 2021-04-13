@@ -20,6 +20,10 @@ export class RazerDeviceMouseMat extends RazerDevice {
     this.addon.mouseMatSetModeStatic(this.internalId, new Uint8Array(color));
   }
 
+  setBrightness(brightness) {
+    this.addon.mouseMatSetBrightness(this.internalId, brightness);
+  }
+
   setSpectrum() {
     super.setSpectrum();
     this.addon.mouseMatSetModeSpectrum(this.internalId);

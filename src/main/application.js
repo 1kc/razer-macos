@@ -123,6 +123,14 @@ export class Application {
       this.refreshTray();
     });
 
+    ipcMain.on('update-mousemat-brightness', (_, arg) => {
+      const { device } = arg;
+      const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
+      currentDevice.setSettings(device.settings);
+      currentDevice.setBrightness(currentDevice.settings.customBrightness);
+      this.refreshTray();
+    });
+
     // keyboard brightness rpc listener
     ipcMain.on('update-keyboard-brightness', (_, arg) => {
       const { device } = arg;

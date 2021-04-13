@@ -10,10 +10,21 @@ export class SectionSettingBrightness extends SectionSettingBlock {
     super(props);
     this.brightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.BRIGHTNESS);
     this.mouseBrightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.MOUSE_BRIGHTNESS);
+    this.mouseMatBrightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.MOUSE_MAT_BRIGHTNESS);
   }
 
   renderTitle() {
-    return this.brightnessFeature ? 'Keyboard Brightness' : 'Mouse Brightness';
+    if (this.brightnessFeature) {
+      return 'Keyboard Brightness';
+    }
+
+    if (this.mouseBrightnessFeature) {
+      return 'Mouse Brightness';
+    }
+
+    if (this.mouseMatBrightnessFeature) {
+      return 'MouseMat Brightness';
+    }
   }
 
   updateKeyboardBrightness(value) {
@@ -32,9 +43,24 @@ export class SectionSettingBrightness extends SectionSettingBlock {
     ipcRenderer.send('update-mouse-'+type+'-brightness', payload);
   }
 
+  updateMouseMatBrightness(value) {
+    this.deviceSelected.settings.customBrightness = value;
+    let payload = {
+      device: this.deviceSelected,
+    };
+    ipcRenderer.send('update-mousemat-brightness', payload);
+  }
+
   renderSettings() {
-    if (!this.brightnessFeature && !this.mouseBrightnessFeature) {
+    if (!this.brightnessFeature && !this.mouseBrightnessFeature && !this.mouseMatBrightnessFeature) {
       return null;
+    }
+
+    if (this.mouseMatBrightnessFeature) {
+      return <Brightness
+        title={"Adjust Mousemat brightness"}
+        currentBrightness={this.deviceSelected.settings.customBrightness}
+        handleBrightnessChange={(value) => {this.updateMouseMatBrightness(value);}} />;
     }
 
     if (this.brightnessFeature) {

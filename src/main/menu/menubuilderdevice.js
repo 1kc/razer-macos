@@ -85,6 +85,8 @@ function getFeatureMenuFor(application, device, feature) {
       return null;
     case FeatureIdentifier.MOUSE_DPI:
       return null;
+    case FeatureIdentifier.MOUSE_MAT_BRIGHTNESS:
+      return getFeatureBrightness(application, device, feature);
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';
   }
@@ -111,7 +113,7 @@ function getFeatureBrightness(application, device, feature) {
     label: 'Brightness',
     submenu: [
       {
-        label: `Brightness: ${device.brightness}%`,
+        label: `Brightness: ${device.settings.customBrightness}%`,
       },
       { type: 'separator' },
       {

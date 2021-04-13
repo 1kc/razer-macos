@@ -15,6 +15,7 @@ import { FeatureMousePollRate } from './featuremousepollrate';
 import { FeatureMouseDPI } from './featuremousedpi';
 import { RazerDeviceType } from '../device/razerdevicetype';
 import { FeatureIdentifier } from './featureidentifier';
+import { FeatureMouseMatBrightness } from './featureMouseMatBrightness';
 
 export class FeatureHelper {
 
@@ -37,6 +38,7 @@ export class FeatureHelper {
       case FeatureIdentifier.MOUSE_BRIGHTNESS: return new FeatureMouseBrightness(configuration);
       case FeatureIdentifier.POLL_RATE: return new FeatureMousePollRate(configuration);
       case FeatureIdentifier.MOUSE_DPI: return new FeatureMouseDPI(configuration);
+      case FeatureIdentifier.MOUSE_MAT_BRIGHTNESS: return new FeatureMouseMatBrightness(configuration)
       default:
         throw featureIdentifier+' is not a valid feature identifier!'
     }
@@ -84,6 +86,7 @@ export class FeatureHelper {
           new FeatureWaveSimple(),
           new FeatureSpectrum(),
           new FeatureBreathe(),
+          new FeatureMouseMatBrightness()
         ];
       case RazerDeviceType.EGPU:
         return [
