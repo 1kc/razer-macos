@@ -252,6 +252,27 @@ ssize_t razer_mouse_mat_attr_write_mode_static_no_store(IOUSBDeviceInterface **u
     return count;
 }
 
+ssize_t razer_mouse_mat_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev, ushort brightness, size_t count)
+{
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+    struct razer_report report = {0};
+
+    switch (product) {
+        case USB_DEVICE_ID_RAZER_FIREFLY_V2:
+            report = razer_chroma_extended_matrix_brightness(VARSTORE, ZERO_LED, brightness);
+            break;
+
+        default:
+            printf("razermousemat: Unknown device\n");
+            break;
+    }
+
+    razer_send_payload(usb_dev, &report);
+
+    return count;
+}
+
 /**
  * Write device file "mode_spectrum"
  *
