@@ -48,21 +48,12 @@ export class SectionSettingBrightness extends SectionSettingBlock {
     }
 
     if (this.brightnessFeature) {
-      if (this.deviceSelected.mainType === "mousemat") {
-        return <Brightness
-          title={"Adjust Mousemat brightness"}
-          currentBrightness={this.deviceSelected.settings.customBrightness}
-          handleBrightnessChange={(value) => {
-            this.updateBrightness(value);
-          }} />;
-      } else {
-        return <Brightness
-          title={"Adjust keyboard brightness"}
-          currentBrightness={this.deviceSelected.settings.customBrightness}
-          handleBrightnessChange={(value) => {
-            this.updateBrightness(value);
-          }} />;
-      }
+      return <Brightness
+        title={`Adjust ${this.deviceSelected.mainType} brightness`}
+        currentBrightness={this.deviceSelected.settings.customBrightness}
+        handleBrightnessChange={(value) => {
+          this.updateBrightness(value);
+        }} />;
     }
 
     if (this.mouseBrightnessFeature) {
