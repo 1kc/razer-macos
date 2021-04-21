@@ -9,30 +9,29 @@ export class SectionSettingBrightness extends SectionSettingBlock {
   constructor(props) {
     super(props);
     this.brightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.BRIGHTNESS);
-    this.mouseBrightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.MOUSE_BRIGHTNESS);
-    this.mouseMatBrightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.MOUSE_MAT_BRIGHTNESS);
-  }
+    this.mouseBrightnessFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.MOUSE_BRIGHTNESS);}
 
   renderTitle() {
+
     if (this.brightnessFeature) {
-      return 'Keyboard Brightness';
+      if (this.deviceSelected.mainType === "mousemat") {
+        return 'MouseMat Brightness';
+      } else {
+        return 'Keyboard Brightness';
+      }
     }
 
     if (this.mouseBrightnessFeature) {
       return 'Mouse Brightness';
     }
-
-    if (this.mouseMatBrightnessFeature) {
-      return 'MouseMat Brightness';
-    }
   }
 
-  updateKeyboardBrightness(value) {
+  updateBrightness(value) {
     this.deviceSelected.settings.customBrightness = value;
     let payload = {
       device: this.deviceSelected,
     };
-    ipcRenderer.send('update-keyboard-brightness', payload);
+    ipcRenderer.send('update-brightness', payload);
   }
 
   updateMouseBrightness(type, value) {
@@ -43,31 +42,27 @@ export class SectionSettingBrightness extends SectionSettingBlock {
     ipcRenderer.send('update-mouse-'+type+'-brightness', payload);
   }
 
-  updateMouseMatBrightness(value) {
-    this.deviceSelected.settings.customBrightness = value;
-    let payload = {
-      device: this.deviceSelected,
-    };
-    ipcRenderer.send('update-mousemat-brightness', payload);
-  }
-
   renderSettings() {
-    if (!this.brightnessFeature && !this.mouseBrightnessFeature && !this.mouseMatBrightnessFeature) {
+    if (!this.brightnessFeature && !this.mouseBrightnessFeature) {
       return null;
     }
 
-    if (this.mouseMatBrightnessFeature) {
-      return <Brightness
-        title={"Adjust Mousemat brightness"}
-        currentBrightness={this.deviceSelected.settings.customBrightness}
-        handleBrightnessChange={(value) => {this.updateMouseMatBrightness(value);}} />;
-    }
-
     if (this.brightnessFeature) {
-      return <Brightness
-        title={"Adjust keyboard brightness"}
-        currentBrightness={this.deviceSelected.settings.customBrightness}
-        handleBrightnessChange={(value) => {this.updateKeyboardBrightness(value);}} />;
+      if (this.deviceSelected.mainType === "mousemat") {
+        return <Brightness
+          title={"Adjust Mousemat brightness"}
+          currentBrightness={this.deviceSelected.settings.customBrightness}
+          handleBrightnessChange={(value) => {
+            this.updateBrightness(value);
+          }} />;
+      } else {
+        return <Brightness
+          title={"Adjust keyboard brightness"}
+          currentBrightness={this.deviceSelected.settings.customBrightness}
+          handleBrightnessChange={(value) => {
+            this.updateBrightness(value);
+          }} />;
+      }
     }
 
     if (this.mouseBrightnessFeature) {
