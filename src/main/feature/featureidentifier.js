@@ -15,4 +15,3 @@ FeatureIdentifier.OLD_MOUSE_EFFECTS = 'oldMouseEffects';
 FeatureIdentifier.MOUSE_BRIGHTNESS = 'mouseBrightness';
 FeatureIdentifier.POLL_RATE = 'pollRate';
 FeatureIdentifier.MOUSE_DPI = 'dpi';
-FeatureIdentifier.MOUSE_MAT_BRIGHTNESS = 'mouseMatBrightness';
