@@ -17,8 +17,7 @@ export class RazerDeviceKeyboard extends RazerDevice {
   getDefaultSettings() {
     return {
       customColor1: this.defaultColorSettings,
-      customColor2: this.defaultColorSettings,
-      customBrightness: this.getBrightness(),
+      customColor2: this.defaultColorSettings
     }
   }
 

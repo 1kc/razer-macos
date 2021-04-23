@@ -27,9 +27,9 @@ export class SectionSettingBrightness extends SectionSettingBlock {
   }
 
   updateBrightness(value) {
-    this.deviceSelected.settings.customBrightness = value;
     let payload = {
       device: this.deviceSelected,
+      brightness: value
     };
     ipcRenderer.send('update-brightness', payload);
   }
@@ -50,7 +50,7 @@ export class SectionSettingBrightness extends SectionSettingBlock {
     if (this.brightnessFeature) {
       return <Brightness
         title={`Adjust ${this.deviceSelected.mainType} brightness`}
-        currentBrightness={this.deviceSelected.settings.customBrightness}
+        currentBrightness={this.deviceSelected.brightness}
         handleBrightnessChange={(value) => {
           this.updateBrightness(value);
         }} />;

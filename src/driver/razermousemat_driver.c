@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "razermousemat_driver.h"
 #include "razercommon.h"
@@ -259,7 +260,10 @@ ssize_t razer_mouse_mat_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev
     struct razer_report report = {0};
 
     switch (product) {
+        case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
         case USB_DEVICE_ID_RAZER_FIREFLY_V2:
+        case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
+        case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
             report = razer_chroma_extended_matrix_brightness(VARSTORE, ZERO_LED, brightness);
             break;
 
@@ -271,6 +275,32 @@ ssize_t razer_mouse_mat_attr_write_set_brightness(IOUSBDeviceInterface **usb_dev
     razer_send_payload(usb_dev, &report);
 
     return count;
+}
+
+ushort razer_mouse_mat_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
+{
+    UInt16 product = -1;
+    (*usb_dev)->GetDeviceProduct(usb_dev, &product);
+
+    struct razer_report report = razer_chroma_standard_get_led_brightness(VARSTORE, BACKLIGHT_LED);
+    struct razer_report response = {0};
+    unsigned char brightness = 0;
+
+    switch (product) {
+        case USB_DEVICE_ID_RAZER_FIREFLY_HYPERFLUX:
+        case USB_DEVICE_ID_RAZER_FIREFLY_V2:
+        case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA:
+        case USB_DEVICE_ID_RAZER_GOLIATHUS_CHROMA_EXTENDED:
+            brightness = 0xff; // Unfortunately, we can't read the brightness from the device directly. return dummy value.
+            break;
+
+        default:
+            response = razer_send_payload(usb_dev, &report);
+            brightness = response.arguments[2];
+            break;
+    }
+    brightness = round(brightness / 2.55);
+    return brightness;
 }
 
 /**
