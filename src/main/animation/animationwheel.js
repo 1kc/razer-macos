@@ -36,7 +36,7 @@ constructor(device, featureConfiguration, speed) {
 
           angle += Date.now() % parseInt(this.speed * 1000) / (this.speed * 1000) * 360;
           angle = (angle + 360) % 360;
-          matrix[i][j] = Object.values(tinycolor(`hsv(${360-angle},70%,100%)`).toRgb()).slice(0, 3);
+          matrix[i][j] = Object.values(tinycolor(`hsv(${360-angle}, 100%,100%)`).toRgb()).slice(0, 3);
         }
       }
 
