@@ -5,6 +5,23 @@ export class RazerDeviceMouseMat extends RazerDevice {
     super(addon, settingsManager, stateManager, razerProperties);
   }
 
+  async init() {
+    this.brightness = this.addon.mouseMatGetBrightness(this.internalId);
+    return super.init();
+  }
+
+  getState() {
+    const deviceState = super.getState();
+    deviceState['brightness'] = this.brightness;
+    return deviceState;
+  }
+  resetToState(state) {
+    super.resetToState(state);
+    if(typeof state.brightness !== 'undefined') {
+      this.setBrightness(state.brightness);
+    }
+  }
+
   setModeNone() {
     super.setModeNone();
     this.addon.mouseMatSetModeNone(this.internalId);
@@ -18,6 +35,15 @@ export class RazerDeviceMouseMat extends RazerDevice {
   setModeStatic(color) {
     super.setModeStatic(color);
     this.addon.mouseMatSetModeStatic(this.internalId, new Uint8Array(color));
+  }
+
+  getBrightness() {
+    return this.brightness;
+  }
+
+  setBrightness(brightness) {
+    this.brightness = brightness;
+    this.addon.mouseMatSetBrightness(this.internalId, brightness);
   }
 
   setSpectrum() {

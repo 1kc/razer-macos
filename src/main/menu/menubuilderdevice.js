@@ -102,8 +102,7 @@ function getFeatureBreath(application, device, feature) {
 
 function getFeatureBrightness(application, device, feature) {
   const updateBrightness = (brightness) => {
-    device.settings.customBrightness = brightness;
-    device.setBrightness(device.settings.customBrightness);
+    device.setBrightness(brightness);
     application.refreshTray();
   };
 
@@ -111,7 +110,7 @@ function getFeatureBrightness(application, device, feature) {
     label: 'Brightness',
     submenu: [
       {
-        label: `Brightness: ${device.brightness}%`,
+        label: `Brightness: ${device.getBrightness()}%`,
       },
       { type: 'separator' },
       {

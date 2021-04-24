@@ -84,6 +84,7 @@ export class FeatureHelper {
           new FeatureWaveSimple(),
           new FeatureSpectrum(),
           new FeatureBreathe(),
+          new FeatureBrightness()
         ];
       case RazerDeviceType.EGPU:
         return [

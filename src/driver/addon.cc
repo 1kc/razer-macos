@@ -842,6 +842,21 @@ void AccessorySetBrightness(const Napi::CallbackInfo &info) {
     razer_accessory_attr_write_set_brightness(device.usbDevice, brightness, 1);
 }
 
+void MouseMatSetBrightness(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+
+    Napi::Number brightness_number = info[1].ToNumber();
+    ushort brightness = brightness_number.Int32Value();
+
+    razer_mouse_mat_attr_write_set_brightness(device.usbDevice, brightness, 1);
+}
+Napi::Number MouseMatGetBrightness(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+    ushort brightness = razer_mouse_mat_attr_read_set_brightness(device.usbDevice);
+    return Napi::Number::New(env, brightness);
+}
+
 /**
 * Get all razer devices
 */
@@ -917,6 +932,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set("mouseMatSetModeStatic", Napi::Function::New(env, MouseMatSetModeStatic));
     exports.Set("mouseMatSetModeStaticNoStore", Napi::Function::New(env, MouseMatSetModeStaticNoStore));
     exports.Set("mouseMatSetModeSpectrum", Napi::Function::New(env, MouseMatSetModeSpectrum));
+    exports.Set("mouseMatSetBrightness", Napi::Function::New(env, MouseMatSetBrightness));
+    exports.Set("mouseMatGetBrightness", Napi::Function::New(env, MouseMatGetBrightness));
 
     // Older mouse functions
     exports.Set("mouseSetLogoLEDEffect", Napi::Function::New(env, MouseSetLogoLEDEffect));
