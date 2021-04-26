@@ -58,6 +58,13 @@ export class RazerDevice {
     this.stateManager.resetStateFor(this, state);
   }
 
+  hasFeature(featureIdentifier) {
+    return typeof this.getFeature(featureIdentifier) !== 'undefined';
+  }
+  getFeature(featureIdentifier) {
+    return this.features.find(feature => feature.featureIdentifier === featureIdentifier);
+  }
+
   //override in device types
   setModeNone() {
     this.setModeState('none');

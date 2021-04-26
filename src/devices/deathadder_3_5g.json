@@ -3,5 +3,13 @@
   "productId": "0x0016",
   "mainType": "mouse",
   "image": "https://assets2.razerzone.com/images/da10m/carousel/razer-death-adder-gallery-04.png",
-  "features": null
+  "features": null,
+  "featuresMissing": ["mouseBrightness"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 3500
+      }
+    }
+  ]
 }

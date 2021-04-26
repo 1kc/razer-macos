@@ -425,6 +425,23 @@ function getFeatureWaveSimple(application, device, feature) {
 function getFeatureMouseBrightness(application, device, feature) {
 
   const submenu = [
+    feature.configuration.enabledMatrix ? {
+      label: 'All (' + device.getBrightnessMatrix() + '%)',
+      submenu: [
+        {
+          label: '0%', click() {
+            device.setBrightnessMatrix(0);
+            application.refreshTray();
+          },
+        },
+        {
+          label: '100%', click() {
+            device.setBrightnessMatrix(100);
+            application.refreshTray();
+          },
+        },
+      ],
+    } : null,
     feature.configuration.enabledLogo ? {
       label: 'Logo (' + device.getBrightnessLogo() + '%)',
       submenu: [

@@ -1,4 +1,5 @@
 import { RazerDevice } from './razerdevice';
+import { FeatureIdentifier } from '../feature/featureidentifier';
 
 export class RazerDeviceMouse extends RazerDevice {
   constructor(addon, settingsManager, stateManager, razerProperties) {
@@ -8,13 +9,29 @@ export class RazerDeviceMouse extends RazerDevice {
   async init() {
     this.batteryLevel = this.addon.getBatteryLevel(this.internalId);
     this.chargingStatus = this.addon.getChargingStatus(this.internalId);
+
     this.dpi = this.addon.mouseGetDpi(this.internalId);
     this.pollRate = this.addon.mouseGetPollRate(this.internalId);
 
-    this.brightnessLogo = this.addon.mouseGetLogoBrightness(this.internalId);
-    this.brightnessScroll = this.addon.mouseGetScrollBrightness(this.internalId);
-    this.brightnessLeft = this.addon.mouseGetLeftBrightness(this.internalId);
-    this.brightnessRight = this.addon.mouseGetRightBrightness(this.internalId);
+    const featureMouseBrightness = this.getFeature(FeatureIdentifier.MOUSE_BRIGHTNESS);
+
+    if(typeof featureMouseBrightness !== 'undefined') {
+      if(featureMouseBrightness.configuration.enabledMatrix) {
+        this.brightness = this.addon.mouseGetBrightness(this.internalId);
+      }
+      if(featureMouseBrightness.configuration.enabledLogo) {
+        this.brightnessLogo = this.addon.mouseGetLogoBrightness(this.internalId);
+      }
+      if(featureMouseBrightness.configuration.enabledScroll) {
+        this.brightnessScroll = this.addon.mouseGetScrollBrightness(this.internalId);
+      }
+      if(featureMouseBrightness.configuration.enabledLeft) {
+        this.brightnessLeft = this.addon.mouseGetLeftBrightness(this.internalId);
+      }
+      if(featureMouseBrightness.configuration.enabledRight) {
+        this.brightnessRight = this.addon.mouseGetRightBrightness(this.internalId);
+      }
+    }
 
     return super.init();
   }
@@ -30,10 +47,25 @@ export class RazerDeviceMouse extends RazerDevice {
     const deviceState = super.getState();
     deviceState['dpi'] = this.dpi;
     deviceState['pollRate'] = this.pollRate;
-    deviceState['brightnessLogo'] = this.brightnessLogo;
-    deviceState['brightnessScroll'] = this.brightnessScroll;
-    deviceState['brightnessLeft'] = this.brightnessLeft;
-    deviceState['brightnessRight'] = this.brightnessRight;
+
+    const featureMouseBrightness = this.getFeature(FeatureIdentifier.MOUSE_BRIGHTNESS);
+    if(typeof featureMouseBrightness !== 'undefined') {
+      if(featureMouseBrightness.configuration.enabledMatrix) {
+        deviceState['brightness'] = this.brightness;
+      }
+      if(featureMouseBrightness.configuration.enabledLogo) {
+        deviceState['brightnessLogo'] = this.brightnessLogo;
+      }
+      if(featureMouseBrightness.configuration.enabledScroll) {
+        deviceState['brightnessScroll'] = this.brightnessScroll;
+      }
+      if(featureMouseBrightness.configuration.enabledLeft) {
+        deviceState['brightnessLeft'] = this.brightnessLeft;
+      }
+      if(featureMouseBrightness.configuration.enabledRight) {
+        deviceState['brightnessRight'] = this.brightnessRight;
+      }
+    }
     return deviceState;
   }
 
@@ -41,10 +73,27 @@ export class RazerDeviceMouse extends RazerDevice {
     super.resetToState(state);
     this.setDPI(state.dpi);
     this.setPollRate(state.pollRate);
-    this.setBrightnessLogo(state.brightnessLogo);
-    this.setBrightnessScroll(state.brightnessScroll);
-    this.setBrightnessLeft(state.brightnessLeft);
-    this.setBrightnessRight(state.brightnessRight);
+
+    const featureMouseBrightness = this.getFeature(FeatureIdentifier.MOUSE_BRIGHTNESS);
+    if(typeof featureMouseBrightness !== 'undefined') {
+      if(featureMouseBrightness.configuration.enabledMatrix) {
+        if(typeof state.brightness !== 'undefined') {
+          this.setBrightnessMatrix(state.brightness);
+        }
+      }
+      if(featureMouseBrightness.configuration.enabledLogo) {
+        this.setBrightnessLogo(state.brightnessLogo);
+      }
+      if(featureMouseBrightness.configuration.enabledScroll) {
+        this.setBrightnessScroll(state.brightnessScroll);
+      }
+      if(featureMouseBrightness.configuration.enabledLeft) {
+        this.setBrightnessLeft(state.brightnessLeft);
+      }
+      if(featureMouseBrightness.configuration.enabledRight) {
+        this.setBrightnessRight(state.brightnessRight);
+      }
+    }
   }
 
   setModeNone() {
@@ -92,6 +141,14 @@ export class RazerDeviceMouse extends RazerDevice {
   setDPI(dpi) {
     this.dpi = dpi;
     this.addon.mouseSetDpi(this.internalId, dpi);
+  }
+
+  getBrightnessMatrix() {
+    return this.brightness;
+  }
+  setBrightnessMatrix(brightness) {
+    this.brightness = brightness;
+    this.addon.mouseSetBrightness(this.internalId, this.brightness);
   }
 
   getBrightnessLogo() {

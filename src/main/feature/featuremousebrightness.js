@@ -8,6 +8,7 @@ export class FeatureMouseBrightness extends Feature {
 
   getDefaultConfiguration() {
     return {
+      "enabledMatrix": true,
       "enabledLogo": true,
       "enabledScroll": true,
       "enabledLeft": true,

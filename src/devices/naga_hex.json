@@ -3,5 +3,13 @@
   "productId": "0x0041",
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/23/23_naga_hex.png",
-  "features": null
+  "features": null,
+  "featuresMissing": ["mouseBrightness"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 5600
+      }
+    }
+  ]
 }

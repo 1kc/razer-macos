@@ -17,7 +17,7 @@
     },
     {
       "mouseBrightness": {
-        "enabledLogo": false,
+        "enabledMatrix": false,
         "enabledLeft": false,
         "enabledRight": false
       }

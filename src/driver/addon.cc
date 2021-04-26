@@ -412,6 +412,22 @@ void MouseSetPollRate(const Napi::CallbackInfo &info) {
     razer_attr_write_poll_rate(device.usbDevice, poll_rate);
 }
 
+Napi::Number MouseGetBrightness(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+    ushort brightness = razer_attr_read_matrix_brightness(device.usbDevice);
+    return Napi::Number::New(env, brightness);
+}
+
+void MouseSetBrightness(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+
+    Napi::Number brightness_number = info[1].ToNumber();
+    ushort brightness = brightness_number.Int32Value();
+
+    razer_attr_write_matrix_brightness(device.usbDevice, brightness);
+}
+
 Napi::Number MouseGetLogoBrightness(const Napi::CallbackInfo &info) {
     Napi::Env env = info.Env();
     RazerDevice device = getRazerDeviceFor(info);
@@ -911,6 +927,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set("mouseGetPollRate", Napi::Function::New(env, MouseGetPollRate));
     exports.Set("mouseSetPollRate", Napi::Function::New(env, MouseSetPollRate));
 
+    exports.Set("mouseGetBrightness", Napi::Function::New(env, MouseGetBrightness));
+    exports.Set("mouseSetBrightness", Napi::Function::New(env, MouseSetBrightness));
     exports.Set("mouseGetScrollBrightness", Napi::Function::New(env, MouseGetScrollBrightness));
     exports.Set("mouseSetScrollBrightness", Napi::Function::New(env, MouseSetScrollBrightness));
     exports.Set("mouseGetLogoBrightness", Napi::Function::New(env, MouseGetLogoBrightness));

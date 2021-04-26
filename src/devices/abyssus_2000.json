@@ -3,5 +3,13 @@
   "productId": "0x005E",
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/1277/1277_abyssus_2000.png",
-  "features": null
+  "features": null,
+  "featuresMissing": ["mouseBrightness"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 2000
+      }
+    }
+  ]
 }

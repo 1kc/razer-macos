@@ -3,5 +3,13 @@
   "productId": "0x004C",
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/613/613_diamondback.png",
-  "features": null
+  "features": null,
+  "featuresMissing": ["mouseBrightness"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 16000
+      }
+    }
+  ]
 }

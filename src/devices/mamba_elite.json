@@ -5,11 +5,16 @@
   "image": "https://assets.razerzone.com/eeimages/support/products/1390/1390_mamba_elite.png",
   "features": null,
   "featuresMissing": ["oldMouseEffects"],
-  "featuresConfig": [{
-    "dpi": {
-      "min": 100,
-      "max": 16000,
-      "step": 100
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 16000
+      }
+    },
+    {
+      "mouseBrightness": {
+        "enabledMatrix": false
+      }
     }
-  }]
+  ]
 }

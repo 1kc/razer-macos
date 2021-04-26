@@ -2,6 +2,6 @@
   "name": "Razer Nommo Pro",
   "productId": "0x0518",
   "mainType": "accessory",
-  "image": null,
+  "image": "https://assets.razerzone.com/eeimages/support/products/1419/1419_nommo_pro.png",
   "features": null
 }

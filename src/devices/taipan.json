@@ -3,5 +3,13 @@
   "productId": "0x0034",
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/19/19_taipan.png",
-  "features": null
+  "features": null,
+  "featuresMissing": ["mouseBrightness"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 8200
+      }
+    }
+  ]
 }
