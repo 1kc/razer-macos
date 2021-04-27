@@ -38,6 +38,9 @@ export class RazerDevice {
     };
   }
 
+  refresh() {
+  }
+
   destroy() {
     this.addon = null;
   }

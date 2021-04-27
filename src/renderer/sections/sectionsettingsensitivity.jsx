@@ -16,9 +16,9 @@ export class SectionSettingSensitivity extends SectionSettingBlock {
   }
 
   handleClick(currentDpi) {
-    this.deviceSelected.settings.customSensitivity = currentDpi;
     let payload = {
-      device: this.deviceSelected
+      device: this.deviceSelected,
+      dpi: currentDpi
     };
     ipcRenderer.send('request-set-dpi', payload);
   };

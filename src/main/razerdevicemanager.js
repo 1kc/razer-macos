@@ -178,11 +178,13 @@ export class RazerDeviceManager {
   }
 
   destroy() {
-    this.activeRazerDevices.forEach(device => {
-      if (device !== null) {
-        device.destroy();
-      }
-    });
+    if(this.activeRazerDevices != null) {
+      this.activeRazerDevices.forEach(device => {
+        if (device !== null) {
+          device.destroy();
+        }
+      });
+    }
     this.closeDevices();
     this.addon = null;
   }

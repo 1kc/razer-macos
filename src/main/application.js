@@ -116,10 +116,9 @@ export class Application {
 
     // mouse dpi rpc listener
     ipcMain.on('request-set-dpi', (_, arg) => {
-      const { device } = arg;
+      const { device, dpi } = arg;
       const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
-      currentDevice.setSettings(device.settings);
-      currentDevice.setDPI(currentDevice.settings.customSensitivity);
+      currentDevice.setDPI(dpi);
       this.refreshTray();
     });
 
@@ -292,6 +291,16 @@ export class Application {
     // Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
     this.tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
     this.tray.setToolTip('Razer macOS menu');
+    this.tray.on('click', () => {
+      if(this.razerApplication.deviceManager.activeRazerDevices != null) {
+        this.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+          if (device !== null) {
+            device.refresh();
+          }
+        });
+      }
+      this.refreshTray();
+    });
 
     this.refreshTray(true);
   }

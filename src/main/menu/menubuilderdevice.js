@@ -21,7 +21,7 @@ function getHeaderFor(application, razerDevice) {
     case RazerDeviceType.KEYBOARD:
       break;
     case RazerDeviceType.MOUSE:
-      if (razerDevice.batteryLevel !== -1) {
+      if (razerDevice.hasFeature(FeatureIdentifier.BATTERY) && razerDevice.batteryLevel !== -1) {
         if (razerDevice.chargingStatus) {
           label = label + ' - ⚡' + razerDevice.batteryLevel.toString() + '%';
         } else {
@@ -84,6 +84,8 @@ function getFeatureMenuFor(application, device, feature) {
     case FeatureIdentifier.POLL_RATE:
       return null;
     case FeatureIdentifier.MOUSE_DPI:
+      return null;
+    case FeatureIdentifier.BATTERY:
       return null;
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';

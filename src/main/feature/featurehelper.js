@@ -15,6 +15,7 @@ import { FeatureMousePollRate } from './featuremousepollrate';
 import { FeatureMouseDPI } from './featuremousedpi';
 import { RazerDeviceType } from '../device/razerdevicetype';
 import { FeatureIdentifier } from './featureidentifier';
+import { FeatureBattery } from './featurebattery';
 
 export class FeatureHelper {
 
@@ -37,6 +38,7 @@ export class FeatureHelper {
       case FeatureIdentifier.MOUSE_BRIGHTNESS: return new FeatureMouseBrightness(configuration);
       case FeatureIdentifier.POLL_RATE: return new FeatureMousePollRate(configuration);
       case FeatureIdentifier.MOUSE_DPI: return new FeatureMouseDPI(configuration);
+      case FeatureIdentifier.BATTERY: return new FeatureBattery(configuration);
       default:
         throw featureIdentifier+' is not a valid feature identifier!'
     }
@@ -69,6 +71,7 @@ export class FeatureHelper {
           new FeatureMouseBrightness(),
           new FeatureMousePollRate(),
           new FeatureMouseDPI(),
+          new FeatureBattery(),
         ];
       case RazerDeviceType.MOUSEDOCK:
         return [
@@ -76,6 +79,7 @@ export class FeatureHelper {
           new FeatureStatic(),
           new FeatureSpectrum(),
           new FeatureBreathe(),
+          new FeatureBattery(),
         ];
       case RazerDeviceType.MOUSEMAT:
         return [

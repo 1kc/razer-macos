@@ -7,11 +7,18 @@ export class RazerDeviceMouse extends RazerDevice {
   }
 
   async init() {
-    this.batteryLevel = this.addon.getBatteryLevel(this.internalId);
-    this.chargingStatus = this.addon.getChargingStatus(this.internalId);
+    if(this.hasFeature(FeatureIdentifier.BATTERY)) {
+      this.batteryLevel = this.addon.getBatteryLevel(this.internalId);
+      this.chargingStatus = this.addon.getChargingStatus(this.internalId);
+    }
 
-    this.dpi = this.addon.mouseGetDpi(this.internalId);
-    this.pollRate = this.addon.mouseGetPollRate(this.internalId);
+    if(this.hasFeature(FeatureIdentifier.MOUSE_DPI)) {
+      this.dpi = this.addon.mouseGetDpi(this.internalId);
+    }
+
+    if(this.hasFeature(FeatureIdentifier.POLL_RATE)) {
+      this.pollRate = this.addon.mouseGetPollRate(this.internalId);
+    }
 
     const featureMouseBrightness = this.getFeature(FeatureIdentifier.MOUSE_BRIGHTNESS);
 
@@ -36,17 +43,23 @@ export class RazerDeviceMouse extends RazerDevice {
     return super.init();
   }
 
-  getDefaultSettings() {
-    return {
-      customSensitivity: this.getDPI(),
-      customColor1: this.defaultColorSettings,
+  refresh() {
+    super.refresh();
+    if(this.hasFeature(FeatureIdentifier.BATTERY)) {
+      this.batteryLevel = this.addon.getBatteryLevel(this.internalId);
+      this.chargingStatus = this.addon.getChargingStatus(this.internalId);
     }
   }
 
   getState() {
     const deviceState = super.getState();
-    deviceState['dpi'] = this.dpi;
-    deviceState['pollRate'] = this.pollRate;
+    if(this.hasFeature(FeatureIdentifier.MOUSE_DPI)) {
+      deviceState['dpi'] = this.dpi;
+    }
+
+    if(this.hasFeature(FeatureIdentifier.POLL_RATE)) {
+      deviceState['pollRate'] = this.pollRate;
+    }
 
     const featureMouseBrightness = this.getFeature(FeatureIdentifier.MOUSE_BRIGHTNESS);
     if(typeof featureMouseBrightness !== 'undefined') {
@@ -71,8 +84,12 @@ export class RazerDeviceMouse extends RazerDevice {
 
   resetToState(state) {
     super.resetToState(state);
-    this.setDPI(state.dpi);
-    this.setPollRate(state.pollRate);
+    if(this.hasFeature(FeatureIdentifier.MOUSE_DPI)) {
+      this.setDPI(state.dpi);
+    }
+    if(this.hasFeature(FeatureIdentifier.POLL_RATE)) {
+      this.setPollRate(state.pollRate);
+    }
 
     const featureMouseBrightness = this.getFeature(FeatureIdentifier.MOUSE_BRIGHTNESS);
     if(typeof featureMouseBrightness !== 'undefined') {
