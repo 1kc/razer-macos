@@ -1352,6 +1352,7 @@ ushort razer_attr_read_set_brightness(IOUSBDeviceInterface **usb_dev)
         if (is_blade_laptop(usb_dev))
         {
             report = razer_chroma_misc_get_blade_brightness();
+            is_matrix_brightness = true;
         }
         else
         {
