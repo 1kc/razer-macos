@@ -918,7 +918,7 @@ struct razer_report razer_chroma_misc_set_blade_brightness(unsigned char brightn
 {
     struct razer_report report = get_razer_report(0x0E, 0x04, 0x02);
     report.arguments[0] = 0x01;
-    report.arguments[1] = brightness;
+    report.arguments[1] = round(brightness * 2.55); //Razer macOS special: brightness is coming [0-100], blade brightness [0-255] though;
 
     return report;
 }
