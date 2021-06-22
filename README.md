@@ -42,6 +42,7 @@ Keyboards:
 
 - Razer BlackWidow 2019
 - Razer BlackWidow Elite
+- Razer BlackWidow Chroma v2
 - Razer Ornata Chroma
 - Razer Huntsman
 - Razer Huntsman Elite
