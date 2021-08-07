@@ -6,15 +6,9 @@
   "features": null,
   "featuresConfig": [
     {
-      "ripple": {
-          "rows": 6,
-          "cols": 18
-      }
-    },
-    {
       "wheel": {
           "rows": 6,
-          "cols": 18
+          "cols": 22
       }
     }
   ]
