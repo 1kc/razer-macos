@@ -1,0 +1,23 @@
+{
+  "name": "Razer Naga Pro - Wired",
+  "productId": "0x008f",
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1710/small_product.png",
+  "features": null,
+  "featuresMissing": ["oldMouseEffects"],
+  "featuresConfig": [
+    {
+      "mouseBrightness": {
+        "enabledLogo": false,
+        "enabledScroll": false,
+        "enabledLeft": false,
+        "enabledRight": false
+      }
+    },
+    {
+      "dpi": {
+        "max": 20000
+      }
+    }
+  ]
+}
