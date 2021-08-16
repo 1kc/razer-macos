@@ -92,6 +92,14 @@ Q: Menu says "No device found".
 
 A: Use the "Refresh Device List" option.
 
+Q: How do I customize and rebind keys?
+
+You might find the [Karabiner-elements](https://karabiner-elements.pqrs.org/) tool helpful.
+
+## Device Support Policy
+
+Ongoing new device support will be provided on a volunteer contribution basis, as it is difficult for someone who does not own the physical devices to be adding support and conducting tests.
+
 ## Developer usage
 
 Ensure xcode command line tools are installed,
