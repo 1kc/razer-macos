@@ -79,6 +79,7 @@ Headphones:
 Accessories:
 
 - Razer Base Station V2
+- Razer Mouse Bungee V3 Chroma
 
 Please feel free to open pull requests for new devices you have tested.
 
