@@ -103,6 +103,8 @@ Ongoing new device support will be provided on a volunteer contribution basis, a
 
 ## Developer usage
 
+    git clone --recursive https://github.com/1kc/razer-macos.git
+
 Ensure xcode command line tools are installed,
 
 Install node package dependencies:
