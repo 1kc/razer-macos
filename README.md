@@ -109,10 +109,13 @@ Ensure xcode command line tools are installed,
 
 If you have a paid Apple Developer account, edit `release.sh` with your details.
 
-Afterwards, to build, sign, and/or notarize (if applicable,) run `./release`.
+ Afterwards, to automatically build, sign, and/or notarize (if applicable,) run in Terminal: `./release.sh`
+
+ Ad-hoc signing will be used if account information is left empty.
 
 
-Or manually:
+
+ Or build manually:
 
 Install node package dependencies:
 
@@ -130,9 +133,11 @@ For building a distribution ready app and dmg:
 
     yarn dist
 
-If you do not have a valid Apple Developer ID, run codesign before copying to Application folder:
+Sign both packages before moving to /Applications folder with ad-hoc signing:
 
-    codesign -s - --deep --force ./dist/mac-universal/Razer\ macOS.app
+    codesign -s - --deep --force ./dist/mac/Razer\ macOS.app
+    
+    codesign -s - --deep --force ./dist/mac-arm64/Razer\ macOS.app
 
 ## Implementation
 
