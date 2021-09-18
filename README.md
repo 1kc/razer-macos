@@ -109,7 +109,7 @@ Ensure xcode command line tools are installed,
 
 If you have a paid Apple Developer account, edit `release.sh` with your details.
 
- Afterwards, to automatically build, sign, and/or notarize (if applicable,) run `./release`.
+ Afterwards, to automatically build, sign, and/or notarize (if applicable,) run in Terminal: `./release.sh`
 
  Ad-hoc signing will be used if account information is left empty.
 
