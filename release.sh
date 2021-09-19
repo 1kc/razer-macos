@@ -12,8 +12,7 @@ yarn dist
 
 if [[ -z $APPLE_ID ]]
 then
-  codesign -s - --deep --force ./dist/mac/Razer\ macOS.app
-  codesign -s - --deep --force ./dist/mac-arm64/Razer\ macOS.app
+  codesign -s - --deep --force ./dist/mac-universal/Razer\ macOS.app
 fi
 
 unset APPLE_ID
