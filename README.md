@@ -133,11 +133,9 @@ For building a distribution ready app and dmg:
 
     yarn dist
 
-Sign both packages before moving to /Applications folder with ad-hoc signing:
+Sign the universal package before moving to /Applications folder with ad-hoc signing:
 
-    codesign -s - --deep --force ./dist/mac/Razer\ macOS.app
-    
-    codesign -s - --deep --force ./dist/mac-arm64/Razer\ macOS.app
+    codesign -s - --deep --force ./dist/mac-universal/Razer\ macOS.app
 
 ## Implementation
 
