@@ -94,7 +94,7 @@
       "darwin"
     ],
     "arches": [
-      "universal"
+      "x64", "arm64"
     ]
   }
 }
