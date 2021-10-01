@@ -107,6 +107,16 @@ Ongoing new device support will be provided on a volunteer contribution basis, a
 
 Ensure xcode command line tools are installed,
 
+If you have a paid Apple Developer account, edit `release.sh` with your details.
+
+ Afterwards, to automatically build, sign, and/or notarize (if applicable,) run in Terminal: `./release.sh`
+
+ Ad-hoc signing will be used if account information is left empty.
+
+
+
+ Or build manually:
+
 Install node package dependencies:
 
     yarn
@@ -122,6 +132,10 @@ During development, every time the driver code has been updated, a rebuild is re
 For building a distribution ready app and dmg:
 
     yarn dist
+
+Sign the universal package before moving to /Applications folder with ad-hoc signing:
+
+    codesign -s - --deep --force ./dist/mac-universal/Razer\ macOS.app
 
 ## Implementation
 
