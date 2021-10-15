@@ -1,0 +1,22 @@
+{
+  "name": "Razer Basilisk V3",
+  "productId": "0x0099",
+  "mainType": "mouse",
+  "image": "https://dl.razerzone.com/src/5620/5620-1-en-v1.png",
+  "features": null,
+  "featuresMissing": ["oldMouseEffects", "reactive", "battery", "breathe"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 26000
+      }
+    },
+    {
+      "mouseBrightness": {
+        "enabledMatrix": false,
+        "enabledLeft": false,
+        "enabledRight": false
+      }
+    }
+  ]
+}
