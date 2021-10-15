@@ -59,6 +59,7 @@ Mice:
 - Razer Viper Ultimate Wireless
 - Razer Basilisk Ultimate
 - Razer Basilisk V2
+- Razer Basilisk V3
 - Razer Abyssus V2 (under older mouse effects)
 - Razer Razer DeathAdder 2013 (under older mouse effects)
 - Razer Naga Trinity

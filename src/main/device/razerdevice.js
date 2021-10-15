@@ -51,6 +51,7 @@ export class RazerDevice {
   }
 
   getState() {
+    console.log('getState: '+ this.activeMode);
     return {
       mode: this.activeMode,
       args: this.activeModeArguments
@@ -87,6 +88,7 @@ export class RazerDevice {
   }
 
   /*protected*/ setModeState(mode, modeArguments = null) {
+    console.log('setModeState: '+ mode);
     this.activeMode = mode;
     this.activeModeArguments = modeArguments;
   }
