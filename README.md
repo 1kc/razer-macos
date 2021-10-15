@@ -47,6 +47,7 @@ Keyboards:
 - Razer Huntsman
 - Razer Huntsman Elite
 - Razer Huntsman TE
+- Razer Huntsman V2 Analog
 - Razer Cynosa V2
 - Razer Ornata V2
 
