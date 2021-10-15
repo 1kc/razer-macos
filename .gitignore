@@ -116,4 +116,5 @@ build/
 yarn.lock
 
 # vscode files
-/.vscode
+.vscode/
+.vscode/settings.json

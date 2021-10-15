@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.module": "php",
-        "stdlib.h": "c",
-        "stdio.h": "c"
-    }
-}
