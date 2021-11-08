@@ -47,14 +47,18 @@ Keyboards:
 - Razer Huntsman
 - Razer Huntsman Elite
 - Razer Huntsman TE
+- Razer Huntsman V2 Analog
 - Razer Cynosa V2
 - Razer Ornata V2
 
 Mice:
 
-- Razer Deathadder Elite
+- Razer DeathAdder Elite
+- Razer DeathAdder Essential
+- Razer DeathAdder Essential White Edition
+- Razer DeathAdder Essential New
 - Razer DeathAdder V2
-- Death Adder V2 Pro (wired and wireless)
+- Razer DeathAdder V2 Pro (wired and wireless)
 - Razer Razer Lancehead Wireless
 - Razer Viper Ultimate Wireless
 - Razer Basilisk Ultimate
