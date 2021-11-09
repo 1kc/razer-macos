@@ -1,0 +1,21 @@
+{
+  "name": "Razer Huntsman V2",
+  "productId": "0x026c",
+  "mainType": "keyboard",
+  "image": "https://dl.razerzone.com/src/4023-1-EN-v1.png",
+  "features": null,
+  "featuresConfig": [
+    {
+      "ripple": {
+          "rows": 9,
+          "cols": 22
+      }
+    },
+    {
+      "wheel": {
+          "rows": 9,
+          "cols": 22
+      }
+    }
+  ]
+}
