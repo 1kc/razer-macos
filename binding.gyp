@@ -21,7 +21,7 @@
           'ONLY_ACTIVE_ARCH': 'NO',
           'OTHER_CODE_SIGN_FLAGS': 'timestamp --options=runtime',
           'CLANG_CXX_LIBRARY': 'libc++',
-          'MACOSX_DEPLOYMENT_TARGET': '11.0',
+          'MACOSX_DEPLOYMENT_TARGET': '12.0.1',
           'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
           'OTHER_CFLAGS': [
               '-arch x86_64',
