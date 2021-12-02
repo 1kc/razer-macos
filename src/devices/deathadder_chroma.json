@@ -17,5 +17,6 @@
         "max": 10000
       }
     }
-  ]
+  ],
+  "featuresMissing": ["none","waveSimple", "spectrum", "reactive", "breathe"]
 }
