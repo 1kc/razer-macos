@@ -19,26 +19,24 @@ import { FeatureBattery } from './featurebattery';
 
 export class FeatureHelper {
 
-  static createFeatureFrom(featureConfig) {
-    const featureIdentifier = Object.keys(featureConfig)[0];
-    const configuration = featureConfig[featureIdentifier];
+  static createFeatureFrom(featureIdentifier) {
     switch (featureIdentifier) {
-      case FeatureIdentifier.NONE: return new FeatureNone(configuration);
-      case FeatureIdentifier.STATIC: return new FeatureStatic(configuration);
-      case FeatureIdentifier.WAVE_SIMPLE: return new FeatureWaveSimple(configuration);
-      case FeatureIdentifier.WAVE_EXTENDED: return new FeatureWaveExtended(configuration);
-      case FeatureIdentifier.SPECTRUM: return new FeatureSpectrum(configuration);
-      case FeatureIdentifier.REACTIVE: return new FeatureReactive(configuration);
-      case FeatureIdentifier.BREATHE: return new FeatureBreathe(configuration);
-      case FeatureIdentifier.STARLIGHT: return new FeatureStarlight(configuration);
-      case FeatureIdentifier.BRIGHTNESS: return new FeatureBrightness(configuration);
-      case FeatureIdentifier.RIPPLE: return new FeatureRipple(configuration);
-      case FeatureIdentifier.WHEEL: return new FeatureWheel(configuration);
-      case FeatureIdentifier.OLD_MOUSE_EFFECTS: return new FeatureOldMouseEffects(configuration);
-      case FeatureIdentifier.MOUSE_BRIGHTNESS: return new FeatureMouseBrightness(configuration);
-      case FeatureIdentifier.POLL_RATE: return new FeatureMousePollRate(configuration);
-      case FeatureIdentifier.MOUSE_DPI: return new FeatureMouseDPI(configuration);
-      case FeatureIdentifier.BATTERY: return new FeatureBattery(configuration);
+      case FeatureIdentifier.NONE: return new FeatureNone();
+      case FeatureIdentifier.STATIC: return new FeatureStatic();
+      case FeatureIdentifier.WAVE_SIMPLE: return new FeatureWaveSimple();
+      case FeatureIdentifier.WAVE_EXTENDED: return new FeatureWaveExtended();
+      case FeatureIdentifier.SPECTRUM: return new FeatureSpectrum();
+      case FeatureIdentifier.REACTIVE: return new FeatureReactive();
+      case FeatureIdentifier.BREATHE: return new FeatureBreathe();
+      case FeatureIdentifier.STARLIGHT: return new FeatureStarlight();
+      case FeatureIdentifier.BRIGHTNESS: return new FeatureBrightness();
+      case FeatureIdentifier.RIPPLE: return new FeatureRipple();
+      case FeatureIdentifier.WHEEL: return new FeatureWheel();
+      case FeatureIdentifier.OLD_MOUSE_EFFECTS: return new FeatureOldMouseEffects();
+      case FeatureIdentifier.MOUSE_BRIGHTNESS: return new FeatureMouseBrightness();
+      case FeatureIdentifier.POLL_RATE: return new FeatureMousePollRate();
+      case FeatureIdentifier.MOUSE_DPI: return new FeatureMouseDPI();
+      case FeatureIdentifier.BATTERY: return new FeatureBattery();
       default:
         throw featureIdentifier+' is not a valid feature identifier!'
     }

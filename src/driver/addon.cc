@@ -731,6 +731,78 @@ void HeadphoneSetModeSpectrum(const Napi::CallbackInfo &info) {
     razer_headphone_attr_write_mode_spectrum(device.usbDevice, "1", 1);
 }
 
+void HeadphoneSetModeWave(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+
+    std::string waveSettingString = info[1].ToString().Utf8Value();
+    const char *waveSetting = waveSettingString.c_str();
+    if (std::strncmp(waveSetting, "left_turtle", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0xFF);
+    } else if (std::strncmp(waveSetting, "left_slowest", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0xD9);
+    } else if (std::strncmp(waveSetting, "left_slower", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0xB9);
+    } else if (std::strncmp(waveSetting, "left_slow", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0x90);
+    } else if (std::strncmp(waveSetting, "left_default", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0x70);
+    } else if (std::strncmp(waveSetting, "left_fast", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0x55);
+    } else if (std::strncmp(waveSetting, "left_faster", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0x40);
+    } else if (std::strncmp(waveSetting, "left_fastest", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0x25);
+    } else if (std::strncmp(waveSetting, "left_lightning", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "1", 0, 0x10);
+    }
+// right
+    else if (std::strncmp(waveSetting, "right_turtle", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0xFF);
+    } else if (std::strncmp(waveSetting, "right_slowest", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0xD9);
+    } else if (std::strncmp(waveSetting, "right_slower", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0xB9);
+    } else if (std::strncmp(waveSetting, "right_slow", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0x90);
+    } else if (std::strncmp(waveSetting, "right_default", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0x70);
+    } else if (std::strncmp(waveSetting, "right_fast", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0x55);
+    } else if (std::strncmp(waveSetting, "right_faster", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0x40);
+    } else if (std::strncmp(waveSetting, "right_fastest", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0x25);
+    } else if (std::strncmp(waveSetting, "right_lightning", 20) == 0) {
+        razer_headphone_attr_write_mode_wave(device.usbDevice, "2", 0, 0x10);
+    }
+}
+
+void HeadphoneSetModeStarlight(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    RazerDevice device = getRazerDeviceFor(info);
+
+    Napi::Uint8Array argsArr = info[1].As<Napi::Uint8Array>();
+    int argsArr_len = argsArr.ElementLength();
+    // Cast unsigned char array into char array
+    char *buf = (char *) info[1].As<Napi::Uint8Array>().Data();
+    if (argsArr_len == 7) //two colors
+    {
+        razer_headphone_attr_write_mode_starlight(device.usbDevice, buf, 7);
+    } else if (argsArr_len == 4) //single color
+    {
+        razer_headphone_attr_write_mode_starlight(device.usbDevice, buf, 4);
+    } else if (argsArr_len == 1) //random
+    {
+        razer_headphone_attr_write_mode_starlight(device.usbDevice, buf, 1);
+    } else //exception
+    {
+        Napi::TypeError::New(env, "Starlight only accepts Speed (1byte). Speed, RGB (4byte). Speed, RGB, RGB (7byte)")
+                .ThrowAsJavaScriptException();
+        return;
+
+    }
+}
+
 /**
 * Accessory
 */
@@ -971,6 +1043,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set("headphoneSetModeStatic", Napi::Function::New(env, HeadphoneSetModeStatic));
     exports.Set("headphoneSetModeStaticNoStore", Napi::Function::New(env, HeadphoneSetModeStaticNoStore));
     exports.Set("headphoneSetModeSpectrum", Napi::Function::New(env, HeadphoneSetModeSpectrum));
+    exports.Set("headphoneSetModeWave", Napi::Function::New(env, HeadphoneSetModeWave));
+    exports.Set("headphoneSetModeStarlight", Napi::Function::New(env, HeadphoneSetModeStarlight));
 
     // Accessory
     exports.Set("accessorySetModeNone", Napi::Function::New(env, AccessorySetModeNone));

@@ -81,6 +81,7 @@ Laptops:
 Headphones:
 
 - Razer Kraken V2
+- Razer Kraken Kitty Edition
 
 Accessories:
 

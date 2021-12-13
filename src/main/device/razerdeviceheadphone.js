@@ -5,6 +5,13 @@ export class RazerDeviceHeadphone extends RazerDevice {
     super(addon, settingsManager, stateManager, razerProperties);
   }
 
+  getDefaultSettings() {
+    return {
+      customColor1: this.defaultColorSettings,
+      customColor2: this.defaultColorSettings
+    }
+  }
+
   setModeNone() {
     super.setModeNone();
     this.addon.headphoneSetModeNone(this.internalId);
@@ -28,5 +35,15 @@ export class RazerDeviceHeadphone extends RazerDevice {
   setBreathe(color) {
     super.setBreathe(color);
     this.addon.headphoneSetModeBreathe(this.internalId, new Uint8Array(color));
+  }
+
+  setWaveExtended(directionSpeed) {
+    this.setModeState('waveExtended', directionSpeed);
+    this.addon.headphoneSetModeWave(this.internalId, directionSpeed);
+  }
+
+  setStarlight(mode) {
+    this.setModeState('starlight', mode);
+    this.addon.headphoneSetModeStarlight(this.internalId, new Uint8Array(mode));
   }
 }

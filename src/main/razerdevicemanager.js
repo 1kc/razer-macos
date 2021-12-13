@@ -126,7 +126,7 @@ export class RazerDeviceManager {
     if (razerProperties.features == null) {
       razerDeviceProperties.features = FeatureHelper.getDefaultFeaturesFor(razerProperties.mainType);
     } else {
-      razerDeviceProperties.features = razerProperties.features.map(featureConfig => FeatureHelper.createFeatureFrom(featureConfig));
+      razerDeviceProperties.features = razerProperties.features.map(featureIdentifier => FeatureHelper.createFeatureFrom(featureIdentifier));
     }
 
     /// remove features which are stated being missing
