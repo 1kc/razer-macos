@@ -4,7 +4,7 @@
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/1385/1385_deathadderessential.png",
   "features": null,
-  "featuresMisssing":["waveSimple"],
+  "featuresMisssing":["waveSimple","oldMouseEffects"],
   "featuresConfig": [
     {
       "mouseBrightness": {
