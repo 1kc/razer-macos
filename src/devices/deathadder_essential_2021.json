@@ -1,9 +1,10 @@
 {
-  "name": "Razer DeathAdder Essential",
+  "name": "Razer DeathAdder Essential (2021)",
   "productId": "0x0098",
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/1385/1385_deathadderessential.png",
   "features": null,
+  "featuresMisssing":["waveSimple","oldMouseEffects"],
   "featuresConfig": [
     {
       "mouseBrightness": {

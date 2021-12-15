@@ -58,7 +58,7 @@ Mice:
 - Razer DeathAdder Elite
 - Razer DeathAdder Essential
 - Razer DeathAdder Essential White Edition
-- Razer DeathAdder Essential New
+- Razer DeathAdder Essential (2021)
 - Razer DeathAdder V2
 - Razer DeathAdder V2 Pro (wired and wireless)
 - Razer Razer Lancehead Wireless
