@@ -27,12 +27,13 @@ Please see FAQ section below if color changes are not working, otherwise open a 
 
 - ⌨️ Keyboard
 - 🖱️ Mouse
-- 📜 Mouse mat
+- 📜 Mouse mat and charging dock
 - 🌈 e-GPU
 - 🎧 Headphones and stand
 - 💻 Blade laptop
 - 🔊 Speakers
 - 🍺 Mug
+- ⭐️ And More
 
 For a complete list of supported devices, please see [openrazer](https://openrazer.github.io).
 
@@ -40,51 +41,158 @@ Confirmed working for:
 
 Keyboards:
 
+- Razer Anansi
+- Razer Cynosa Chroma
+- Razer Cynosa Lite
+- Razer Cynosa V2
 - Razer BlackWidow 2019
+- Razer BlackWidow Chroma
+- Razer BlackWidow Chroma Tournament Edition
+- Razer BlackWidow Chroma V2
 - Razer BlackWidow Elite
-- Razer BlackWidow Chroma v2
-- Razer Ornata Chroma
+- Razer BlackWidow Essential
+- Razer BlackWidow Lite
+- Razer BlackWidow Overwatch
+- Razer BlackWidow Stealth
+- Razer BlackWidow Stealth Edition
+- Razer BlackWidow Ultimate 2012
+- Razer BlackWidow Ultimate 2013
+- Razer BlackWidow Ultimate 2016
+- Razer BlackWidow V3
+- Razer BlackWidow V3 Pro (wired)
+- Razer BlackWidow V3 TK
+- Razer BlackWidow X Chroma
+- Razer BlackWidow X Chroma Tournament Edition
+- Razer BlackWidow X Chroma Ultimate
+- Razer Deathstalker Chroma
+- Razer Deathstalker Expert
 - Razer Huntsman
 - Razer Huntsman Elite
-- Razer Huntsman TE
 - Razer Huntsman Mini
-- Razer Huntsman V2 Analog
+- Razer Huntsman Tournament Edition
 - Razer Huntsman V2
-- Razer Cynosa V2
-- Razer Ornata V2
+- Razer Huntsman V2 Analog
+- Razer Nostromo
+- Razer Orbweaver
+- Razer Orbweaver Chroma
+- Razer Ornata
+- Razer Ornata Chroma
+- Razer Ornata Chroma V2
+- Razer Tartarus
+- Razer Tartarus Chroma
+- Razer Tartarus V2
 
 Mice:
 
+- Razer Abyssus 
+- Razer Abyssus 1800
+- Razer Abyssus 2000
+- Razer Abyssus Elite DVA Edition
+- Razer Abyssus Essential
+- Razer Abyssus V2 (under older mouse effects)
+- Razer Basilisk
+- Razer Basilisk Essential
+- Razer Basilisk Ultimate
+- Razer Basilisk V2
+- Razer Basilisk V3
+- Razer DeathAdder 3 5G
+- Razer DeathAdder 1800
+- Razer DeathAdder 2013 (under older mouse effects)
+- Razer DeathAdder 3500
+- Razer DeathAdder Chroma
 - Razer DeathAdder Elite
 - Razer DeathAdder Essential
 - Razer DeathAdder Essential White Edition
 - Razer DeathAdder Essential (2021)
 - Razer DeathAdder V2
+- Razer DeathAdder V2 Mini
 - Razer DeathAdder V2 Pro (wired and wireless)
-- Razer Razer Lancehead Wireless
-- Razer Viper Ultimate Wireless
-- Razer Basilisk Ultimate
-- Razer Basilisk V2
-- Razer Abyssus V2 (under older mouse effects)
-- Razer Razer DeathAdder 2013 (under older mouse effects)
+- Razer Diamondback Chroma
+- Razer Imperator
+- Razer Lancehead Tournament Edition
+- Razer Lancehead Wired
+- Razer Lancehead Wireless (and wired)
+- Razer Mamba 2012 (wired and wireless)
+- Razer Mamba Elite
+- Razer Mamba Tournament Edition
+- Razer Mamba Wired
+- Razer Mamba Wireless (and wired)
+- Razer Naga 2012
+- Razer Naga 2014
+- Razer Naga Chroma
+- Razer Naga Hex
+- Razer Naga Hex Red
+- Razer Naga Hex V2
+- Razer Naga Left Handed 2020
+- Razer Naga Pro (wired and wireless)
 - Razer Naga Trinity
+- Razer Orochi 2011
+- Razer Orochi 2013
+- Razer Orochi Chroma
+- Razer Ouroboros
+- Razer Taipan
+- Razer Viper
+- Razer Viper 8KHz
+- Razer Viper Mini
+- Razer Viper Ultimate (wired and wireless)
 
-Mouse mats:
+Mouse mats and charging dock:
 
-- Razer Goliathus Extended
+- Razer Firefly
+- Razer Firefly Hyperflux
 - Razer Firefly V2
+- Razer Goliathus Chroma
+- Razer Goliathus Chroma Extended
+- Razer Mouse Charging Dock
+
+e-GPUs:
+
+- Razer Core X Chroma
+
+Headphones and stand:
+
+- Razer Base Station V2 Chroma
+- Razer Kraken
+- Razer Kraken 7.1
+- Razer Kraken 7.1 (Alternate)
+- Razer Kraken Kitty Edition
+- Razer Kraken Ultimate
+- Razer Kraken V2
 
 Laptops:
 
-- Razer Blade Advanced 2018
+- Razer Blade 2018
+- Razer Blade 2019 Advanced
+- Razer Blade 2018 Base
+- Razer Blade 2019 Base
+- Razer Blade 2018 Mercury
+- Razer Blade Late-2016
+- Razer Blade Mid-2019 Mercury
+- Razer Blade Pro 2017
+- Razer Blade Pro 2017 Full HD
+- Razer Blade Pro Late-2016
+- Razer Blade Stealth
+- Razer Blade Stealth 2019
+- Razer Blade Stealth Late-2016
+- Razer Blade Stealth Mid-2017
+- Razer Blade Stealth Late-2017
+- Razer Blade Stealth Late-2019
+- Razer Blade Studio Edition 2019
+- Razer Blade QHD
 
-Headphones:
+Speakers:
 
-- Razer Kraken V2
+- Razer Nommo Chroma
+- Razer Nommo Pro
+
+Mugs: 
+
+- Razer Chroma Mug
+- Razer Chroma Base
+- Razer Chroma HDK
 
 Accessories:
 
-- Razer Base Station V2
 - Razer Mouse Bungee V3 Chroma
 
 Please feel free to open pull requests for new devices you have tested.
