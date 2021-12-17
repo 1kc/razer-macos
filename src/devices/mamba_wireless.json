@@ -4,8 +4,14 @@
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/1404/1404_mamba_wireless.png",
   "features": null,
-  "featuresMissing": ["mouseBrightness"],
   "featuresConfig": [
+    {
+      "mouseBrightness": {
+        "enabledMatrix": false,
+        "enabledLeft": false,
+        "enabledRight": false
+      }
+    },
     {
       "dpi": {
         "max": 16000
