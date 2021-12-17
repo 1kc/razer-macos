@@ -27,7 +27,7 @@ Please see FAQ section below if color changes are not working, otherwise open a 
 
 - ⌨️ Keyboard
 - 🖱️ Mouse
-- 📜 Mouse mat and charging dock
+- 📜 Mouse mat
 - 🌈 e-GPU
 - 🎧 Headphones and stand
 - 💻 Blade laptop
@@ -42,9 +42,6 @@ Confirmed working for:
 Keyboards:
 
 - Razer Anansi
-- Razer Cynosa Chroma
-- Razer Cynosa Lite
-- Razer Cynosa V2
 - Razer BlackWidow 2019
 - Razer BlackWidow Chroma
 - Razer BlackWidow Chroma Tournament Edition
@@ -64,6 +61,9 @@ Keyboards:
 - Razer BlackWidow X Chroma
 - Razer BlackWidow X Chroma Tournament Edition
 - Razer BlackWidow X Chroma Ultimate
+- Razer Cynosa Chroma
+- Razer Cynosa Lite
+- Razer Cynosa V2
 - Razer Deathstalker Chroma
 - Razer Deathstalker Expert
 - Razer Huntsman
@@ -136,14 +136,13 @@ Mice:
 - Razer Viper Mini
 - Razer Viper Ultimate (wired and wireless)
 
-Mouse mats and charging dock:
+Mouse mats:
 
 - Razer Firefly
 - Razer Firefly Hyperflux
 - Razer Firefly V2
 - Razer Goliathus Chroma
 - Razer Goliathus Chroma Extended
-- Razer Mouse Charging Dock
 
 e-GPUs:
 
@@ -194,6 +193,8 @@ Mugs:
 Accessories:
 
 - Razer Mouse Bungee V3 Chroma
+- Razer Mouse Charging Dock
+- Razer Thunderbolt 4 Dock Chroma
 
 Please feel free to open pull requests for new devices you have tested.
 
