@@ -4,6 +4,7 @@
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/1612/1612_razerdeathadderv2.png",
   "features": null,
+  "featuresMissing": ["waveSimple","oldMouseEffects"],
   "featuresConfig": [
     {
       "dpi": {
