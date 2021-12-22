@@ -64,6 +64,7 @@ Mice:
 - Razer Razer Lancehead Wireless
 - Razer Viper Ultimate Wireless
 - Razer Basilisk Ultimate
+- Razer Basilisk Essential
 - Razer Basilisk V2
 - Razer Abyssus V2 (under older mouse effects)
 - Razer Razer DeathAdder 2013 (under older mouse effects)
