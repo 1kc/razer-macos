@@ -18,7 +18,7 @@
     "electron-json-storage": "^4.2.0",
     "iohook": "file:./iohook",
     "node-addon-api": "^1.0.0",
-    "node-forge": "^0.10.0",
+    "node-forge": "^1.0.0",
     "react": "^16.13.1",
     "react-color": "^2.18.0",
     "react-dom": "^16.13.1",
