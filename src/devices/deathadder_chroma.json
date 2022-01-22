@@ -4,7 +4,7 @@
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/278/278_deathadder_chroma.png",
   "features": null,
-  "featuresMissing": ["waveSimple"],
+  "featuresMissing": ["none","waveSimple", "spectrum", "reactive", "breathe"],
   "featuresConfig": [
     {
       "mouseBrightness": {
@@ -18,6 +18,5 @@
         "max": 10000
       }
     }
-  ],
-  "featuresMissing": ["none","waveSimple", "spectrum", "reactive", "breathe"]
+  ]
 }
