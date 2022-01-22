@@ -4,6 +4,7 @@
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/1539/1539_viper.png",
   "features": null,
+  "featuresMissing": ["waveSimple"],
   "featuresConfig": [
     {
       "mouseBrightness": {
