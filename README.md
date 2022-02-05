@@ -71,6 +71,7 @@ Keyboards:
 - Razer Huntsman Mini
 - Razer Huntsman Tournament Edition
 - Razer Huntsman V2
+- Razer Huntsman v2 TKL
 - Razer Huntsman V2 Analog
 - Razer Nostromo
 - Razer Orbweaver

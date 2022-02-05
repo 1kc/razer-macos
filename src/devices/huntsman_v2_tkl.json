@@ -1,0 +1,21 @@
+{
+  "name": "Razer Huntsman V2 TKL",
+  "productId": "0x026b",
+  "mainType": "keyboard",
+  "image": "https://assets3.razerzone.com/02qciF5cWDrRcrL9CxzbHC017No=/500x500/https%3A%2F%2Fhybrismediaprod.blob.core.windows.net%2Fsys-master-phoenix-images-container%2Fhb8%2Fhd7%2F9239675600926%2Fhuntsman-v2-tkl-500x500.png",
+  "features": null,
+  "featuresConfig": [
+    {
+      "ripple": {
+          "rows": 6,
+          "cols": 22
+      }
+    },
+    {
+      "wheel": {
+          "rows": 6,
+          "cols": 22
+      }
+    }
+  ]
+}
