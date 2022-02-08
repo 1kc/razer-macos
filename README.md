@@ -206,7 +206,7 @@ A: It is possible that a wrong on-board keyboard profile has been selected. Chan
 
 Q: Menu says "No device found".
 
-A: Use the "Refresh Device List" option.
+A: Use the "Refresh Device List" option, which can be found when pressing the Razer OS icon on the top menu bar.
 
 Q: How do I customize and rebind keys?
 
