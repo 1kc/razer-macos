@@ -8,13 +8,13 @@
     {
       "ripple": {
           "rows": 6,
-          "cols": 22
+          "cols": 18
       }
     },
     {
       "wheel": {
           "rows": 6,
-          "cols": 22
+          "cols": 18
       }
     }
   ]
