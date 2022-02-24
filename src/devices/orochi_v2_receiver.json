@@ -1,0 +1,15 @@
+{
+  "name": "Razer Orochi Chroma (Receiver)",
+  "productId": "0x0094",
+  "mainType": "mouse",
+  "image": "https://dl.razerzone.com/src/OrochiV2-1-en-v1.png",
+  "features": null,
+  "featuresMissing": ["mouseBrightness"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 18000
+      }
+    }
+  ]
+}
