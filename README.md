@@ -69,6 +69,7 @@ Keyboards:
 - Razer Huntsman
 - Razer Huntsman Elite
 - Razer Huntsman Mini
+- Razer Huntsman Mini (JP)
 - Razer Huntsman Tournament Edition
 - Razer Huntsman V2
 - Razer Huntsman V2 Analog
