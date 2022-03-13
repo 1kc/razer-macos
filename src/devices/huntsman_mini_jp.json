@@ -1,0 +1,21 @@
+{
+  "name": "Razer Huntsman Mini (JP)",
+  "productId": "0x0269",
+  "mainType": "keyboard",
+  "image": "https://rzrwarranty.s3.amazonaws.com/4403e5e6b96d59dc95a278e257688e64a68f7b24945617653d68e3273877c01e.png",
+  "features": null,
+  "featuresConfig": [
+    {
+      "ripple": {
+          "rows": 5,
+          "cols": 15
+      }
+    },
+    {
+      "wheel": {
+          "rows": 5,
+          "cols": 15
+      }
+    }
+  ]
+}
