@@ -10,7 +10,7 @@
 - **Supporting Razer devices** Keyboards, mice, mouse mats, eGPUs and blade laptops
 - **Custom color picking** Choose your own colors for static, reactive and starlight effects
 - **Persistent color settings** Color effects are saved to onboard memory
-- **Works on the latest macOS** Including Intel and Apple Silicon. There are no plans from Razer to further support macOS ([source](https://support.razer.com/articles/1543762911))
+- **Works on the latest macOS** Including Intel and Apple Silicon. There are no current plans from Razer to support macOS ([source](https://mysupport.razer.com/app/answers/detail/a_id/1381/kw/macOS))
 
 ## Download
 
