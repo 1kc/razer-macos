@@ -7,13 +7,13 @@
   "featuresConfig": [
     {
       "ripple": {
-          "rows": 9,
+          "rows": 8,
           "cols": 22
       }
     },
     {
       "wheel": {
-          "rows": 9,
+          "rows": 8,
           "cols": 22
       }
     }
