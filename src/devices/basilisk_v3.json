@@ -4,7 +4,7 @@
   "mainType": "mouse",
   "image": "https://dl.razerzone.com/src/5620/5620-1-en-v1.png",
   "features": null,
-  "featuresMissing": ["oldMouseEffects", "reactive", "battery", "breathe"],
+  "featuresMissing": ["oldMouseEffects", "reactive", "breathe"],
   "featuresConfig": [
     {
       "dpi": {
@@ -13,7 +13,6 @@
     },
     {
       "mouseBrightness": {
-        "enabledMatrix": false,
         "enabledLeft": false,
         "enabledRight": false
       }
