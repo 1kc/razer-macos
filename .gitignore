@@ -111,3 +111,10 @@ build/
 
 # IntelliJ
 .idea
+
+# Yarn Lock file
+yarn.lock
+
+# vscode files
+.vscode/
+.vscode/settings.json
