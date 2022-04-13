@@ -56,6 +56,7 @@ Keyboards:
 - Razer BlackWidow Ultimate 2013
 - Razer BlackWidow Ultimate 2016
 - Razer BlackWidow V3
+- Razer BlackWidow V3 Mini Hyperspeed
 - Razer BlackWidow V3 Pro (wired)
 - Razer BlackWidow V3 TK
 - Razer BlackWidow X Chroma
