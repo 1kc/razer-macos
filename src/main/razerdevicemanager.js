@@ -32,6 +32,7 @@ export class RazerDeviceManager {
     this.closeDevices();
 
     const devicePromises = this.addon.getAllDevices().map(async foundDevice => {
+      console.log(foundDevice);
       const configurationDevice = this.razerConfigDevices.find(d => d.productId === foundDevice.productId);
       if (configurationDevice === undefined) {
         return null;
