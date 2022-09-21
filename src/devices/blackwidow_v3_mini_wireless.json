@@ -1,0 +1,21 @@
+{
+  "name": "Razer BlackWidow V3 Mini Hyperspeed (Wireless)",
+  "productId": "0x0271",
+  "mainType": "keyboard",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1777/500x500-blackwidowv3mini.png",
+  "features": null,
+  "featuresConfig": [
+    {
+      "ripple": {
+        "rows": 5,
+        "cols": 16
+      }
+    },
+    {
+      "wheel": {
+        "rows": 5,
+        "cols": 16
+      }
+    }
+  ]
+}
