@@ -4,5 +4,12 @@
   "mainType": "mouse",
   "image": "https://assets.razerzone.com/eeimages/support/products/606/606_mambate_500x500.png",
   "features": null,
-  "featuresMissing": ["mouseBrightness"]
+  "featuresMissing": ["mouseBrightness"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 16000
+      }
+    }
+  ]
 }
