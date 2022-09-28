@@ -1,0 +1,11 @@
+{
+  "name": "Razer Ornata V3",
+  "productId": "0x028F",
+  "mainType": "keyboard",
+  "image": "https://dl.razerzone.com/src/6075-1-en-v1.png",
+  "features": null,
+  "featuresMissing": ["starlight", "ripple", "wheel"],
+  "featuresConfig": [
+
+  ]
+}

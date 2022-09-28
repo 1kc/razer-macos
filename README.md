@@ -81,6 +81,7 @@ Keyboards:
 - Razer Ornata
 - Razer Ornata Chroma
 - Razer Ornata Chroma V2
+- Razer Ornata V3
 - Razer Tartarus
 - Razer Tartarus Chroma
 - Razer Tartarus V2
