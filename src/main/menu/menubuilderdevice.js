@@ -86,16 +86,44 @@ function getFeatureMenuFor(application, device, feature) {
     case FeatureIdentifier.MOUSE_DPI:
       return null;
     case FeatureIdentifier.BATTERY:
-      return null;
+      return getFeatureBatteryLevel(application, device, feature);
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';
   }
+}
+
+function getFeatureBatteryLevel(application, device, feature) {
+  return {
+    label: 'Battery level',
+    click() {
+      device.batteryLevelInterval = setInterval(() => {
+        if(!device.batteryLevel || device.batteryLevel === -1) {
+          device.setModeStatic([255, 255, 255]);
+          return;
+        }
+
+        var r, g, b = 0;
+
+        if (device.batteryLevel < 50) {
+          r = 255;
+          g = Math.round(5.1 * device.batteryLevel);
+        }
+        else {
+          g = 255;
+          r = Math.round(510 - 5.10 * device.batteryLevel);
+        }
+
+        device.setModeStatic([r, g, 0]);
+      }, 15000);
+    },
+  };
 }
 
 function getFeatureBreath(application, device, feature) {
   return {
     label: 'Breathe',
     click() {
+      if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
       // random
       device.setBreathe([0]);
     },
@@ -135,6 +163,7 @@ function getFeatureNone(application, device, feature) {
   return {
     label: 'None',
     click() {
+      if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
       device.setModeNone();
     },
   };
@@ -146,24 +175,28 @@ function getFeatureOldMouseEffect(application, device, feature) {
     feature.configuration.enabledStatic ? {
       label: 'Static',
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setLogoLEDEffect('static');
       },
     } : null,
     feature.configuration.enabledBlinking ? {
       label: 'Blinking',
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setLogoLEDEffect('blinking');
       },
     } : null,
     feature.configuration.enabledPulsate ? {
       label: 'Pulsate',
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setLogoLEDEffect('pulsate');
       },
     } : null,
     feature.configuration.enabledScroll ? {
       label: 'Scroll',
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setLogoLEDEffect('scroll');
       },
     } : null,
@@ -180,6 +213,7 @@ function getFeatureReactive(application, device, feature) {
     return {
       label: label,
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setReactive(colorMode);
       },
     };
@@ -197,7 +231,7 @@ function getFeatureReactive(application, device, feature) {
 
 function getFeatureRipple(application, device, feature) {
 
-  if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
+  if (feature.configuration == null || feature.configuration.rows === -1 || feature.configuration.cols === -1) {
     return {
       // device missing rows, cols config
       label: 'Ripple',
@@ -209,6 +243,7 @@ function getFeatureRipple(application, device, feature) {
     return {
       label: label,
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setRippleEffect(feature.configuration, color, backgroundColor);
       },
     };
@@ -231,7 +266,7 @@ function getFeatureRipple(application, device, feature) {
 
 function getFeatureWheel(application, device, feature) {
 
-  if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
+  if (feature.configuration == null || feature.configuration.rows === -1 || feature.configuration.cols === -1) {
     return {
       // device missing rows, cols config
       label: 'Wheel',
@@ -243,6 +278,7 @@ function getFeatureWheel(application, device, feature) {
     return {
       label: label,
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setWheelEffect(feature.configuration, speed);
       },
     };
@@ -262,6 +298,7 @@ function getFeatureSpectrum(application, device, feature) {
   return {
     label: 'Spectrum',
     click() {
+      if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
       device.setSpectrum();
     },
   };
@@ -272,6 +309,7 @@ function getFeatureStarlight(application, device, feature) {
     return {
       label: label,
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setStarlight([speed].concat(colors));
       },
     };
@@ -346,6 +384,7 @@ function getFeatureStatic(application, device, feature) {
     return {
       label: label,
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setModeStatic(color);
       },
     };
@@ -370,6 +409,7 @@ function getFeatureWaveExtended(application, device, feature) {
     return {
       label: label,
       click() {
+        if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
         device.setWaveExtended(directionSpeed);
       },
     };
@@ -411,12 +451,14 @@ function getFeatureWaveSimple(application, device, feature) {
       {
         label: 'Left',
         click() {
+          if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
           device.setWaveSimple('left');
         },
       },
       {
         label: 'Right',
         click() {
+          if(device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
           device.setWaveSimple('right');
         },
       },
@@ -519,6 +561,6 @@ function getFeatureMouseBrightness(application, device, feature) {
 
   return {
     label: 'Brightness',
-    submenu: submenu.filter(s => s!= null),
+    submenu: submenu.filter(s => s != null),
   };
 }

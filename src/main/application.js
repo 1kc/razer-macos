@@ -2,6 +2,7 @@ import { RazerApplication } from './razerapplication';
 import { app, dialog, BrowserWindow, ipcMain, Menu, nativeTheme, Tray, powerMonitor } from 'electron';
 import path from 'path';
 import { getMenuFor } from './menu/menubuilder';
+import { FeatureIdentifier } from './feature/featureidentifier';
 
 const version = require('../../package.json').version;
 
@@ -42,7 +43,7 @@ export class Application {
     });
 
     powerMonitor.on('suspend', () => {
-      if(this.razerApplication.stateManager.stateOnSuspend == null) {
+      if (this.razerApplication.stateManager.stateOnSuspend == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -50,7 +51,7 @@ export class Application {
       });
     });
     powerMonitor.on('resume', () => {
-      if(this.razerApplication.stateManager.stateOnResume == null) {
+      if (this.razerApplication.stateManager.stateOnResume == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -58,7 +59,7 @@ export class Application {
       });
     });
     powerMonitor.on('on-ac', () => {
-      if(this.razerApplication.stateManager.stateOnAc == null) {
+      if (this.razerApplication.stateManager.stateOnAc == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -66,7 +67,7 @@ export class Application {
       });
     });
     powerMonitor.on('on-battery', () => {
-      if(this.razerApplication.stateManager.stateOnBattery == null) {
+      if (this.razerApplication.stateManager.stateOnBattery == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -74,7 +75,7 @@ export class Application {
       });
     });
     powerMonitor.on('shutdown', () => {
-      if(this.razerApplication.stateManager.stateOnShutdown == null) {
+      if (this.razerApplication.stateManager.stateOnShutdown == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -82,7 +83,7 @@ export class Application {
       });
     });
     powerMonitor.on('lock-screen', () => {
-      if(this.razerApplication.stateManager.stateOnLockScreen == null) {
+      if (this.razerApplication.stateManager.stateOnLockScreen == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -90,7 +91,7 @@ export class Application {
       });
     });
     powerMonitor.on('unlock-screen', () => {
-      if(this.razerApplication.stateManager.stateOnUnlockScreen == null) {
+      if (this.razerApplication.stateManager.stateOnUnlockScreen == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -98,7 +99,7 @@ export class Application {
       });
     });
     powerMonitor.on('user-did-become-active', () => {
-      if(this.razerApplication.stateManager.stateOnUserDidBecomeActive == null) {
+      if (this.razerApplication.stateManager.stateOnUserDidBecomeActive == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -106,7 +107,7 @@ export class Application {
       });
     });
     powerMonitor.on('user-did-resign-active', () => {
-      if(this.razerApplication.stateManager.stateOnUserDidResignActive == null) {
+      if (this.razerApplication.stateManager.stateOnUserDidResignActive == null) {
         return;
       }
       this.razerApplication.refresh(false).then(() => {
@@ -146,7 +147,7 @@ export class Application {
     });
 
     // mouse brightness
-    ['Matrix','Logo', 'Scroll', 'Left', 'Right'].forEach(brightnessMouseIdentifier => {
+    ['Matrix', 'Logo', 'Scroll', 'Left', 'Right'].forEach(brightnessMouseIdentifier => {
       ipcMain.on('update-mouse-' + brightnessMouseIdentifier.toLowerCase() + '-brightness', (_, arg) => {
         const { device, brightness } = arg;
         const currentDevice = this.razerApplication.deviceManager.getByInternalId(device.internalId);
@@ -291,8 +292,11 @@ export class Application {
     // Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
     this.tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
     this.tray.setToolTip('Razer macOS menu');
+
+    setInterval(() => this.updateTrayBattery(), 2000);
+
     this.tray.on('click', () => {
-      if(this.razerApplication.deviceManager.activeRazerDevices != null) {
+      if (this.razerApplication.deviceManager.activeRazerDevices != null) {
         this.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
           if (device !== null) {
             device.refresh();
@@ -303,6 +307,28 @@ export class Application {
     });
 
     this.refreshTray(true);
+  }
+
+  updateTrayBattery() {
+    if (this.razerApplication.deviceManager.activeRazerDevices != null) {
+      this.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
+        if (device !== null) {
+          device.refresh();
+
+          if (device.hasFeature(FeatureIdentifier.BATTERY) && device.batteryLevel && device.batteryLevel !== -1) {
+            var label = " "; // Uncomment to show device name on tray: + device.name;
+
+            if (device.chargingStatus) {
+              label = label + ' ⚡' + device.batteryLevel.toString() + '%';
+            } else {
+              label = label + ' 🔋' + device.batteryLevel.toString() + '%';
+            }
+
+            this.tray.setTitle(label);
+          }
+        }
+      });
+    }
   }
 
   refreshTray(withDeviceRefresh) {
