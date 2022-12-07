@@ -29,7 +29,7 @@ export class RazerDevice {
   }
 
   getSettingsKey() {
-    return 'razer_'+this.productId;
+    return 'razer_' + this.productId;
   }
 
   getDefaultSettings() {
