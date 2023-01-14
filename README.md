@@ -146,6 +146,7 @@ Mouse mats:
 - Razer Firefly V2
 - Razer Goliathus Chroma
 - Razer Goliathus Chroma Extended
+- Razer Strider Chroma
 
 e-GPUs:
 
