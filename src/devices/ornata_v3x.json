@@ -1,0 +1,21 @@
+{
+  "name": "Razer Ornata V3X",
+  "productId": "0x02a2",
+  "mainType": "keyboard",
+  "image": "https://assets2.razerzone.com/images/pnx.assets/2357bd33c09a6c0348ae612770ad1e57/ornata-v3-x-500x500.png",
+  "features": null,
+  "featuresConfig": [
+    {
+      "ripple": {
+          "rows": 6,
+          "cols": 22
+      }
+    },
+    {
+      "wheel": {
+          "rows": 6,
+          "cols": 22
+      }
+    }
+  ]
+}
