@@ -1,0 +1,23 @@
+{
+  "name": "Razer Viper V2 Pro Wired",
+  "productId": "0x00A5",
+  "mainType": "mouse",
+  "image": "https://dl.razerzone.com/src/6048-1-en-v10.png",
+  "features": null,
+  "featuresMissing": ["waveSimple", "oldMouseEffects", "reactive", "breathe"],
+  "featuresConfig": [
+    {
+      "mouseBrightness": {
+        "enabledMatrix": false,
+        "enabledScroll": false,
+        "enabledLeft": false,
+        "enabledRight": false
+      }
+    },
+    {
+      "dpi": {
+        "max": 30000
+      }
+    }
+  ]
+}
