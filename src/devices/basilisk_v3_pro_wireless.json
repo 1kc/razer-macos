@@ -1,0 +1,21 @@
+{
+  "name": "Razer Basilisk V3 Pro (Wireless)",
+  "productId": "0x00AB",
+  "mainType": "mouse",
+  "image": "https://dl.razerzone.com/src2/6220/6220-4-en-v1.png",
+  "features": null,
+  "featuresMissing": ["oldMouseEffects", "reactive", "breathe"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 30000
+      }
+    },
+    {
+      "mouseBrightness": {
+        "enabledLeft": true,
+        "enabledRight": false
+      }
+    }
+  ]
+}

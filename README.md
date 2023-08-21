@@ -98,6 +98,7 @@ Mice:
 - Razer Basilisk Ultimate
 - Razer Basilisk V2
 - Razer Basilisk V3
+- Razer Basilisk V3 Pro (wired and wireless)
 - Razer DeathAdder 3 5G
 - Razer DeathAdder 1800
 - Razer DeathAdder 2013 (under older mouse effects)
