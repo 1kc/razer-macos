@@ -1,0 +1,21 @@
+{
+  "name": "Razer Deathstalker V2",
+  "productId": "0x0295",
+  "mainType": "keyboard",
+  "image": "https://assets2.razerzone.com/images/pnx.assets/a54bdf79abdfc0d42a0fff19047725a3/deathstalker-v2_500x500.png",
+  "features": null,
+  "featuresConfig": [
+    {
+      "ripple": {
+        "rows": 6,
+        "cols": 22
+      }
+    },
+    {
+      "wheel": {
+        "rows": 6,
+        "cols": 22
+      }
+    }
+  ]
+}
