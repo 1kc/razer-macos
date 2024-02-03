@@ -1,0 +1,21 @@
+{
+    "name": "Razer BlackWidow V4 75%",
+    "productId": "0x02a5",
+    "mainType": "keyboard",
+    "image": "https://assets3.razerzone.com/Pgyxh3HUrUSIwR3kf2RzK3UUbE0=/300x300/https%3A%2F%2Fhybrismediaprod.blob.core.windows.net%2Fsys-master-phoenix-images-container%2Fhf7%2Fh5a%2F9640099119134%2Fblackwidow-v4-75-black-2-500x500.png",
+    "features": null,
+    "featuresConfig": [
+      {
+        "ripple": {
+            "rows": 6,
+            "cols": 15
+        }
+      },
+      {
+        "wheel": {
+            "rows": 6,
+            "cols": 15
+        }
+      }
+    ]
+  }
