@@ -1,4 +1,7 @@
 {
+  "variables": {
+    "openssl_fips": "", 
+  },
   "targets": [
     {
       "target_name": "addon",
@@ -11,7 +14,7 @@
         "<!@(node -p \"require('node-addon-api').include\")",
         "librazermacos/src/include"
       ],
-      'defines': [ 'NAPI_DISABLE_CPP_EXCEPTIONS' ],
+      'defines': [ 'NAPI_DISABLE_CPP_EXCEPTIONS', 'openssl_fips=""' ],
             'LDFLAGS': [
           '-framework IOKit',
           '-framework CoreFoundation'
