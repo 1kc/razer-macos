@@ -12,9 +12,12 @@
 - **Persistent color settings** Color effects are saved to onboard memory
 - **Works on the latest macOS** Including Intel and Apple Silicon. There are no current plans from Razer to support macOS ([source](https://mysupport.razer.com/app/answers/detail/a_id/1381/kw/macOS))
 
+## Important note
+This is not the original repo the original repo is from [1kc/librazermacos](https://github.com/1kc/razer-macos) I forked this repo to maintain it as the original seems to be abandoned.
+
 ## Download
 
-[Latest release](https://github.com/1kc/razer-macos/releases)
+[Latest release](https://github.com/stickoking/razer-macos/releases)
 
 ## Installation instructions
 
@@ -62,6 +65,7 @@ Keyboards:
 - Razer BlackWidow X Chroma
 - Razer BlackWidow X Chroma Tournament Edition
 - Razer BlackWidow X Chroma Ultimate
+- Razer BlackWidow V4 75%
 - Razer Cynosa Chroma
 - Razer Cynosa Lite
 - Razer Cynosa V2
@@ -221,7 +225,7 @@ Ongoing new device support will be provided on a volunteer contribution basis, a
 
 ## Developer usage
 
-    git clone --recursive https://github.com/1kc/razer-macos.git
+    git clone --recursive https://github.com/stickoking/razer-macos
 
 Ensure xcode command line tools are installed,
 

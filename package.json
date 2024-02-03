@@ -30,12 +30,12 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
+    "@electron/universal": "^1.2.1",
     "babel-loader": "^8.1.0",
     "electron": "^11.5.0",
     "electron-builder": "^23.3.3",
     "electron-builder-notarize": "^1.2.0",
     "electron-webpack": "^2.8.2",
-    "@electron/universal": "^1.2.1",
     "mini-css-extract-plugin": "^0.9.0",
     "native-ext-loader": "^2.3.0",
     "node-gyp": "^8.2.0",
@@ -88,7 +88,8 @@
       "darwin"
     ],
     "arches": [
-      "x64", "arm64"
+      "x64",
+      "arm64"
     ]
   }
 }
