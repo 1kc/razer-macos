@@ -71,6 +71,7 @@ Keyboards:
 - Razer Cynosa V2
 - Razer Deathstalker Chroma
 - Razer Deathstalker Expert
+- Razer Deathstalker V2
 - Razer Huntsman
 - Razer Huntsman Elite
 - Razer Huntsman Mini
