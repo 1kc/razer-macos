@@ -1,0 +1,15 @@
+{
+  "name": "Razer Naga X",
+  "productId": "0x0096",
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1704/product.png",
+  "features": null,
+  "featuresMissing": ["oldMouseEffects"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 18000
+      }
+    }
+  ]
+}
