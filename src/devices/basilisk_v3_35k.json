@@ -1,0 +1,21 @@
+{
+    "name": "Razer Basilisk V3 35k",
+    "productId": "0x00cb",
+    "mainType": "mouse",
+    "image": "https://dl.razerzone.com/src/5620/5620-1-en-v1.png",
+    "features": null,
+    "featuresMissing": ["oldMouseEffects", "reactive", "breathe"],
+    "featuresConfig": [
+      {
+        "dpi": {
+          "max": 35000
+        }
+      },
+      {
+        "mouseBrightness": {
+          "enabledLeft": false,
+          "enabledRight": false
+        }
+      }
+    ]
+  }
