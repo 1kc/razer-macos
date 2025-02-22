@@ -87,7 +87,7 @@ Keyboards:
 
 Mice:
 
-- Razer Abyssus 
+- Razer Abyssus
 - Razer Abyssus 1800
 - Razer Abyssus 2000
 - Razer Abyssus Elite DVA Edition
@@ -146,6 +146,7 @@ Mouse mats:
 - Razer Firefly V2
 - Razer Goliathus Chroma
 - Razer Goliathus Chroma Extended
+- Razer Goliathus Chroma 3xl
 
 e-GPUs:
 
@@ -187,7 +188,7 @@ Speakers:
 - Razer Nommo Chroma
 - Razer Nommo Pro
 
-Mugs: 
+Mugs:
 
 - Razer Chroma Mug
 - Razer Chroma Base
@@ -227,13 +228,11 @@ Ensure xcode command line tools are installed,
 
 If you have a paid Apple Developer account, edit `release.sh` with your details.
 
- Afterwards, to automatically build, sign, and/or notarize (if applicable,) run in Terminal: `./release.sh`
+Afterwards, to automatically build, sign, and/or notarize (if applicable,) run in Terminal: `./release.sh`
 
- Ad-hoc signing will be used if account information is left empty.
+Ad-hoc signing will be used if account information is left empty.
 
-
-
- Or build manually:
+Or build manually:
 
 Install node package dependencies:
 
