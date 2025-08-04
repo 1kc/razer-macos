@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+#DEBHELPER#
+
+printf "\n\033[1;36mADD YOUR USER TO THE PLUGDEV GROUP: '\033[1;35msudo gpasswd -a \$USER plugdev\033[1;36m'\033[0m\n"

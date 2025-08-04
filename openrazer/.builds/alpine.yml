@@ -1,0 +1,79 @@
+image: alpine/latest
+packages:
+  - astyle
+  - dbus-x11
+  - linux-lts-dev
+  - py3-autopep8
+  - py3-daemonize
+  - py3-dbus
+  - py3-gobject3
+  - py3-numpy
+  - py3-pylint
+  - py3-setproctitle
+  - py3-setuptools
+  - py3-udev
+  - sed
+sources:
+  - https://github.com/openrazer/openrazer
+tasks:
+  - check-formatting: |
+      cd openrazer
+
+      # Check the formatting of the driver and the python code
+      # Disable astyle for now:
+      # https://gitlab.com/saalen/astyle/-/issues/91
+      #./scripts/ci/check-astyle-formatting.sh
+      ./scripts/ci/check-autopep8-formatting.sh
+
+  - check-misc: |
+      cd openrazer
+
+      # Check with pylint for errors
+      ./scripts/ci/check-pylint.sh
+      # Check for auto-generated files
+      ./scripts/ci/test-auto-generate.sh
+      # Check for hex casing issues
+      ./scripts/ci/test-hex-casing.sh
+
+  - compile-driver: |
+      cd openrazer
+
+      kerneldirs=(/lib/modules/*/build)
+      kerneldir="${kerneldirs[0]}"
+
+      # Work around the following error by disabling gcc plugins
+      #   cc1: error: incompatible gcc/plugin versions
+      #   cc1: error: failed to initialize plugin ./scripts/gcc-plugins/stackleak_plugin.so
+      sudo truncate -s 0 "$kerneldir"/scripts/Makefile.gcc-plugins
+
+      # Compile the kernel driver
+      echo "ccflags-y := -Wall -Werror" >> driver/Makefile
+      make KERNELDIR="$kerneldir"
+
+  - functional-test-setup: |
+      # The daemon wants the user to be in the plugdev group
+      sudo addgroup -S plugdev
+      sudo addgroup -S $USER plugdev
+
+  - functional-test: |
+      cd openrazer
+
+      # Clean up background processes on exit
+      trap "pkill -f openrazer-daemon;
+            pkill -f create_fake_dev;
+            pkill -f dbus-daemon" EXIT
+
+      # Launch dbus
+      eval $(dbus-launch --sh-syntax)
+
+      # Setup the fake driver
+      ./scripts/ci/setup-fakedriver.sh
+
+      # Launch the daemon
+      ./scripts/ci/launch-daemon.sh
+
+      # Wait for the daemon to be ready
+      sleep 5
+
+      # Run a simple check to see if the daemon is alive
+      ./scripts/ci/test-daemon.sh

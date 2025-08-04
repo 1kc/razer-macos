@@ -98,6 +98,7 @@ Mice:
 - Razer Basilisk Ultimate
 - Razer Basilisk V2
 - Razer Basilisk V3
+- Razer Basilisk V3 X HyperSpeed
 - Razer DeathAdder 3 5G
 - Razer DeathAdder 1800
 - Razer DeathAdder 2013 (under older mouse effects)
@@ -274,3 +275,7 @@ Builds on work done by these amazing projects:
 - [openrazer](https://github.com/openrazer/openrazer)
 - [osx-razer-blade](https://github.com/kprinssu/osx-razer-blade)
 - [osx-razer-led](https://github.com/dylanparker/osx-razer-led)
+## New Device Support
+- ✨ Added support for **Razer Basilisk V3 X HyperSpeed**
+- Full RGB lighting control and wireless connectivity support
+- Compatible with all standard mouse effects (static, breathing, spectrum cycling, etc.)

@@ -17,7 +17,7 @@ export class RazerDevice {
         r: 255,
         g: 255,
         b: 0,
-      }
+      },
     };
     this.activeMode = null;
     this.activeModeArguments = null;
@@ -29,17 +29,16 @@ export class RazerDevice {
   }
 
   getSettingsKey() {
-    return 'razer_'+this.productId;
+    return 'razer_' + this.productId;
   }
 
   getDefaultSettings() {
     return {
-      customColor1: this.defaultColorSettings
+      customColor1: this.defaultColorSettings,
     };
   }
 
-  refresh() {
-  }
+  refresh() {}
 
   destroy() {
     this.addon = null;
@@ -53,8 +52,8 @@ export class RazerDevice {
   getState() {
     return {
       mode: this.activeMode,
-      args: this.activeModeArguments
-    }
+      args: this.activeModeArguments,
+    };
   }
 
   resetToState(state) {
@@ -65,28 +64,63 @@ export class RazerDevice {
     return typeof this.getFeature(featureIdentifier) !== 'undefined';
   }
   getFeature(featureIdentifier) {
-    return this.features.find(feature => feature.featureIdentifier === featureIdentifier);
+    return this.features.find(
+      (feature) => feature.featureIdentifier === featureIdentifier
+    );
   }
 
   //override in device types
   setModeNone() {
-    this.setModeState('none');
+    try {
+      this.setModeState('none');
+    } catch (error) {
+      throw new Error(`Failed to set mode none: ${error.message}`);
+    }
   }
+
   setModeStaticNoStore(color) {
-    this.setModeState('staticNoStore', color);
+    try {
+      if (!color) {
+        throw new Error('Color parameter is required');
+      }
+      this.setModeState('staticNoStore', color);
+    } catch (error) {
+      throw new Error(`Failed to set static no store mode: ${error.message}`);
+    }
   }
+
   setModeStatic(color) {
-    this.setModeState('static', color);
+    try {
+      if (!color) {
+        throw new Error('Color parameter is required');
+      }
+      this.setModeState('static', color);
+    } catch (error) {
+      throw new Error(`Failed to set static mode: ${error.message}`);
+    }
   }
 
   setSpectrum() {
-    this.setModeState('spectrum');
-  }
-  setBreathe(color) {
-    this.setModeState('breathe', color);
+    try {
+      this.setModeState('spectrum');
+    } catch (error) {
+      throw new Error(`Failed to set spectrum mode: ${error.message}`);
+    }
   }
 
-  /*protected*/ setModeState(mode, modeArguments = null) {
+  setBreathe(color) {
+    try {
+      if (!color) {
+        throw new Error('Color parameter is required');
+      }
+      this.setModeState('breathe', color);
+    } catch (error) {
+      throw new Error(`Failed to set breathe mode: ${error.message}`);
+    }
+  }
+
+  /*protected*/
+  setModeState(mode, modeArguments = null) {
     this.activeMode = mode;
     this.activeModeArguments = modeArguments;
   }
@@ -99,10 +133,10 @@ export class RazerDevice {
     const ignoreProperties = this.getSerializeIgnoredProperties();
     const serializedDevice = {};
     Object.entries(this)
-      .filter(([key]) => !ignoreProperties.find(ignored => ignored === key))
+      .filter(([key]) => !ignoreProperties.find((ignored) => ignored === key))
       .forEach(([key, value]) => {
         serializedDevice[key] = value;
-      })
+      });
     serializedDevice['state'] = this.getState();
     return serializedDevice;
   }
