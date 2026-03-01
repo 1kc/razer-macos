@@ -1,0 +1,15 @@
+{
+  "name": "Razer Basilisk X HyperSpeed",
+  "productId": "0x0083",
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1476/1476_basilisk-x-hyperspeed.png",
+  "features": null,
+  "featuresMissing": ["mouseBrightness", "waveSimple"],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 16000
+      }
+    }
+  ]
+}
