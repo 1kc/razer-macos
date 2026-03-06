@@ -3,6 +3,7 @@ import { SettingsManager } from './settingsmanager';
 import { RazerAnimationCycleSpectrum } from './animation/animationcyclespectrum';
 import { RazerAnimationCycleCustom } from './animation/animationcyclecustom';
 import { StateManager } from './statemanager';
+import { USBMonitor } from './usbmonitor';
 
 /**
  * Main application
@@ -17,8 +18,12 @@ export class RazerApplication {
     this.settingsManager = new SettingsManager();
     this.stateManager = new StateManager(this.settingsManager);
     this.deviceManager = new RazerDeviceManager(this.settingsManager, this.stateManager);
+    this.usbMonitor = new USBMonitor(this.deviceManager, this.stateManager);
     this.spectrumAnimation = null;
     this.cycleAnimation = null;
+    
+    // Start USB monitoring for KVM support
+    this.usbMonitor.start();
   }
 
   async refresh(withOnStartState = true) {
@@ -35,6 +40,7 @@ export class RazerApplication {
   }
 
   destroy() {
+    this.usbMonitor.stop();
     this.deviceManager.destroy();
   }
 
