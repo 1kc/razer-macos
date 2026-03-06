@@ -24,6 +24,7 @@ export class StateManager {
         this.stateOnUnlockScreen = savedState.stateOnUnlockScreen;
         this.stateOnUserDidBecomeActive = savedState.stateOnUserDidBecomeActive;
         this.stateOnUserDidResignActive = savedState.stateOnUserDidResignActive;
+        this.stateOnDeviceReconnect = savedState.stateOnDeviceReconnect || null;
       } else {
         await this.createNewState();
       }
@@ -49,6 +50,7 @@ export class StateManager {
     this.stateOnUnlockScreen = null;
     this.stateOnUserDidBecomeActive = null;
     this.stateOnUserDidResignActive = null;
+    this.stateOnDeviceReconnect = null; // KVM: State to apply when device reconnects
     await this.save();
   }
 
@@ -115,6 +117,7 @@ export class StateManager {
       stateOnUnlockScreen: this.stateOnUnlockScreen,
       stateOnUserDidBecomeActive: this.stateOnUserDidBecomeActive,
       stateOnUserDidResignActive: this.stateOnUserDidResignActive,
+      stateOnDeviceReconnect: this.stateOnDeviceReconnect,
     });
   }
 
@@ -207,6 +210,32 @@ export class StateManager {
     }
   }
 
+  async deviceReconnect() {
+    return this.changeToState(this.stateOnDeviceReconnect);
+  }
+
+  /**
+   * Apply the current state to all devices
+   * Used when device reconnects via KVM to restore lighting
+   */
+  async applyCurrentState() {
+    // If there's a specific state for device reconnect, use it
+    if (this.stateOnDeviceReconnect) {
+      await this.deviceReconnect();
+      return;
+    }
+
+    // Otherwise, apply the current state of each device
+    if (this.devices) {
+      for (const device of this.devices) {
+        const currentState = device.getState();
+        if (currentState) {
+          device.resetToState(currentState);
+        }
+      }
+    }
+  }
+
   serialize() {
     return {
       devices: this.devices.map(device => device.serialize()),
@@ -221,6 +250,7 @@ export class StateManager {
       stateOnUnlockScreen: this.stateOnUnlockScreen,
       stateOnUserDidBecomeActive: this.stateOnUserDidBecomeActive,
       stateOnUserDidResignActive: this.stateOnUserDidResignActive,
+      stateOnDeviceReconnect: this.stateOnDeviceReconnect,
     };
   }
 }
