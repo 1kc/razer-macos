@@ -1,0 +1,24 @@
+{
+  "name": "Razer Cobra",
+  "productId": "0x00A3",
+  "mainType": "mouse",
+  "image": "https://assets2.razerzone.com/images/pnx.assets/0cf39c832890131444d75991945a1b10/razer-cobra-hero.webp",
+  "features": null,
+  "featuresMissing": ["waveSimple"],
+  "featuresConfig": [
+    {
+      "mouseBrightness": {
+        "enabledMatrix": false,
+        "enabledScroll": false,
+        "enabledLeft": false,
+        "enabledRight": false
+      }
+    },
+    {
+      "dpi": {
+        "max": 8500
+      }
+    }
+  ]
+}
+
