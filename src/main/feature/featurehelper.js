@@ -7,6 +7,7 @@ import { FeatureBreathe } from './featurebreathe';
 import { FeatureStarlight } from './featurestarlight';
 import { FeatureRipple } from './featureripple';
 import { FeatureWheel } from './featurewheel';
+import { FeatureFire } from './featurefire';
 import { FeatureBrightness } from './featurebrightness';
 import { FeatureWaveSimple } from './featurewavesimple';
 import { FeatureOldMouseEffects } from './featureoldmouseeffects';
@@ -34,6 +35,7 @@ export class FeatureHelper {
       case FeatureIdentifier.BRIGHTNESS: return new FeatureBrightness(configuration);
       case FeatureIdentifier.RIPPLE: return new FeatureRipple(configuration);
       case FeatureIdentifier.WHEEL: return new FeatureWheel(configuration);
+      case FeatureIdentifier.FIRE: return new FeatureFire(configuration);
       case FeatureIdentifier.OLD_MOUSE_EFFECTS: return new FeatureOldMouseEffects(configuration);
       case FeatureIdentifier.MOUSE_BRIGHTNESS: return new FeatureMouseBrightness(configuration);
       case FeatureIdentifier.POLL_RATE: return new FeatureMousePollRate(configuration);
@@ -57,6 +59,7 @@ export class FeatureHelper {
           new FeatureStarlight(),
           new FeatureRipple(),
           new FeatureWheel(),
+          new FeatureFire(),
           new FeatureBrightness(),
         ];
       case RazerDeviceType.MOUSE:

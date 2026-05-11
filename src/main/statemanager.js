@@ -202,6 +202,9 @@ export class StateManager {
       case 'wheel':
         device.setWheelEffect(state.args[0], state.args[1]);
         break;
+      case 'fire':
+        device.setFireEffect(state.args[0], state.args[1]);
+        break;
       default:
         console.error('Unknown State mode ' + state.mode);
     }
