@@ -33,7 +33,9 @@ export class RazerDeviceKeyboard extends RazerDevice {
 
   resetToState(state) {
     super.resetToState(state);
-    this.setBrightness(state.brightness);
+    if(typeof state.brightness !== 'undefined' && state.brightness !== this.brightness) {
+      this.setBrightness(state.brightness);
+    }
   }
 
   destroy() {
