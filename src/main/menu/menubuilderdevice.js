@@ -77,6 +77,8 @@ function getFeatureMenuFor(application, device, feature) {
       return getFeatureRipple(application, device, feature);
     case FeatureIdentifier.WHEEL:
       return getFeatureWheel(application, device, feature);
+    case FeatureIdentifier.FIRE:
+      return getFeatureFire(application, device, feature);
     case FeatureIdentifier.OLD_MOUSE_EFFECTS:
       return getFeatureOldMouseEffect(application, device, feature);
     case FeatureIdentifier.MOUSE_BRIGHTNESS:
@@ -256,6 +258,53 @@ function getFeatureWheel(application, device, feature) {
       singleItem('Fast Speed', 1),
     ],
   };
+}
+
+function getFeatureFire(application, device, feature) {
+  const configuration = getMatrixConfiguration(device, feature);
+
+  if(configuration == null) {
+    return {
+      // device missing rows, cols config
+      label: 'Fire',
+      enabled: false
+    };
+  }
+
+  const singleItem = (label, colors) => {
+    return {
+      label: label,
+      click() {
+        device.setFireEffect(configuration, colors);
+      },
+    };
+  };
+
+  return {
+    label: 'Fire',
+    submenu: [
+      singleItem('Custom color', Object.values(device.settings.customColor1.rgb).slice(0, 3)),
+      singleItem('Custom dual color',
+        Object.values(device.settings.customColor1.rgb).slice(0, 3)
+          .concat(Object.values(device.settings.customColor2.rgb).slice(0, 3)),
+      ),
+      singleItem('Classic', [0xff, 0x24, 0, 0xff, 0xb0, 0]),
+      singleItem('Blue', [0, 0x55, 0xff, 0xbf, 0xff, 0xff]),
+      singleItem('Green', [0, 0xff, 0x40, 0xff, 0xff, 0x80]),
+    ],
+  };
+}
+
+function getMatrixConfiguration(device, feature) {
+  const configurations = [
+    feature.configuration,
+    device.hasFeature(FeatureIdentifier.WHEEL) ? device.getFeature(FeatureIdentifier.WHEEL).configuration : null,
+    device.hasFeature(FeatureIdentifier.RIPPLE) ? device.getFeature(FeatureIdentifier.RIPPLE).configuration : null,
+  ];
+
+  return configurations.find(configuration => {
+    return configuration != null && configuration.rows !== -1 && configuration.cols !== -1;
+  });
 }
 
 function getFeatureSpectrum(application, device, feature) {
