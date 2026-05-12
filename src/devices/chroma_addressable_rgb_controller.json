@@ -1,0 +1,7 @@
+{
+  "name": "Razer Chroma Addressable RGB Controller",
+  "productId": "0x0F1F",
+  "mainType": "accessory",
+  "image": "https://dl.razerzone.com/src/3903-1-EN-v1.png",
+  "features": null
+}
