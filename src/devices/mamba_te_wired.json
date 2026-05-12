@@ -2,10 +2,19 @@
   "name": "Razer Mamba Tournament Edition",
   "productId": "0x0046",
   "mainType": "mouse",
+  "lightingEffectTarget": "backlight",
   "image": "https://assets.razerzone.com/eeimages/support/products/606/606_mambate_500x500.png",
   "features": null,
-  "featuresMissing": ["mouseBrightness"],
+  "featuresMissing": ["oldMouseEffects"],
   "featuresConfig": [
+    {
+      "mouseBrightness": {
+        "enabledLogo": false,
+        "enabledScroll": false,
+        "enabledLeft": false,
+        "enabledRight": false
+      }
+    },
     {
       "dpi": {
         "max": 16000
