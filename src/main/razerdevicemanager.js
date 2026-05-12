@@ -45,6 +45,7 @@ export class RazerDeviceManager {
         features: configurationDevice.features,
         featuresMissing: configurationDevice.featuresMissing,
         featuresConfig: configurationDevice.featuresConfig,
+        lightingEffectTarget: configurationDevice.lightingEffectTarget,
       };
       const razerDevice = this.createRazerDeviceFrom(razerProperties);
       return razerDevice.init();
@@ -120,6 +121,7 @@ export class RazerDeviceManager {
       mainType: razerProperties.mainType,
       image: razerProperties.image,
       features: null,
+      lightingEffectTarget: razerProperties.lightingEffectTarget,
     };
 
     /// create from device standard or from feature list
@@ -161,6 +163,7 @@ export class RazerDeviceManager {
         features: razerConfigDevice.features,
         featuresMissing: razerConfigDevice.featuresMissing,
         featuresConfig: razerConfigDevice.featuresConfig,
+        lightingEffectTarget: razerConfigDevice.lightingEffectTarget,
         image: razerConfigDevice.image,
       };
     });
