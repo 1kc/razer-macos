@@ -22,6 +22,7 @@ export class RazerApplication {
   }
 
   async refresh(withOnStartState = true) {
+    const previousDeviceStates = this.deviceManager.snapshotActiveDeviceStates();
     return this.deviceManager.refreshRazerDevices().then(() => {
       const spectrumPromise = new RazerAnimationCycleSpectrum(this).init().then(animation => {
         this.spectrumAnimation = animation;
@@ -29,7 +30,12 @@ export class RazerApplication {
       const cyclePromise = new RazerAnimationCycleCustom(this).init().then(animation => {
         this.cycleAnimation = animation;
       });
-      const resetAll = this.stateManager.init(this.deviceManager.activeRazerDevices, withOnStartState);
+      const resetAll = this.stateManager.init(this.deviceManager.activeRazerDevices, withOnStartState).then(() => {
+        // If no startup state is configured, keep the previous live device state on reconnect.
+        if (withOnStartState && !this.stateManager.stateOnStart) {
+          this.deviceManager.restoreDeviceStates(previousDeviceStates);
+        }
+      });
       return Promise.all([spectrumPromise, cyclePromise, resetAll]).then(() => true);
     });
   }

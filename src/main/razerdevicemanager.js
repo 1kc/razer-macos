@@ -57,6 +57,40 @@ export class RazerDeviceManager {
     });
   }
 
+  snapshotActiveDeviceStates() {
+    if (this.activeRazerDevices == null) {
+      return [];
+    }
+    return this.activeRazerDevices.map(device => ({
+      productId: device.productId,
+      mainType: device.mainType,
+      state: device.getState(),
+    }));
+  }
+
+  restoreDeviceStates(previousStates) {
+    if (this.activeRazerDevices == null || previousStates == null || previousStates.length === 0) {
+      return;
+    }
+
+    const remainingStates = previousStates.slice();
+    this.activeRazerDevices.forEach(device => {
+      const matchedStateIndex = remainingStates.findIndex(snapshot =>
+        snapshot.productId === device.productId && snapshot.mainType === device.mainType
+      );
+      if (matchedStateIndex === -1) {
+        return;
+      }
+
+      const snapshot = remainingStates.splice(matchedStateIndex, 1)[0];
+      if (snapshot == null || snapshot.state == null) {
+        return;
+      }
+
+      device.resetToState(snapshot.state);
+    });
+  }
+
   sortDevices(devices) {
     const deviceOrder = [
       RazerDeviceType.KEYBOARD,
