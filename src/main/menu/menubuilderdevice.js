@@ -285,6 +285,15 @@ function getFeatureStarlight(application, device, feature) {
     ];
   };
 
+  const customDualColor = [
+    device.settings.customColor1.rgb.r,
+    device.settings.customColor1.rgb.g,
+    device.settings.customColor1.rgb.b,
+    device.settings.customColor2.rgb.r,
+    device.settings.customColor2.rgb.g,
+    device.settings.customColor2.rgb.b,
+  ];
+
   return {
     label: 'Starlight',
     submenu: [
@@ -294,7 +303,11 @@ function getFeatureStarlight(application, device, feature) {
       },
       {
         label: 'Custom dual color',
-        submenu: menuFor([device.settings.customColor1.rgb.r, device.settings.customColor1.rgb.g, device.settings.customColor1.rgb.b, device.settings.customColor2.rgb.r, device.settings.customColor2.rgb.g, device.settings.customColor2.rgb.b]),
+        submenu: menuFor(customDualColor),
+      },
+      {
+        label: 'Custom fire dual color',
+        submenu: menuFor(customDualColor),
       },
       {
         label: 'Random',
@@ -323,6 +336,14 @@ function getFeatureStarlight(application, device, feature) {
       {
         label: 'Orange',
         submenu: menuFor([0xff, 0x45, 0]),
+      },
+      {
+        label: 'Fire',
+        submenu: menuFor([0xff, 0x2d, 0, 0xff, 0x8c, 0]),
+      },
+      {
+        label: 'Deep Fire',
+        submenu: menuFor([0x8b, 0, 0, 0xff, 0x45, 0]),
       },
 
       {
