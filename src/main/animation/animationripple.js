@@ -117,7 +117,7 @@ constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
     this.backgroundColor = backgroundColor != null ? backgroundColor : [0, 0, 0];
 
     this.device = device;
-    this.ioHook = require('iohook');
+    this.ioHook = require('uiohook-napi').uIOhook;
 
     this.nRows = featureConfiguration.rows;
     this.nCols = featureConfiguration.cols;
@@ -195,6 +195,5 @@ constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
 
   destroy() {
     this.stop();
-    this.ioHook.unload();
   }
 }

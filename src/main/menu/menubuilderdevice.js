@@ -86,16 +86,137 @@ function getFeatureMenuFor(application, device, feature) {
     case FeatureIdentifier.MOUSE_DPI:
       return null;
     case FeatureIdentifier.BATTERY:
-      return null;
+      return getFeatureBatteryLevel(application, device, feature);
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';
   }
+}
+
+// Battery level moves over hours, so a slow tick is plenty. Each tick makes a
+// synchronous native USB call, so this doubles as limiting exposure to a stale
+// device handle.
+const BATTERY_POLL_MS = 120000;
+
+function clearBatteryMode(device) {
+  if (device.batteryLevelInterval) {
+    clearInterval(device.batteryLevelInterval);
+    device.batteryLevelInterval = null;
+  }
+  if (device.settings && device.settings.batteryModeActive) {
+    device.settings.batteryModeActive = false;
+    device.setSettings(device.settings);
+  }
+}
+
+function getFeatureBatteryLevel(application, device, feature) {
+  const getDockTargetDevice = () => {
+    if (device.mainType !== RazerDeviceType.MOUSEDOCK) {
+      return device;
+    }
+
+    const devices = application.razerApplication.deviceManager.activeRazerDevices || [];
+    // Resolve the live dock object every tick in case the device list refreshed.
+    // Deliberately no fallback to the captured `device`: once the dock leaves the
+    // active list its native handle has been released, and writing to it segfaults
+    // inside IOUSBLib rather than throwing something the try/catch could catch.
+    return devices.find(activeDevice =>
+      activeDevice.mainType === RazerDeviceType.MOUSEDOCK
+      && activeDevice.productId === device.productId,
+    ) || null;
+  };
+
+  const getBatterySourceDevice = () => {
+    if (device.mainType !== RazerDeviceType.MOUSEDOCK) {
+      return getDockTargetDevice();
+    }
+
+    // Dock has no own battery telemetry; map to an attached mouse battery.
+    const devices = application.razerApplication.deviceManager.activeRazerDevices || [];
+    const batteryMice = devices.filter(activeDevice =>
+      activeDevice.mainType === RazerDeviceType.MOUSE
+      && activeDevice.hasFeature(FeatureIdentifier.BATTERY),
+    );
+
+    const chargingMouse = batteryMice.find(mouse => mouse.chargingStatus);
+    return chargingMouse || batteryMice[0] || null;
+  };
+
+  const updateBatteryColor = () => {
+    const dockTargetDevice = getDockTargetDevice();
+    if (!dockTargetDevice) {
+      return;
+    }
+
+    const batterySourceDevice = getBatterySourceDevice();
+    if (batterySourceDevice && typeof batterySourceDevice.refresh === 'function') {
+      batterySourceDevice.refresh();
+    }
+
+    const batteryLevel = batterySourceDevice ? batterySourceDevice.batteryLevel : null;
+    if (!batteryLevel || batteryLevel === -1) {
+      dockTargetDevice.setModeStatic([255, 255, 255]);
+      return;
+    }
+
+    let r = 0;
+    let g = 0;
+
+    if (batteryLevel < 50) {
+      r = 255;
+      g = Math.round(5.1 * batteryLevel);
+    } else {
+      g = 255;
+      r = Math.round(510 - 5.10 * batteryLevel);
+    }
+
+    dockTargetDevice.setModeStatic([r, g, 0]);
+  };
+
+  // Auto-start polling if battery mode was active when the app last ran.
+  if (device.settings && device.settings.batteryModeActive && !device.batteryLevelInterval) {
+    try {
+      updateBatteryColor();
+    } catch (error) {
+      console.warn('Failed to apply initial battery color update', error);
+    }
+    device.batteryLevelInterval = setInterval(() => {
+      try {
+        updateBatteryColor();
+      } catch (error) {
+        console.warn('Failed battery color update tick', error);
+      }
+    }, BATTERY_POLL_MS);
+  }
+
+  return {
+    label: 'Battery level',
+    click() {
+      if (device.batteryLevelInterval) clearInterval(device.batteryLevelInterval);
+      if (device.settings) {
+        device.settings.batteryModeActive = true;
+        device.setSettings(device.settings);
+      }
+      try {
+        updateBatteryColor();
+      } catch (error) {
+        console.warn('Failed to apply initial battery color update', error);
+      }
+      device.batteryLevelInterval = setInterval(() => {
+        try {
+          updateBatteryColor();
+        } catch (error) {
+          console.warn('Failed battery color update tick', error);
+        }
+      }, BATTERY_POLL_MS);
+    },
+  };
 }
 
 function getFeatureBreath(application, device, feature) {
   return {
     label: 'Breathe',
     click() {
+      clearBatteryMode(device);
       // random
       device.setBreathe([0]);
     },
@@ -135,6 +256,7 @@ function getFeatureNone(application, device, feature) {
   return {
     label: 'None',
     click() {
+      clearBatteryMode(device);
       device.setModeNone();
     },
   };
@@ -146,24 +268,28 @@ function getFeatureOldMouseEffect(application, device, feature) {
     feature.configuration.enabledStatic ? {
       label: 'Static',
       click() {
+        clearBatteryMode(device);
         device.setLogoLEDEffect('static');
       },
     } : null,
     feature.configuration.enabledBlinking ? {
       label: 'Blinking',
       click() {
+        clearBatteryMode(device);
         device.setLogoLEDEffect('blinking');
       },
     } : null,
     feature.configuration.enabledPulsate ? {
       label: 'Pulsate',
       click() {
+        clearBatteryMode(device);
         device.setLogoLEDEffect('pulsate');
       },
     } : null,
     feature.configuration.enabledScroll ? {
       label: 'Scroll',
       click() {
+        clearBatteryMode(device);
         device.setLogoLEDEffect('scroll');
       },
     } : null,
@@ -180,6 +306,7 @@ function getFeatureReactive(application, device, feature) {
     return {
       label: label,
       click() {
+        clearBatteryMode(device);
         device.setReactive(colorMode);
       },
     };
@@ -197,7 +324,7 @@ function getFeatureReactive(application, device, feature) {
 
 function getFeatureRipple(application, device, feature) {
 
-  if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
+  if (feature.configuration == null || feature.configuration.rows === -1 || feature.configuration.cols === -1) {
     return {
       // device missing rows, cols config
       label: 'Ripple',
@@ -209,6 +336,7 @@ function getFeatureRipple(application, device, feature) {
     return {
       label: label,
       click() {
+        clearBatteryMode(device);
         device.setRippleEffect(feature.configuration, color, backgroundColor);
       },
     };
@@ -231,7 +359,7 @@ function getFeatureRipple(application, device, feature) {
 
 function getFeatureWheel(application, device, feature) {
 
-  if(feature.configuration == null || feature.configuration.rows === -1 ||  feature.configuration.cols === -1) {
+  if (feature.configuration == null || feature.configuration.rows === -1 || feature.configuration.cols === -1) {
     return {
       // device missing rows, cols config
       label: 'Wheel',
@@ -243,6 +371,7 @@ function getFeatureWheel(application, device, feature) {
     return {
       label: label,
       click() {
+        clearBatteryMode(device);
         device.setWheelEffect(feature.configuration, speed);
       },
     };
@@ -262,6 +391,7 @@ function getFeatureSpectrum(application, device, feature) {
   return {
     label: 'Spectrum',
     click() {
+      clearBatteryMode(device);
       device.setSpectrum();
     },
   };
@@ -272,6 +402,7 @@ function getFeatureStarlight(application, device, feature) {
     return {
       label: label,
       click() {
+        clearBatteryMode(device);
         device.setStarlight([speed].concat(colors));
       },
     };
@@ -346,6 +477,7 @@ function getFeatureStatic(application, device, feature) {
     return {
       label: label,
       click() {
+        clearBatteryMode(device);
         device.setModeStatic(color);
       },
     };
@@ -370,6 +502,7 @@ function getFeatureWaveExtended(application, device, feature) {
     return {
       label: label,
       click() {
+        clearBatteryMode(device);
         device.setWaveExtended(directionSpeed);
       },
     };
@@ -411,12 +544,14 @@ function getFeatureWaveSimple(application, device, feature) {
       {
         label: 'Left',
         click() {
+          clearBatteryMode(device);
           device.setWaveSimple('left');
         },
       },
       {
         label: 'Right',
         click() {
+          clearBatteryMode(device);
           device.setWaveSimple('right');
         },
       },
@@ -519,6 +654,6 @@ function getFeatureMouseBrightness(application, device, feature) {
 
   return {
     label: 'Brightness',
-    submenu: submenu.filter(s => s!= null),
+    submenu: submenu.filter(s => s != null),
   };
 }

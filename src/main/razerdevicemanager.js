@@ -151,9 +151,10 @@ export class RazerDeviceManager {
   }
 
   getAllRazerDeviceConfigurations() {
-    const allFiles = require.context('../devices', true, /\.json$/i);
-    return allFiles.keys().map((key) => {
-      const razerConfigDevice = allFiles(key);
+    // Vite has no require.context; import.meta.glob is inlined at build time.
+    const allFiles = import.meta.glob('../devices/*.json', { eager: true });
+    return Object.values(allFiles).map((module) => {
+      const razerConfigDevice = module.default ?? module;
       return {
         name: razerConfigDevice.name,
         productId: parseInt(razerConfigDevice.productId, 16),

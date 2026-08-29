@@ -10,11 +10,20 @@
 - **Supporting Razer devices** Keyboards, mice, mouse mats, eGPUs and blade laptops
 - **Custom color picking** Choose your own colors for static, reactive and starlight effects
 - **Persistent color settings** Color effects are saved to onboard memory
+- **Battery indicator** The Mouse Dock is lit red to green by the attached mouse's charge, and
+  the charge is shown in the menu bar with a lightning bolt while charging
 - **Works on the latest macOS** Including Intel and Apple Silicon. There are no current plans from Razer to support macOS ([source](https://mysupport.razer.com/app/answers/detail/a_id/1381/kw/macOS))
+
+## About this fork
+
+This is a maintained fork of [1kc/razer-macos](https://github.com/1kc/razer-macos), which has had
+no commits since September 2022. It adds a Mouse Dock battery indicator, a menu bar battery
+readout, and a build that works on current Node and Electron. See [CHANGELOG.md](CHANGELOG.md)
+for the full list, including why version `0.5.0` is skipped.
 
 ## Download
 
-[Latest release](https://github.com/1kc/razer-macos/releases)
+[Latest release](https://github.com/uefigs139/razer-macos/releases)
 
 ## Installation instructions
 
@@ -221,9 +230,12 @@ Ongoing new device support will be provided on a volunteer contribution basis, a
 
 ## Developer usage
 
-    git clone --recursive https://github.com/1kc/razer-macos.git
+    git clone --recursive https://github.com/uefigs139/razer-macos.git
 
-Ensure xcode command line tools are installed,
+Ensure xcode command line tools are installed.
+
+Node 20.19 or newer is required (Vite 8). The build uses electron-vite, not the archived
+electron-webpack that upstream still uses.
 
 If you have a paid Apple Developer account, edit `release.sh` with your details.
 

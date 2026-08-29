@@ -1,59 +1,43 @@
 {
   "name": "razer-macos",
-  "version": "0.4.10",
+  "version": "0.6.0",
   "description": "Open source color effects manager for Razer peripherals on macOS",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uefigs139/razer-macos.git"
+  },
   "license": "GPL-2.0-only",
-  "main": "src/main/index.js",
+  "main": "out/main/index.js",
   "scripts": {
-    "dev": "electron-webpack dev",
-    "compile": "electron-webpack",
-    "dist": "yarn compile && electron-builder",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "dist": "yarn build && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "rebuild": "node-gyp rebuild",
     "clean": "node-gyp clean",
     "prettier:js": "prettier --write \"src/{main,renderer}/**/*.{js,jsx}\""
   },
   "dependencies": {
-    "dot-prop": "^5.3.0",
-    "electron-json-storage": "^4.2.0",
-    "iohook": "file:./iohook",
-    "node-addon-api": "^1.0.0",
-    "node-forge": "^0.10.0",
-    "react": "^16.13.1",
-    "react-color": "^2.18.0",
-    "react-dom": "^16.13.1",
-    "react-select": "^3.2.0",
-    "react-slider": "^1.1.2",
-    "react-tabs": "^3.1.2",
-    "source-map-support": "^0.5.19",
-    "tinycolor2": "^1.4.2"
+    "electron-json-storage": "^4.6.0",
+    "node-addon-api": "^8.9.2",
+    "react": "^18.3.1",
+    "react-color": "^2.19.3",
+    "react-dom": "^18.3.1",
+    "react-select": "^5.10.2",
+    "react-slider": "^2.0.6",
+    "react-tabs": "^6.1.1",
+    "tinycolor2": "^1.6.0",
+    "uiohook-napi": "^1.5.5"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.14.5",
-    "babel-loader": "^8.1.0",
-    "electron": "^11.5.0",
-    "electron-builder": "^23.3.3",
-    "electron-builder-notarize": "^1.2.0",
-    "electron-webpack": "^2.8.2",
-    "@electron/universal": "^1.2.1",
-    "mini-css-extract-plugin": "^0.9.0",
-    "native-ext-loader": "^2.3.0",
-    "node-gyp": "^8.2.0",
-    "prettier": "^2.2.1",
-    "prop-types": "^15.7.2",
-    "webpack": "^4.44.2",
-    "websocket-extensions": "^0.1.4"
-  },
-  "electronWebpack": {
-    "main": {
-      "sourceDirectory": "src/main",
-      "webpackConfig": "webpack.main.additions.js"
-    },
-    "renderer": {
-      "sourceDirectory": "src/renderer",
-      "template": "src/renderer/index.html",
-      "webpackConfig": "webpack.renderer.additions.js"
-    }
+    "@vitejs/plugin-react": "^6.1.0",
+    "electron": "^44.0.0",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "node-gyp": "^11.4.2",
+    "prettier": "^3.6.2",
+    "prop-types": "^15.8.1",
+    "vite": "^8.2.2"
   },
   "gypfile": true,
   "build": {
@@ -64,7 +48,13 @@
       "output": "dist",
       "buildResources": "resources"
     },
-    "afterSign": "electron-builder-notarize",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "uefigs139",
+        "repo": "razer-macos"
+      }
+    ],
     "mac": {
       "category": "public.app-category.developer-tools",
       "icon": "icon.icns",
@@ -76,19 +66,21 @@
           "arch": [
             "universal"
           ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "universal"
+          ]
         }
       ]
-    }
-  },
-  "iohook": {
-    "targets": [
-      "electron-85"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
     ],
-    "platforms": [
-      "darwin"
-    ],
-    "arches": [
-      "x64", "arm64"
+    "asarUnpack": [
+      "**/*.node"
     ]
   }
 }

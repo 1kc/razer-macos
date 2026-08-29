@@ -1,9 +1,17 @@
 import { RazerApplication } from './razerapplication';
-import { app, dialog, BrowserWindow, ipcMain, Menu, nativeTheme, Tray, powerMonitor } from 'electron';
+import { app, dialog, BrowserWindow, ipcMain, Menu, nativeImage, nativeTheme, Tray, powerMonitor } from 'electron';
 import path from 'path';
 import { getMenuFor } from './menu/menubuilder';
+import { FeatureIdentifier } from './feature/featureidentifier';
+// ?asset resolves to a real file path in dev and in the packaged app,
+// replacing electron-webpack's __static global.
+import trayIconPath from '../../static/assets/iconTemplate.png?asset';
 
 const version = require('../../package.json').version;
+
+// Menu bar battery readout. Each tick makes synchronous native USB calls, so
+// keep it slow: a mouse battery moves over hours.
+const TRAY_BATTERY_POLL_MS = 30000;
 
 /**
  * Application is a small wrapper around an electron app (browserwindow, tray, dialog...)
@@ -218,7 +226,7 @@ export class Application {
 
   createWindow() {
     this.browserWindow = new BrowserWindow({
-      webPreferences: { nodeIntegration: true },
+      webPreferences: { preload: path.join(__dirname, '../preload/index.js') },
       //titleBarStyle: 'hidden',
       height: 800, // This is adjusted later with window.setSize
       resizable: false,
@@ -233,10 +241,10 @@ export class Application {
       show: false,
     });
     if (this.isDevelopment) {
-      this.browserWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
+      this.browserWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
       this.browserWindow.resizable = true;
     } else {
-      this.browserWindow.loadFile(path.join(__dirname, 'index.html'));
+      this.browserWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
     }
 
     // Handle window logic properly on macOS:
@@ -288,9 +296,19 @@ export class Application {
       }
     }
 
-    // Template.png will be automatically inverted by electron: https://www.electronjs.org/docs/api/native-image#template-image
-    this.tray = new Tray(path.join(__static, '/assets/iconTemplate.png'));
+    // The bundler content-hashes the asset filename, so it no longer ends in
+    // "Template" and macOS will not infer a template image from the name.
+    // Set the flag explicitly instead of relying on that convention.
+    // https://www.electronjs.org/docs/api/native-image#template-image
+    const trayIcon = nativeImage.createFromPath(trayIconPath);
+    trayIcon.setTemplateImage(true);
+    this.tray = new Tray(trayIcon);
     this.tray.setToolTip('Razer macOS menu');
+    this.updateTrayBattery();
+    if (this.trayBatteryInterval) {
+      clearInterval(this.trayBatteryInterval);
+    }
+    this.trayBatteryInterval = setInterval(() => this.updateTrayBattery(), TRAY_BATTERY_POLL_MS);
     this.tray.on('click', () => {
       if(this.razerApplication.deviceManager.activeRazerDevices != null) {
         this.razerApplication.deviceManager.activeRazerDevices.forEach(device => {
@@ -305,11 +323,35 @@ export class Application {
     this.refreshTray(true);
   }
 
+  updateTrayBattery() {
+    const devices = this.razerApplication.deviceManager.activeRazerDevices;
+    if (devices == null) {
+      return;
+    }
+    // Only devices that actually report a battery. Refreshing the others would
+    // make native USB calls for nothing.
+    const device = devices.find(
+      activeDevice => activeDevice !== null && activeDevice.hasFeature(FeatureIdentifier.BATTERY),
+    );
+    if (!device) {
+      return;
+    }
+    device.refresh();
+    const batteryLevel = device.batteryLevel;
+    if (!batteryLevel || batteryLevel === -1) {
+      return;
+    }
+    this.tray.setTitle(`  ${device.chargingStatus ? '⚡' : '🔋'}${batteryLevel}%`);
+  }
+
   refreshTray(withDeviceRefresh) {
     const refresh = withDeviceRefresh ? this.razerApplication.refresh() : Promise.resolve(true);
     refresh.then(() => {
       const contextMenu = Menu.buildFromTemplate(getMenuFor(this));
       this.tray.setContextMenu(contextMenu);
+      // Devices have just been enumerated, so the readout can be filled in now
+      // rather than waiting for the next poll.
+      this.updateTrayBattery();
     });
   }
 
