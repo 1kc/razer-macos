@@ -4,6 +4,7 @@ import { FeatureIdentifier } from '../feature/featureidentifier';
 export class RazerDeviceMouse extends RazerDevice {
   constructor(addon, settingsManager, stateManager, razerProperties) {
     super(addon, settingsManager, stateManager, razerProperties);
+    this.lightingEffectTarget = razerProperties.lightingEffectTarget;
   }
 
   async init() {
@@ -24,7 +25,7 @@ export class RazerDeviceMouse extends RazerDevice {
 
     if(typeof featureMouseBrightness !== 'undefined') {
       if(featureMouseBrightness.configuration.enabledMatrix) {
-        this.brightness = this.addon.mouseGetBrightness(this.internalId);
+        this.brightness = this.getMatrixBrightness();
       }
       if(featureMouseBrightness.configuration.enabledLogo) {
         this.brightnessLogo = this.addon.mouseGetLogoBrightness(this.internalId);
@@ -115,36 +116,70 @@ export class RazerDeviceMouse extends RazerDevice {
 
   setModeNone() {
     super.setModeNone();
+    if(this.usesBacklightEffects()) {
+      this.addon.mouseSetMatrixModeNone(this.internalId);
+      return;
+    }
     this.addon.mouseSetLogoModeNone(this.internalId);
   }
 
   setModeStaticNoStore(color) {
     super.setModeStaticNoStore(color);
+    if(this.usesBacklightEffects()) {
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeStaticNoStore(this.internalId, new Uint8Array(color));
+      return;
+    }
     this.addon.mouseSetLogoModeStaticNoStore(this.internalId, new Uint8Array(color));
   }
 
   setModeStatic(color) {
     super.setModeStatic(color);
+    if(this.usesBacklightEffects()) {
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeStatic(this.internalId, new Uint8Array(color));
+      return;
+    }
     this.addon.mouseSetLogoModeStatic(this.internalId, new Uint8Array(color));
   }
 
   setSpectrum() {
     super.setSpectrum();
+    if(this.usesBacklightEffects()) {
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeSpectrum(this.internalId);
+      return;
+    }
     this.addon.mouseSetLogoModeSpectrum(this.internalId);
   }
 
   setBreathe(color) {
     super.setBreathe(color);
+    if(this.usesBacklightEffects()) {
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeBreathe(this.internalId, new Uint8Array(color));
+      return;
+    }
     this.addon.mouseSetLogoModeBreathe(this.internalId, new Uint8Array(color));
   }
 
   // device specific
   setWaveSimple(direction) {
     this.setModeState('waveSimple', direction);
+    if(this.usesBacklightEffects()) {
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeWave(this.internalId, direction === 'left' ? 'left_default' : 'right_default');
+      return;
+    }
     this.addon.mouseSetLogoModeWave(this.internalId, direction);
   }
   setReactive(colorMode) {
     this.setModeState('reactive', colorMode);
+    if(this.usesBacklightEffects()) {
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeReactive(this.internalId, new Uint8Array(colorMode));
+      return;
+    }
     this.addon.mouseSetLogoModeReactive(this.internalId, new Uint8Array(colorMode));
   }
   setLogoLEDEffect(effect) {
@@ -165,7 +200,7 @@ export class RazerDeviceMouse extends RazerDevice {
   }
   setBrightnessMatrix(brightness) {
     this.brightness = brightness;
-    this.addon.mouseSetBrightness(this.internalId, this.brightness);
+    this.setMatrixBrightness(this.brightness);
   }
 
   getBrightnessLogo() {
@@ -206,5 +241,31 @@ export class RazerDeviceMouse extends RazerDevice {
   setPollRate(pollRate) {
     this.pollRate = pollRate;
     this.addon.mouseSetPollRate(this.internalId, this.pollRate);
+  }
+
+  usesBacklightEffects() {
+    return this.lightingEffectTarget === 'backlight';
+  }
+
+  ensureBacklightVisible() {
+    if(this.brightness <= 0) {
+      this.brightness = 100;
+      this.addon.mouseSetBrightness(this.internalId, this.brightness);
+    }
+  }
+
+  getMatrixBrightness() {
+    if(this.usesBacklightEffects()) {
+      return this.addon.mouseGetBrightness(this.internalId);
+    }
+    return this.addon.mouseGetBrightness(this.internalId);
+  }
+
+  setMatrixBrightness(brightness) {
+    if(this.usesBacklightEffects()) {
+      this.addon.mouseSetBrightness(this.internalId, brightness);
+      return;
+    }
+    this.addon.mouseSetBrightness(this.internalId, brightness);
   }
 }

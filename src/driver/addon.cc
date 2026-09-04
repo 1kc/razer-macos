@@ -200,6 +200,46 @@ void KbdSetModeCustom(const Napi::CallbackInfo &info)
     razer_attr_write_mode_custom(device.usbDevice, "1", 1);
 }
 
+void MouseSetMatrixModeNone(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    razer_attr_write_matrix_mode_none(device.usbDevice);
+}
+
+Napi::Boolean MouseSetMatrixModeSpectrum(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    return Napi::Boolean::New(info.Env(), razer_attr_write_matrix_mode_spectrum(device.usbDevice) != 0);
+}
+
+void MouseSetMatrixModeWave(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    std::string direction = info[1].ToString().Utf8Value();
+    razer_attr_write_matrix_mode_wave(device.usbDevice, direction.find("left") == 0 ? 1 : 2);
+}
+
+Napi::Boolean MouseSetMatrixModeStatic(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    Napi::Uint8Array args = info[1].As<Napi::Uint8Array>();
+    return Napi::Boolean::New(info.Env(), razer_attr_write_matrix_mode_static(device.usbDevice, (char *)args.Data(), args.ElementLength(), 0x01) != 0);
+}
+
+void MouseSetMatrixModeStaticNoStore(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    Napi::Uint8Array args = info[1].As<Napi::Uint8Array>();
+    razer_attr_write_matrix_mode_static(device.usbDevice, (char *)args.Data(), args.ElementLength(), 0x00);
+}
+
+void MouseSetMatrixModeReactive(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    Napi::Uint8Array args = info[1].As<Napi::Uint8Array>();
+    razer_attr_write_matrix_mode_reactive(device.usbDevice, (char *)args.Data(), args.ElementLength());
+}
+
+void MouseSetMatrixModeBreathe(const Napi::CallbackInfo &info) {
+    RazerDevice device = getRazerDeviceFor(info);
+    Napi::Uint8Array args = info[1].As<Napi::Uint8Array>();
+    razer_attr_write_matrix_mode_breath(device.usbDevice, (char *)args.Data(), args.ElementLength());
+}
+
 void KbdSetCustomFrame(const Napi::CallbackInfo &info)
 {
     RazerDevice device = getRazerDeviceFor(info);
@@ -909,6 +949,13 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set("KbdSetBrightness", Napi::Function::New(env, KbdSetBrightness));
     exports.Set("kbdSetModeStarlight", Napi::Function::New(env, KbdSetModeStarlight));
     exports.Set("kbdSetModeCustom", Napi::Function::New(env, KbdSetModeCustom));
+    exports.Set("mouseSetMatrixModeNone", Napi::Function::New(env, MouseSetMatrixModeNone));
+    exports.Set("mouseSetMatrixModeSpectrum", Napi::Function::New(env, MouseSetMatrixModeSpectrum));
+    exports.Set("mouseSetMatrixModeWave", Napi::Function::New(env, MouseSetMatrixModeWave));
+    exports.Set("mouseSetMatrixModeStatic", Napi::Function::New(env, MouseSetMatrixModeStatic));
+    exports.Set("mouseSetMatrixModeStaticNoStore", Napi::Function::New(env, MouseSetMatrixModeStaticNoStore));
+    exports.Set("mouseSetMatrixModeReactive", Napi::Function::New(env, MouseSetMatrixModeReactive));
+    exports.Set("mouseSetMatrixModeBreathe", Napi::Function::New(env, MouseSetMatrixModeBreathe));
     exports.Set("kbdSetCustomFrame", Napi::Function::New(env, KbdSetCustomFrame));
 
     exports.Set("getBatteryLevel", Napi::Function::New(env, GetMousebatteryLevel));
