@@ -117,7 +117,7 @@ export class RazerDeviceMouse extends RazerDevice {
   setModeNone() {
     super.setModeNone();
     if(this.usesBacklightEffects()) {
-      this.addon.kbdSetModeNone(this.internalId);
+      this.addon.mouseSetMatrixModeNone(this.internalId);
       return;
     }
     this.addon.mouseSetLogoModeNone(this.internalId);
@@ -126,7 +126,8 @@ export class RazerDeviceMouse extends RazerDevice {
   setModeStaticNoStore(color) {
     super.setModeStaticNoStore(color);
     if(this.usesBacklightEffects()) {
-      this.addon.kbdSetModeStaticNoStore(this.internalId, new Uint8Array(color));
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeStaticNoStore(this.internalId, new Uint8Array(color));
       return;
     }
     this.addon.mouseSetLogoModeStaticNoStore(this.internalId, new Uint8Array(color));
@@ -135,7 +136,8 @@ export class RazerDeviceMouse extends RazerDevice {
   setModeStatic(color) {
     super.setModeStatic(color);
     if(this.usesBacklightEffects()) {
-      this.addon.kbdSetModeStatic(this.internalId, new Uint8Array(color));
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeStatic(this.internalId, new Uint8Array(color));
       return;
     }
     this.addon.mouseSetLogoModeStatic(this.internalId, new Uint8Array(color));
@@ -144,7 +146,8 @@ export class RazerDeviceMouse extends RazerDevice {
   setSpectrum() {
     super.setSpectrum();
     if(this.usesBacklightEffects()) {
-      this.addon.kbdSetModeSpectrum(this.internalId);
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeSpectrum(this.internalId);
       return;
     }
     this.addon.mouseSetLogoModeSpectrum(this.internalId);
@@ -153,7 +156,8 @@ export class RazerDeviceMouse extends RazerDevice {
   setBreathe(color) {
     super.setBreathe(color);
     if(this.usesBacklightEffects()) {
-      this.addon.kbdSetModeBreathe(this.internalId, new Uint8Array(color));
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeBreathe(this.internalId, new Uint8Array(color));
       return;
     }
     this.addon.mouseSetLogoModeBreathe(this.internalId, new Uint8Array(color));
@@ -163,7 +167,8 @@ export class RazerDeviceMouse extends RazerDevice {
   setWaveSimple(direction) {
     this.setModeState('waveSimple', direction);
     if(this.usesBacklightEffects()) {
-      this.addon.kbdSetModeWave(this.internalId, direction === 'left' ? 'left_default' : 'right_default');
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeWave(this.internalId, direction === 'left' ? 'left_default' : 'right_default');
       return;
     }
     this.addon.mouseSetLogoModeWave(this.internalId, direction);
@@ -171,7 +176,8 @@ export class RazerDeviceMouse extends RazerDevice {
   setReactive(colorMode) {
     this.setModeState('reactive', colorMode);
     if(this.usesBacklightEffects()) {
-      this.addon.kbdSetModeReactive(this.internalId, new Uint8Array(colorMode));
+      this.ensureBacklightVisible();
+      this.addon.mouseSetMatrixModeReactive(this.internalId, new Uint8Array(colorMode));
       return;
     }
     this.addon.mouseSetLogoModeReactive(this.internalId, new Uint8Array(colorMode));
@@ -241,16 +247,23 @@ export class RazerDeviceMouse extends RazerDevice {
     return this.lightingEffectTarget === 'backlight';
   }
 
+  ensureBacklightVisible() {
+    if(this.brightness <= 0) {
+      this.brightness = 100;
+      this.addon.mouseSetBrightness(this.internalId, this.brightness);
+    }
+  }
+
   getMatrixBrightness() {
     if(this.usesBacklightEffects()) {
-      return this.addon.KbdGetBrightness(this.internalId);
+      return this.addon.mouseGetBrightness(this.internalId);
     }
     return this.addon.mouseGetBrightness(this.internalId);
   }
 
   setMatrixBrightness(brightness) {
     if(this.usesBacklightEffects()) {
-      this.addon.KbdSetBrightness(this.internalId, brightness);
+      this.addon.mouseSetBrightness(this.internalId, brightness);
       return;
     }
     this.addon.mouseSetBrightness(this.internalId, brightness);
