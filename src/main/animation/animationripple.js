@@ -1,5 +1,12 @@
 import { RazerDeviceAnimation } from './animation';
 
+// One shared hook listener per process; stopped effects leave no event closures.
+const activeRippleListeners = new Map();
+let sharedHook = null;
+const dispatchKeydown = event => {
+  activeRippleListeners.forEach(listener => listener(event));
+};
+
 export class RazerAnimationRipple extends RazerDeviceAnimation {
 
 constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
@@ -124,7 +131,7 @@ constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
   }
 
   start() {
-    this.ioHook.start();
+    this.stop();
 
     const refreshRate = 0.05; // in seconds
     const eventDuration = 1; // in seconds
@@ -143,7 +150,7 @@ constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
     let keyEvents = [];
 
     // keyboard listener
-    this.ioHook.on('keydown', (event) => {
+    const listener = (event) => {
       if (!(event.keycode in this.KEY_MAPPING)) return;
       const rowIdx = this.KEY_MAPPING[event.keycode][0];
       const colIdx = this.KEY_MAPPING[event.keycode][1];
@@ -153,7 +160,15 @@ constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
         colIdx,
         startTime: Date.now() / 1000,
       });
-    });
+    };
+    if (sharedHook === null) {
+      sharedHook = this.ioHook;
+      sharedHook.on('keydown', dispatchKeydown);
+    }
+    activeRippleListeners.set(this, listener);
+    if (activeRippleListeners.size === 1) {
+      this.ioHook.start();
+    }
 
     this.rippleEffectInterval = setInterval(() => {
       keyEvents = keyEvents.filter((event) => event.startTime + eventDuration > Date.now() / 1000);
@@ -185,16 +200,20 @@ constructor(device, featureConfiguration, color, backgroundColor = [0, 0, 0]) {
         this.device.setCustomFrame(new Uint8Array(row));
       }
       this.device.setModeCustom();
-    }, refreshRate);
+    }, refreshRate * 1000);
   }
 
   stop() {
-    clearTimeout(this.rippleEffectInterval);
-    this.ioHook.stop();
+    clearInterval(this.rippleEffectInterval);
+    this.rippleEffectInterval = null;
+    const wasActive = activeRippleListeners.delete(this);
+    if (wasActive && activeRippleListeners.size === 0) {
+      this.ioHook.stop();
+    }
   }
 
   destroy() {
+    // Refresh reuses the process-wide hook. Unloading it would break new effects.
     this.stop();
-    this.ioHook.unload();
   }
 }

@@ -74,6 +74,10 @@ export class ViewStateSettings extends React.Component {
     this.setState({ isLoading: true });
 
     const additionalState = ipcRenderer.sendSync('state-settings-add', itemName);
+    if (!additionalState) {
+      this.setState({ isLoading: false });
+      return;
+    }
     this.stateManager.savedStates.push(additionalState);
 
     const devicesWithUndefinedState = additionalState.states.filter(stateObj => !stateObj.state.mode).map(stateObj => {
@@ -107,6 +111,11 @@ export class ViewStateSettings extends React.Component {
     }
     return stateToRender.states.map(stateObj => {
       const device = this.stateManager.devices.find(device => device.productId == stateObj.deviceId);
+      if (!device) {
+        return <div key={stateObj.deviceId} className='state-device'>
+          Device {stateObj.deviceId} is disconnected.
+        </div>;
+      }
       return this.getDeviceStateFor(device, stateObj.state);
     });
   }
@@ -258,7 +267,7 @@ export class ViewStateSettings extends React.Component {
           </div>
           <div className={'state-selectors'}>
 
-            <p>This state will be activated whenever Razer macOS starts or refreshes its devices.</p>
+            <p>This state is activated when Razer macOS starts or you refresh the device list manually. Automatic reconnect restores the last active lighting.</p>
             <div className={'state-selector'}>
               <div>On application start</div>
               <div><Select value={this.state.selectionStart} options={this.state.optionsWithNull} onChange={(item) => this.selectionChangeStart(item)} styles={customStyles} /></div>

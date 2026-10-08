@@ -14,7 +14,12 @@ function patch(deviceMenu, application) {
   deviceMenu.forEach(menuItem => {
     if (menuItem.hasOwnProperty('click')) {
       const originalClick = menuItem['click'];
+      const generation = application.razerApplication.deviceManager.generation;
       menuItem['click'] = (ev) => {
+        if (application.razerApplication.isRefreshing || application.razerApplication.destroyed ||
+            generation !== application.razerApplication.deviceManager.generation) {
+          return;
+        }
         application.razerApplication.stopAnimations();
         originalClick(ev);
       };

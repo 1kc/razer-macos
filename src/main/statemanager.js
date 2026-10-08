@@ -184,6 +184,9 @@ export class StateManager {
       case 'breathe':
         device.setBreathe(state.args);
         break;
+      case 'ledEffect':
+        device.setLogoLEDEffect(state.args);
+        break;
       case 'waveSimple':
         device.setWaveSimple(state.args);
         break;

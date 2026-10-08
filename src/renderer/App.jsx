@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './react-tabs.css';
 import { ipcRenderer } from 'electron';
 import { ViewDeviceSettings } from './views/viewdevicesettings';
@@ -11,29 +11,44 @@ import { ViewStateSettings } from './views/viewstatesettings';
 export class App extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      mode: 'device',
-      message: null
+    this.state = { mode: null, message: null, refreshing: false, revision: 0 };
+    this.renderView = (event, message) => {
+      this.setState(previous => ({
+        mode: message.mode,
+        message,
+        revision: previous.revision + 1,
+      }));
     };
+    this.refreshDevices = (event, refreshing) => this.setState({ refreshing });
+  }
 
-    ipcRenderer.on('render-view', (event, message) => {
-      const {mode} = message;
-      this.setState({mode: null, message: null});
-      this.setState({mode: mode, message: message});
-    })
+  componentDidMount() {
+    ipcRenderer.on('render-view', this.renderView);
+    ipcRenderer.on('device-refreshing', this.refreshDevices);
+  }
+
+  componentWillUnmount() {
+    ipcRenderer.removeListener('render-view', this.renderView);
+    ipcRenderer.removeListener('device-refreshing', this.refreshDevices);
   }
 
   render() {
-    if(this.state.mode === 'device') {
-      return <ViewDeviceSettings config={this.state.message}></ViewDeviceSettings>;
-    } else if(this.state.mode == 'color') {
-      return <ViewColorSettings config={this.state.message}></ViewColorSettings>;
-    } else if(this.state.mode == 'state') {
-      return <ViewStateSettings config={this.state.message}></ViewStateSettings>;
+    const { mode, message, refreshing, revision } = this.state;
+    if (refreshing) {
+      return <div role="status">Refreshing devices…</div>;
     }
-    return <div></div>;
+    if (mode === 'device-unavailable') {
+      return <div role="status">{message.message}</div>;
+    }
+    if (mode === 'device') {
+      return <ViewDeviceSettings key={revision} config={message} />;
+    }
+    if (mode === 'color') {
+      return <ViewColorSettings key={revision} config={message} />;
+    }
+    if (mode === 'state') {
+      return <ViewStateSettings key={revision} config={message} />;
+    }
+    return <div />;
   }
-
-
 }

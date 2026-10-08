@@ -7,6 +7,8 @@ export class RazerDevice {
     this.name = razerDeviceProperties.name;
     this.productId = razerDeviceProperties.productId;
     this.internalId = razerDeviceProperties.internalId;
+    this.generation = razerDeviceProperties.generation;
+    this.destroyed = false;
     this.mainType = razerDeviceProperties.mainType;
     this.image = razerDeviceProperties.image;
     this.features = razerDeviceProperties.features;
@@ -42,7 +44,9 @@ export class RazerDevice {
   }
 
   destroy() {
-    this.addon = null;
+    // Keep the generation-bound driver: a stale UI callback becomes a no-op,
+    // rather than accessing a new device through a recycled native index.
+    this.destroyed = true;
   }
 
   async setSettings(settings) {

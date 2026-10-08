@@ -12,6 +12,10 @@ export class RazerAnimationCycle extends RazerDeviceAnimation {
   }
 
   setDevicesCycleColors() {
+    if (this.cycleColors.length === 0) {
+      return;
+    }
+    this.cycleColorsIndex %= this.cycleColors.length;
     this.razerApp.deviceManager.activeRazerDevices.forEach(device => {
       device.setModeStaticNoStore([
         this.cycleColors[this.cycleColorsIndex].r,
@@ -26,14 +30,20 @@ export class RazerAnimationCycle extends RazerDeviceAnimation {
     }
   }
 
-  start() {
-    clearInterval(this.cycleColorsInterval);
-    this.cycleColorsIndex = 0;
-    this.setDevicesCycleColors(this.cycleColors);
+  start(resetIndex = true) {
+    this.stop();
+    if (resetIndex) {
+      this.cycleColorsIndex = 0;
+    }
+    if (this.cycleColors.length === 0) {
+      return;
+    }
+    this.setDevicesCycleColors();
     this.cycleColorsInterval = setInterval(() => this.setDevicesCycleColors(), this.colorChangeMs);
   }
 
   stop() {
     clearInterval(this.cycleColorsInterval);
+    this.cycleColorsInterval = null;
   }
 }

@@ -15,6 +15,7 @@ constructor(device, featureConfiguration, speed) {
   }
 
   start() {
+    this.stop();
     const refreshRate = 0.05; // in seconds
 
     // initialization
@@ -46,11 +47,12 @@ constructor(device, featureConfiguration, speed) {
         this.device.setCustomFrame(new Uint8Array(row))
       }
       this.device.setModeCustom();
-    }, refreshRate);
+    }, refreshRate * 1000);
   }
 
   stop() {
-    clearTimeout(this.wheelEffectInterval);
+    clearInterval(this.wheelEffectInterval);
+    this.wheelEffectInterval = null;
   }
 
   destroy() {

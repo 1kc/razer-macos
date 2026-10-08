@@ -1,6 +1,13 @@
 #include <napi.h>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
+#include <cstdint>
+#include <string>
+#include <vector>
+#include <CoreFoundation/CoreFoundation.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/usb/USBSpec.h>
 
 extern "C"
 {
@@ -873,6 +880,125 @@ Napi::Number MouseMatGetBrightness(const Napi::CallbackInfo &info) {
     return Napi::Number::New(env, brightness);
 }
 
+namespace {
+class TopologyIOObject {
+public:
+    explicit TopologyIOObject(io_object_t value) : value_(value) {}
+    ~TopologyIOObject() {
+        if (value_ != IO_OBJECT_NULL) {
+            IOObjectRelease(value_);
+        }
+    }
+    TopologyIOObject(const TopologyIOObject &) = delete;
+    TopologyIOObject &operator=(const TopologyIOObject &) = delete;
+
+private:
+    io_object_t value_;
+};
+
+struct DeviceTopologyEntry {
+    uint64_t registryId;
+    int32_t productId;
+};
+
+Napi::Value TopologyError(Napi::Env env, const std::string &message) {
+    Napi::Error::New(env, message).ThrowAsJavaScriptException();
+    return env.Undefined();
+}
+} // namespace
+
+/**
+ * Observe Razer USB registry entries without opening devices or replacing the
+ * live handle table. The caller may filter productId against its configurations.
+ * A failed or invalidated observation throws instead of reporting an empty set.
+ */
+Napi::Value GetDeviceTopology(const Napi::CallbackInfo &info) {
+    Napi::Env env = info.Env();
+    CFMutableDictionaryRef matching = IOServiceMatching(kIOUSBDeviceClassName);
+    if (matching == nullptr) {
+        return TopologyError(env, "Unable to create USB topology matching dictionary");
+    }
+
+    int32_t vendorId = USB_VENDOR_ID_RAZER;
+    CFNumberRef vendor = CFNumberCreate(
+            kCFAllocatorDefault, kCFNumberSInt32Type, &vendorId);
+    if (vendor == nullptr) {
+        CFRelease(matching);
+        return TopologyError(env, "Unable to create Razer vendor match");
+    }
+    CFDictionarySetValue(matching, CFSTR(kUSBVendorID), vendor);
+    CFRelease(vendor);
+
+    io_iterator_t iterator = IO_OBJECT_NULL;
+    // IOServiceGetMatchingServices consumes matching on success and failure.
+    kern_return_t result = IOServiceGetMatchingServices(
+            MACH_PORT_NULL, matching, &iterator);
+    TopologyIOObject iteratorOwner(iterator);
+    if (result != kIOReturnSuccess || iterator == IO_OBJECT_NULL) {
+        return TopologyError(env, "Unable to enumerate USB topology: " +
+                std::to_string(result));
+    }
+
+    std::vector<DeviceTopologyEntry> entries;
+    while (io_service_t service = IOIteratorNext(iterator)) {
+        TopologyIOObject serviceOwner(service);
+        CFMutableDictionaryRef properties = nullptr;
+        result = IORegistryEntryCreateCFProperties(
+                service, &properties, kCFAllocatorDefault, 0);
+        if (result != kIOReturnSuccess || properties == nullptr) {
+            if (properties != nullptr) {
+                CFRelease(properties);
+            }
+            return TopologyError(env, "Unable to read USB topology properties: " +
+                    std::to_string(result));
+        }
+
+        CFTypeRef product = CFDictionaryGetValue(properties, CFSTR(kUSBProductID));
+        int32_t productId = 0;
+        bool validProduct = product != nullptr &&
+                CFGetTypeID(product) == CFNumberGetTypeID() &&
+                !CFNumberIsFloatType(static_cast<CFNumberRef>(product)) &&
+                CFNumberGetValue(static_cast<CFNumberRef>(product),
+                        kCFNumberSInt32Type, &productId) &&
+                productId >= 0 && productId <= 0xffff;
+        CFRelease(properties);
+        if (!validProduct) {
+            return TopologyError(env, "USB topology contains an invalid product ID");
+        }
+
+        uint64_t registryId = 0;
+        result = IORegistryEntryGetRegistryEntryID(service, &registryId);
+        if (result != kIOReturnSuccess) {
+            return TopologyError(env, "Unable to read USB registry identity: " +
+                    std::to_string(result));
+        }
+        entries.push_back({registryId, productId});
+    }
+
+    if (!IOIteratorIsValid(iterator)) {
+        return TopologyError(env, "USB topology changed during enumeration");
+    }
+
+    std::sort(entries.begin(), entries.end(),
+            [](const DeviceTopologyEntry &left, const DeviceTopologyEntry &right) {
+                if (left.registryId != right.registryId) {
+                    return left.registryId < right.registryId;
+                }
+                return left.productId < right.productId;
+            });
+
+    Napi::Array topology = Napi::Array::New(env, entries.size());
+    for (size_t index = 0; index < entries.size(); ++index) {
+        Napi::Object entry = Napi::Object::New(env);
+        // Registry IDs are uint64_t and must not pass through a JS Number.
+        entry.Set("registryId", Napi::String::New(
+                env, std::to_string(entries[index].registryId)));
+        entry.Set("productId", Napi::Number::New(env, entries[index].productId));
+        topology[index] = entry;
+    }
+    return topology;
+}
+
 /**
 * Get all razer devices
 */
@@ -893,7 +1019,11 @@ Napi::Array GetAllDevices(const Napi::CallbackInfo &info) {
 }
 
 void CloseAllDevices(const Napi::CallbackInfo &info) {
-    closeAllRazerDevices(devices);
+    if (devices.devices != nullptr) {
+        closeAllRazerDevices(devices);
+    }
+    // The library accepts RazerDevices by value; clear the addon's owning copy.
+    devices = {nullptr, 0};
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
@@ -983,6 +1113,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set("accessorySetBrightness", Napi::Function::New(env, AccessorySetBrightness));
 
     // All devices
+    exports.Set("getDeviceTopology", Napi::Function::New(env, GetDeviceTopology));
     exports.Set("getAllDevices", Napi::Function::New(env, GetAllDevices));
     exports.Set("closeAllDevices", Napi::Function::New(env, CloseAllDevices));
 
