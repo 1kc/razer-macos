@@ -1,0 +1,13 @@
+{
+  "name": "Razer DeathAdder V3 HyperSpeed Wired",
+  "productId": "0x00C4",
+  "mainType": "mouse",
+  "image": "https://assets.razerzone.com/eeimages/support/products/1714/comp_1_00000.png",
+  "features": [
+    { "pollRate": { "pollRates": [125, 500, 1000] } },
+    { "dpi": { "max": 26000 } },
+    { "battery": {} }
+  ],
+  "featuresMissing": null,
+  "featuresConfig": null
+}

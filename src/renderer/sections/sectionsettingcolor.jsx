@@ -3,10 +3,12 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import CustomColor from '../components/CustomColor';
 import CustomColor2 from '../components/CustomColor2';
 import { SectionSettingBlock } from './sectionsettingblock.jsx';
+import { FeatureIdentifier } from '../../main/feature/featureidentifier';
 
 export class SectionSettingColor extends SectionSettingBlock {
   constructor(props) {
     super(props);
+    this.staticFeature = this.deviceSelected.features.find(feature => feature.featureIdentifier === FeatureIdentifier.STATIC);
   }
 
   renderTitle() {
@@ -14,6 +16,10 @@ export class SectionSettingColor extends SectionSettingBlock {
   }
 
   renderSettings() {
+    if (!this.staticFeature) {
+      return null;
+    }
+
     if (this.deviceSelected.settings.customColor2 != null) {
       return <Tabs>
         <TabList>

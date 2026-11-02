@@ -110,6 +110,8 @@ Mice:
 - Razer DeathAdder V2
 - Razer DeathAdder V2 Mini
 - Razer DeathAdder V2 Pro (wired and wireless)
+- Razer DeathAdder V3 Pro (wired and wireless)
+- Razer DeathAdder V3 HyperSpeed (wired and wireless)
 - Razer Diamondback Chroma
 - Razer Imperator
 - Razer Lancehead Tournament Edition
