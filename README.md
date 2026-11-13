@@ -198,6 +198,7 @@ Accessories:
 
 - Razer Mouse Bungee V3 Chroma
 - Razer Mouse Charging Dock
+- Razer Mouse Dock Pro
 - Razer Thunderbolt 4 Dock Chroma
 
 Please feel free to open pull requests for new devices you have tested.
