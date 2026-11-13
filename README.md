@@ -98,7 +98,7 @@ Mice:
 - Razer Basilisk Ultimate
 - Razer Basilisk V2
 - Razer Basilisk V3
-- Razer Basilisk V3 Pro 35K (wired and wireless)
+- Razer Basilisk V3 Pro 35K (wired, wireless, and through the Mouse Dock Pro)
 - Razer DeathAdder 3 5G
 - Razer DeathAdder 1800
 - Razer DeathAdder 2013 (under older mouse effects)
@@ -198,7 +198,7 @@ Accessories:
 
 - Razer Mouse Bungee V3 Chroma
 - Razer Mouse Charging Dock
-- Razer Mouse Dock Pro
+- Razer Mouse Dock Pro (including a "Battery level" lighting mode driven by the paired mouse)
 - Razer Thunderbolt 4 Dock Chroma
 
 Please feel free to open pull requests for new devices you have tested.

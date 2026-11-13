@@ -1,5 +1,6 @@
 import { FeatureIdentifier } from '../feature/featureidentifier';
 import { RazerDeviceType } from '../device/razerdevicetype';
+import { BatteryLevelMode } from '../batterylevelmode';
 
 export function getDeviceMenuFor(application, razerDevice) {
   let deviceMenu = [
@@ -86,10 +87,31 @@ function getFeatureMenuFor(application, device, feature) {
     case FeatureIdentifier.MOUSE_DPI:
       return null;
     case FeatureIdentifier.BATTERY:
-      return null;
+      return getFeatureBatteryLevel(application, device, feature);
     default:
       throw 'Unmapped feature for identifier ' + feature.featureIdentifier + ' detected.';
   }
+}
+
+function getFeatureBatteryLevel(application, device, feature) {
+  // Mice show their battery in the header; docks get a lighting mode driven by the mouse battery.
+  if (!BatteryLevelMode.isSupportedBy(device)) {
+    return null;
+  }
+  const active = application.batteryLevelMode.isActive(device);
+  return {
+    label: 'Battery level',
+    type: 'checkbox',
+    checked: active,
+    click() {
+      if (active) {
+        application.batteryLevelMode.stop(device);
+      } else {
+        application.batteryLevelMode.start(device);
+      }
+      application.refreshTray();
+    },
+  };
 }
 
 function getFeatureBreath(application, device, feature) {

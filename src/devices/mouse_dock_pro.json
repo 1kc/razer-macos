@@ -3,5 +3,12 @@
   "productId": "0x00A4",
   "mainType": "accessory",
   "image": null,
-  "features": null
+  "features": [
+    { "none": null },
+    { "static": null },
+    { "waveExtended": null },
+    { "spectrum": null },
+    { "breathe": null },
+    { "battery": null }
+  ]
 }

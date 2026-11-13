@@ -1,0 +1,26 @@
+{
+  "name": "Razer Basilisk V3 Pro 35K",
+  "productId": "0x80CD",
+  "mainType": "mouse",
+  "image": "https://dl.razerzone.com/src2/6220/6220-4-en-v1.png",
+  "features": null,
+  "featuresMissing": [
+    "oldMouseEffects",
+    "reactive",
+    "breathe",
+    "pollRate"
+  ],
+  "featuresConfig": [
+    {
+      "dpi": {
+        "max": 35000
+      }
+    },
+    {
+      "mouseBrightness": {
+        "enabledLeft": true,
+        "enabledRight": false
+      }
+    }
+  ]
+}
