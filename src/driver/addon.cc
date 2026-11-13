@@ -220,7 +220,7 @@ Napi::Number GetMousebatteryLevel(const Napi::CallbackInfo &info) {
     RazerDevice device = getRazerDeviceFor(info);
     Napi::Env env = info.Env();
 
-    char buf[4] = {0};
+    char buf[8] = {0}; // "255\n" plus terminator
 
     razer_attr_read_get_battery(device.usbDevice, buf);
     double bufferValue = atof(buf);
@@ -236,7 +236,7 @@ Napi::Boolean GetIsMouseCharging(const Napi::CallbackInfo &info) {
     Napi::Env env = info.Env();
     RazerDevice device = getRazerDeviceFor(info);
 
-    char buf[2] = {0};
+    char buf[8] = {0}; // "0\n" plus terminator
     razer_attr_read_is_charging(device.usbDevice, buf);
     int charging = atoi(buf);
 

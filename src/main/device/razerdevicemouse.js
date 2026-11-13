@@ -166,6 +166,29 @@ export class RazerDeviceMouse extends RazerDevice {
   setBrightnessMatrix(brightness) {
     this.brightness = brightness;
     this.addon.mouseSetBrightness(this.internalId, this.brightness);
+    this.syncZoneBrightness(brightness);
+  }
+
+  // "All" sets every zone. Reading the zones back right away returns the old values on
+  // wireless mice, so mirror the new value instead to keep the menu accurate.
+  syncZoneBrightness(brightness) {
+    const featureMouseBrightness = this.getFeature(FeatureIdentifier.MOUSE_BRIGHTNESS);
+    if (typeof featureMouseBrightness === 'undefined') {
+      return;
+    }
+    const config = featureMouseBrightness.configuration;
+    if (config.enabledLogo) {
+      this.brightnessLogo = brightness;
+    }
+    if (config.enabledScroll) {
+      this.brightnessScroll = brightness;
+    }
+    if (config.enabledLeft) {
+      this.brightnessLeft = brightness;
+    }
+    if (config.enabledRight) {
+      this.brightnessRight = brightness;
+    }
   }
 
   getBrightnessLogo() {

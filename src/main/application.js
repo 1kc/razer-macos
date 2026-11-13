@@ -2,6 +2,7 @@ import { RazerApplication } from './razerapplication';
 import { app, dialog, BrowserWindow, ipcMain, Menu, nativeTheme, Tray, powerMonitor } from 'electron';
 import path from 'path';
 import { getMenuFor } from './menu/menubuilder';
+import { BatteryLevelMode } from './batterylevelmode';
 
 const version = require('../../package.json').version;
 
@@ -25,6 +26,7 @@ export class Application {
 
     // Init the main application
     this.razerApplication = new RazerApplication();
+    this.batteryLevelMode = new BatteryLevelMode(this);
   }
 
   initListeners() {
@@ -308,6 +310,7 @@ export class Application {
   refreshTray(withDeviceRefresh) {
     const refresh = withDeviceRefresh ? this.razerApplication.refresh() : Promise.resolve(true);
     refresh.then(() => {
+      this.batteryLevelMode.sync();
       const contextMenu = Menu.buildFromTemplate(getMenuFor(this));
       this.tray.setContextMenu(contextMenu);
     });
